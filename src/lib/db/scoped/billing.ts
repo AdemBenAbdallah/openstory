@@ -13,7 +13,7 @@ import {
   RESERVATION_TTL_MS,
   signupGrantIdempotencyKey,
   totalCheckoutCents,
-} from '@/lib/billing/constants';
+} from '@/shared/billing/constants';
 import {
   type Microdollars,
   micros,
@@ -22,7 +22,7 @@ import {
   negateMicros,
   subtractMicros,
   ZERO_MICROS,
-} from '@/lib/billing/money';
+} from '@/shared/billing/money';
 import type { Database } from '@/lib/db/client';
 import {
   creditBatches,
@@ -39,7 +39,7 @@ import type {
 } from '@/lib/db/schema/credits';
 import { notifyAutoTopUpFailed } from '@/lib/emails/notify-auto-top-up-failed';
 import { ValidationError } from '@/shared/errors';
-import { getBillingChannel } from '@/lib/realtime';
+import { getBillingChannel } from '@/shared/realtime';
 import {
   and,
   count,
@@ -54,7 +54,7 @@ import {
 import { generateId } from '@/shared/id';
 import { giftTokenRedemptions, giftTokens } from '../schema';
 
-import { getLogger } from '@/lib/observability/logger';
+import { getLogger } from '@/shared/observability/logger';
 
 /**
  * Best-effort live balance push for the credit pill (#1090).

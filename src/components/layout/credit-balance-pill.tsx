@@ -36,8 +36,8 @@ import { useUser } from '@/hooks/use-user';
 import {
   SIGNUP_GRANT_MICROS,
   shouldOfferWelcomeClaim,
-} from '@/lib/billing/constants';
-import { microsToDisplayUsd } from '@/lib/billing/money';
+} from '@/shared/billing/constants';
+import { microsToDisplayUsd } from '@/shared/billing/money';
 import { Link } from '@tanstack/react-router';
 import { Wallet } from 'lucide-react';
 

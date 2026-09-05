@@ -14,8 +14,8 @@ import {
   MIN_TOPUP_AMOUNT_USD,
   SIGNUP_GRANT_MICROS,
   splitCheckoutAmounts,
-} from './constants';
-import { microsToUsd } from './money';
+} from '@/shared/billing/constants';
+import { microsToUsd } from '@/shared/billing/money';
 import { captureCheckoutOpened } from './checkout-events';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { getStripeOrThrow } from './stripe';

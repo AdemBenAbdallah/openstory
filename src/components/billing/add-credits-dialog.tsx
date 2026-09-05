@@ -47,14 +47,14 @@ import {
   BILLING_PAYMENT_METHODS_KEY,
 } from '@/hooks/use-billing-balance';
 import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
-import { useAuthSession } from '@/lib/auth/session-query';
+import { useAuthSession } from '@/shared/auth/session-query';
 import {
   DEFAULT_TOPUP_AMOUNT_USD,
   formatPlatformFeePercent,
   MAX_TOPUP_AMOUNT_USD,
   MIN_TOPUP_AMOUNT_USD,
   splitCheckoutAmounts,
-} from '@/lib/billing/constants';
+} from '@/shared/billing/constants';
 import { usePostHog } from '@posthog/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';

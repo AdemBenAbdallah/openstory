@@ -34,9 +34,9 @@ import { useUser } from '@/hooks/use-user';
 import {
   SIGNUP_GRANT_MICROS,
   welcomeDialogMode,
-} from '@/lib/billing/constants';
-import type { WelcomeDialogMode } from '@/lib/billing/constants';
-import { microsToDisplayUsd } from '@/lib/billing/money';
+} from '@/shared/billing/constants';
+import type { WelcomeDialogMode } from '@/shared/billing/constants';
+import { microsToDisplayUsd } from '@/shared/billing/money';
 import { hasPendingGenerate } from '@/shared/generation/pending-generate';
 import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
