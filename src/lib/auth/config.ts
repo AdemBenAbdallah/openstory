@@ -31,8 +31,12 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
 import { getDb } from '#db-client';
 import { getEnv } from '#env';
 import { teamMembers, teams } from '@/lib/db/schema';
-import { SIGNUP_GRANT_MICROS } from '@/lib/billing/constants';
+import {
+  grantsWelcomeCreditsOnSignup,
+  SIGNUP_GRANT_MICROS,
+} from '@/lib/billing/constants';
 import { microsToDisplayUsd } from '@/lib/billing/money';
+import { signupGrantIdempotencyKey } from '@/lib/billing/welcome-grants';
 import { createBillingMethods } from '@/lib/db/scoped/billing';
 import { sendOtpEmail } from '@/lib/services/email-service';
 import {
@@ -315,14 +319,16 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
               role: 'owner',
             });
 
-            // Grant every new team a one-time welcome credit (#1047; preflight fixed in #1062).
-            // Off when the grant is 0 (#1529) — no $0 ledger row.
-            if (SIGNUP_GRANT_MICROS > 0) {
+            // Hosted Stripe waits for a saved card (#1516). Self-host / e2e
+            // still credit here so local and CI keep a working first short.
+            // Skip a $0 ledger row when the grant is off (#1529).
+            if (SIGNUP_GRANT_MICROS > 0 && grantsWelcomeCreditsOnSignup()) {
               await createBillingMethods(db, team.id, user.id).addCredits(
                 SIGNUP_GRANT_MICROS,
                 {
                   type: 'credit_adjustment',
                   description: `Welcome credit: ${microsToDisplayUsd(SIGNUP_GRANT_MICROS)}`,
+                  idempotencyKey: signupGrantIdempotencyKey(team.id),
                   metadata: { signupGrant: true },
                 }
               );

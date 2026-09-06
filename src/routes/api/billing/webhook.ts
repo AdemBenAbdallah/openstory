@@ -4,12 +4,19 @@
  */
 
 import { stripeWebhookMiddleware } from '@/functions/stripe-webhook-middleware';
+import { SAVE_CARD_METADATA_TYPE } from '@/lib/billing/checkout';
 import { captureCheckoutAnalyticsForStripeEvent } from '@/lib/billing/checkout-events';
+import {
+  fulfillSavedCard,
+  grantWelcomeCreditsForTeam,
+} from '@/lib/billing/welcome-card';
 import { microsToDisplayUsd, usdToMicros } from '@/lib/billing/money';
 import { getStripeOrThrow } from '@/lib/billing/stripe';
+import type { ScopedDb } from '@/lib/db/scoped';
 import { getPostHogClient } from '@/lib/posthog-server';
 import { createFileRoute } from '@tanstack/react-router';
 import { scheduleFlushAnalytics } from '#flush-scheduler';
+import type Stripe from 'stripe';
 
 import { getLogger } from '@/lib/observability/logger';
 
@@ -36,6 +43,21 @@ export const Route = createFileRoute('/api/billing/webhook')({
           switch (event.type) {
             case 'checkout.session.completed': {
               const session = event.data.object;
+
+              if (
+                session.mode === 'setup' &&
+                session.metadata?.type === SAVE_CARD_METADATA_TYPE
+              ) {
+                if (teamId && userId) {
+                  await handleSaveCardCheckout({
+                    session,
+                    scopedDb,
+                    teamId,
+                    userId,
+                  });
+                }
+                break;
+              }
 
               if (
                 // oxlint-disable-next-line typescript-eslint/no-unnecessary-condition -- runtime guard
@@ -117,6 +139,15 @@ export const Route = createFileRoute('/api/billing/webhook')({
 
               logger.info(`Added $${amountUsd} credits to team ${teamId}`);
 
+              if (teamId && userId) {
+                await grantWelcomeCreditsForTeam({
+                  scopedDb,
+                  teamId,
+                  userId,
+                  source: 'purchase',
+                });
+              }
+
               if (teamId) {
                 const posthog = getPostHogClient();
                 posthog?.capture({
@@ -129,6 +160,38 @@ export const Route = createFileRoute('/api/billing/webhook')({
                   },
                 });
               }
+              break;
+            }
+
+            case 'setup_intent.succeeded': {
+              const setupIntent = event.data.object;
+              if (setupIntent.metadata?.type !== SAVE_CARD_METADATA_TYPE) {
+                break;
+              }
+              if (!teamId || !userId) break;
+              const customerId =
+                typeof setupIntent.customer === 'string'
+                  ? setupIntent.customer
+                  : setupIntent.customer?.id;
+              const paymentMethodId =
+                typeof setupIntent.payment_method === 'string'
+                  ? setupIntent.payment_method
+                  : setupIntent.payment_method?.id;
+              if (!customerId || !paymentMethodId) {
+                logger.error('save_card setup_intent missing customer or PM', {
+                  teamId,
+                  setupIntentId: setupIntent.id,
+                });
+                break;
+              }
+              await fulfillSavedCard({
+                scopedDb,
+                teamId,
+                userId,
+                customerId,
+                paymentMethodId,
+                source: 'setup_intent',
+              });
               break;
             }
 
@@ -176,6 +239,15 @@ export const Route = createFileRoute('/api/billing/webhook')({
                   stripePaymentIntentId: paymentIntent.id,
                 });
               }
+
+              if (teamId && userId) {
+                await grantWelcomeCreditsForTeam({
+                  scopedDb,
+                  teamId,
+                  userId,
+                  source: 'purchase',
+                });
+              }
               break;
             }
 
@@ -201,3 +273,50 @@ export const Route = createFileRoute('/api/billing/webhook')({
     },
   },
 });
+
+async function handleSaveCardCheckout(opts: {
+  session: Stripe.Checkout.Session;
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+}): Promise<void> {
+  const { session, scopedDb, teamId, userId } = opts;
+  const customerId =
+    typeof session.customer === 'string'
+      ? session.customer
+      : session.customer?.id;
+  if (!customerId) {
+    logger.error('save_card checkout missing customer', {
+      teamId,
+      sessionId: session.id,
+    });
+    return;
+  }
+
+  const stripe = getStripeOrThrow();
+  const setupIntentRef = session.setup_intent;
+  const setupIntent =
+    typeof setupIntentRef === 'string'
+      ? await stripe.setupIntents.retrieve(setupIntentRef)
+      : setupIntentRef;
+  const paymentMethodId =
+    typeof setupIntent?.payment_method === 'string'
+      ? setupIntent.payment_method
+      : setupIntent?.payment_method?.id;
+  if (!paymentMethodId) {
+    logger.error('save_card checkout missing payment method', {
+      teamId,
+      sessionId: session.id,
+    });
+    return;
+  }
+
+  await fulfillSavedCard({
+    scopedDb,
+    teamId,
+    userId,
+    customerId,
+    paymentMethodId,
+    source: 'setup_checkout',
+  });
+}

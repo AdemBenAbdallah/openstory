@@ -63,7 +63,7 @@ export const CreditBalancePill: React.FC = () => {
         <SidebarMenuItem>
           <SidebarMenuButton
             asChild
-            tooltip={`Welcome credits · ${WELCOME_AMOUNT} free on signup`}
+            tooltip={`Welcome credits · ${WELCOME_AMOUNT} to claim`}
             className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400"
           >
             <Link

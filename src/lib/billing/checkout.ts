@@ -1,9 +1,10 @@
 /**
  * Stripe Checkout Service
- * Creates checkout sessions for credit top-ups
+ * Creates checkout sessions for credit top-ups and card setup (#1516).
  */
 
 import { ValidationError } from '@/shared/errors';
+import { captureProductEvent } from '@/lib/observability/product-events';
 import {
   formatPlatformFeePercent,
   MIN_TOPUP_AMOUNT_USD,
@@ -12,6 +13,10 @@ import {
 import { captureCheckoutOpened } from './checkout-events';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { getStripeOrThrow } from './stripe';
+import type Stripe from 'stripe';
+
+/** Metadata `type` for Checkout `mode: 'setup'` — no charge, save a card. */
+export const SAVE_CARD_METADATA_TYPE = 'save_card';
 
 type CreateCheckoutParams = {
   scopedDb: ScopedDb;
@@ -24,6 +29,36 @@ type CreateCheckoutParams = {
   /** Copied from `add_credits_clicked` so webhook events keep the surface. */
   surface?: string;
 };
+
+async function ensureStripeCustomer(opts: {
+  stripe: Stripe;
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  userEmail: string;
+}): Promise<string> {
+  const settings = await opts.scopedDb.billing.getBillingSettings();
+  let customerId = settings.stripeCustomerId;
+  if (customerId) {
+    try {
+      const existing = await opts.stripe.customers.retrieve(customerId);
+      if (existing.deleted) {
+        customerId = null;
+      }
+    } catch {
+      customerId = null;
+    }
+  }
+  if (!customerId) {
+    const customer = await opts.stripe.customers.create({
+      email: opts.userEmail,
+      metadata: { teamId: opts.teamId, userId: opts.userId },
+    });
+    customerId = customer.id;
+    await opts.scopedDb.billing.saveStripeCustomerId(customerId);
+  }
+  return customerId;
+}
 
 export async function createCheckoutSession(
   params: CreateCheckoutParams
@@ -46,29 +81,13 @@ export async function createCheckoutSession(
   }
 
   const stripe = getStripeOrThrow();
-  const settings = await scopedDb.billing.getBillingSettings();
-
-  // Reuse existing Stripe customer or create new one
-  let customerId = settings.stripeCustomerId;
-  if (customerId) {
-    // Verify the customer still exists in Stripe (may differ between environments)
-    try {
-      const existing = await stripe.customers.retrieve(customerId);
-      if (existing.deleted) {
-        customerId = null;
-      }
-    } catch {
-      customerId = null;
-    }
-  }
-  if (!customerId) {
-    const customer = await stripe.customers.create({
-      email: userEmail,
-      metadata: { teamId, userId },
-    });
-    customerId = customer.id;
-    await scopedDb.billing.saveStripeCustomerId(customerId);
-  }
+  const customerId = await ensureStripeCustomer({
+    stripe,
+    scopedDb,
+    teamId,
+    userId,
+    userEmail,
+  });
 
   const { creditUsd, feeUsd } = splitCheckoutAmounts(amountUsd);
   const creditCents = Math.round(creditUsd * 100);
@@ -147,6 +166,66 @@ export async function createCheckoutSession(
     stripeCheckoutSessionId: session.id,
     ...(paymentIntentId ? { stripePaymentIntentId: paymentIntentId } : {}),
     ...(surface ? { surface } : {}),
+  });
+
+  if (!session.url) {
+    throw new Error('Stripe did not return a checkout URL');
+  }
+
+  return { url: session.url };
+}
+
+type CreateSetupCheckoutParams = {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  userEmail: string;
+  successUrl: string;
+  cancelUrl: string;
+};
+
+/**
+ * Checkout in `mode: 'setup'` — Stripe's UI says save a card, not pay $0.
+ * Webhook middleware requires teamId + userId on the object metadata, so
+ * both the session and the SetupIntent carry them.
+ */
+export async function createSetupCheckoutSession(
+  params: CreateSetupCheckoutParams
+): Promise<{ url: string }> {
+  const { scopedDb, teamId, userId, userEmail, successUrl, cancelUrl } = params;
+
+  const stripe = getStripeOrThrow();
+  const customerId = await ensureStripeCustomer({
+    stripe,
+    scopedDb,
+    teamId,
+    userId,
+    userEmail,
+  });
+
+  const metadata: Record<string, string> = {
+    teamId,
+    userId,
+    type: SAVE_CARD_METADATA_TYPE,
+  };
+
+  const session = await stripe.checkout.sessions.create({
+    mode: 'setup',
+    customer: customerId,
+    payment_method_types: ['card'],
+    metadata,
+    setup_intent_data: { metadata },
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+  });
+
+  captureProductEvent({
+    distinctId: userId,
+    event: 'welcome_card_setup_opened',
+    properties: {
+      teamId,
+      stripe_checkout_session_id: session.id,
+    },
   });
 
   if (!session.url) {

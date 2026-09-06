@@ -28,7 +28,10 @@ type ProductEventName =
   | 'feedback_submitted'
   | 'sequence_ready_email_sent'
   | 'auto_top_up_failed_email_sent'
-  | 'studio_generation_started';
+  | 'studio_generation_started'
+  | 'welcome_card_setup_opened'
+  | 'welcome_credits_granted'
+  | 'welcome_auto_topup_bonus_granted';
 
 export type CaptureProductEventArgs = {
   distinctId: string;

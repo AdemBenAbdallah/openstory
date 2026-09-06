@@ -4,7 +4,10 @@
  */
 
 import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
-import { createCheckoutSession } from '@/lib/billing/checkout';
+import {
+  createCheckoutSession,
+  createSetupCheckoutSession,
+} from '@/lib/billing/checkout';
 import {
   captureCheckoutCanceledFromSession,
   captureCheckoutFailed,
@@ -13,11 +16,17 @@ import {
   mapCheckoutFailureReason,
 } from '@/lib/billing/checkout-events';
 import {
+  AUTO_TOPUP_BONUS_MICROS,
   isStripeEnabled,
   MAX_TOPUP_AMOUNT_USD,
   MIN_TOPUP_AMOUNT_USD,
   totalCheckoutCents,
 } from '@/lib/billing/constants';
+import {
+  grantWelcomeCreditsForTeam,
+  grantWelcomeIfTeamHasCard,
+} from '@/lib/billing/welcome-card';
+import { grantAutoTopUpBonus } from '@/lib/billing/welcome-grants';
 import {
   micros,
   microsToDisplayUsd,
@@ -70,6 +79,54 @@ export const createCheckoutSessionFn = createServerFn({ method: 'POST' })
     });
 
     return { url };
+  });
+
+/**
+ * Save a card with no charge (Stripe Checkout `mode: 'setup'`). Unlocks the
+ * welcome grant on `checkout.session.completed` / the claim fn on return.
+ */
+export const createSetupCheckoutSessionFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .handler(async ({ context }) => {
+    if (!isStripeEnabled()) {
+      throw new ValidationError('Stripe is not configured');
+    }
+
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+
+    const req = getRequest();
+    const appUrl = getServerAppUrl(req);
+
+    const { url } = await createSetupCheckoutSession({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+      userEmail: context.user.email,
+      successUrl: `${appUrl}/`,
+      cancelUrl: `${appUrl}/`,
+    });
+
+    return { url };
+  });
+
+/**
+ * After Stripe setup redirect: grant the welcome credits if a card is on
+ * file. Idempotent with the webhook.
+ */
+export const claimWelcomeCreditsFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .handler(async ({ context }) => {
+    if (!isStripeEnabled()) {
+      return { granted: false, hasCard: false };
+    }
+
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+
+    return grantWelcomeIfTeamHasCard({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+    });
   });
 
 const reportCheckoutCanceledSchema = z.object({
@@ -357,6 +414,13 @@ export const purchaseCreditsFn = createServerFn({ method: 'POST' })
       },
     });
 
+    await grantWelcomeCreditsForTeam({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+      source: 'purchase',
+    });
+
     // `null` means this exact grant already landed (replayed request) — the
     // earlier credit stands, so report the balance rather than a phantom.
     return {
@@ -376,15 +440,18 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
   .handler(async ({ context }) => {
     const { scopedDb } = context;
 
-    const [funds, settings, usageHistory] = await Promise.all([
-      scopedDb.billing.getAvailable(),
-      scopedDb.billing.getBillingSettings(),
-      // One credit_usage row is enough — drives welcome-credits suppression (#1096).
-      scopedDb.billing.getTransactionHistory({
-        limit: 1,
-        type: 'credit_usage',
-      }),
-    ]);
+    const [funds, settings, usageHistory, hasSignupGrant, hasAutoTopUpBonus] =
+      await Promise.all([
+        scopedDb.billing.getAvailable(),
+        scopedDb.billing.getBillingSettings(),
+        // One credit_usage row is enough — drives welcome-credits suppression (#1096).
+        scopedDb.billing.getTransactionHistory({
+          limit: 1,
+          type: 'credit_usage',
+        }),
+        scopedDb.billing.hasSignupGrant(),
+        scopedDb.billing.hasAutoTopUpBonus(),
+      ]);
 
     return {
       teamId: context.teamId,
@@ -395,6 +462,8 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
       // D1 `count(*)` can arrive as a string — coerce. Prefer row presence too.
       hasUsedCredits:
         usageHistory.transactions.length > 0 || Number(usageHistory.total) > 0,
+      hasSignupGrant,
+      hasAutoTopUpBonus,
       autoTopUp: {
         enabled: settings.autoTopUpEnabled,
         thresholdUsd: settings.autoTopUpThresholdMicros
@@ -562,7 +631,7 @@ export const updateAutoTopUpFn = createServerFn({ method: 'POST' })
 
     if (!billingSettings.stripeCustomerId) {
       throw new ValidationError(
-        'Add a payment method first by making a top-up purchase'
+        'Save a card first — no charge, or make a purchase'
       );
     }
 
@@ -575,6 +644,23 @@ export const updateAutoTopUpFn = createServerFn({ method: 'POST' })
       amountMicros:
         data.amountUsd !== undefined ? usdToMicros(data.amountUsd) : undefined,
     });
+
+    if (data.enabled) {
+      const bonus = await grantAutoTopUpBonus({
+        teamId: context.teamId,
+        addCredits: context.scopedDb.billing.addCredits,
+      });
+      if (bonus.granted) {
+        captureProductEvent({
+          distinctId: context.user.id,
+          event: 'welcome_auto_topup_bonus_granted',
+          properties: {
+            teamId: context.teamId,
+            amount_usd: microsToUsd(AUTO_TOPUP_BONUS_MICROS),
+          },
+        });
+      }
+    }
 
     return {
       message: data.enabled ? 'Auto top-up enabled' : 'Auto top-up disabled',

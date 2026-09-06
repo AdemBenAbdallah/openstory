@@ -7,6 +7,7 @@ import {
 import { describe, expect, it } from 'vitest';
 import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
 import {
+  AUTO_TOPUP_BONUS_MICROS,
   SIGNUP_GRANT_MICROS,
   formatPlatformFeePercent,
   platformFeeUsd,
@@ -24,6 +25,10 @@ const WELCOME_SHORT_TARGET_S =
   WELCOME_SHORT_SCENE_COUNT * WELCOME_SHORT_SHOT_DURATION_S;
 
 describe('billing constants', () => {
+  it('auto-reload bonus is a $10 one-shot on top of the welcome grant', () => {
+    expect(AUTO_TOPUP_BONUS_MICROS).toBe(10_000_000);
+  });
+
   it('applies platform fee only at purchase', () => {
     expect(platformFeeUsd(100)).toBeCloseTo(7);
     expect(totalCheckoutUsd(100)).toBeCloseTo(107);

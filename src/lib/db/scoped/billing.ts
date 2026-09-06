@@ -14,6 +14,10 @@ import {
   totalCheckoutCents,
 } from '@/lib/billing/constants';
 import {
+  autoTopUpBonusIdempotencyKey,
+  signupGrantIdempotencyKey,
+} from '@/lib/billing/welcome-grants';
+import {
   type Microdollars,
   micros,
   microsToDisplayUsd,
@@ -38,7 +42,17 @@ import type {
 import { notifyAutoTopUpFailed } from '@/lib/emails/notify-auto-top-up-failed';
 import { ValidationError } from '@/shared/errors';
 import { getBillingChannel } from '@/lib/realtime';
-import { and, count, desc, eq, gte, isNull, notExists, sql } from 'drizzle-orm';
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gte,
+  isNull,
+  notExists,
+  or,
+  sql,
+} from 'drizzle-orm';
 import { generateId } from '@/shared/id';
 import { giftTokenRedemptions, giftTokens } from '../schema';
 
@@ -282,12 +296,46 @@ function createBillingReadMethods(db: Database, teamId: string) {
     return existing;
   }
 
+  async function hasSignupGrant(): Promise<boolean> {
+    const [row] = await db
+      .select({ id: transactions.id })
+      .from(transactions)
+      .where(
+        and(
+          eq(transactions.teamId, teamId),
+          eq(transactions.type, 'credit_adjustment'),
+          or(
+            eq(transactions.idempotencyKey, signupGrantIdempotencyKey(teamId)),
+            sql`json_extract(${transactions.metadata}, '$.signupGrant') = 1`
+          )
+        )
+      )
+      .limit(1);
+    return !!row;
+  }
+
+  async function hasAutoTopUpBonus(): Promise<boolean> {
+    const [row] = await db
+      .select({ id: transactions.id })
+      .from(transactions)
+      .where(
+        and(
+          eq(transactions.teamId, teamId),
+          eq(transactions.idempotencyKey, autoTopUpBonusIdempotencyKey(teamId))
+        )
+      )
+      .limit(1);
+    return !!row;
+  }
+
   return {
     getBalance,
     getAvailable,
     hasEnoughCredits,
     getTransactionHistory,
     getBillingSettings,
+    hasSignupGrant,
+    hasAutoTopUpBonus,
   };
 }
 

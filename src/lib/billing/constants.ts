@@ -12,6 +12,18 @@ export function isStripeEnabled(): boolean {
 }
 
 /**
+ * Whether a new team gets the welcome grant in the user-create hook.
+ *
+ * Hosted Stripe gates that grant behind a saved card (#1516). Self-host
+ * (no Stripe key) and e2e still credit at signup so local/CI keep working
+ * even when a developer `.env.local` has `STRIPE_SECRET_KEY`.
+ */
+export function grantsWelcomeCreditsOnSignup(): boolean {
+  if (getEnv().E2E_TEST === 'true') return true;
+  return !isStripeEnabled();
+}
+
+/**
  * Platform fee applied when purchasing credits (e.g., 0.07 = 7%).
  * Charged only on credit top-ups (Stripe checkout / auto top-up) — not on
  * each generation. Generations deduct wallet balance at lab rates.
@@ -19,15 +31,25 @@ export function isStripeEnabled(): boolean {
 export const PLATFORM_FEE_PERCENT = 0.07;
 
 /**
- * Free credit granted to every new team on signup, in USD.
- *
- * 0 = free credits are off (#1529): no ledger row on signup, and the welcome
- * dialog / signed-out pill / pricing blurb all hide. Was $10.
+ * Welcome-grant amount in USD. Paid when a card is saved or a credit
+ * purchase succeeds — not at team create, except e2e / self-host
+ * (`grantsWelcomeCreditsOnSignup`). 0 still hides the dialog / signed-out
+ * pill / pricing blurb (#1529). This experiment restores $20, gated
+ * behind a saved card (#1516).
  */
-const SIGNUP_GRANT_USD = 0;
+const SIGNUP_GRANT_USD = 20;
 
 /** Free credit granted to every new team on signup, in microdollars */
 export const SIGNUP_GRANT_MICROS: Microdollars = usdToMicros(SIGNUP_GRANT_USD);
+
+/**
+ * One-shot bonus for first enabling auto-reload (#1516). Independent of the
+ * welcome grant so a team that already has $20 can still collect it.
+ */
+const AUTO_TOPUP_BONUS_USD = 10;
+
+export const AUTO_TOPUP_BONUS_MICROS: Microdollars =
+  usdToMicros(AUTO_TOPUP_BONUS_USD);
 
 /**
  * Rough cost of another default short, used in the ready-email balance line
@@ -49,6 +71,14 @@ export const DEFAULT_TOPUP_AMOUNT_USD = 10;
 /** Minimum top-up amount in microdollars */
 export const MIN_TOPUP_AMOUNT_MICROS: Microdollars =
   usdToMicros(MIN_TOPUP_AMOUNT_USD);
+
+/**
+ * Conservative auto-reload threshold for the welcome-gate one-click. The
+ * reload amount is `MIN_TOPUP_AMOUNT_USD` — settings still default a new
+ * auto-reload to $100 / $5, which is a later choice, not the first-run
+ * "you don't have to pay anything" moment.
+ */
+export const WELCOME_AUTO_TOPUP_THRESHOLD_USD = 5;
 
 /**
  * Maximum top-up amount in USD. Enforced server-side on every path that can
