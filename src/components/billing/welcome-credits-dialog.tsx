@@ -37,7 +37,7 @@ import {
 } from '@/shared/billing/constants';
 import type { WelcomeDialogMode } from '@/shared/billing/constants';
 import { microsToDisplayUsd } from '@/shared/billing/money';
-import { hasPendingGenerate } from '@/shared/generation/pending-generate';
+import { hasPendingGenerate } from '@/components/generation/pending-generate';
 import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';

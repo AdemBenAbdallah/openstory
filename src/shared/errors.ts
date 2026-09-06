@@ -55,28 +55,9 @@ export class OpenStoryError extends Error {
   }
 }
 
-export class DatabaseError extends OpenStoryError {
-  constructor(message: string, details?: Record<string, unknown>) {
-    super(message, 'DATABASE_ERROR', 500, details);
-  }
-}
-
-export class ConnectionError extends OpenStoryError {
-  constructor(message: string, details?: Record<string, unknown>) {
-    super(message, 'CONNECTION_ERROR', 503, details);
-  }
-}
-
 export class ValidationError extends OpenStoryError {
   constructor(message: string, details?: Record<string, unknown>) {
     super(message, 'VALIDATION_ERROR', 400, details);
-  }
-}
-
-/** The write collides with an existing resource (e.g. a duplicate slug). */
-export class ConflictError extends OpenStoryError {
-  constructor(message: string, details?: Record<string, unknown>) {
-    super(message, 'CONFLICT', 409, details);
   }
 }
 
@@ -86,18 +67,6 @@ export class WelcomeCardAlreadyClaimedError extends OpenStoryError {
     message: string = 'This card has already been used to claim welcome credits'
   ) {
     super(message, 'WELCOME_CARD_ALREADY_CLAIMED', 409);
-  }
-}
-
-export class ConfigurationError extends OpenStoryError {
-  constructor(message: string, details?: Record<string, unknown>) {
-    super(message, 'CONFIGURATION_ERROR', 500, details);
-  }
-}
-
-export class StorageError extends OpenStoryError {
-  constructor(message: string, details?: Record<string, unknown>) {
-    super(message, 'STORAGE_ERROR', 500, details);
   }
 }
 
