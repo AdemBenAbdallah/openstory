@@ -24,6 +24,7 @@ import {
   flaggedInputs,
   isContentRejectionError,
 } from '@/lib/ai/content-rejection';
+import { arkAssetIdentities } from '@/lib/ai/byteplus-asset-pool';
 import { extractFalErrorMessage } from '@/lib/ai/fal-error';
 import { computeVideoManifestInputHash } from '@/lib/ai/input-hash';
 import { DEFAULT_VIDEO_MODEL, IMAGE_TO_VIDEO_MODELS } from '@/lib/ai/models';
@@ -113,6 +114,23 @@ type MotionWorkflowResult = {
 
 /** Route a provider clip failure: a content flag re-rolls the attempt (#881);
  *  anything else is a hard stop, matching the pre-#881 behaviour. */
+/**
+ * Unpin the BytePlus ACR slots this shot leased (#1361), by the stored URLs it
+ * submitted. A no-op for every other via — those identities were never in the
+ * ledger, and `releaseLeases` matches nothing.
+ */
+async function releaseArkLeases(
+  scopedDb: WorkflowScopedDb,
+  input: MotionWorkflowInput
+): Promise<void> {
+  await scopedDb.bytePlusAssets.releaseLeases(
+    await arkAssetIdentities([
+      ...(input.imageUrl ? [input.imageUrl] : []),
+      ...(input.referenceImages ?? []).map((ref) => ref.referenceImageUrl),
+    ])
+  );
+}
+
 function classifyMotionFailure(message: string): MotionPollOutcome {
   return isContentRejectionError(message)
     ? { kind: 'rejected', rejection: message }
@@ -653,6 +671,7 @@ export class MotionWorkflow extends OpenStoryWorkflowEntrypoint<MotionWorkflowIn
             // Cast/element reference images (#873) — only Kling v3 Pro emits them.
             referenceImages: input.referenceImages,
             scopedDb: scopedDb.credentials,
+            assetLedger: scopedDb.bytePlusAssets,
           });
           return { ok: true as const, job };
         } catch (error) {
@@ -895,6 +914,18 @@ export class MotionWorkflow extends OpenStoryWorkflowEntrypoint<MotionWorkflowIn
     // narrowing (a `let` could be reassigned, so TS widens it inside closures).
     const job = succeededJob;
 
+    // The clip is rendered, so the `asset://` stills this job pinned are free
+    // to evict again (#1361). Nothing is deleted — they stay resident and
+    // reusable, which is the whole point of the pool; the lease only stops a
+    // sibling batch deleting a slot out from under an in-flight Seedance job.
+    // The failure half is in `onFailure`; the TTL covers only a run that dies
+    // without reaching either.
+    if (job.via === 'byteplus') {
+      await step.do('release-byteplus-asset-leases', async () =>
+        releaseArkLeases(scopedDb, input)
+      );
+    }
+
     // Exact charge from the via's reported usage (the check-credits `cost`
     // was only an estimate for the affordability gate). The via owns endpoint
     // aliasing (fal Seedance-with-refs bills on its reference-to-video
@@ -1102,6 +1133,25 @@ export class MotionWorkflow extends OpenStoryWorkflowEntrypoint<MotionWorkflowIn
   }): Promise<void> {
     const input = event.payload;
     const model = input.model || DEFAULT_VIDEO_MODEL;
+
+    // Unpin this shot's ACR slots (#1361), the lease half of what
+    // `zeroReservation` does for credits in the batch's own onFailure. Without
+    // it a failed run holds its slots for the full TTL, which is how a bad
+    // batch starves the next good one. Best-effort: a throw here would replace
+    // the real failure message, and the TTL is still behind it.
+    //
+    // Only this shot's own stills. The batch parent must NOT sweep the whole
+    // fan-out here — a terminal parent does not imply dead children (#839),
+    // and unpinning a slot a live sibling is still polling is exactly the 400
+    // the lease exists to prevent.
+    try {
+      await releaseArkLeases(scopedDb, input);
+    } catch (releaseError) {
+      logger.warn(
+        `[MotionWorkflow:cf] Failed to release BytePlus asset leases for shot ${input.shotId}:`,
+        { err: releaseError }
+      );
+    }
 
     // The success span is recorded in runImpl, which every failure exit skips
     // (submit 422, hard poll failure, poll-budget timeout, content-rejection
