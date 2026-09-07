@@ -318,7 +318,6 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
           <ClaimDialogContent
             grantDisplay={GRANT_DISPLAY}
             bonusDisplay={BONUS_DISPLAY}
-            hasSignupGrant={hasSignupGrant}
             hasSavedCard={hasSavedCard}
             hasAutoTopUpBonus={hasAutoTopUpBonus}
             autoTopUpEnabled={autoTopUpEnabled}
@@ -369,7 +368,6 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
 type ClaimDialogContentProps = {
   grantDisplay: string;
   bonusDisplay: string;
-  hasSignupGrant: boolean;
   hasSavedCard: boolean;
   hasAutoTopUpBonus: boolean;
   autoTopUpEnabled: boolean;
@@ -387,7 +385,6 @@ type ClaimDialogContentProps = {
 function ClaimDialogContent({
   grantDisplay,
   bonusDisplay,
-  hasSignupGrant,
   hasSavedCard,
   hasAutoTopUpBonus,
   autoTopUpEnabled,
@@ -407,11 +404,7 @@ function ClaimDialogContent({
     <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
       <WelcomeHeader
         amount={grantDisplay}
-        description={
-          hasSignupGrant
-            ? "That's yours. Saving a card confirms you're a real person — we won't charge you. Auto-reload adds another $10."
-            : "Save a card to unlock it. We won't charge you — it just confirms you're a real person."
-        }
+        description="Save a card to unlock it. We won't charge you — it just confirms you're a real person."
       />
 
       <div className="flex flex-col gap-4 px-6 py-5">
@@ -420,11 +413,7 @@ function ClaimDialogContent({
             done={hasSavedCard}
             icon={<CreditCard className="size-4" aria-hidden />}
             title="Save a card"
-            detail={
-              hasSignupGrant
-                ? 'No payment today. We already credited this team.'
-                : `No payment today. Unlocks ${grantDisplay}.`
-            }
+            detail={`No payment today. Unlocks ${grantDisplay}.`}
             reward={grantDisplay}
             action={
               hasSavedCard ? null : (
@@ -487,7 +476,7 @@ function ClaimDialogContent({
         ) : null}
 
         <DialogFooter className="gap-2 sm:justify-stretch">
-          {hasSignupGrant || hasSavedCard ? (
+          {hasSavedCard ? (
             <Button className="sm:flex-1" onClick={onSkip}>
               {primaryLabel}
             </Button>

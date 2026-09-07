@@ -14,13 +14,12 @@ export function isStripeEnabled(): boolean {
 /**
  * Whether a new team gets the welcome grant in the user-create hook.
  *
- * Hosted Stripe gates that grant behind a saved card (#1516). Self-host
- * (no Stripe key) and e2e still credit at signup so local/CI keep working
- * even when a developer `.env.local` has `STRIPE_SECRET_KEY`.
+ * #1516: saving a card is what credits $20. Signup itself never pays,
+ * except the hermetic e2e worker which has no Stripe and must still fund
+ * a first short.
  */
 export function grantsWelcomeCreditsOnSignup(): boolean {
-  if (getEnv().E2E_TEST === 'true') return true;
-  return !isStripeEnabled();
+  return getEnv().E2E_TEST === 'true';
 }
 
 /**

@@ -319,8 +319,8 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
               role: 'owner',
             });
 
-            // Hosted Stripe waits for a saved card (#1516). Self-host / e2e
-            // still credit here so local and CI keep a working first short.
+            // $20 welcome credit is granted when they save a card (#1516).
+            // e2e is the exception — no Stripe, still needs a funded first short.
             // Skip a $0 ledger row when the grant is off (#1529).
             if (SIGNUP_GRANT_MICROS > 0 && grantsWelcomeCreditsOnSignup()) {
               await createBillingMethods(db, team.id, user.id).addCredits(

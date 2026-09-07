@@ -1,8 +1,8 @@
 /**
  * Card-gated welcome credits (#1516).
  *
- * Hosted Stripe: the $20 signup grant waits for a saved card. Enabling
- * auto-reload adds a one-shot $10 bonus. Self-host / e2e still grant at
+ * The $20 welcome grant is paid when a card is saved, not at team create.
+ * Enabling auto-reload adds a one-shot $10 bonus. e2e still grants at
  * team create (see `grantsWelcomeCreditsOnSignup`).
  */
 
