@@ -18,7 +18,7 @@ import { useWelcomeCreditsGate } from '@/components/billing/welcome-credits-dial
 import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
 import { useBillingBalance } from '@/hooks/use-billing-balance';
 import { useBillingGateQuery } from '@/hooks/use-billing-gate';
-import { shouldOfferWelcomeClaim } from '@/lib/billing/constants';
+import { shouldOfferWelcomeClaim } from '@/shared/billing/constants';
 import {
   closeBillingGate,
   getBillingGateReason,

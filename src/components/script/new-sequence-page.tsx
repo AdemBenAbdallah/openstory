@@ -9,7 +9,7 @@ import { useBillingGate } from '@/hooks/use-billing-gate';
 import { useSequence } from '@/hooks/use-sequences';
 import { useStyles } from '@/hooks/use-styles';
 import { useUser } from '@/hooks/use-user';
-import { shouldOfferWelcomeClaim } from '@/lib/billing/constants';
+import { shouldOfferWelcomeClaim } from '@/shared/billing/constants';
 import { SITE_CONFIG } from '@/shared/marketing/constants';
 import { AUTO_STYLE_ID } from '@/shared/style/auto-style';
 import { briefForStyle } from '@/shared/style/brief-for-style';

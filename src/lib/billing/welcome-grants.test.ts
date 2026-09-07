@@ -4,7 +4,7 @@ import {
   shouldOfferWelcomeClaim,
   SIGNUP_GRANT_MICROS,
   welcomeDialogMode,
-} from '@/lib/billing/constants';
+} from '@/shared/billing/constants';
 import type { Database } from '@/lib/db/client';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { generateId } from '@/shared/id';

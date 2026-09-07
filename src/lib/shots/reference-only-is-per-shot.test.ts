@@ -49,6 +49,11 @@ const SEQUENCE_LEVEL_BY_DESIGN: Record<string, string> = {
   'src/lib/sequences/smart-retry.ts': 'whole-run credit estimate',
   'src/functions/sequences.ts': 'whole-run credit estimate',
   'src/functions/shot-image.ts': 'whole-run credit estimate',
+  'src/functions/pricing.ts': 'whole-run credit estimate',
+  'src/hooks/use-draft-generation-estimate.ts': 'whole-run credit estimate',
+  // Continue-stage prefetch for the whole sequence, not a per-shot render.
+  'src/routes/_app/sequences/$id/scenes.tsx':
+    'sequence-wide continue-stage estimate',
   // Plan snapshot of the sequence row. Per-shot answers are frozen onto each
   // PlanTarget as `usesStartFrame`.
   'src/lib/shots/update-stale-plan.ts': 'snapshots the sequence default',

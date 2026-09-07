@@ -10,7 +10,7 @@ import {
   SAVE_CARD_METADATA_TYPE,
   type WelcomeGrantSource,
 } from '@/lib/billing/checkout';
-import { SIGNUP_GRANT_MICROS } from '@/lib/billing/constants';
+import { SIGNUP_GRANT_MICROS } from '@/shared/billing/constants';
 import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
 import { captureCheckoutAnalyticsForStripeEvent } from '@/lib/billing/checkout-events';
 import { microsToDisplayUsd, usdToMicros } from '@/shared/billing/money';

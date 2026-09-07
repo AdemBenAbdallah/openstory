@@ -6,7 +6,8 @@ vi.doMock('#env', () => ({
   getEnv: () => env,
 }));
 
-const { grantsWelcomeCreditsOnSignup } = await import('./constants');
+const { grantsWelcomeCreditsOnSignup } =
+  await import('@/shared/billing/constants');
 
 describe('grantsWelcomeCreditsOnSignup', () => {
   it('credits at team create when Stripe is not configured', () => {
