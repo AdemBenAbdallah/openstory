@@ -7,6 +7,7 @@ import {
 import { describe, expect, it } from 'vitest';
 import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
 import {
+  MIN_TOPUP_AMOUNT_USD,
   SIGNUP_GRANT_MICROS,
   formatPlatformFeePercent,
   platformFeeUsd,
@@ -24,6 +25,10 @@ const WELCOME_SHORT_TARGET_S =
   WELCOME_SHORT_SCENE_COUNT * WELCOME_SHORT_SHOT_DURATION_S;
 
 describe('billing constants', () => {
+  it('minimum top-up is $5', () => {
+    expect(MIN_TOPUP_AMOUNT_USD).toBe(5);
+  });
+
   it('applies platform fee only at purchase', () => {
     expect(platformFeeUsd(100)).toBeCloseTo(7);
     expect(totalCheckoutUsd(100)).toBeCloseTo(107);

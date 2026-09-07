@@ -4,10 +4,12 @@ import { PageContainer } from '@/components/layout/page-container';
 import { PageIntro } from '@/components/typography/page-intro';
 import { ScriptView } from '@/components/script/script-view';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useBillingBalance } from '@/hooks/use-billing-balance';
 import { useBillingGate } from '@/hooks/use-billing-gate';
 import { useSequence } from '@/hooks/use-sequences';
 import { useStyles } from '@/hooks/use-styles';
 import { useUser } from '@/hooks/use-user';
+import { shouldOfferWelcomeClaim } from '@/lib/billing/constants';
 import { SITE_CONFIG } from '@/shared/marketing/constants';
 import { AUTO_STYLE_ID } from '@/lib/style/auto-style';
 import { briefForStyle } from '@/lib/style/brief-for-style';
@@ -174,7 +176,12 @@ export function NewSequencePage({
   );
 
   const { needsBillingSetup, hasFalKey, stripeEnabled } = useBillingGate();
+  const { hasSignupGrant } = useBillingBalance();
   const [billingOpen, setBillingOpen] = useState(false);
+  const offerWelcomeClaim = shouldOfferWelcomeClaim({
+    stripeEnabled,
+    hasSignupGrant,
+  });
 
   // Clear billing return flag when user is back on this page
   useEffect(() => {
@@ -182,10 +189,14 @@ export function NewSequencePage({
   }, []);
 
   useEffect(() => {
+    // Unclaimed welcome grant has its own dialog — don't stack the billing
+    // gate under it, and don't pop the gate after they Skip. Generate
+    // reopens the claim screen via GlobalBillingGateDialog.
+    if (offerWelcomeClaim) return;
     if (needsBillingSetup && !wasBillingPromptDismissed()) {
       setBillingOpen(true);
     }
-  }, [needsBillingSetup]);
+  }, [needsBillingSetup, offerWelcomeClaim]);
 
   const handleSuccess = useCallback(
     (sequenceIds: string[]) => {

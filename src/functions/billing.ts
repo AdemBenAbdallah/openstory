@@ -4,7 +4,13 @@
  */
 
 import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
-import { createCheckoutSession } from '@/lib/billing/checkout';
+import {
+  createCheckoutSession,
+  createSetupCheckoutSession,
+  grantWelcomeCreditsForPaymentMethod,
+  grantWelcomeIfTeamHasCard,
+  teamHasSavedCard,
+} from '@/lib/billing/checkout';
 import {
   captureCheckoutCanceledFromSession,
   captureCheckoutFailed,
@@ -25,7 +31,10 @@ import {
   usdToMicros,
 } from '@/lib/billing/money';
 import type { TransactionType } from '@/lib/db/schema/credits';
-import { ValidationError } from '@/shared/errors';
+import {
+  isWelcomeCardAlreadyClaimedError,
+  ValidationError,
+} from '@/shared/errors';
 import { FOUNDER_EMAIL } from '@/shared/marketing/constants';
 import { getLogger } from '@/lib/observability/logger';
 import { captureProductEvent } from '@/lib/observability/product-events';
@@ -72,6 +81,55 @@ export const createCheckoutSessionFn = createServerFn({ method: 'POST' })
     return { url };
   });
 
+/**
+ * Save a card with no charge (Stripe Checkout `mode: 'setup'`). Unlocks the
+ * welcome grant on session.completed, setup_intent.succeeded, or the claim
+ * fn on return.
+ */
+export const createSetupCheckoutSessionFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .handler(async ({ context }) => {
+    if (!isStripeEnabled()) {
+      throw new ValidationError('Stripe is not configured');
+    }
+
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+
+    const req = getRequest();
+    const appUrl = getServerAppUrl(req);
+
+    const { url } = await createSetupCheckoutSession({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+      userEmail: context.user.email,
+      successUrl: `${appUrl}/?welcome_setup=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${appUrl}/?welcome_setup=canceled`,
+    });
+
+    return { url };
+  });
+
+/**
+ * After Stripe setup redirect: grant the welcome credits if a card is on
+ * file. Idempotent with the webhook.
+ */
+export const claimWelcomeCreditsFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .handler(async ({ context }) => {
+    if (!isStripeEnabled()) {
+      return { granted: false, hasCard: false, hasSignupGrant: false };
+    }
+
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+
+    return grantWelcomeIfTeamHasCard({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+    });
+  });
+
 const reportCheckoutCanceledSchema = z.object({
   sessionId: z.string().min(1).max(256),
 });
@@ -116,10 +174,10 @@ export type SavedPaymentMethod = {
 };
 
 /**
- * Saved cards for the team's Stripe customer. Cards get saved during
- * Stripe Checkout (`setup_future_usage: 'off_session'`), so a team that has
- * never checked out has none — the add-credits dialog then falls back to a
- * Checkout redirect.
+ * Saved cards for the team's Stripe customer. Welcome claim saves a card
+ * via SetupIntent; Checkout (`setup_future_usage: 'off_session'`) saves one
+ * on a first purchase. The add-credits dialog falls back to Checkout when
+ * none are on file.
  *
  * Admin-only: these cards belong to whoever set billing up, and
  * `purchaseCreditsFn` can charge them without further consent.
@@ -357,6 +415,23 @@ export const purchaseCreditsFn = createServerFn({ method: 'POST' })
       },
     });
 
+    try {
+      await grantWelcomeCreditsForPaymentMethod({
+        scopedDb: context.scopedDb,
+        teamId: context.teamId,
+        userId: context.user.id,
+        paymentMethodId: data.paymentMethodId,
+        source: 'purchase',
+      });
+    } catch (err) {
+      if (!isWelcomeCardAlreadyClaimedError(err)) {
+        logger.error(
+          'Welcome grant after purchase failed; webhook will retry',
+          { err }
+        );
+      }
+    }
+
     // `null` means this exact grant already landed (replayed request) — the
     // earlier credit stands, so report the balance rather than a phantom.
     return {
@@ -376,7 +451,7 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
   .handler(async ({ context }) => {
     const { scopedDb } = context;
 
-    const [funds, settings, usageHistory] = await Promise.all([
+    const [funds, settings, usageHistory, hasSignupGrant] = await Promise.all([
       scopedDb.billing.getAvailable(),
       scopedDb.billing.getBillingSettings(),
       // One credit_usage row is enough — drives welcome-credits suppression (#1096).
@@ -384,6 +459,7 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
         limit: 1,
         type: 'credit_usage',
       }),
+      scopedDb.billing.hasSignupGrant(),
     ]);
 
     return {
@@ -395,6 +471,7 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
       // D1 `count(*)` can arrive as a string — coerce. Prefer row presence too.
       hasUsedCredits:
         usageHistory.transactions.length > 0 || Number(usageHistory.total) > 0,
+      hasSignupGrant,
       autoTopUp: {
         enabled: settings.autoTopUpEnabled,
         thresholdUsd: settings.autoTopUpThresholdMicros
@@ -558,11 +635,9 @@ export const updateAutoTopUpFn = createServerFn({ method: 'POST' })
 
     await requireTeamAdminAccess(context.user.id, context.teamId);
 
-    const billingSettings = await context.scopedDb.billing.getBillingSettings();
-
-    if (!billingSettings.stripeCustomerId) {
+    if (data.enabled && !(await teamHasSavedCard(context.scopedDb))) {
       throw new ValidationError(
-        'Add a payment method first by making a top-up purchase'
+        'Save a card first — no charge, or make a purchase'
       );
     }
 

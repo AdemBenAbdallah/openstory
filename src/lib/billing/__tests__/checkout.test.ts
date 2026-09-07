@@ -2,14 +2,20 @@ import type { ScopedDb } from '@/lib/db/scoped';
 import { describe, expect, it, vi } from 'vitest';
 
 const create = vi.fn();
+const paymentMethodsList = vi.fn();
 vi.doMock('../stripe', () => ({
   getStripeOrThrow: () => ({
     customers: {
       retrieve: vi.fn().mockResolvedValue({ deleted: false }),
       create: vi.fn().mockResolvedValue({ id: 'cus_new' }),
+      update: vi.fn(),
     },
     checkout: {
       sessions: { create },
+    },
+    paymentMethods: {
+      list: paymentMethodsList,
+      retrieve: vi.fn(),
     },
   }),
 }));
@@ -19,7 +25,11 @@ vi.doMock('@/lib/observability/product-events', () => ({
   captureProductEvent,
 }));
 
-const { createCheckoutSession } = await import('../checkout');
+const {
+  createCheckoutSession,
+  createSetupCheckoutSession,
+  grantWelcomeIfTeamHasCard,
+} = await import('../checkout');
 
 function makeScopedDb() {
   const stub = {
@@ -84,5 +94,104 @@ describe('createCheckoutSession', () => {
         surface: 'sidebar_pill',
       }),
     });
+  });
+
+  it('saves a card with Checkout setup mode and no charge', async () => {
+    create.mockReset();
+    create.mockResolvedValue({
+      id: 'cs_setup',
+      url: 'https://checkout.stripe.com/setup',
+    });
+    captureProductEvent.mockClear();
+
+    await createSetupCheckoutSession({
+      scopedDb: makeScopedDb(),
+      teamId: 'team_1',
+      userId: 'user_1',
+      userEmail: 'test@example.com',
+      successUrl:
+        'https://app/?welcome_setup=success&session_id={CHECKOUT_SESSION_ID}',
+      cancelUrl: 'https://app/?welcome_setup=canceled',
+    });
+
+    expect(create).toHaveBeenCalledTimes(1);
+    const session = create.mock.calls[0]?.[0];
+    expect(session.mode).toBe('setup');
+    expect(session.line_items).toBeUndefined();
+    expect(session.metadata).toEqual({
+      teamId: 'team_1',
+      userId: 'user_1',
+      type: 'save_card',
+    });
+    expect(session.success_url).toContain('welcome_setup=success');
+    expect(session.cancel_url).toContain('welcome_setup=canceled');
+    expect(session.setup_intent_data.metadata).toEqual(session.metadata);
+    expect(captureProductEvent).toHaveBeenCalledWith({
+      distinctId: 'user_1',
+      event: 'welcome_card_setup_opened',
+      properties: expect.objectContaining({
+        teamId: 'team_1',
+        stripe_checkout_session_id: 'cs_setup',
+      }),
+    });
+  });
+});
+
+describe('grantWelcomeIfTeamHasCard', () => {
+  it('does not grant when the team has no Stripe customer', async () => {
+    const addCredits = vi.fn();
+    const stub = {
+      billing: {
+        getBillingSettings: vi
+          .fn()
+          .mockResolvedValue({ stripeCustomerId: null }),
+        hasSignupGrant: vi.fn().mockResolvedValue(false),
+        addCredits,
+      },
+    };
+    // oxlint-disable-next-line typescript-eslint/no-unsafe-type-assertion -- test double
+    const scopedDb = stub as unknown as ScopedDb;
+
+    const result = await grantWelcomeIfTeamHasCard({
+      scopedDb,
+      teamId: 'team_1',
+      userId: 'user_1',
+    });
+
+    expect(result).toEqual({
+      granted: false,
+      hasCard: false,
+      hasSignupGrant: false,
+    });
+    expect(addCredits).not.toHaveBeenCalled();
+  });
+
+  it('does not grant when the customer has no saved card', async () => {
+    const addCredits = vi.fn();
+    paymentMethodsList.mockResolvedValue({ data: [] });
+    const stub = {
+      billing: {
+        getBillingSettings: vi
+          .fn()
+          .mockResolvedValue({ stripeCustomerId: 'cus_1' }),
+        hasSignupGrant: vi.fn().mockResolvedValue(false),
+        addCredits,
+      },
+    };
+    // oxlint-disable-next-line typescript-eslint/no-unsafe-type-assertion -- test double
+    const scopedDb = stub as unknown as ScopedDb;
+
+    const result = await grantWelcomeIfTeamHasCard({
+      scopedDb,
+      teamId: 'team_1',
+      userId: 'user_1',
+    });
+
+    expect(result).toEqual({
+      granted: false,
+      hasCard: false,
+      hasSignupGrant: false,
+    });
+    expect(addCredits).not.toHaveBeenCalled();
   });
 });

@@ -1,7 +1,7 @@
 /**
  * Low-balance toast (#1299).
  *
- * The toast carries the offer — "Add $10" as the primary action, with the
+ * The toast carries the offer — "Add $N" (min top-up) as the primary action, with the
  * gate's other paths (BYOK, gift codes, founder credits) on Sonner's `cancel`
  * slot. Separated from `useLowBalanceWarning` so the copy and both buttons
  * are viewable in Storybook without a real balance drop; the hook owns when

@@ -20,6 +20,8 @@ type BalanceQueryData = {
   availableUsd?: number;
   reservedUsd?: number;
   stripeEnabled: boolean;
+  hasUsedCredits?: boolean;
+  hasSignupGrant?: boolean;
   autoTopUp: {
     enabled: boolean;
     thresholdUsd: number | null;

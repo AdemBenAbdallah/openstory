@@ -42,7 +42,10 @@ import {
   useAddCreditsDialogOpen,
 } from '@/hooks/use-add-credits-dialog';
 import { closeBillingGate } from '@/hooks/use-billing-gate-dialog';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
+import {
+  BILLING_BALANCE_KEY,
+  BILLING_PAYMENT_METHODS_KEY,
+} from '@/hooks/use-billing-balance';
 import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
 import { useAuthSession } from '@/lib/auth/session-query';
 import {
@@ -94,7 +97,7 @@ export function AddCreditsDialog() {
         surface: getAddCreditsSurface(),
       });
       // The dialog is mounted once, so a previously typed amount would still
-      // be sitting there — and the low-balance toast promises "Add $10" (#1299).
+      // be sitting there — and the low-balance toast promises the min top-up (#1299).
       setAmount(DEFAULT_TOPUP_AMOUNT);
     }
   }, [open, posthog]);
@@ -104,7 +107,7 @@ export function AddCreditsDialog() {
     isLoading: pmLoading,
     error: pmError,
   } = useQuery({
-    queryKey: ['billing-payment-methods'],
+    queryKey: [...BILLING_PAYMENT_METHODS_KEY],
     queryFn: () => listPaymentMethodsFn(),
     staleTime: 60_000,
     enabled: open && !!session,

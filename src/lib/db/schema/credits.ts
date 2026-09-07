@@ -151,6 +151,30 @@ export const teamBillingSettings = snakeCase.table('team_billing_settings', {
     .notNull(),
 });
 
+/**
+ * One Stripe card fingerprint may unlock the welcome grant for one team.
+ * Fingerprint is Stripe's stable id for the PAN (same card, same account).
+ */
+export const welcomeCardClaims = snakeCase.table(
+  'welcome_card_claims',
+  {
+    id: text()
+      .$defaultFn(() => generateId())
+      .primaryKey()
+      .notNull(),
+    fingerprint: text().notNull(),
+    teamId: text()
+      .notNull()
+      .references(() => teams.id, { onDelete: 'restrict' }),
+    createdAt: integer({ mode: 'timestamp' })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('idx_welcome_card_claims_fingerprint').on(table.fingerprint),
+  ]
+);
+
 // Credit Batches — tracks each top-up for future expiration
 const CREDIT_BATCH_SOURCES = [
   'stripe_checkout',

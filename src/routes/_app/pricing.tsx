@@ -58,11 +58,12 @@ function PricingPage() {
           {filmCosts?.welcomeCredits ? (
             <>
               {' '}
-              New accounts start with{' '}
+              New accounts get{' '}
               <span className="font-medium text-foreground tabular-nums">
                 {filmCosts.welcomeCredits}
               </span>{' '}
-              free — enough for a typical 30s short with motion and music.
+              free after saving a card (no charge) — enough for a typical 30s
+              short with motion and music.
             </>
           ) : null}
         </p>

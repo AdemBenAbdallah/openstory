@@ -11,6 +11,7 @@ import {
   isStripeEnabled,
   MIN_TOPUP_AMOUNT_MICROS,
   RESERVATION_TTL_MS,
+  signupGrantIdempotencyKey,
   totalCheckoutCents,
 } from '@/lib/billing/constants';
 import {
@@ -29,6 +30,7 @@ import {
   credits,
   teamBillingSettings,
   transactions,
+  welcomeCardClaims,
 } from '@/lib/db/schema/credits';
 import type {
   CreditBatchSource,
@@ -38,7 +40,17 @@ import type {
 import { notifyAutoTopUpFailed } from '@/lib/emails/notify-auto-top-up-failed';
 import { ValidationError } from '@/shared/errors';
 import { getBillingChannel } from '@/lib/realtime';
-import { and, count, desc, eq, gte, isNull, notExists, sql } from 'drizzle-orm';
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gte,
+  isNull,
+  notExists,
+  or,
+  sql,
+} from 'drizzle-orm';
 import { generateId } from '@/shared/id';
 import { giftTokenRedemptions, giftTokens } from '../schema';
 
@@ -282,12 +294,34 @@ function createBillingReadMethods(db: Database, teamId: string) {
     return existing;
   }
 
+  /** True if this team already received the welcome grant.
+   *  Match idempotency key OR metadata.signupGrant: pre-#1516 rows have
+   *  no key, so the key alone would miss them and double-pay. */
+  async function hasSignupGrant(): Promise<boolean> {
+    const [row] = await db
+      .select({ id: transactions.id })
+      .from(transactions)
+      .where(
+        and(
+          eq(transactions.teamId, teamId),
+          eq(transactions.type, 'credit_adjustment'),
+          or(
+            eq(transactions.idempotencyKey, signupGrantIdempotencyKey(teamId)),
+            sql`json_extract(${transactions.metadata}, '$.signupGrant') = 1`
+          )
+        )
+      )
+      .limit(1);
+    return !!row;
+  }
+
   return {
     getBalance,
     getAvailable,
     hasEnoughCredits,
     getTransactionHistory,
     getBillingSettings,
+    hasSignupGrant,
   };
 }
 
@@ -314,6 +348,27 @@ export function createBillingMethods(
       transactionId: opts.transactionId,
       type: opts.type,
     });
+  }
+
+  /**
+   * Reserve this Stripe card fingerprint for this team's welcome grant.
+   * Returns false if another team already claimed with this card.
+   */
+  async function claimWelcomeCardFingerprint(
+    fingerprint: string
+  ): Promise<boolean> {
+    const inserted = await db
+      .insert(welcomeCardClaims)
+      .values({ fingerprint, teamId })
+      .onConflictDoNothing({ target: welcomeCardClaims.fingerprint })
+      .returning({ teamId: welcomeCardClaims.teamId });
+    if (inserted.length > 0) return true;
+    const [existing] = await db
+      .select({ teamId: welcomeCardClaims.teamId })
+      .from(welcomeCardClaims)
+      .where(eq(welcomeCardClaims.fingerprint, fingerprint))
+      .limit(1);
+    return existing?.teamId === teamId;
   }
 
   async function clearAutoTopUpFailure(): Promise<void> {
@@ -1554,6 +1609,7 @@ export function createBillingMethods(
     ...read,
     addCredits,
     saveStripeCustomerId,
+    claimWelcomeCardFingerprint,
     clearAutoTopUpFailure,
     deductCredits,
     tryDeductCredits,
