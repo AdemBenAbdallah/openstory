@@ -93,7 +93,11 @@ function writeEnvFile(vars: Map<string, string>) {
     },
     {
       header: 'Billing (Stripe)',
-      keys: ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'],
+      keys: [
+        'STRIPE_SECRET_KEY',
+        'STRIPE_PUBLISHABLE_KEY',
+        'STRIPE_WEBHOOK_SECRET',
+      ],
     },
     {
       header: 'Security',
@@ -1589,7 +1593,11 @@ export async function runProdSetup(mode: ProdSetupMode) {
   // -------------------------------------------------------------------------
   // Billing (Stripe)
   // -------------------------------------------------------------------------
-  const stripeKeys = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'] as const;
+  const stripeKeys = [
+    'STRIPE_SECRET_KEY',
+    'STRIPE_PUBLISHABLE_KEY',
+    'STRIPE_WEBHOOK_SECRET',
+  ] as const;
   const hasStripe = stripeKeys.some((k) => vars.has(k));
 
   if (hasStripe) {
@@ -1614,6 +1622,11 @@ export async function runProdSetup(mode: ProdSetupMode) {
       'Get one at: https://dashboard.stripe.com/apikeys'
     );
     await promptForKey(
+      'STRIPE_PUBLISHABLE_KEY',
+      'Stripe Publishable Key (pk_live_...)',
+      'Same page as the secret key — used for in-app card entry'
+    );
+    await promptForKey(
       'STRIPE_WEBHOOK_SECRET',
       'Stripe Webhook Secret (whsec_...)',
       'From your webhook endpoint in the Stripe dashboard'
@@ -1627,13 +1640,15 @@ export async function runProdSetup(mode: ProdSetupMode) {
         'Events to enable:',
         '  - checkout.session.completed',
         '  - checkout.session.expired',
+        '  - setup_intent.succeeded',
         '  - payment_intent.succeeded',
         '  - payment_intent.payment_failed',
         '  - payment_intent.canceled',
         '',
         'If using a restricted key, required permissions:',
         '  Charges (Read), Customers (Write),',
-        '  Payment Intents (Read), Checkout Sessions (Write)',
+        '  Payment Intents (Read), Setup Intents (Write),',
+        '  Checkout Sessions (Write)',
       ].join('\n'),
       'Production Webhook Setup'
     );

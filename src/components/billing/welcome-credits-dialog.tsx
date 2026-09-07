@@ -1,20 +1,14 @@
 /**
  * Welcome Credits Dialog (#1096, #1516)
  *
- * Two surfaces, one provider:
- *
- * - **claim** (hosted Stripe, no signup grant yet): unlock $20 by saving a
- *   card (no charge). Auto-reload is a separate +$10. GitHub/X are listed
- *   as optional, not as credit tasks.
- * - **gift** (self-host / e2e / grandfathered unused grant): the original
- *   "you have $20" nudge. Re-shows every RESHOW_INTERVAL_MS until the team
- *   spends credits.
+ * - **claim**: Stripe on, $20 unpaid. Add a card (Stripe Checkout setup,
+ *   no charge) to unlock it.
+ * - **gift**: unused signup grant and Stripe off (e2e / self-host).
  *
  * Dismiss cadence lives in localStorage (house pattern for UI prefs).
+ * Claim uses its own per-user key so a gift Skip cannot suppress it.
  */
 
-import { GitHubIcon } from '@/components/icons/github-icon';
-import { XIcon } from '@/components/icons/x-icon';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -28,79 +22,93 @@ import { Switch } from '@/components/ui/switch';
 import {
   claimWelcomeCreditsFn,
   createSetupCheckoutSessionFn,
-  listPaymentMethodsFn,
-  updateAutoTopUpFn,
 } from '@/functions/billing';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
 import {
   BILLING_BALANCE_KEY,
+  BILLING_PAYMENT_METHODS_KEY,
   useBillingBalance,
 } from '@/hooks/use-billing-balance';
 import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
 import { useShowCosts } from '@/hooks/use-show-costs';
 import { useUser } from '@/hooks/use-user';
 import {
-  AUTO_TOPUP_BONUS_MICROS,
-  MIN_TOPUP_AMOUNT_USD,
   SIGNUP_GRANT_MICROS,
-  WELCOME_AUTO_TOPUP_THRESHOLD_USD,
-} from '@/lib/billing/constants';
-import { microsToDisplayUsd } from '@/lib/billing/money';
-import {
   welcomeDialogMode,
   type WelcomeDialogMode,
-} from '@/lib/billing/welcome-grants';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+} from '@/lib/billing/constants';
+import { microsToDisplayUsd } from '@/lib/billing/money';
 import { hasPendingGenerate } from '@/shared/generation/pending-generate';
-import { cn } from '@/shared/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, CreditCard, RefreshCw, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import {
   createContext,
+  useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
 
-/** Last dismiss timestamp (ms since epoch). */
 const DISMISSED_AT_KEY = 'openstory:welcome-credits-dismissed-at';
-/** Legacy one-shot flag — cleared so new re-show rules can apply. */
+const CLAIM_DISMISSED_AT_KEY = 'openstory:welcome-claim-dismissed-at';
 const LEGACY_SEEN_KEY = 'openstory:welcome-credits-seen';
-/** Survives the Stripe setup redirect so we don't treat it as a dismiss. */
 const SETUP_PENDING_KEY = 'openstory:welcome-setup-pending';
 
-/** Re-show after dismiss until the team has actually spent credits. */
 const RESHOW_INTERVAL_MS = 3 * 60 * 60 * 1000;
 
 const GRANT_DISPLAY = microsToDisplayUsd(SIGNUP_GRANT_MICROS);
-const BONUS_DISPLAY = microsToDisplayUsd(AUTO_TOPUP_BONUS_MICROS);
 
-function readDismissedAt(): number | null {
+function parseDismissedAt(raw: string | null): number | null {
+  if (!raw) return null;
+  const ts = Number(raw);
+  return Number.isFinite(ts) ? ts : null;
+}
+
+function readDismissedAt(
+  mode: WelcomeDialogMode,
+  userId: string
+): number | null {
   try {
-    // Drop the old permanent "seen" flag without treating it as a fresh
-    // dismiss — otherwise anyone who hit the one-shot dialog is blocked
-    // for 3h every time we migrate.
-    if (localStorage.getItem(LEGACY_SEEN_KEY)) {
-      localStorage.removeItem(LEGACY_SEEN_KEY);
+    if (mode === 'claim') {
+      return parseDismissedAt(
+        localStorage.getItem(`${CLAIM_DISMISSED_AT_KEY}:${userId}`)
+      );
     }
-
-    const raw = localStorage.getItem(DISMISSED_AT_KEY);
-    if (!raw) return null;
-    const ts = Number(raw);
-    return Number.isFinite(ts) ? ts : null;
+    return (
+      parseDismissedAt(localStorage.getItem(`${DISMISSED_AT_KEY}:${userId}`)) ??
+      parseDismissedAt(localStorage.getItem(DISMISSED_AT_KEY))
+    );
   } catch {
-    // private mode / quota
     return null;
   }
 }
 
-function writeDismissedAt(): void {
+function isDismissInWindow(mode: WelcomeDialogMode, userId: string): boolean {
+  const dismissedAt = readDismissedAt(mode, userId);
+  return dismissedAt != null && Date.now() - dismissedAt < RESHOW_INTERVAL_MS;
+}
+
+function writeDismissedAt(mode: WelcomeDialogMode, userId: string): void {
   try {
-    localStorage.setItem(DISMISSED_AT_KEY, String(Date.now()));
+    const now = String(Date.now());
+    if (mode === 'claim') {
+      localStorage.setItem(`${CLAIM_DISMISSED_AT_KEY}:${userId}`, now);
+    } else {
+      localStorage.setItem(`${DISMISSED_AT_KEY}:${userId}`, now);
+      localStorage.setItem(DISMISSED_AT_KEY, now);
+    }
+    localStorage.removeItem(LEGACY_SEEN_KEY);
+  } catch {
+    // private mode / quota
+  }
+}
+
+function clearDismissedAt(userId: string): void {
+  try {
+    localStorage.removeItem(`${CLAIM_DISMISSED_AT_KEY}:${userId}`);
+    localStorage.removeItem(`${DISMISSED_AT_KEY}:${userId}`);
+    localStorage.removeItem(DISMISSED_AT_KEY);
     localStorage.removeItem(LEGACY_SEEN_KEY);
   } catch {
     // private mode / quota
@@ -131,17 +139,25 @@ function clearSetupPending(): void {
   }
 }
 
-/**
- * Whether the welcome-credits moment is still in the way: the show/skip
- * decision hasn't settled yet, or the dialog is open. Deferred flows (the
- * composer's resume-after-sign-in Generate, #1187) wait on this so they don't
- * stack their own dialog on top of the welcome gift. Permissive outside the
- * provider (stories/tests): nothing blocks.
- */
-const WelcomeCreditsContext = createContext<{ blocking: boolean } | null>(null);
+function subscribeNever(): () => void {
+  return () => {};
+}
 
-export function useWelcomeCreditsGate(): { blocking: boolean } {
-  return useContext(WelcomeCreditsContext) ?? { blocking: false };
+const WelcomeCreditsContext = createContext<{
+  blocking: boolean;
+  reopen: () => void;
+} | null>(null);
+
+export function useWelcomeCreditsGate(): {
+  blocking: boolean;
+  reopen: () => void;
+} {
+  return (
+    useContext(WelcomeCreditsContext) ?? {
+      blocking: false,
+      reopen: () => {},
+    }
+  );
 }
 
 export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
@@ -151,84 +167,80 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   const { showCosts, setShowCosts } = useShowCosts();
   const queryClient = useQueryClient();
   const {
-    data: balanceData,
     stripeEnabled,
     hasUsedCredits,
     hasSignupGrant,
-    hasAutoTopUpBonus,
     isSuccess: balanceReady,
     isError: balanceFailed,
   } = useBillingBalance();
-  const autoTopUpEnabled = balanceData?.autoTopUp.enabled ?? false;
-  const [open, setOpen] = useState(false);
-  // The show/skip decision has been made (dialog opened, or decided not to).
-  const [settled, setSettled] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
+  const [skippedUserId, setSkippedUserId] = useState<string | null>(null);
+  const [forcedOpen, setForcedOpen] = useState(false);
+  const [redirectingToStripe, setRedirectingToStripe] = useState(false);
+  const isClient = useSyncExternalStore(
+    subscribeNever,
+    () => true,
+    () => false
+  );
   const setupPending = useSyncExternalStore(
-    () => () => {},
+    subscribeNever,
     isSetupPending,
     () => false
   );
-  const redirectingToStripe = useRef(false);
 
   const mode: WelcomeDialogMode = welcomeDialogMode({
     stripeEnabled,
     hasSignupGrant,
     hasUsedCredits,
-    setupPending,
   });
 
-  useEffect(() => {
-    if (!user) return;
-    // Free credits off (#1529): nothing to announce.
-    if (SIGNUP_GRANT_MICROS <= 0) {
-      setSettled(true);
-      return;
-    }
-    // Wait until balance query settles (success or error). Don't use isFetched
-    // alone — while the query is disabled it stays false forever.
-    if (!balanceReady && !balanceFailed) return;
+  const grantOff = SIGNUP_GRANT_MICROS <= 0;
+  const recentlyDismissed = useSyncExternalStore(
+    subscribeNever,
+    () => Boolean(user && mode !== 'none' && isDismissInWindow(mode, user.id)),
+    () => false
+  );
+  const balanceSettled = balanceReady || balanceFailed;
+  const skipped = skippedUserId === user?.id;
+  const open = Boolean(
+    !grantOff &&
+    isClient &&
+    user &&
+    balanceSettled &&
+    !(stripeEnabled && hasSignupGrant) &&
+    (forcedOpen ||
+      setupPending ||
+      (mode !== 'none' && !skipped && !recentlyDismissed))
+  );
+  const settled = !user || grantOff || (isClient && balanceSettled);
 
-    if (setupPending) {
-      setOpen(true);
-      setSettled(true);
-      return;
-    }
-
-    if (mode === 'none') {
-      setSettled(true);
-      return;
-    }
-
-    const dismissedAt = readDismissedAt();
-    if (dismissedAt != null && Date.now() - dismissedAt < RESHOW_INTERVAL_MS) {
-      setSettled(true);
-      return;
-    }
-    setOpen(true);
-    setSettled(true);
-  }, [user, mode, setupPending, balanceReady, balanceFailed]);
+  const reopen = useCallback(() => {
+    if (user) clearDismissedAt(user.id);
+    setSkippedUserId(null);
+    setForcedOpen(true);
+    setSetupError(null);
+  }, [user]);
 
   const handleOpenChange = (next: boolean) => {
-    if (!next && redirectingToStripe.current) {
-      // Full-page navigate to Stripe — don't treat unload as a dismiss.
-      return;
-    }
-    setOpen(next);
+    if (!next && redirectingToStripe) return;
     if (!next) {
-      writeDismissedAt();
+      if (user) {
+        writeDismissedAt(mode === 'none' ? 'claim' : mode, user.id);
+        setSkippedUserId(user.id);
+      }
+      setForcedOpen(false);
       clearSetupPending();
       setSetupError(null);
     }
   };
 
-  const { data: pmData } = useQuery({
-    queryKey: ['billing-payment-methods'],
-    queryFn: () => listPaymentMethodsFn(),
-    enabled: Boolean(user && stripeEnabled && mode === 'claim'),
-    staleTime: 60_000,
-  });
-  const hasSavedCard = (pmData?.paymentMethods.length ?? 0) > 0;
+  const invalidateBilling = () => {
+    void queryClient.invalidateQueries({ queryKey: [...BILLING_BALANCE_KEY] });
+    void queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
+    void queryClient.invalidateQueries({
+      queryKey: [...BILLING_PAYMENT_METHODS_KEY],
+    });
+  };
 
   const setupMutation = useMutation({
     meta: { inlineError: true },
@@ -238,126 +250,78 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
       window.location.href = data.url;
     },
     onError: (err) => {
-      redirectingToStripe.current = false;
+      setRedirectingToStripe(false);
+      clearSetupPending();
       setSetupError(
         err instanceof Error ? err.message : 'Could not open card setup'
       );
     },
   });
 
-  const autoTopUpMutation = useMutation({
-    meta: { inlineError: true },
-    mutationFn: () =>
-      updateAutoTopUpFn({
-        data: {
-          enabled: true,
-          thresholdUsd: WELCOME_AUTO_TOPUP_THRESHOLD_USD,
-          amountUsd: MIN_TOPUP_AMOUNT_USD,
-        },
-      }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: [...BILLING_BALANCE_KEY],
-      });
-      void queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
-      void queryClient.invalidateQueries({
-        queryKey: ['billing-payment-methods'],
-      });
-    },
-    onError: (err) => {
-      setSetupError(
-        err instanceof Error ? err.message : 'Could not enable auto-reload'
-      );
-    },
-  });
-
   const returnedFromStripe =
-    setupPending && !setupMutation.isPending && !redirectingToStripe.current;
+    setupPending && !setupMutation.isPending && !redirectingToStripe;
 
   const claimQuery = useQuery({
     queryKey: ['welcome-credits-claim', user?.id],
     queryFn: async () => {
       const result = await claimWelcomeCreditsFn();
-      await queryClient.invalidateQueries({
-        queryKey: [...BILLING_BALANCE_KEY],
-      });
-      await queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
-      await queryClient.invalidateQueries({
-        queryKey: ['billing-payment-methods'],
-      });
+      invalidateBilling();
+      if (!result.hasCard) {
+        throw new Error('Could not unlock credits yet');
+      }
       return result;
     },
     enabled: Boolean(user && open && returnedFromStripe),
-    retry: false,
+    retry: 3,
+    retryDelay: 1000,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
-  // Signed-in with the decision still pending counts as blocking, so a
-  // deferred flow can't jump in just before the dialog opens. After the
-  // card-gated grant lands, Generate can proceed even if the auto-reload
-  // offer is still up.
   const value = useMemo(
     () => ({
       blocking:
         (!!user && !settled) ||
         (open && (mode === 'gift' || (mode === 'claim' && !hasSignupGrant))),
+      reopen,
     }),
-    [user, settled, open, mode, hasSignupGrant]
+    [user, settled, open, mode, hasSignupGrant, reopen]
   );
 
-  // False on the server; only VISIBLE while the dialog is open (client-only,
-  // after the localStorage intent exists), so no SSR/hydration mismatch.
   const primaryLabel = hasPendingGenerate()
     ? 'Keep creating'
     : 'Start creating';
 
+  const claimError =
+    setupError ??
+    (claimQuery.error instanceof Error ? claimQuery.error.message : null);
+
   return (
     <WelcomeCreditsContext.Provider value={value}>
       {children}
-      <Dialog open={open && mode !== 'none'} onOpenChange={handleOpenChange}>
-        {mode === 'claim' ? (
-          <ClaimDialogContent
-            grantDisplay={GRANT_DISPLAY}
-            bonusDisplay={BONUS_DISPLAY}
-            hasSavedCard={hasSavedCard}
-            hasAutoTopUpBonus={hasAutoTopUpBonus}
-            autoTopUpEnabled={autoTopUpEnabled}
-            showCosts={showCosts}
-            onShowCostsChange={setShowCosts}
-            setupError={
-              setupError ??
-              (claimQuery.error instanceof Error
-                ? claimQuery.error.message
-                : claimQuery.isError
-                  ? 'Could not unlock credits yet'
-                  : null)
-            }
-            setupPending={setupMutation.isPending}
-            autoTopUpPending={autoTopUpMutation.isPending}
-            onSaveCard={() => {
-              setSetupError(null);
-              markSetupPending();
-              redirectingToStripe.current = true;
-              setupMutation.mutate();
-            }}
-            onEnableAutoTopUp={() => {
-              setSetupError(null);
-              autoTopUpMutation.mutate();
-            }}
-            onSkip={() => handleOpenChange(false)}
-            primaryLabel={primaryLabel}
-          />
-        ) : (
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        {mode === 'gift' ? (
           <GiftDialogContent
             grantDisplay={GRANT_DISPLAY}
             showCosts={showCosts}
             onShowCostsChange={setShowCosts}
-            stripeEnabled={stripeEnabled}
-            onBuyMore={() => {
-              handleOpenChange(false);
-              openAddCreditsDialog('welcome_dialog');
-            }}
             onStart={() => handleOpenChange(false)}
             primaryLabel={primaryLabel}
+          />
+        ) : (
+          <ClaimDialogContent
+            grantDisplay={GRANT_DISPLAY}
+            showCosts={showCosts}
+            onShowCostsChange={setShowCosts}
+            setupError={claimError}
+            opening={setupMutation.isPending || redirectingToStripe}
+            claiming={claimQuery.isPending && returnedFromStripe}
+            onAddCard={() => {
+              setSetupError(null);
+              setRedirectingToStripe(true);
+              setupMutation.mutate();
+            }}
+            onSkip={() => handleOpenChange(false)}
           />
         )}
       </Dialog>
@@ -365,109 +329,37 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-type ClaimDialogContentProps = {
-  grantDisplay: string;
-  bonusDisplay: string;
-  hasSavedCard: boolean;
-  hasAutoTopUpBonus: boolean;
-  autoTopUpEnabled: boolean;
-  showCosts: boolean;
-  onShowCostsChange: (value: boolean) => void;
-  setupError: string | null;
-  setupPending: boolean;
-  autoTopUpPending: boolean;
-  onSaveCard: () => void;
-  onEnableAutoTopUp: () => void;
-  onSkip: () => void;
-  primaryLabel: string;
-};
-
 function ClaimDialogContent({
   grantDisplay,
-  bonusDisplay,
-  hasSavedCard,
-  hasAutoTopUpBonus,
-  autoTopUpEnabled,
   showCosts,
   onShowCostsChange,
   setupError,
-  setupPending,
-  autoTopUpPending,
-  onSaveCard,
-  onEnableAutoTopUp,
+  opening,
+  claiming,
+  onAddCard,
   onSkip,
-  primaryLabel,
-}: ClaimDialogContentProps) {
-  const autoReloadDone = hasAutoTopUpBonus || autoTopUpEnabled;
-
+}: {
+  grantDisplay: string;
+  showCosts: boolean;
+  onShowCostsChange: (value: boolean) => void;
+  setupError: string | null;
+  opening: boolean;
+  claiming: boolean;
+  onAddCard: () => void;
+  onSkip: () => void;
+}) {
+  const busy = opening || claiming;
   return (
     <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
       <WelcomeHeader
         amount={grantDisplay}
-        description="Save a card to unlock it. We won't charge you — it just confirms you're a real person."
+        description="Add a card to unlock it. We won't charge you — it just confirms you're a real person."
       />
 
       <div className="flex flex-col gap-4 px-6 py-5">
-        <ul className="flex flex-col gap-2">
-          <TaskRow
-            done={hasSavedCard}
-            icon={<CreditCard className="size-4" aria-hidden />}
-            title="Save a card"
-            detail={`No payment today. Unlocks ${grantDisplay}.`}
-            reward={grantDisplay}
-            action={
-              hasSavedCard ? null : (
-                <Button size="sm" onClick={onSaveCard} disabled={setupPending}>
-                  {setupPending ? 'Opening…' : 'Save card'}
-                </Button>
-              )
-            }
-          />
-          <TaskRow
-            done={autoReloadDone}
-            icon={<RefreshCw className="size-4" aria-hidden />}
-            title="Turn on auto-reload"
-            detail={`Adds $${MIN_TOPUP_AMOUNT_USD} when your balance hits $${WELCOME_AUTO_TOPUP_THRESHOLD_USD}. Change anytime.`}
-            reward={`+${bonusDisplay}`}
-            action={
-              autoReloadDone ? null : (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={onEnableAutoTopUp}
-                  disabled={!hasSavedCard || autoTopUpPending}
-                >
-                  {autoTopUpPending ? 'Enabling…' : 'Enable'}
-                </Button>
-              )
-            }
-          />
-        </ul>
-
-        <p className="text-xs text-muted-foreground">
-          Optional, no credits —{' '}
-          <a
-            href={SITE_CONFIG.githubHref}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
-          >
-            <GitHubIcon className="size-3" />
-            Star on GitHub
-          </a>
-          {' · '}
-          <a
-            href={SITE_CONFIG.xHref}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
-          >
-            <XIcon className="size-3" />
-            Follow on X
-          </a>
-        </p>
-
-        <ShowCostsRow checked={showCosts} onCheckedChange={onShowCostsChange} />
+        <Button className="self-center" onClick={onAddCard} disabled={busy}>
+          {claiming ? 'Unlocking…' : opening ? 'Opening…' : 'Add a card'}
+        </Button>
 
         {setupError ? (
           <p role="alert" className="text-xs text-destructive">
@@ -475,46 +367,34 @@ function ClaimDialogContent({
           </p>
         ) : null}
 
-        <DialogFooter className="gap-2 sm:justify-stretch">
-          {hasSavedCard ? (
-            <Button className="sm:flex-1" onClick={onSkip}>
-              {primaryLabel}
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="sm:flex-1"
-              onClick={onSkip}
-              disabled={setupPending}
-            >
-              Skip for now
-            </Button>
-          )}
-        </DialogFooter>
+        <ShowCostsRow checked={showCosts} onCheckedChange={onShowCostsChange} />
+
+        <Button
+          variant="link"
+          className="self-end text-muted-foreground"
+          onClick={onSkip}
+          disabled={busy}
+        >
+          Skip for now
+        </Button>
       </div>
     </DialogContent>
   );
 }
 
-type GiftDialogContentProps = {
-  grantDisplay: string;
-  showCosts: boolean;
-  onShowCostsChange: (value: boolean) => void;
-  stripeEnabled: boolean;
-  onBuyMore: () => void;
-  onStart: () => void;
-  primaryLabel: string;
-};
-
 function GiftDialogContent({
   grantDisplay,
   showCosts,
   onShowCostsChange,
-  stripeEnabled,
-  onBuyMore,
   onStart,
   primaryLabel,
-}: GiftDialogContentProps) {
+}: {
+  grantDisplay: string;
+  showCosts: boolean;
+  onShowCostsChange: (value: boolean) => void;
+  onStart: () => void;
+  primaryLabel: string;
+}) {
   return (
     <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
       <WelcomeHeader
@@ -526,11 +406,6 @@ function GiftDialogContent({
         <ShowCostsRow checked={showCosts} onCheckedChange={onShowCostsChange} />
 
         <DialogFooter className="gap-2 sm:justify-stretch">
-          {stripeEnabled ? (
-            <Button variant="outline" className="sm:flex-1" onClick={onBuyMore}>
-              Buy more
-            </Button>
-          ) : null}
           <Button className="sm:flex-1" onClick={onStart}>
             {primaryLabel}
           </Button>
@@ -553,11 +428,6 @@ function WelcomeHeader({
         aria-hidden
         className="pointer-events-none absolute -right-8 -top-10 size-40 rounded-full bg-primary/15 blur-2xl"
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-12 -left-6 size-32 rounded-full bg-emerald-500/10 blur-2xl"
-      />
-
       <div className="relative flex flex-col items-center gap-3 text-center">
         <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm ring-4 ring-primary/15">
           <Sparkles className="size-6" aria-hidden />
@@ -599,61 +469,5 @@ function ShowCostsRow({
         aria-label="Show costs"
       />
     </div>
-  );
-}
-
-function TaskRow({
-  done,
-  icon,
-  title,
-  detail,
-  reward,
-  action,
-}: {
-  done: boolean;
-  icon: ReactNode;
-  title: string;
-  detail: string;
-  reward: string;
-  action: ReactNode;
-}) {
-  return (
-    <li
-      className={cn(
-        'flex flex-col gap-3 rounded-xl border p-3.5 sm:flex-row sm:items-start',
-        done
-          ? 'border-primary/30 bg-primary/5'
-          : 'border-border/60 bg-transparent'
-      )}
-    >
-      <div className="flex min-w-0 flex-1 items-start gap-3">
-        <span
-          className={cn(
-            'mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full',
-            done
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground'
-          )}
-          aria-hidden
-        >
-          {done ? <Check className="size-4" /> : icon}
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <div className="flex items-baseline justify-between gap-2">
-            <p className="text-sm font-medium">
-              {done ? <span className="sr-only">Done. </span> : null}
-              {title}
-            </p>
-            <p className="shrink-0 text-xs font-medium tabular-nums text-muted-foreground">
-              {reward}
-            </p>
-          </div>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            {detail}
-          </p>
-        </div>
-      </div>
-      {action ? <div className="shrink-0 sm:self-center">{action}</div> : null}
-    </li>
   );
 }

@@ -9,6 +9,7 @@ import { LOW_BALANCE_THRESHOLD_USD } from '@/lib/billing/constants';
 import { getBillingBalanceFn } from '@/functions/billing';
 
 export const BILLING_BALANCE_KEY = ['billing-balance'] as const;
+export const BILLING_PAYMENT_METHODS_KEY = ['billing-payment-methods'] as const;
 
 export function useBillingBalance() {
   const { data: session } = useAuthSession();
@@ -38,7 +39,6 @@ export function useBillingBalance() {
     stripeEnabled: query.data?.stripeEnabled ?? false,
     hasUsedCredits: query.data?.hasUsedCredits ?? false,
     hasSignupGrant: query.data?.hasSignupGrant ?? false,
-    hasAutoTopUpBonus: query.data?.hasAutoTopUpBonus ?? false,
     isLowBalance:
       balance !== null && balance > 0 && balance <= lowBalanceThreshold,
     isZeroBalance: balance !== null && balance <= 0,

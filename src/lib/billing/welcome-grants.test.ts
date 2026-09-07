@@ -1,8 +1,8 @@
 import {
-  AUTO_TOPUP_BONUS_MICROS,
+  grantSignupCredits,
   SIGNUP_GRANT_MICROS,
+  welcomeDialogMode,
 } from '@/lib/billing/constants';
-import { micros } from '@/lib/billing/money';
 import type { Database } from '@/lib/db/client';
 import { generateId } from '@/shared/id';
 import { credits, teams, transactions, user } from '@/lib/db/schema';
@@ -12,11 +12,6 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createBillingMethods } from '@/lib/db/scoped/billing';
-import {
-  grantAutoTopUpBonus,
-  grantSignupCredits,
-  welcomeDialogMode,
-} from './welcome-grants';
 
 describe('welcomeDialogMode', () => {
   it('asks for a card when Stripe is on and the welcome grant is still unpaid', () => {
@@ -25,20 +20,18 @@ describe('welcomeDialogMode', () => {
         stripeEnabled: true,
         hasSignupGrant: false,
         hasUsedCredits: false,
-        setupPending: false,
       })
     ).toBe('claim');
   });
 
-  it('keeps the claim checklist on Stripe after the grant so auto-reload is still offered', () => {
+  it('hides the claim dialog once the grant has landed', () => {
     expect(
       welcomeDialogMode({
         stripeEnabled: true,
         hasSignupGrant: true,
         hasUsedCredits: false,
-        setupPending: false,
       })
-    ).toBe('claim');
+    ).toBe('none');
   });
 
   it('keeps the unused-gift dialog when Stripe is off', () => {
@@ -47,29 +40,26 @@ describe('welcomeDialogMode', () => {
         stripeEnabled: false,
         hasSignupGrant: true,
         hasUsedCredits: false,
-        setupPending: false,
       })
     ).toBe('gift');
   });
 
-  it('never shows once the team has spent credits', () => {
+  it('hides the claim dialog after a grandfathered grant has been spent', () => {
+    expect(
+      welcomeDialogMode({
+        stripeEnabled: true,
+        hasSignupGrant: true,
+        hasUsedCredits: true,
+      })
+    ).toBe('none');
+  });
+
+  it('still offers the card gate after BYOK spend if the grant is unpaid', () => {
     expect(
       welcomeDialogMode({
         stripeEnabled: true,
         hasSignupGrant: false,
         hasUsedCredits: true,
-        setupPending: false,
-      })
-    ).toBe('none');
-  });
-
-  it('reopens the claim checklist while returning from Stripe setup', () => {
-    expect(
-      welcomeDialogMode({
-        stripeEnabled: true,
-        hasSignupGrant: true,
-        hasUsedCredits: false,
-        setupPending: true,
       })
     ).toBe('claim');
   });
@@ -129,6 +119,14 @@ describe('welcome credit grants', () => {
     });
     expect(second.granted).toBe(false);
     expect(await billing.getBalance()).toBe(SIGNUP_GRANT_MICROS);
+
+    const raced = await grantSignupCredits({
+      teamId,
+      addCredits: billing.addCredits,
+      alreadyGranted: false,
+    });
+    expect(raced.granted).toBe(false);
+    expect(await billing.getBalance()).toBe(SIGNUP_GRANT_MICROS);
   });
 
   it('treats a pre-gate signupGrant metadata row as already granted', async () => {
@@ -143,34 +141,22 @@ describe('welcome credit grants', () => {
     const result = await grantSignupCredits({
       teamId,
       addCredits: billing.addCredits,
-      alreadyGranted: true,
+      alreadyGranted: await billing.hasSignupGrant(),
     });
     expect(result.granted).toBe(false);
     expect(await billing.getBalance()).toBe(SIGNUP_GRANT_MICROS);
   });
 
-  it('credits the auto-reload bonus once', async () => {
+  it('lets only one team claim a given card fingerprint', async () => {
     const billing = createBillingMethods(db, teamId, userId);
-    await billing.addCredits(micros(1_000_000), {
-      type: 'credit_adjustment',
-      description: 'seed',
-    });
+    expect(await billing.claimWelcomeCardFingerprint('fp_card_1')).toBe(true);
+    expect(await billing.claimWelcomeCardFingerprint('fp_card_1')).toBe(true);
 
-    const first = await grantAutoTopUpBonus({
-      teamId,
-      addCredits: billing.addCredits,
-    });
-    expect(first.granted).toBe(true);
-    expect(first.newBalance).toBe(micros(1_000_000 + AUTO_TOPUP_BONUS_MICROS));
-    expect(await billing.hasAutoTopUpBonus()).toBe(true);
-
-    const second = await grantAutoTopUpBonus({
-      teamId,
-      addCredits: billing.addCredits,
-    });
-    expect(second.granted).toBe(false);
-    expect(await billing.getBalance()).toBe(
-      micros(1_000_000 + AUTO_TOPUP_BONUS_MICROS)
-    );
+    const otherTeamId = generateId();
+    await db
+      .insert(teams)
+      .values({ id: otherTeamId, name: 'Other', slug: 'other' });
+    const other = createBillingMethods(db, otherTeamId, userId);
+    expect(await other.claimWelcomeCardFingerprint('fp_card_1')).toBe(false);
   });
 });

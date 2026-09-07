@@ -5,9 +5,11 @@
  * Visible when:
  * 1. Signed out — welcome-credit preview (grant amount, green) so new visitors
  *    see the free starting balance before they create an account (#1140)
- * 2. Low balance with no safety net (amber)
- * 3. Balance topped up — brief green flash
- * 4. User left "Show costs" on (default) — muted wallet amount (#1140)
+ * 2. Signed in with an unclaimed welcome grant — same green pill; click
+ *    reopens the claim dialog after Skip
+ * 3. Low balance with no safety net (amber)
+ * 4. Balance topped up — brief green flash
+ * 5. User left "Show costs" on (default) — muted wallet amount (#1140)
  *
  * Expanded: wallet + $amount at normal sidebar foreground weight.
  * Collapsed (icon rail): wallet icon only + tooltip with amount — never the
@@ -22,6 +24,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useWelcomeCreditsGate } from '@/components/billing/welcome-credits-dialog';
 import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
 import { useBalanceFlash } from '@/hooks/use-balance-flash';
 import { useBillingBalance } from '@/hooks/use-billing-balance';
@@ -38,12 +41,23 @@ const WELCOME_AMOUNT = microsToDisplayUsd(SIGNUP_GRANT_MICROS);
 
 export const CreditBalancePill: React.FC = () => {
   const { data: user, isLoading: userLoading } = useUser();
-  const { balance, reserved, teamId, isLowBalance } = useBillingBalance();
+  const {
+    balance,
+    reserved,
+    teamId,
+    isLowBalance,
+    stripeEnabled,
+    hasSignupGrant,
+  } = useBillingBalance();
   const { data: gateStatus } = useBillingGateQuery();
   const { showCosts } = useShowCosts();
   const { isFlashing } = useBalanceFlash();
+  const { reopen: reopenWelcomeCredits } = useWelcomeCreditsGate();
 
   const isSignedOut = !userLoading && !user;
+  const unclaimedWelcome = Boolean(
+    user && stripeEnabled && !hasSignupGrant && SIGNUP_GRANT_MICROS > 0
+  );
 
   // A fal key alone covers generation (LLM calls route through fal's
   // OpenRouter endpoint); an OpenRouter key alone doesn't cover media.
@@ -75,6 +89,26 @@ export const CreditBalancePill: React.FC = () => {
                 {WELCOME_AMOUNT}
               </span>
             </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
+  if (unclaimedWelcome) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            tooltip={`Claim ${WELCOME_AMOUNT} welcome credits`}
+            onClick={() => reopenWelcomeCredits()}
+            aria-label={`Claim ${WELCOME_AMOUNT} welcome credits`}
+            className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400"
+          >
+            <Wallet />
+            <span className="tabular-nums" aria-live="polite">
+              {WELCOME_AMOUNT}
+            </span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

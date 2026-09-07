@@ -22,7 +22,6 @@ type BalanceQueryData = {
   stripeEnabled: boolean;
   hasUsedCredits?: boolean;
   hasSignupGrant?: boolean;
-  hasAutoTopUpBonus?: boolean;
   autoTopUp: {
     enabled: boolean;
     thresholdUsd: number | null;

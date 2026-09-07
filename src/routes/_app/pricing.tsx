@@ -63,7 +63,7 @@ function PricingPage() {
                 {filmCosts.welcomeCredits}
               </span>{' '}
               free after saving a card (no charge) — enough for a typical 30s
-              short with motion and music. Auto-reload unlocks another $10.
+              short with motion and music.
             </>
           ) : null}
         </p>

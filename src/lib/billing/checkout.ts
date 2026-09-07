@@ -1,22 +1,41 @@
 /**
  * Stripe Checkout Service
- * Creates checkout sessions for credit top-ups and card setup (#1516).
+ * Credit top-up Checkout sessions and save-card setup (#1516).
  */
 
-import { ValidationError } from '@/shared/errors';
+import {
+  isWelcomeCardAlreadyClaimedError,
+  ValidationError,
+  WelcomeCardAlreadyClaimedError,
+} from '@/shared/errors';
 import { captureProductEvent } from '@/lib/observability/product-events';
 import {
   formatPlatformFeePercent,
+  grantSignupCredits,
   MIN_TOPUP_AMOUNT_USD,
+  SIGNUP_GRANT_MICROS,
   splitCheckoutAmounts,
 } from './constants';
+import { microsToUsd } from './money';
 import { captureCheckoutOpened } from './checkout-events';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { getStripeOrThrow } from './stripe';
 import type Stripe from 'stripe';
 
-/** Metadata `type` for Checkout `mode: 'setup'` — no charge, save a card. */
+/** Metadata `type` for save-card Checkout / SetupIntent — no charge. */
 export const SAVE_CARD_METADATA_TYPE = 'save_card';
+
+async function cardFingerprint(paymentMethodId: string): Promise<string> {
+  const stripe = getStripeOrThrow();
+  const pm = await stripe.paymentMethods.retrieve(paymentMethodId);
+  const fingerprint = pm.card?.fingerprint;
+  if (!fingerprint) {
+    throw new ValidationError(
+      'This card cannot be used to claim welcome credits'
+    );
+  }
+  return fingerprint;
+}
 
 type CreateCheckoutParams = {
   scopedDb: ScopedDb;
@@ -185,7 +204,7 @@ type CreateSetupCheckoutParams = {
 };
 
 /**
- * Checkout in `mode: 'setup'` — Stripe's UI says save a card, not pay $0.
+ * Checkout in `mode: 'setup'` — Stripe's UI says save a card, not pay.
  * Webhook middleware requires teamId + userId on the object metadata, so
  * both the session and the SetupIntent carry them.
  */
@@ -233,4 +252,129 @@ export async function createSetupCheckoutSession(
   }
 
   return { url: session.url };
+}
+
+export type WelcomeGrantSource =
+  | 'setup_checkout'
+  | 'setup_intent'
+  | 'claim'
+  | 'purchase';
+
+export async function teamHasSavedCard(scopedDb: ScopedDb): Promise<boolean> {
+  const settings = await scopedDb.billing.getBillingSettings();
+  if (!settings.stripeCustomerId) return false;
+  const stripe = getStripeOrThrow();
+  const methods = await stripe.paymentMethods.list({
+    customer: settings.stripeCustomerId,
+    type: 'card',
+    limit: 1,
+  });
+  return methods.data.length > 0;
+}
+
+export async function fulfillSavedCard(opts: {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  customerId: string;
+  paymentMethodId: string;
+  source: Exclude<WelcomeGrantSource, 'purchase'>;
+}): Promise<{ granted: boolean }> {
+  const fingerprint = await cardFingerprint(opts.paymentMethodId);
+  const stripe = getStripeOrThrow();
+  await stripe.customers.update(opts.customerId, {
+    invoice_settings: { default_payment_method: opts.paymentMethodId },
+  });
+  await opts.scopedDb.billing.saveStripeCustomerId(opts.customerId);
+  await opts.scopedDb.billing.clearAutoTopUpFailure();
+
+  return grantWelcomeCreditsForTeam({
+    scopedDb: opts.scopedDb,
+    teamId: opts.teamId,
+    userId: opts.userId,
+    source: opts.source,
+    cardFingerprint: fingerprint,
+  });
+}
+
+export async function grantWelcomeCreditsForTeam(opts: {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  source: WelcomeGrantSource;
+  cardFingerprint: string;
+}): Promise<{ granted: boolean }> {
+  const alreadyGranted = await opts.scopedDb.billing.hasSignupGrant();
+  if (alreadyGranted) return { granted: false };
+
+  const reserved = await opts.scopedDb.billing.claimWelcomeCardFingerprint(
+    opts.cardFingerprint
+  );
+  if (!reserved) {
+    throw new WelcomeCardAlreadyClaimedError();
+  }
+
+  const result = await grantSignupCredits({
+    teamId: opts.teamId,
+    addCredits: opts.scopedDb.billing.addCredits,
+    alreadyGranted: false,
+  });
+
+  if (result.granted) {
+    captureProductEvent({
+      distinctId: opts.userId,
+      event: 'welcome_credits_granted',
+      properties: {
+        teamId: opts.teamId,
+        amount_usd: microsToUsd(SIGNUP_GRANT_MICROS),
+        source: opts.source,
+      },
+    });
+  }
+
+  return { granted: result.granted };
+}
+
+export async function grantWelcomeCreditsOnPurchase(
+  opts: Parameters<typeof grantWelcomeCreditsForTeam>[0]
+): Promise<{ granted: boolean }> {
+  try {
+    return await grantWelcomeCreditsForTeam(opts);
+  } catch (err) {
+    if (isWelcomeCardAlreadyClaimedError(err)) {
+      return { granted: false };
+    }
+    throw err;
+  }
+}
+
+/** Return-from-Stripe safety net (webhook may still be in flight). */
+export async function grantWelcomeIfTeamHasCard(opts: {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+}): Promise<{ granted: boolean; hasCard: boolean }> {
+  const settings = await opts.scopedDb.billing.getBillingSettings();
+  if (!settings.stripeCustomerId) {
+    return { granted: false, hasCard: false };
+  }
+
+  const stripe = getStripeOrThrow();
+  const methods = await stripe.paymentMethods.list({
+    customer: settings.stripeCustomerId,
+    type: 'card',
+    limit: 1,
+  });
+  const pm = methods.data[0];
+  if (!pm) return { granted: false, hasCard: false };
+
+  const { granted } = await fulfillSavedCard({
+    scopedDb: opts.scopedDb,
+    teamId: opts.teamId,
+    userId: opts.userId,
+    customerId: settings.stripeCustomerId,
+    paymentMethodId: pm.id,
+    source: 'claim',
+  });
+  return { granted, hasCard: true };
 }

@@ -4,19 +4,21 @@
  */
 
 import { stripeWebhookMiddleware } from '@/functions/stripe-webhook-middleware';
-import { SAVE_CARD_METADATA_TYPE } from '@/lib/billing/checkout';
-import { captureCheckoutAnalyticsForStripeEvent } from '@/lib/billing/checkout-events';
 import {
   fulfillSavedCard,
-  grantWelcomeCreditsForTeam,
-} from '@/lib/billing/welcome-card';
+  grantWelcomeCreditsOnPurchase,
+  SAVE_CARD_METADATA_TYPE,
+  type WelcomeGrantSource,
+} from '@/lib/billing/checkout';
+import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
+import { captureCheckoutAnalyticsForStripeEvent } from '@/lib/billing/checkout-events';
 import { microsToDisplayUsd, usdToMicros } from '@/lib/billing/money';
 import { getStripeOrThrow } from '@/lib/billing/stripe';
-import type { ScopedDb } from '@/lib/db/scoped';
 import { getPostHogClient } from '@/lib/posthog-server';
 import { createFileRoute } from '@tanstack/react-router';
 import { scheduleFlushAnalytics } from '#flush-scheduler';
 import type Stripe from 'stripe';
+import type { ScopedDb } from '@/lib/db/scoped';
 
 import { getLogger } from '@/lib/observability/logger';
 
@@ -87,6 +89,7 @@ export const Route = createFileRoute('/api/billing/webhook')({
                 await scopedDb.billing.saveStripeCustomerId(customerId);
               }
               let receiptUrl: string | undefined;
+              let purchasePaymentMethodId: string | undefined;
               try {
                 if (session.payment_intent) {
                   const stripe = getStripeOrThrow();
@@ -108,6 +111,7 @@ export const Route = createFileRoute('/api/billing/webhook')({
                       typeof pi.payment_method === 'string'
                         ? pi.payment_method
                         : pi.payment_method.id;
+                    purchasePaymentMethodId = pmId;
                     await stripe.customers.update(customerId, {
                       invoice_settings: { default_payment_method: pmId },
                     });
@@ -132,33 +136,41 @@ export const Route = createFileRoute('/api/billing/webhook')({
                 },
               });
 
-              if (!result) {
-                logger.info(`Duplicate session ${session.id}, skipping`);
-                break;
+              if (result) {
+                logger.info(`Added $${amountUsd} credits to team ${teamId}`);
+                if (teamId) {
+                  const posthog = getPostHogClient();
+                  posthog?.capture({
+                    distinctId: teamId,
+                    event: 'credits_added',
+                    properties: {
+                      amount_usd: amountUsd,
+                      stripe_session_id: session.id,
+                      source: 'stripe_webhook',
+                    },
+                  });
+                }
+              } else {
+                logger.info(`Duplicate session ${session.id}, skipping top-up`);
               }
 
-              logger.info(`Added $${amountUsd} credits to team ${teamId}`);
-
-              if (teamId && userId) {
-                await grantWelcomeCreditsForTeam({
-                  scopedDb,
-                  teamId,
-                  userId,
-                  source: 'purchase',
-                });
-              }
-
-              if (teamId) {
-                const posthog = getPostHogClient();
-                posthog?.capture({
-                  distinctId: teamId,
-                  event: 'credits_added',
-                  properties: {
-                    amount_usd: amountUsd,
-                    stripe_session_id: session.id,
-                    source: 'stripe_webhook',
-                  },
-                });
+              // Always attempt: a retry after a credited purchase must still
+              // land the welcome grant. Idempotent via hasSignupGrant.
+              if (teamId && userId && purchasePaymentMethodId) {
+                const stripe = getStripeOrThrow();
+                const pm = await stripe.paymentMethods.retrieve(
+                  purchasePaymentMethodId
+                );
+                const fingerprint = pm.card?.fingerprint;
+                if (fingerprint) {
+                  await grantWelcomeCreditsOnPurchase({
+                    scopedDb,
+                    teamId,
+                    userId,
+                    source: 'purchase',
+                    cardFingerprint: fingerprint,
+                  });
+                }
               }
               break;
             }
@@ -182,9 +194,11 @@ export const Route = createFileRoute('/api/billing/webhook')({
                   teamId,
                   setupIntentId: setupIntent.id,
                 });
-                break;
+                throw new Error(
+                  'save_card setup_intent missing customer or PM'
+                );
               }
-              await fulfillSavedCard({
+              await fulfillSavedCardIgnoringReuse({
                 scopedDb,
                 teamId,
                 userId,
@@ -241,12 +255,24 @@ export const Route = createFileRoute('/api/billing/webhook')({
               }
 
               if (teamId && userId) {
-                await grantWelcomeCreditsForTeam({
-                  scopedDb,
-                  teamId,
-                  userId,
-                  source: 'purchase',
-                });
+                const pmId =
+                  typeof paymentIntent.payment_method === 'string'
+                    ? paymentIntent.payment_method
+                    : paymentIntent.payment_method?.id;
+                if (pmId) {
+                  const stripe = getStripeOrThrow();
+                  const pm = await stripe.paymentMethods.retrieve(pmId);
+                  const fingerprint = pm.card?.fingerprint;
+                  if (fingerprint) {
+                    await grantWelcomeCreditsOnPurchase({
+                      scopedDb,
+                      teamId,
+                      userId,
+                      source: 'purchase',
+                      cardFingerprint: fingerprint,
+                    });
+                  }
+                }
               }
               break;
             }
@@ -290,7 +316,7 @@ async function handleSaveCardCheckout(opts: {
       teamId,
       sessionId: session.id,
     });
-    return;
+    throw new Error('save_card checkout missing customer');
   }
 
   const stripe = getStripeOrThrow();
@@ -308,10 +334,10 @@ async function handleSaveCardCheckout(opts: {
       teamId,
       sessionId: session.id,
     });
-    return;
+    throw new Error('save_card checkout missing payment method');
   }
 
-  await fulfillSavedCard({
+  await fulfillSavedCardIgnoringReuse({
     scopedDb,
     teamId,
     userId,
@@ -319,4 +345,25 @@ async function handleSaveCardCheckout(opts: {
     paymentMethodId,
     source: 'setup_checkout',
   });
+}
+
+async function fulfillSavedCardIgnoringReuse(opts: {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  customerId: string;
+  paymentMethodId: string;
+  source: Exclude<WelcomeGrantSource, 'purchase'>;
+}): Promise<void> {
+  try {
+    await fulfillSavedCard(opts);
+  } catch (err) {
+    if (isWelcomeCardAlreadyClaimedError(err)) {
+      logger.info('welcome grant skipped: card already claimed', {
+        teamId: opts.teamId,
+      });
+      return;
+    }
+    throw err;
+  }
 }

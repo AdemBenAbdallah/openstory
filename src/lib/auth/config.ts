@@ -34,9 +34,9 @@ import { teamMembers, teams } from '@/lib/db/schema';
 import {
   grantsWelcomeCreditsOnSignup,
   SIGNUP_GRANT_MICROS,
+  signupGrantIdempotencyKey,
 } from '@/lib/billing/constants';
 import { microsToDisplayUsd } from '@/lib/billing/money';
-import { signupGrantIdempotencyKey } from '@/lib/billing/welcome-grants';
 import { createBillingMethods } from '@/lib/db/scoped/billing';
 import { sendOtpEmail } from '@/lib/services/email-service';
 import {
@@ -319,8 +319,8 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
               role: 'owner',
             });
 
-            // $20 welcome credit is granted when they save a card (#1516).
-            // e2e is the exception — no Stripe, still needs a funded first short.
+            // Hosted Stripe grants on save-card / purchase (#1516). e2e and
+            // self-host (no Stripe) still fund a first short at team create.
             // Skip a $0 ledger row when the grant is off (#1529).
             if (SIGNUP_GRANT_MICROS > 0 && grantsWelcomeCreditsOnSignup()) {
               await createBillingMethods(db, team.id, user.id).addCredits(

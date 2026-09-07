@@ -88,6 +88,7 @@ import {
   credits,
   teamBillingSettings,
   transactions,
+  welcomeCardClaims,
 } from './credits';
 
 import { teamApiKeys } from './team-api-keys';
@@ -362,7 +363,7 @@ export { creditReservations, credits, transactions };
  *
  * @public used by drizzle-kit generate, not the app graph
  */
-export { creditBatches, teamBillingSettings };
+export { creditBatches, teamBillingSettings, welcomeCardClaims };
 
 // Team API Keys
 export { teamApiKeys };
@@ -503,6 +504,7 @@ export const schema = {
   creditReservations,
   transactions,
   teamBillingSettings,
+  welcomeCardClaims,
 
   // Team API Keys
   teamApiKeys,
