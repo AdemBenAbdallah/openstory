@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
+import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
 import {
   CONTENT_REJECTION_USER_HINT,
   CONTENT_REJECTION_USER_TITLE,
@@ -9,7 +9,7 @@ import {
 import {
   CREDITS_SHORT_TITLE,
   creditsShortHint,
-} from '@/shared/billing/credits-short';
+} from '@/billing/credits-short';
 import type { FailureSummary } from '@/shared/failures/failure-analysis';
 import { cn } from '@/components/utils';
 import {

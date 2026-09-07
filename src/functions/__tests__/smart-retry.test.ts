@@ -37,7 +37,7 @@ import { toShotView, type ShotView } from '@/shared/shots/shot-view';
 import {
   estimateImageCost,
   gateEstimate,
-} from '@/shared/billing/cost-estimation';
+} from '@/billing/cost-estimation';
 
 const assertNoActiveStoryboardMock = vi.fn();
 const triggerStoryboardMock = vi.fn();
@@ -56,7 +56,7 @@ vi.doMock('@/lib/workflow/client', () => ({
 }));
 
 const reserveRunCreditsMock = vi.fn();
-vi.doMock('@/lib/billing/preflight', () => ({
+vi.doMock('@/billing/server/preflight', () => ({
   reserveRunCredits: reserveRunCreditsMock,
   releaseReservationOnThrow: async (
     _db: unknown,

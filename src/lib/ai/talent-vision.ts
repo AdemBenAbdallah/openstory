@@ -6,7 +6,7 @@
  * sheet metadata without a second model call.
  */
 
-import type { Microdollars } from '@/shared/billing/money';
+import type { Microdollars } from '@/billing/money';
 import type { ResolvedLlmKey } from '@/lib/db/scoped/api-keys';
 import {
   aiObservabilityMiddleware,

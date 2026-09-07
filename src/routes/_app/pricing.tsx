@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button';
 import {
   formatPlatformFeePercent,
   PLATFORM_FEE_PERCENT,
-} from '@/shared/billing/constants';
-import { getPricingCatalogFn } from '@/functions/pricing';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
+} from '@/billing/constants';
+import { getPricingCatalogFn } from '@/billing/pricing.fn';
+import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
 import { SITE_CONFIG } from '@/shared/marketing/constants';
 import { ArrowUpRight, KeyRound } from 'lucide-react';
 

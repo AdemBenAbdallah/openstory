@@ -13,7 +13,7 @@ import {
   type PromptWithReferenceImages,
   type ReferenceImageDescription,
   buildReferenceImagePrompt,
-} from '@/shared/prompts/reference-image-prompt';
+} from '@/stills/reference-image-prompt';
 
 /**
  * Build a concise location description from location data

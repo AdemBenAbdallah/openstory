@@ -1,5 +1,5 @@
 import { usesStartFrame } from '@/shared/shots/use-start-frame';
-import { canRenderReferenceOnly } from '@/lib/motion/motion-generation';
+import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
 import { resolveVideoModel } from '@/shared/ai/resolve-asset-models';
 import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { REFERENCE_ONLY_MODEL_ERROR } from '@/lib/schemas/sequence.schemas';
@@ -8,8 +8,8 @@ import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import {
   estimateImageCost,
   gateEstimate,
-} from '@/shared/billing/cost-estimation';
-import { requireCredits } from '@/lib/billing/preflight';
+} from '@/billing/cost-estimation';
+import { requireCredits } from '@/billing/server/preflight';
 import { getWorkflowRunOutcome } from '@/lib/workflow/run-outcome';
 import { workflowNameFromRunId } from '@/lib/workflow/trigger-bindings';
 import type { NewShot } from '@/lib/db/schema';
@@ -34,9 +34,9 @@ import {
   pendingUpscaleUrlFromVersion,
   type ShotGridSheet,
 } from '@/shared/shots/shot-view';
-import { getVideoDownloadUrl } from '@/lib/motion/video-storage';
-import { motionPromptFromVersion } from '@/shared/motion/resolve-motion-prompt';
-import { projectVideoVariants } from '@/lib/motion/video-variant-projection';
+import { getVideoDownloadUrl } from '@/motion/server/video-storage';
+import { motionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
+import { projectVideoVariants } from '@/motion/server/video-variant-projection';
 import {
   bulkShotSchema,
   singleShotSchema,

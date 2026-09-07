@@ -18,7 +18,7 @@ import {
   safeImageToVideoModel,
   safeTextToImageModel,
 } from '@/shared/ai/models';
-import { canRenderReferenceOnly } from '@/lib/motion/motion-generation';
+import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
@@ -31,8 +31,8 @@ import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import {
   releaseReservationOnThrow,
   reserveRunCredits,
-} from '@/lib/billing/preflight';
-import { estimateStoryboardPreflightCost } from '@/shared/billing/storyboard-preflight-cost';
+} from '@/billing/server/preflight';
+import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
 import { generateId } from '@/shared/id';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';

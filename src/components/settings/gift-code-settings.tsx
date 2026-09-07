@@ -11,9 +11,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { triggerBalanceFlash } from '@/hooks/use-balance-flash';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
+import { triggerBalanceFlash } from '@/billing/ui/use-balance-flash';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
 import { copyTextToClipboard } from '@/components/clipboard';
 import {
   batchCreateGiftTokensFn,
@@ -21,7 +21,7 @@ import {
   isSystemAdminFn,
   listGiftTokensFn,
   redeemGiftTokenFn,
-} from '@/functions/gift-tokens';
+} from '@/billing/gift-tokens.fn';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Check, Copy, Gift, Layers, LinkIcon, ShieldCheck } from 'lucide-react';

@@ -72,10 +72,10 @@ import {
   type MotionPrompt,
 } from '@/lib/ai/scene-analysis.schema';
 import { unledgeredAssetPool } from '@/lib/ai/byteplus-asset-pool';
-import { assembleMotionPrompt } from '@/shared/motion/assemble-motion-prompt';
-import { fetchVideoForUpload } from '@/lib/motion/video-storage';
-import { pollMotionJob, submitMotionJob } from '@/lib/motion/motion-generation';
-import { snapDuration } from '@/shared/motion/snap-duration';
+import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
+import { fetchVideoForUpload } from '@/motion/server/video-storage';
+import { pollMotionJob, submitMotionJob } from '@/motion/server/motion-generation';
+import { snapDuration } from '@/motion/snap-duration';
 import {
   getChatPrompt,
   type ChatMessage,

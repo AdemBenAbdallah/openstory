@@ -6,7 +6,7 @@ import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
 } from '@/lib/ai/element-vision';
-import { deductWorkflowCredits } from '@/lib/billing/workflow-deduction';
+import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
 import type {

@@ -4,12 +4,12 @@
  */
 
 import type { TextModel } from '@/shared/ai/models';
-import { reportMissingBillingCost } from '@/shared/billing/billing-observability';
+import { reportMissingBillingCost } from '@/billing/billing-observability';
 import {
   usdToMicros,
   ZERO_MICROS,
   type Microdollars,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import { aiObservabilityMiddleware } from '@/lib/observability/ai-otel';
 import type { ChatMessage } from '@/lib/prompts';
 import {

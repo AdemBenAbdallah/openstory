@@ -29,7 +29,7 @@ import {
 } from '@/functions/api-keys';
 import { initiateOpenRouterOAuthFn } from '@/functions/openrouter-oauth';
 import { getCurrentUserProfileFn } from '@/functions/user';
-import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
 import { usePostHog } from '@posthog/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';

@@ -1,6 +1,6 @@
 import { RouteErrorFallback } from '@/components/error/route-error-fallback';
 import { PageContainer } from '@/components/layout/page-container';
-import { isSystemAdminFn } from '@/functions/gift-tokens';
+import { isSystemAdminFn } from '@/billing/gift-tokens.fn';
 import { requireSessionOrRedirect } from '@/components/auth/route-guards';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 

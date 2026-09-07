@@ -52,7 +52,7 @@ import {
 import type { ChatMiddleware, GenerationMiddleware } from '@tanstack/ai';
 import { otelMiddleware } from '@tanstack/ai/middlewares/otel';
 import { createServerOnlyFn } from '@tanstack/react-start';
-import { microsToUsd, type Microdollars } from '@/shared/billing/money';
+import { microsToUsd, type Microdollars } from '@/billing/money';
 import { getLogger, toErrorPayload } from '@/shared/observability/logger';
 
 const logger = getLogger(['openstory', 'observability', 'ai-otel']);

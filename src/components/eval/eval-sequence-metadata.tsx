@@ -15,7 +15,7 @@ import { getImageModelById } from '@/shared/ai/models';
 import {
   CREDITS_SHORT_TITLE,
   isCreditsShortError,
-} from '@/shared/billing/credits-short';
+} from '@/billing/credits-short';
 import { getAspectRatioData } from '@/shared/constants/aspect-ratios';
 import { errorMessage } from '@/shared/errors';
 import { formatDistanceToNow } from '@/components/format-date';

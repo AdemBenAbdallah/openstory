@@ -10,7 +10,7 @@ import {
 import {
   CREDITS_SHORT_TITLE,
   isCreditsShortError,
-} from '@/shared/billing/credits-short';
+} from '@/billing/credits-short';
 import type { SceneRow } from '@/lib/db/schema/scenes';
 import type { Shot } from '@/lib/db/schema/shots';
 import type { Sequence } from '@/lib/db/schema/sequences';

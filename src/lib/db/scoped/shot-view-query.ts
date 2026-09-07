@@ -28,7 +28,7 @@ import type {
   ShotPromptVersion,
   VideoVariant,
 } from '@/lib/db/schema';
-import { motionPromptFromVersion } from '@/shared/motion/resolve-motion-prompt';
+import { motionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
 import {
   type ShotGridSheet,
   type ShotView,

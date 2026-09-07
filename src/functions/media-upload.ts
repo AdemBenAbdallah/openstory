@@ -42,7 +42,7 @@ import type { Scene } from '@/lib/ai/scene-analysis.schema';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { ValidationError } from '@/shared/errors';
-import { buildVideoManifest } from '@/lib/motion/render-segments';
+import { buildVideoManifest } from '@/motion/server/render-segments';
 import { getGenerationChannel } from '@/shared/realtime';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
 import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';

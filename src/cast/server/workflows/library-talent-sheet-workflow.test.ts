@@ -24,10 +24,10 @@ const mockEmit = vi.fn();
 vi.doMock('@/lib/storage/copy-stored-image', () => ({
   copyStoredImage: mockCopyStoredImage,
 }));
-vi.doMock('@/lib/image/image-generation', () => ({
+vi.doMock('@/stills/server/image-generation', () => ({
   generateImageWithProvider: mockGenerateImageWithProvider,
 }));
-vi.doMock('@/lib/billing/workflow-deduction', () => ({
+vi.doMock('@/billing/server/workflow-deduction', () => ({
   deductWorkflowCredits: mockDeductWorkflowCredits,
   extractImageCost: () => 0,
   recordFalUsageStep: mockRecordFalUsageStep,

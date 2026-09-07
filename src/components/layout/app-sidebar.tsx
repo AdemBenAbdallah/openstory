@@ -48,13 +48,13 @@ import { UserSidebarFooter } from './user-sidebar-footer';
  * does not debit, so that path never looks like a balance drop).
  */
 
-import { showLowBalanceToast } from '@/components/billing/low-balance-toast';
-import { typicalShortCostUsd } from '@/components/billing/typical-short-cost';
-import { subscribeInsufficientCredits } from '@/hooks/notify-insufficient-credits';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
-import { openBillingGate } from '@/hooks/use-billing-gate-dialog';
-import { useBillingBalance } from '@/hooks/use-billing-balance';
-import { useFalPricing } from '@/hooks/use-fal-pricing';
+import { showLowBalanceToast } from '@/billing/ui/low-balance-toast';
+import { typicalShortCostUsd } from '@/billing/ui/typical-short-cost';
+import { subscribeInsufficientCredits } from '@/billing/ui/notify-insufficient-credits';
+import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
+import { openBillingGate } from '@/billing/ui/use-billing-gate-dialog';
+import { useBillingBalance } from '@/billing/ui/use-billing-balance';
+import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 
 function useLowBalanceWarning() {
   const { balance, isLowBalance, isZeroBalance, lowBalanceThreshold } =

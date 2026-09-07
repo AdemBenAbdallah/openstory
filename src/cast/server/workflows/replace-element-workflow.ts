@@ -18,7 +18,7 @@ import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
 } from '@/lib/ai/element-vision';
-import { deductWorkflowCredits } from '@/lib/billing/workflow-deduction';
+import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import {
   DEFAULT_IMAGE_MODEL,
   safeTextToImageModel,

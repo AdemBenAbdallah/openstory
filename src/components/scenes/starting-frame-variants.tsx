@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useFalBillingGate } from '@/hooks/use-billing-gate';
+import { useFalBillingGate } from '@/billing/ui/use-billing-gate';
 import { useGenerateVariants, useSelectVariant } from '@/hooks/use-shots';
 import type { TextToImageModel } from '@/shared/ai/models';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';

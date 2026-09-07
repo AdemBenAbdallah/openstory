@@ -1,17 +1,17 @@
 /**
  * Exact fal cost for a completed generation — the server half of
- * `@/shared/ai/fal-cost`. It reads live `model_pricing` from D1, which is
+ * `@/billing/fal-cost`. It reads live `model_pricing` from D1, which is
  * why it lives in `src/lib` while the pre-flight estimator stays client-safe.
  */
 
 import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import type { EffectiveFalPricing } from '@/shared/ai/fal-cost';
-import { reportMissingBillingCost } from '@/shared/billing/billing-observability';
+import type { EffectiveFalPricing } from '@/billing/fal-cost';
+import { reportMissingBillingCost } from '@/billing/billing-observability';
 import {
   type Microdollars,
   ZERO_MICROS,
   multiplyMicros,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import { getLogger } from '@/shared/observability/logger';
 
 const logger = getLogger(['openstory', 'ai', 'fal-cost']);

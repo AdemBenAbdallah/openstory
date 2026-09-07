@@ -2,7 +2,7 @@ import {
   type AspectRatio,
   getVariantGridConfig,
 } from '@/shared/constants/aspect-ratios';
-import { tileBackgroundCss } from '@/shared/image/tile-crop';
+import { tileBackgroundCss } from '@/stills/tile-crop';
 import { cn } from '@/components/utils';
 import { Loader2 } from 'lucide-react';
 

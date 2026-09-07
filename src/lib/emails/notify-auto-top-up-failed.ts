@@ -3,7 +3,7 @@
  * decline — `recordAutoTopUpFailure` owns that guarantee.
  */
 
-import { type Microdollars, microsToDisplayUsd } from '@/shared/billing/money';
+import { type Microdollars, microsToDisplayUsd } from '@/billing/money';
 import type { Database } from '@/lib/db/client';
 import { teamMembers } from '@/lib/db/schema/teams';
 import { user } from '@/lib/db/schema/auth';

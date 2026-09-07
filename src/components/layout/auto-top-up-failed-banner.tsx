@@ -6,7 +6,7 @@
  */
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useBillingGateQuery } from '@/hooks/use-billing-gate';
+import { useBillingGateQuery } from '@/billing/ui/use-billing-gate';
 import { Link } from '@tanstack/react-router';
 import { AlertTriangle } from 'lucide-react';
 

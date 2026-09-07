@@ -1,4 +1,4 @@
-import { ActionCost } from '@/components/billing/action-cost';
+import { ActionCost } from '@/billing/ui/action-cost';
 import type { ModelGenerationStatus } from '@/components/model/base-model-selector';
 import { MusicModelSelector } from '@/components/model/music-model-selector';
 import { PromptHistorySheet } from '@/components/prompts/prompt-history-sheet';
@@ -10,12 +10,12 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { VoiceInputButton } from '@/components/voice/voice-input-button';
-import { useFalPricing } from '@/hooks/use-fal-pricing';
+import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import {
   getAudioModelDurationLimits,
   type AudioModel,
 } from '@/shared/ai/models';
-import { estimateAudioCost } from '@/shared/billing/cost-estimation';
+import { estimateAudioCost } from '@/billing/cost-estimation';
 import { useTextDictation } from '@/hooks/use-dictation';
 import type { Sequence } from '@/lib/db/schema';
 import {

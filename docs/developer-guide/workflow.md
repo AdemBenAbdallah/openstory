@@ -266,7 +266,7 @@ flowchart LR
    - After each image completes, fires the shot-grid variant generation via `triggerWorkflow('/variant-image', …)` (fire-and-forget; its progress is tracked on `frame.variantImageStatus`)
 3. Returns `{ imageUrls }` — primary model's URL per scene. The primary still is persisted to `frame.thumbnailUrl`, which the motion-prompt pass reads next.
 
-**Motion + Music Prompts Workflow** (`src/lib/workflows/motion-music-prompts-workflow.ts`):
+**Motion + Music Prompts Workflow** (`src/motion/server/workflows/motion-music-prompts-workflow.ts`):
 
 1. **Snap durations** — Snaps scene durations to video model capabilities upfront so both motion prompts and music design see identical values
 2. **Parallel generation** — Motion prompts and music design run simultaneously (parallel _within_ this child; the child itself runs after frame images):
@@ -277,7 +277,7 @@ flowchart LR
 
 ### Phase 5: Motion + Music Generation (Conditional)
 
-**Sub-workflow:** `motionBatchWorkflow` (`src/lib/workflows/motion-batch-workflow.ts`)
+**Sub-workflow:** `motionBatchWorkflow` (`src/motion/server/workflows/motion-batch-workflow.ts`)
 
 Only runs if `autoGenerateMotion` is enabled, a video model is set, and images were generated. A single orchestrator handles:
 
@@ -428,17 +428,17 @@ Per-scene fan-out (image, variant, motion) uses `Promise.allSettled` over `spawn
 | **Prompt Generation**                                |                                                                     |
 | `src/lib/workflows/visual-prompt-workflow.ts`        | Visual prompt sub-workflow (parallel per scene)                     |
 | `src/lib/workflows/visual-prompt-scene-workflow.ts`  | Per-scene visual prompt LLM call                                    |
-| `src/lib/workflows/motion-prompt-workflow.ts`        | Motion prompt sub-workflow (parallel per scene)                     |
+| `src/motion/server/workflows/motion-prompt-workflow.ts`        | Motion prompt sub-workflow (parallel per scene)                     |
 | `src/lib/workflows/motion-prompt-scene-workflow.ts`  | Per-scene motion prompt LLM call                                    |
-| `src/lib/workflows/motion-music-prompts-workflow.ts` | Orchestrates motion + music prompts in parallel                     |
+| `src/motion/server/workflows/motion-music-prompts-workflow.ts` | Orchestrates motion + music prompts in parallel                     |
 | `src/audio/server/workflows/music-prompt-workflow.ts`         | Music design LLM call                                               |
 | **Image Generation**                                 |                                                                     |
 | `src/lib/workflows/frame-images-workflow.ts`         | Orchestrates image + variant gen for all scenes                     |
-| `src/lib/workflows/image-workflow.ts`                | Single image generation (Fal.ai)                                    |
+| `src/stills/server/workflows/image-workflow.ts`                | Single image generation (Fal.ai)                                    |
 | `src/lib/workflows/variant-workflow.ts`              | Shot grid variant generation                                        |
 | **Motion + Music Generation**                        |                                                                     |
-| `src/lib/workflows/motion-batch-workflow.ts`         | Orchestrates motion + music + merge                                 |
-| `src/lib/workflows/motion-workflow.ts`               | Single motion/video generation (Fal.ai)                             |
+| `src/motion/server/workflows/motion-batch-workflow.ts`         | Orchestrates motion + music + merge                                 |
+| `src/motion/server/workflows/motion-workflow.ts`               | Single motion/video generation (Fal.ai)                             |
 | `src/audio/server/workflows/music-workflow.ts`                | Music generation (Fal.ai)                                           |
 | `src/lib/workflows/merge-video-workflow.ts`          | Merge frame videos into sequence video                              |
 | `src/lib/workflows/merge-audio-video-workflow.ts`    | Merge music audio with video                                        |

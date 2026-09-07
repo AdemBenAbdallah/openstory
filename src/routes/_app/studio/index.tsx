@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { studioSortSchema } from '@/shared/studio/schema';
+import { studioSortSchema } from '@/studio/schema';
 import { z } from 'zod';
 
 const searchParamsSchema = z.object({

@@ -4,8 +4,8 @@ import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
 } from '@/lib/ai/element-vision';
-import { reportMissingBillingCost } from '@/shared/billing/billing-observability';
-import { estimateLLMCost } from '@/shared/billing/cost-estimation';
+import { reportMissingBillingCost } from '@/billing/billing-observability';
+import { estimateLLMCost } from '@/billing/cost-estimation';
 import { InsufficientCreditsError, NotFoundError } from '@/shared/errors';
 import { generateId } from '@/shared/id';
 import { ulidSchema } from '@/lib/schemas/id.schemas';

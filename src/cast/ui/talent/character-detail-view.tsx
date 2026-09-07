@@ -1,4 +1,4 @@
-import { ActionCost } from '@/components/billing/action-cost';
+import { ActionCost } from '@/billing/ui/action-cost';
 import { ImageModelSelector } from '@/components/model/image-model-selector';
 import { UploadMediaButton } from '@/components/scenes/upload-media-button';
 import { SheetComparisonDialog } from '@/cast/ui/sheets/sheet-comparison-dialog';
@@ -43,10 +43,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useFalPricing } from '@/hooks/use-fal-pricing';
+import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import { useSequence } from '@/hooks/use-sequences';
 import type { TextToImageModel } from '@/shared/ai/models';
-import { estimateImageCost } from '@/shared/billing/cost-estimation';
+import { estimateImageCost } from '@/billing/cost-estimation';
 import { resolveSheetImageModel } from '@/cast/sheet-image-model';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';

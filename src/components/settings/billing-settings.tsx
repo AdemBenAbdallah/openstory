@@ -6,7 +6,7 @@
  * auto-reload?" prompt below, which writes settings directly.
  */
 
-import { AutoTopUpDialog } from '@/components/billing/auto-topup-dialog';
+import { AutoTopUpDialog } from '@/billing/ui/auto-topup-dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -32,16 +32,16 @@ import {
   getTransactionsFn,
   reportCheckoutCanceledFn,
   updateAutoTopUpFn,
-} from '@/functions/billing';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
-import { clearBalanceFlash } from '@/hooks/use-balance-flash';
+} from '@/billing/billing.fn';
+import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
+import { clearBalanceFlash } from '@/billing/ui/use-balance-flash';
 import {
   BILLING_BALANCE_KEY,
   useBillingBalance,
-} from '@/hooks/use-billing-balance';
-import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
-import { useShowCosts } from '@/hooks/use-show-costs';
-import { MIN_TOPUP_AMOUNT_USD } from '@/shared/billing/constants';
+} from '@/billing/ui/use-billing-balance';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
+import { useShowCosts } from '@/billing/ui/use-show-costs';
+import { MIN_TOPUP_AMOUNT_USD } from '@/billing/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';
 import {

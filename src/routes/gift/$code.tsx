@@ -8,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { redeemGiftTokenFn } from '@/functions/gift-tokens';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
+import { redeemGiftTokenFn } from '@/billing/gift-tokens.fn';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
 import { sessionQueryOptions } from '@/components/auth/session-query';
 import { usePostHog } from '@posthog/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

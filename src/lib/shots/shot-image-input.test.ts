@@ -21,7 +21,7 @@ import type { Frame, Shot } from '@/lib/db/schema';
 vi.doMock('@/lib/ai/fal-pricing-live', () => ({
   getEffectiveFalPricing: async () => ({}),
 }));
-vi.doMock('@/lib/billing/preflight', () => ({
+vi.doMock('@/billing/server/preflight', () => ({
   requireCredits: async () => undefined,
 }));
 

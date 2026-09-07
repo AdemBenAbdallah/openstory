@@ -1,4 +1,4 @@
-import { ScenePlayer } from '@/components/motion/scene-player';
+import { ScenePlayer } from '@/motion/ui/scene-player';
 import { CanvasMediaStage } from '@/components/scenes/canvas-media-stage';
 import { ShotMediaDropZone } from '@/components/scenes/shot-media-drop-zone';
 import { StartingFrameVariants } from '@/components/scenes/starting-frame-variants';

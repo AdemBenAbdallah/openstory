@@ -15,8 +15,8 @@
  */
 
 import type { CreateGeneratedAssetData } from '@/functions/model-assets';
-import { usdToMicros, type Microdollars } from '@/shared/billing/money';
-import { requireCredits } from '@/lib/billing/preflight';
+import { usdToMicros, type Microdollars } from '@/billing/money';
+import { requireCredits } from '@/billing/server/preflight';
 import { requireGenerationAllowed } from '@/lib/compliance/generation-gate';
 import type { ScopedDb } from '@/lib/db/scoped';
 import type {

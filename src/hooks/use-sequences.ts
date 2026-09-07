@@ -14,7 +14,7 @@ import {
   type AddModelResult,
 } from '@/functions/sequences';
 import type { GenerationStage } from '@/shared/generation/pipeline';
-import { micros, type Microdollars } from '@/shared/billing/money';
+import { micros, type Microdollars } from '@/billing/money';
 import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';
 import type { SequenceMusicVariant } from '@/lib/db/schema';
 import type { VariantType } from '@/lib/db/schema/shot-variants';

@@ -31,7 +31,7 @@ const RAW_DB_ALLOWLIST = [
 /** Files that may value-import `createScopedDb` / `createSystemAdminScopedDb`. */
 const SCOPED_FACTORY_ALLOWLIST = [
   'src/functions/middleware.ts',
-  'src/functions/stripe-webhook-middleware.ts',
+  'src/billing/stripe-webhook-middleware.fn.ts',
   'src/lib/workflow/base-workflow.ts',
 ];
 

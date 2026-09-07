@@ -9,11 +9,11 @@ import {
   deductWorkflowCredits,
   extractImageCost,
   recordFalUsageStep,
-} from '@/lib/billing/workflow-deduction';
+} from '@/billing/server/workflow-deduction';
 import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { generateImageWithProvider } from '@/lib/image/image-generation';
-import { uploadPosterToStorage } from '@/lib/image/image-storage';
+import { generateImageWithProvider } from '@/stills/server/image-generation';
+import { uploadPosterToStorage } from '@/stills/server/image-storage';
 import { buildPosterPrompt } from '@/lib/prompts/poster-prompt';
 import {
   notifySequenceReady,

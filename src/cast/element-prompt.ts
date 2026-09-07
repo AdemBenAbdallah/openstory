@@ -9,7 +9,7 @@
 
 import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
 import type { SequenceElementMinimal, StyleConfig } from '@/lib/db/schema';
-import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
+import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 
 /**
  * Build a concise descriptor for an element for use in reference-image prompts.

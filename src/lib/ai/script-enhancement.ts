@@ -32,13 +32,13 @@ import {
   runEnhanceScriptTurns,
 } from '@/lib/ai/enhance-script-turns';
 import { createUserPrompt } from '@/lib/ai/script-enhancer';
-import { reportMissingBillingCost } from '@/shared/billing/billing-observability';
-import { estimateLLMCost } from '@/shared/billing/cost-estimation';
+import { reportMissingBillingCost } from '@/billing/billing-observability';
+import { estimateLLMCost } from '@/billing/cost-estimation';
 import {
   addMicros,
   ZERO_MICROS,
   type Microdollars,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import type { ScopedDb } from '@/lib/db/scoped';
 import type { ResolvedLlmKey } from '@/lib/db/scoped/api-keys';
 import { InsufficientCreditsError } from '@/shared/errors';

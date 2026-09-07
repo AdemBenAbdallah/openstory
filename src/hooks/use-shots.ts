@@ -30,7 +30,7 @@ import {
   setVideoFromVariantFn,
   type ShotImageVersionRow,
   type ShotVideoVersionRow,
-} from '@/functions/shot-image';
+} from '@/stills/shot-image.fn';
 import { promptVariantKeys } from '@/hooks/use-prompt-variants';
 import { segmentKeys } from '@/hooks/use-segments';
 import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';

@@ -4,7 +4,7 @@ import {
   type TextToImageModel,
 } from '@/shared/ai/models';
 import { parseStyleConfig } from '@/look/style-config';
-import { generateImageWithProvider } from '@/lib/image/image-generation';
+import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { buildStyledImagePrompt } from '@/look/server/style-image-prompt';
 import { styleSlug } from '@/look/style-slug';
 import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';

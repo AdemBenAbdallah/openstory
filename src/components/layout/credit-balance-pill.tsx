@@ -25,19 +25,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useWelcomeCreditsGate } from '@/components/billing/welcome-credits-dialog';
-import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
-import { useBalanceFlash } from '@/hooks/use-balance-flash';
-import { useBillingBalance } from '@/hooks/use-billing-balance';
-import { useBillingBalanceRealtime } from '@/hooks/use-billing-balance-realtime';
-import { useBillingGateQuery } from '@/hooks/use-billing-gate';
-import { useShowCosts } from '@/hooks/use-show-costs';
+import { useWelcomeCreditsGate } from '@/billing/ui/welcome-credits-dialog';
+import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
+import { useBalanceFlash } from '@/billing/ui/use-balance-flash';
+import { useBillingBalance } from '@/billing/ui/use-billing-balance';
+import { useBillingBalanceRealtime } from '@/billing/ui/use-billing-balance-realtime';
+import { useBillingGateQuery } from '@/billing/ui/use-billing-gate';
+import { useShowCosts } from '@/billing/ui/use-show-costs';
 import { useUser } from '@/hooks/use-user';
 import {
   SIGNUP_GRANT_MICROS,
   shouldOfferWelcomeClaim,
-} from '@/shared/billing/constants';
-import { microsToDisplayUsd } from '@/shared/billing/money';
+} from '@/billing/constants';
+import { microsToDisplayUsd } from '@/billing/money';
 import { Link } from '@tanstack/react-router';
 import { Wallet } from 'lucide-react';
 

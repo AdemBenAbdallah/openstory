@@ -7,10 +7,10 @@ import {
   deductWorkflowCredits,
   extractImageCost,
   recordFalUsageStep,
-} from '@/lib/billing/workflow-deduction';
+} from '@/billing/server/workflow-deduction';
 import { generateId } from '@/shared/id';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { ImageGenerationParams } from '@/lib/image/image-generation';
+import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import {
   buildLibraryLocationSheetPrompt,
   buildLocationPreviewPrompt,
@@ -20,7 +20,7 @@ import { getLocationChannel } from '@/shared/realtime';
 import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
 import { uploadResponse } from '@/lib/storage/upload-response';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { generateImageSoftening } from '@/lib/workflows/content-soften';
+import { generateImageSoftening } from '@/stills/server/workflows/content-soften';
 import type {
   LibraryLocationSheetWorkflowInput,
   LibraryLocationSheetWorkflowResult,

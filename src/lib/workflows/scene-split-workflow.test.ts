@@ -42,7 +42,7 @@ vi.doMock('@/shared/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 
-vi.doMock('@/lib/billing/workflow-deduction', () => ({
+vi.doMock('@/billing/server/workflow-deduction', () => ({
   deductWorkflowCredits: vi.fn(() => Promise.resolve()),
 }));
 

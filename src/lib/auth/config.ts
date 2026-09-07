@@ -33,7 +33,7 @@ import { getEnv } from '#env';
 import {
   grantsWelcomeCreditsOnSignup,
   SIGNUP_GRANT_MICROS,
-} from '@/shared/billing/constants';
+} from '@/billing/constants';
 import { sendOtpEmail } from '@/lib/services/email-service';
 import {
   currentAuthCookiePrefix,

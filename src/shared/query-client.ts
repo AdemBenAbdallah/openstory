@@ -1,4 +1,4 @@
-import { notifyInsufficientCredits } from '@/hooks/notify-insufficient-credits';
+import { notifyInsufficientCredits } from '@/billing/ui/notify-insufficient-credits';
 import { isAuthError, isInsufficientCreditsError } from '@/shared/errors';
 import { MutationCache, QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';

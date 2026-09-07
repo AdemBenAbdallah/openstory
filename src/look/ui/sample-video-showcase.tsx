@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { VideoPlayer } from '@/components/motion/video-player';
+import { VideoPlayer } from '@/motion/ui/video-player';
 import { getAspectRatioClassName } from '@/shared/constants/aspect-ratios';
 import {
   optimizedVideoUrl,

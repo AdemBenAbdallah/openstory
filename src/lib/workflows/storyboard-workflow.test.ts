@@ -29,7 +29,7 @@ vi.doMock('@/lib/db/scoped', () => ({
 vi.doMock('@/lib/ai/fal-config', () => ({
   configureFalProxyFromEnv: vi.fn(),
 }));
-vi.doMock('@/lib/image/image-generation', () => ({
+vi.doMock('@/stills/server/image-generation', () => ({
   generateImageWithProvider: vi.fn(),
 }));
 

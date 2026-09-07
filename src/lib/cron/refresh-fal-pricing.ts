@@ -35,8 +35,8 @@ import {
 import {
   FAL_TYPICAL_UNITS_PER_DEFAULT_CLIP,
   FAL_UNVERIFIED_SIBLINGS,
-} from '@/shared/ai/fal-typical-units';
-import { usdToMicros } from '@/shared/billing/money';
+} from '@/billing/fal-typical-units';
+import { usdToMicros } from '@/billing/money';
 import {
   modelPricing,
   modelPricingHistory,

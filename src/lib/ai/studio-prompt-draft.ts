@@ -8,7 +8,7 @@
  * activity is supported but not yet reachable from the composer.
  */
 
-import type { Microdollars } from '@/shared/billing/money';
+import type { Microdollars } from '@/billing/money';
 import type { ResolvedLlmKey } from '@/lib/db/scoped/api-keys';
 import {
   aiObservabilityMiddleware,
@@ -18,7 +18,7 @@ import type { ChatMessage } from '@/lib/prompts';
 import type {
   StudioActivity,
   StudioReferenceKind,
-} from '@/shared/studio/schema';
+} from '@/studio/schema';
 import { toVisionImageSource } from '@/lib/storage/external-url';
 import { chat } from '@tanstack/ai';
 import { createAdapter } from './create-adapter';

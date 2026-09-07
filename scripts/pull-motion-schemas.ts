@@ -109,7 +109,7 @@ async function main() {
   console.log('\nGenerating endpoint map...\n');
   await runCommand('bun', ['scripts/generate-motion-endpoint-map.ts']);
 
-  console.log('\nDone! Generated types in src/shared/motion/generated/');
+  console.log('\nDone! Generated types in src/motion/server/generated/');
 }
 
 main().catch((err) => {

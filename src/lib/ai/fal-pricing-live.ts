@@ -12,14 +12,14 @@ import { BYTEPLUS_RATE_CARD } from '@/lib/ai/byteplus-pricing';
 import {
   FAL_TYPICAL_UNITS_PER_DEFAULT_CLIP,
   FAL_UNVERIFIED_SIBLINGS,
-} from '@/shared/ai/fal-typical-units';
+} from '@/billing/fal-typical-units';
 import {
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
 } from '@/shared/ai/models';
 import { typedEntries } from '@/shared/utils/typed-object';
-import { micros, type Microdollars } from '@/shared/billing/money';
+import { micros, type Microdollars } from '@/billing/money';
 import { modelPricing } from '@/lib/db/schema';
 import type { ObservedUnits } from '@/lib/db/schema/model-pricing';
 import { getLogger } from '@/shared/observability/logger';

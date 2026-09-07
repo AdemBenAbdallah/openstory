@@ -22,8 +22,8 @@ import type {
   SequenceElementMinimal,
   SequenceLocationMinimal,
 } from '@/lib/db/schema';
-import { assembleMotionPrompt } from '@/shared/motion/assemble-motion-prompt';
-import { buildMotionReferenceImages } from '@/shared/motion/build-motion-references';
+import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
+import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
 import { getLogger } from '@/shared/observability/logger';
 import { WorkflowValidationError } from '@/lib/workflow/errors';
 import type { BatchMotionMusicWorkflowInput } from '@/lib/workflow/types';

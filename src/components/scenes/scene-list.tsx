@@ -1,4 +1,4 @@
-import { ActionCost } from '@/components/billing/action-cost';
+import { ActionCost } from '@/billing/ui/action-cost';
 import { GenerationStopSlider } from '@/components/generation/generation-stop-slider';
 import { MotionModelSelector } from '@/components/model/motion-model-selector';
 import { MusicModelSelector } from '@/components/model/music-model-selector';
@@ -24,20 +24,20 @@ import {
 import {
   estimateAudioCost,
   estimateVideoCost,
-} from '@/shared/billing/cost-estimation';
+} from '@/billing/cost-estimation';
 import {
   addMicros,
   ZERO_MICROS,
   type Microdollars,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';
 import type { Resolution } from '@/shared/constants/resolutions';
-import { useFalPricing } from '@/hooks/use-fal-pricing';
+import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import { useGenerationSliceEstimate } from '@/hooks/use-sequences';
 import type { SceneWithScript } from '@/hooks/use-scenes';
 import type { ShotVariant } from '@/lib/db/schema';
 import { errorMessage } from '@/shared/errors';
-import { resolveShotDuration } from '@/shared/motion/resolve-shot-duration';
+import { resolveShotDuration } from '@/motion/resolve-shot-duration';
 import type { SceneSelection } from '@/components/scenes/scene-selection';
 import type { SequenceSegment } from '@/shared/scenes/scene-segments';
 import { rendersReferenceOnly } from '@/shared/shots/use-start-frame';

@@ -21,8 +21,8 @@ import {
   RESOLUTIONS,
   type Resolution,
 } from '@/shared/constants/resolutions';
-import { imageResolutionTiers } from '@/shared/image/build-image-request';
-import { motionResolutionTiers } from '@/shared/motion/model-capabilities';
+import { imageResolutionTiers } from '@/stills/build-image-request';
+import { motionResolutionTiers } from '@/motion/model-capabilities';
 
 type Selection = {
   imageModels?: readonly TextToImageModel[];

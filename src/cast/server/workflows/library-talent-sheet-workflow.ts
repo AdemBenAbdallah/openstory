@@ -8,10 +8,10 @@ import {
   deductWorkflowCredits,
   extractImageCost,
   recordFalUsageStep,
-} from '@/lib/billing/workflow-deduction';
+} from '@/billing/server/workflow-deduction';
 import { generateId } from '@/shared/id';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { ImageGenerationParams } from '@/lib/image/image-generation';
+import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import { buildLibraryTalentSheetPrompt } from '@/cast/character-prompt';
 import { cropTalentSheetPortrait } from '@/cast/server/talent/crop-sheet-portrait';
 import { recordProvenance } from '@/lib/compliance/provenance';
@@ -20,7 +20,7 @@ import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
 import { copyStoredImage } from '@/lib/storage/copy-stored-image';
 import { uploadResponse } from '@/lib/storage/upload-response';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { generateImageSoftening } from '@/lib/workflows/content-soften';
+import { generateImageSoftening } from '@/stills/server/workflows/content-soften';
 import { WorkflowValidationError } from '@/lib/workflow/errors';
 import type {
   LibraryTalentSheetWorkflowInput,

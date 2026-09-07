@@ -18,10 +18,10 @@ import type { Scene } from '@/lib/ai/scene-analysis.schema';
 import {
   estimateReferenceSheetCost,
   estimateStoryboardRenderCost,
-} from '@/shared/billing/cost-estimation';
-import { creditsShortStatusError } from '@/shared/billing/credits-short';
-import { addMicros, microsToUsd } from '@/shared/billing/money';
-import { gateStoryboardRenders } from '@/lib/billing/storyboard-render-gate';
+} from '@/billing/cost-estimation';
+import { creditsShortStatusError } from '@/billing/credits-short';
+import { addMicros, microsToUsd } from '@/billing/money';
+import { gateStoryboardRenders } from '@/billing/server/storyboard-render-gate';
 import { reusesTalentSheet } from '@/cast/server/talent/reuse-talent-sheet';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { buildCastCharacterBible } from '@/cast/character-prompt';

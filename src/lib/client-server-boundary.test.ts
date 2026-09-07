@@ -431,7 +431,7 @@ describe('client/server import boundary', () => {
 
     test('billing-observability does not retain posthog-server on the client', () => {
       const source = readFileSync(
-        join(SRC, 'src/shared/billing/billing-observability.ts'),
+        join(SRC, 'src/billing/billing-observability.ts'),
         'utf8'
       );
       expect(clientRetainedImports(source)).not.toContain(

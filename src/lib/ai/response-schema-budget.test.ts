@@ -21,7 +21,7 @@ import type { z } from 'zod';
 import { elementVisionResponseSchema } from './element-vision';
 import { talentMediaAnalysisSchema } from './talent-vision';
 import { autoStyleResponseSchema } from '@/look/auto-style';
-import { softenImagePromptResponseSchema } from '@/lib/workflows/content-soften';
+import { softenImagePromptResponseSchema } from '@/stills/server/workflows/content-soften';
 import {
   ANTHROPIC_GRAMMAR_BUDGET_BYTES,
   structuredOutputSchemaBytes,

@@ -59,9 +59,9 @@ import type {
   SequenceLocationMinimal,
   StyleConfig,
 } from '@/lib/db/schema';
-import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
+import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import type { UpdateStalePlan } from '@/lib/shots/update-stale-plan';
-import type { StudioCreateInput } from '@/shared/studio/schema';
+import type { StudioCreateInput } from '@/studio/schema';
 import type {
   GenerationCheckpoint,
   GenerationStage,

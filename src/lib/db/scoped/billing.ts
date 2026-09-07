@@ -13,7 +13,7 @@ import {
   RESERVATION_TTL_MS,
   signupGrantIdempotencyKey,
   totalCheckoutCents,
-} from '@/shared/billing/constants';
+} from '@/billing/constants';
 import {
   type Microdollars,
   micros,
@@ -22,7 +22,7 @@ import {
   negateMicros,
   subtractMicros,
   ZERO_MICROS,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import type { Database } from '@/lib/db/client';
 import {
   creditBatches,
@@ -1401,7 +1401,7 @@ export function createBillingMethods(
     // Dynamic import: this module is in the client module graph (via
     // middleware → scoped), and a static `stripe` import ships the Stripe
     // Node SDK to the browser (#1253). Only the server ever runs this path.
-    const { getStripeOrThrow } = await import('@/lib/billing/stripe');
+    const { getStripeOrThrow } = await import('@/billing/server/stripe');
     const stripe = getStripeOrThrow();
     const amountCents = totalCheckoutCents(topUpMicros);
 

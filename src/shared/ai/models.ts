@@ -8,8 +8,8 @@
 import { isNativeGrokVideoModel } from '@/shared/ai/grok-native';
 import type { AnalysisModelId } from '@/shared/ai/models.config';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import type { MotionEndpointId } from '@/shared/motion/endpoint-map';
-import { modelSupportsAspectRatio } from '@/shared/motion/model-capabilities';
+import type { MotionEndpointId } from '@/motion/server/endpoint-map';
+import { modelSupportsAspectRatio } from '@/motion/model-capabilities';
 // Type-only: the Seedream adapter narrows `model` to a literal union, so the
 // catalog's `byteplusId` has to be that union rather than a bare string —
 // a retired id then fails typecheck instead of at request time (#1157).
@@ -35,7 +35,7 @@ export type TextModel = AnalysisModelId;
  *
  * API-contract details (durations, aspect ratios, image URL field names) are
  * derived from OpenAPI schemas — see MOTION_ENDPOINT_META and MOTION_TRANSFORMS
- * in src/lib/motion/generated/endpoint-map.ts.
+ * in src/motion/server/endpoint-map.ts.
  *
  * Only model-level metadata lives here: identity, audio override, performance.
  */

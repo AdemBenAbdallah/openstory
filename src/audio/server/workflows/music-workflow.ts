@@ -8,11 +8,11 @@ import { uploadAudioToStorage } from '@/audio/server/audio-storage';
 import { recordProvenance } from '@/lib/compliance/provenance';
 import { buildR2Key, STORAGE_BUCKETS } from '@/lib/storage/buckets';
 import { generateMusic } from '@/audio/server/music-generation';
-import { ZERO_MICROS } from '@/shared/billing/money';
+import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
   recordFalUsageStep,
-} from '@/lib/billing/workflow-deduction';
+} from '@/billing/server/workflow-deduction';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { getGenerationChannel } from '@/shared/realtime';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';

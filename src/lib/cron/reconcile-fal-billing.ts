@@ -24,9 +24,9 @@ import {
   type FalBillingEvent,
   fetchFalBillingEvents,
 } from '@/lib/ai/fal-pricing-fetch';
-import { reportBillingDrift } from '@/shared/billing/billing-observability';
-import { FAL_UNVERIFIED_SIBLINGS } from '@/shared/ai/fal-typical-units';
-import { usdToMicros } from '@/shared/billing/money';
+import { reportBillingDrift } from '@/billing/billing-observability';
+import { FAL_UNVERIFIED_SIBLINGS } from '@/billing/fal-typical-units';
+import { usdToMicros } from '@/billing/money';
 import {
   modelPricing,
   modelPricingHistory,

@@ -9,7 +9,7 @@ import {
   micros,
   microsToDisplayUsd,
   microsToUsd,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import {

@@ -20,8 +20,8 @@ import {
   user,
 } from '@/lib/db/schema';
 import type { TeamMemberRole } from '@/lib/db/schema/teams';
-import { signupGrantIdempotencyKey } from '@/shared/billing/constants';
-import { type Microdollars, microsToDisplayUsd } from '@/shared/billing/money';
+import { signupGrantIdempotencyKey } from '@/billing/constants';
+import { type Microdollars, microsToDisplayUsd } from '@/billing/money';
 import { createAdminMethods } from '@/lib/db/scoped/admin';
 import { createApiKeysMethods } from '@/lib/db/scoped/api-keys';
 import { createBillingMethods } from '@/lib/db/scoped/billing';

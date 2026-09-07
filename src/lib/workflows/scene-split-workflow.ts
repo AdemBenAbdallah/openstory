@@ -67,9 +67,9 @@ import type {
   ElementBibleEntry,
   LocationBibleEntry,
 } from '@/lib/ai/scene-analysis.schema';
-import { addMicros, type Microdollars } from '@/shared/billing/money';
+import { addMicros, type Microdollars } from '@/billing/money';
 import type { TokenUsage } from '@tanstack/ai';
-import { deductWorkflowCredits } from '@/lib/billing/workflow-deduction';
+import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import {
   buildSceneInsert,
   buildSceneShotLinks,

@@ -13,7 +13,7 @@ import {
   stripTotalLine,
 } from '@/shared/ai/enhance-duration';
 import type { ImageToVideoModel } from '@/shared/ai/models';
-import { durationGridForModel } from '@/shared/motion/snap-duration';
+import { durationGridForModel } from '@/motion/snap-duration';
 import type { ChatMessage } from '@/lib/prompts';
 
 type EnhanceTextDelta = { delta: string; reasoning?: string };

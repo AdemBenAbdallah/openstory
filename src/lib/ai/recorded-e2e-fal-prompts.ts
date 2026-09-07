@@ -9,8 +9,8 @@
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
-import { buildReferenceImagePrompt } from '@/shared/prompts/reference-image-prompt';
-import { getVariantImagePrompt } from '@/lib/prompts/variant-image';
+import { buildReferenceImagePrompt } from '@/stills/reference-image-prompt';
+import { getVariantImagePrompt } from '@/stills/server/variant-image';
 import {
   matchCharactersToScene,
   matchElementsToShotImage,

@@ -3,7 +3,7 @@
  * new ledger rows (not idempotent workflow replays).
  */
 
-import { micros } from '@/shared/billing/money';
+import { micros } from '@/billing/money';
 import type { Database } from '@/lib/db/client';
 import { generateId } from '@/shared/id';
 import {

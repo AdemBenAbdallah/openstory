@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { VideoPlayer } from '@/components/motion/video-player';
+import { VideoPlayer } from '@/motion/ui/video-player';
 import { buildMentionItems } from '@/components/scenes/prompt-mention/mention-items';
 import { HighlightedPrompt } from '@/components/text-editor/mention/highlighted-prompt';
 import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';

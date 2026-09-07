@@ -29,19 +29,19 @@ import {
   type AspectRatio,
 } from '@/shared/constants/aspect-ratios';
 import type { Resolution } from '@/shared/constants/resolutions';
-import { buildBytePlusImageRequest } from '@/shared/image/build-byteplus-image-request';
-import { buildImageRequest } from '@/shared/image/build-image-request';
-import { buildBytePlusVideoRequest } from '@/shared/motion/build-byteplus-video-request';
-import { buildGeminiVideoRequest } from '@/shared/motion/build-gemini-video-request';
-import { buildGrokVideoRequest } from '@/shared/motion/build-grok-video-request';
-import { buildMotionRequest } from '@/shared/motion/build-model-input';
+import { buildBytePlusImageRequest } from '@/stills/build-byteplus-image-request';
+import { buildImageRequest } from '@/stills/build-image-request';
+import { buildBytePlusVideoRequest } from '@/motion/server/build-byteplus-video-request';
+import { buildGeminiVideoRequest } from '@/motion/server/build-gemini-video-request';
+import { buildGrokVideoRequest } from '@/motion/server/build-grok-video-request';
+import { buildMotionRequest } from '@/motion/server/build-model-input';
 import {
   buildMotionReferenceImages,
   buildShotImageReferenceImages,
-} from '@/shared/motion/build-motion-references';
-import { resolveMotionPrompt } from '@/shared/motion/resolve-motion-prompt';
-import { resolveShotDuration } from '@/shared/motion/resolve-shot-duration';
-import { buildReferenceImagePrompt } from '@/shared/prompts/reference-image-prompt';
+} from '@/motion/server/build-motion-references';
+import { resolveMotionPrompt } from '@/motion/server/resolve-motion-prompt';
+import { resolveShotDuration } from '@/motion/resolve-shot-duration';
+import { buildReferenceImagePrompt } from '@/stills/reference-image-prompt';
 
 export type BoundPromptImage = {
   label: string;

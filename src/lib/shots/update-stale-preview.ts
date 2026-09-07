@@ -10,7 +10,7 @@ import {
   estimateImageCost,
   estimateLLMCost,
   estimateVideoCost,
-} from '@/shared/billing/cost-estimation';
+} from '@/billing/cost-estimation';
 import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 
 type FalPricingMap = Record<string, EffectiveFalPricing>;
@@ -19,7 +19,7 @@ import {
   addMicros,
   ZERO_MICROS,
   type Microdollars,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import type { UpdateStalePlan } from '@/lib/shots/update-stale-plan';
 import type { UpdateStaleDepth } from '@/shared/shots/update-stale-depth';
 

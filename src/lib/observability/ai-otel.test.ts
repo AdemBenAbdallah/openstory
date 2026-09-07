@@ -13,7 +13,7 @@ import type {
 } from '@tanstack/ai/middlewares/otel';
 import type { Attributes, SpanOptions, SpanStatus } from '@opentelemetry/api';
 import { diag, SpanStatusCode } from '@opentelemetry/api';
-import { micros } from '@/shared/billing/money';
+import { micros } from '@/billing/money';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockLogError = vi.fn(

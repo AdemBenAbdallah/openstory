@@ -139,7 +139,7 @@ Per class, edit and follow through:
   flow if it had one.
 - **Video / motion** (`models.ts` `IMAGE_TO_VIDEO_MODELS`): update `id` + meta,
   then regenerate the schemas — **`bun motion:codegen`** (writes
-  `src/lib/motion/generated/**` and `endpoint-map.ts`). Never hand-write motion
+  `src/motion/server/generated/**` and `src/motion/server/endpoint-map.ts`). Never hand-write motion
   schemas. Re-check `maxPromptLength` against the new schema.
 - **Audio** (`models.ts` `AUDIO_MODELS`): update `id` + `capabilities`
   (durations, formats) from the new schema.
@@ -152,7 +152,7 @@ Per class, edit and follow through:
     re-date the header comment, and note the rate is advertised-not-verified).
     A missed rename means Ark generations bill $0 — exactly the #1069 failure
     mode the card exists to prevent.
-  - `src/shared/ai/fal-cost.ts` `ENDPOINT_STRATEGY` — if the old fal endpoint ids
+  - `src/billing/fal-cost.ts` `ENDPOINT_STRATEGY` — if the old fal endpoint ids
     appear there (token-billed Seedance endpoints do), rename them too.
   - The request builders (`build-byteplus-video-request.ts` /
     `build-byteplus-image-request.ts`) read the id from the registry, but
@@ -172,8 +172,8 @@ Per class, edit and follow through:
 ```bash
 bun typecheck
 bun lint
-bun run test src/lib/ai src/lib/motion   # registry + motion suites
-bun run test src/lib/billing             # pricing/cost if fal pricing changed
+bun run test src/models src/motion   # registry + motion suites
+bun run test src/billing             # pricing/cost if fal pricing changed
 ```
 
 Fix anything that breaks. If a bump cascades into non-trivial changes (schema

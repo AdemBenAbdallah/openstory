@@ -37,8 +37,8 @@ import {
   videoModelDisplayName,
   type ImageToVideoModel,
 } from '@/shared/ai/models';
-import { durationGridForModel } from '@/shared/motion/model-capabilities';
-import { snapDuration } from '@/shared/motion/snap-duration';
+import { durationGridForModel } from '@/motion/model-capabilities';
+import { snapDuration } from '@/motion/snap-duration';
 import type { Shot } from '@/lib/db/schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Sparkles } from 'lucide-react';

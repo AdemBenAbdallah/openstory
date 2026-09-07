@@ -53,7 +53,7 @@ const {
   durableStreamingLLMCallCf,
   shouldInlineVisionForVia,
 } = await import('./llm-call-helper');
-const { usdToMicros, ZERO_MICROS } = await import('@/shared/billing/money');
+const { usdToMicros, ZERO_MICROS } = await import('@/billing/money');
 
 // Minimal WorkflowStep: run every step body immediately, no retries.
 // oxlint-disable-next-line typescript-eslint/no-unsafe-type-assertion -- minimal WorkflowStep stub: the helper only uses `do`

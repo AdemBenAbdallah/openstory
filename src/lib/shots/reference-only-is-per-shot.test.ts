@@ -48,8 +48,8 @@ const SEQUENCE_LEVEL_BY_DESIGN: Record<string, string> = {
   // between two similarly-priced routes; the envelope is an estimate.
   'src/lib/sequences/smart-retry.ts': 'whole-run credit estimate',
   'src/functions/sequences.ts': 'whole-run credit estimate',
-  'src/functions/shot-image.ts': 'whole-run credit estimate',
-  'src/functions/pricing.ts': 'whole-run credit estimate',
+  'src/stills/shot-image.fn.ts': 'whole-run credit estimate',
+  'src/billing/pricing.fn.ts': 'whole-run credit estimate',
   'src/hooks/use-draft-generation-estimate.ts': 'whole-run credit estimate',
   // Continue-stage prefetch for the whole sequence, not a per-shot render.
   'src/routes/_app/sequences/$id/scenes.tsx':

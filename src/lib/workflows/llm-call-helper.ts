@@ -36,8 +36,8 @@ import {
 } from '@/shared/ai/models.config';
 import { withRegionFallback } from '@/shared/ai/region-policy';
 import { extractStreamingStringField } from '@/lib/ai/stream-extract';
-import type { Microdollars } from '@/shared/billing/money';
-import { deductWorkflowCredits } from '@/lib/billing/workflow-deduction';
+import type { Microdollars } from '@/billing/money';
+import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { aiObservabilityMiddleware } from '@/lib/observability/ai-otel';
 import { getLogger } from '@/shared/observability/logger';

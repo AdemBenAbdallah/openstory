@@ -1,7 +1,7 @@
 import { ThinkingBar } from '@/components/ai/thinking-bar';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { ActionCost } from '@/components/billing/action-cost';
-import { useWelcomeCreditsGate } from '@/components/billing/welcome-credits-dialog';
+import { ActionCost } from '@/billing/ui/action-cost';
+import { useWelcomeCreditsGate } from '@/billing/ui/welcome-credits-dialog';
 import { PremiumCard } from '@/components/cards/premium-card';
 import {
   ElementSelector,
@@ -46,9 +46,9 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { enhanceScriptStreamFn } from '@/functions/ai';
 import { useAutoScroll } from '@/hooks/use-auto-scroll';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { BILLING_TRANSACTIONS_KEY } from '@/hooks/use-billing-balance-realtime';
-import { useBillingGate } from '@/hooks/use-billing-gate';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { BILLING_TRANSACTIONS_KEY } from '@/billing/ui/use-billing-balance-realtime';
+import { useBillingGate } from '@/billing/ui/use-billing-gate';
 import { useGenerationSettings } from '@/hooks/use-generation-settings';
 import {
   DEFAULT_GENERATION_STOP_AT,

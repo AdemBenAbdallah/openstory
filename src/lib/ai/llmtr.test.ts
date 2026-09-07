@@ -20,7 +20,7 @@ import {
   llmtrTextModel,
 } from './llmtr';
 import { SCRIPT_ANALYSIS_MODELS } from '@/shared/ai/models.config';
-import { microsToUsd, ZERO_MICROS } from '@/shared/billing/money';
+import { microsToUsd, ZERO_MICROS } from '@/billing/money';
 import { typedEntries } from '@/shared/utils/typed-object';
 
 const usage = (promptTokens: number, completionTokens: number) => ({

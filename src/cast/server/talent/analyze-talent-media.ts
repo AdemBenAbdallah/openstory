@@ -9,8 +9,8 @@ import {
   type TalentVisionResult,
 } from '@/lib/ai/talent-vision';
 import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import { reportMissingBillingCost } from '@/shared/billing/billing-observability';
-import { estimateLLMCost } from '@/shared/billing/cost-estimation';
+import { reportMissingBillingCost } from '@/billing/billing-observability';
+import { estimateLLMCost } from '@/billing/cost-estimation';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { InsufficientCreditsError } from '@/shared/errors';
 

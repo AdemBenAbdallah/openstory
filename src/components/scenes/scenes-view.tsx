@@ -21,7 +21,7 @@ import {
 import { FailureSummaryBanner } from '@/components/sequence/failure-summary-banner';
 import { SequenceHeaderPortal } from '@/components/sequence/sequence-header-slot';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { batchGenerateMotionFn } from '@/functions/motion-functions';
+import { batchGenerateMotionFn } from '@/motion/motion.fn';
 import {
   continueGenerationFn,
   generateMusicFn,
@@ -37,8 +37,8 @@ import { getDivergentVariantPromptDiffFn } from '@/functions/prompt-variants';
 import { smartRetryFn } from '@/functions/smart-retry';
 import { useActiveImageModel } from '@/hooks/use-active-image-model';
 import { useActiveVideoModel } from '@/hooks/use-active-video-model';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { notifyInsufficientCredits } from '@/hooks/notify-insufficient-credits';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { notifyInsufficientCredits } from '@/billing/ui/notify-insufficient-credits';
 import { useSceneSelection } from '@/hooks/use-scene-selection';
 import { useSequenceSegments } from '@/hooks/use-segments';
 import { useScenesBySequence, type SceneWithScript } from '@/hooks/use-scenes';

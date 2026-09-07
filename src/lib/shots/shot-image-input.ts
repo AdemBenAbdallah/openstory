@@ -14,8 +14,8 @@ import { resolveImageModel } from '@/shared/ai/resolve-asset-models';
 import {
   estimateImageCost,
   gateEstimate,
-} from '@/shared/billing/cost-estimation';
-import { requireCredits } from '@/lib/billing/preflight';
+} from '@/billing/cost-estimation';
+import { requireCredits } from '@/billing/server/preflight';
 import type { Resolution } from '@/shared/constants/resolutions';
 import {
   aspectRatioToImageSize,
@@ -30,7 +30,7 @@ import type { ScopedDb } from '@/lib/db/scoped';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
-import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
+import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import { buildUserEditProvenance } from '@/lib/prompts/user-edit-provenance';
 import type {
   ImageWorkflowInput,

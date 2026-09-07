@@ -91,7 +91,7 @@ Columns: `id`, `teamId`, `userId`, `provider` ('fal'), `endpointId` (e.g. `fal-a
 
 ### Workflow (Agent A owns)
 
-`src/lib/workflows/asset-generation-workflow.ts`, class `AssetGenerationWorkflow` extends
+`src/studio/server/workflows/asset-generation-workflow.ts`, class `AssetGenerationWorkflow` extends
 `OpenStoryWorkflowEntrypoint`. Payload: `{ userId, teamId, assetId, endpointId, activity,
 input }`. Wire in all 3 places (wrangler.jsonc `workflows[]` binding `ASSET_WORKFLOW`,
 `src/server.ts` re-export, `TRIGGER_TO_BINDING['/asset']`) — `wiring-consistency.test.ts`

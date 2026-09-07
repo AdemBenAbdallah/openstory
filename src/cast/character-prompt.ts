@@ -10,7 +10,7 @@
 import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
 
 import type { CharacterMinimal, StyleConfig } from '@/lib/db/schema';
-import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
+import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 /**
  * Build a concise character description from character data
  *

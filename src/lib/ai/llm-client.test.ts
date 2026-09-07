@@ -1,4 +1,4 @@
-import { usdToMicros, ZERO_MICROS } from '@/shared/billing/money';
+import { usdToMicros, ZERO_MICROS } from '@/billing/money';
 import type { TextModel } from '@/shared/ai/models';
 import type { TokenUsage } from '@tanstack/ai';
 import { convertWebSearchToolToAdapterFormat } from '@tanstack/ai-openrouter/tools';

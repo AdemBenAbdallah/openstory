@@ -12,7 +12,7 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
-import { generateImageWithProvider } from '@/lib/image/image-generation';
+import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { DEFAULT_LOCATION_TEMPLATES } from '@/cast/server/location/location-templates';
 import {
   buildLibraryTalentSheetPrompt,

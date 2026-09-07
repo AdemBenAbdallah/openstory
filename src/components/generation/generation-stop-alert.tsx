@@ -1,4 +1,4 @@
-import { ActionCost } from '@/components/billing/action-cost';
+import { ActionCost } from '@/billing/ui/action-cost';
 import { GenerationStopSlider } from '@/components/generation/generation-stop-slider';
 import {
   AlertDialog,

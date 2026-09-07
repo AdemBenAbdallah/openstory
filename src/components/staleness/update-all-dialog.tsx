@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import { getUpdateStalePreviewFn } from '@/functions/shots';
 import type { ShotStaleness } from '@/hooks/use-shot-staleness';
-import { useShowCosts } from '@/hooks/use-show-costs';
+import { useShowCosts } from '@/billing/ui/use-show-costs';
 import {
   addMicros,
   microsToDisplayUsd,
   ZERO_MICROS,
   type Microdollars,
-} from '@/shared/billing/money';
+} from '@/billing/money';
 import type { UpdateStalePreview } from '@/lib/shots/update-stale-preview';
 import {
   UPDATE_STALE_DEPTH_LABELS,

@@ -52,21 +52,21 @@ import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import {
   estimateVideoCost,
   gateEstimate,
-} from '@/shared/billing/cost-estimation';
-import { requireCredits } from '@/lib/billing/preflight';
+} from '@/billing/cost-estimation';
+import { requireCredits } from '@/billing/server/preflight';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { isInsufficientCreditsError } from '@/shared/errors';
-import { buildMotionReferenceImages } from '@/shared/motion/build-motion-references';
-import { resolveMotionPromptFromVersion } from '@/shared/motion/resolve-motion-prompt';
-import { resolveShotDuration } from '@/shared/motion/resolve-shot-duration';
+import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
+import { resolveMotionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
+import { resolveShotDuration } from '@/motion/resolve-shot-duration';
 import { getAnchorImageUrl } from '@/lib/shots/frame-image';
 import type {
   FramePromptVersion,
   FrameVariant,
   ShotPromptVersion,
 } from '@/lib/db/schema';
-import type { FramePromptResult } from '@/lib/workflows/frame-prompt-workflow';
-import type { MotionPromptWorkflowResult } from '@/lib/workflows/motion-prompt-workflow';
+import type { FramePromptResult } from '@/stills/server/workflows/frame-prompt-workflow';
+import type { MotionPromptWorkflowResult } from '@/motion/server/workflows/motion-prompt-workflow';
 import { getLogger } from '@/shared/observability/logger';
 import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
 import {

@@ -12,8 +12,8 @@ import { getFalEndpointIds } from '@/lib/ai/fal-endpoints';
 import {
   FAL_ADVERTISED_CALL_USD,
   FAL_TYPICAL_UNITS_PER_DEFAULT_CLIP,
-} from '@/shared/ai/fal-typical-units';
-import { usdToMicros } from '@/shared/billing/money';
+} from '@/billing/fal-typical-units';
+import { usdToMicros } from '@/billing/money';
 import { modelPricing } from '@/lib/db/schema';
 import { getDb } from '#db-client';
 import { getEnv } from '#env';

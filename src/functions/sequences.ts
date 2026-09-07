@@ -15,29 +15,29 @@ import {
   estimateStoryboardCost,
   estimateVideoCost,
   gateEstimate,
-} from '@/shared/billing/cost-estimation';
+} from '@/billing/cost-estimation';
 import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import { sumShotDurationsSeconds } from '@/lib/sequences/shot-durations';
-import { addMicros, ZERO_MICROS } from '@/shared/billing/money';
-import { buildMotionReferenceImages } from '@/shared/motion/build-motion-references';
-import { resolveShotDuration } from '@/shared/motion/resolve-shot-duration';
+import { addMicros, ZERO_MICROS } from '@/billing/money';
+import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
+import { resolveShotDuration } from '@/motion/resolve-shot-duration';
 import {
   releaseReservationOnThrow,
   reserveRunCredits,
-} from '@/lib/billing/preflight';
-import { estimateStoryboardPreflightCost } from '@/shared/billing/storyboard-preflight-cost';
+} from '@/billing/server/preflight';
+import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
 import { DEFAULT_ASPECT_RATIO } from '@/shared/constants/aspect-ratios';
 import type { Shot } from '@/lib/db/schema';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
 } from '@/lib/scenes/scene-script';
-import { buildShotImageWorkflowInput } from '@/lib/image/build-shot-image-input';
+import { buildShotImageWorkflowInput } from '@/stills/server/build-shot-image-input';
 import { toShotView, type ShotView } from '@/shared/shots/shot-view';
 import {
   motionPromptFromVersion,
   resolveMotionPrompt,
-} from '@/shared/motion/resolve-motion-prompt';
+} from '@/motion/server/resolve-motion-prompt';
 import { VARIANT_TYPES, type VariantType } from '@/lib/db/schema/shot-variants';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
 import {
@@ -69,7 +69,7 @@ import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
 import { simpleHash } from '@/shared/utils/hash';
 import { getLogger } from '@/shared/observability/logger';
 import { createSequences } from '@/lib/sequences/create-sequences';
-import { canRenderReferenceOnly } from '@/lib/motion/motion-generation';
+import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
 import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import {
   rendersReferenceOnly,

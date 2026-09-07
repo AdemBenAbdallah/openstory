@@ -4,7 +4,7 @@
  * (`MotionMusicPromptsWorkflow` snap-durations step).
  */
 
-import { snapDuration } from '@/shared/motion/snap-duration';
+import { snapDuration } from '@/motion/snap-duration';
 import { getChatPrompt } from '@/lib/prompts';
 import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import {

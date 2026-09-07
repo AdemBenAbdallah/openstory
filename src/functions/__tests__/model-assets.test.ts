@@ -37,7 +37,7 @@ vi.doMock('#db-client', () => ({ getDb: () => db }));
 vi.doMock('@/lib/models/schema-fetch', () => ({
   fetchModelInputSchema: mockFetchModelInputSchema,
 }));
-vi.doMock('@/lib/billing/preflight', () => ({
+vi.doMock('@/billing/server/preflight', () => ({
   requireCredits: mockRequireCredits,
 }));
 vi.doMock('@/lib/workflow/client', () => ({

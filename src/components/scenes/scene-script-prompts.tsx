@@ -1,5 +1,5 @@
 import { ThinkingBar } from '@/components/ai/thinking-bar';
-import { ActionCost } from '@/components/billing/action-cost';
+import { ActionCost } from '@/billing/ui/action-cost';
 import type { ModelGenerationStatus } from '@/components/model/base-model-selector';
 import { ImageModelSelector } from '@/components/model/image-model-selector';
 import { MotionModelSelector } from '@/components/model/motion-model-selector';
@@ -28,16 +28,16 @@ import { VoiceInputButton } from '@/components/voice/voice-input-button';
 import { useEditorDictation } from '@/hooks/use-dictation';
 import { useSequenceMentionItems } from '@/hooks/use-mention-items';
 import { shortenPromptFn } from '@/functions/ai';
-import { generateShotImageFn } from '@/functions/shot-image';
+import { generateShotImageFn } from '@/stills/shot-image.fn';
 import {
   cancelVideoRenderFn,
   generateShotMotionFn,
-} from '@/functions/motion-functions';
+} from '@/motion/motion.fn';
 import { regenerateShotPromptFn } from '@/functions/prompt-variants';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { notifyInsufficientCredits } from '@/hooks/notify-insufficient-credits';
-import { useFalBillingGate } from '@/hooks/use-billing-gate';
-import { useFalPricing } from '@/hooks/use-fal-pricing';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { notifyInsufficientCredits } from '@/billing/ui/notify-insufficient-credits';
+import { useFalBillingGate } from '@/billing/ui/use-billing-gate';
+import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import { segmentKeys } from '@/hooks/use-segments';
 import {
   shotKeys,
@@ -89,7 +89,7 @@ import {
 import {
   estimateImageCost,
   estimateVideoCost,
-} from '@/shared/billing/cost-estimation';
+} from '@/billing/cost-estimation';
 import {
   DEFAULT_ASPECT_RATIO,
   type AspectRatio,
@@ -103,7 +103,7 @@ import {
   CONTENT_REJECTION_USER_TITLE,
   isContentRejectionError,
 } from '@/shared/ai/content-rejection';
-import { resolveShotDuration } from '@/shared/motion/resolve-shot-duration';
+import { resolveShotDuration } from '@/motion/resolve-shot-duration';
 import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
 
 import { useShotPromptStream } from '@/components/realtime/use-shot-prompt-stream';

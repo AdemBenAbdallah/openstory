@@ -5,7 +5,7 @@
  */
 
 import { isBytePlusConfigured } from '@/lib/ai/byteplus-config';
-import { motionPromptFromVersion } from '@/shared/motion/resolve-motion-prompt';
+import { motionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_VIDEO_MODEL,

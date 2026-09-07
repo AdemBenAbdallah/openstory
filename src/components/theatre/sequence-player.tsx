@@ -9,7 +9,7 @@
  */
 
 import { Button } from '@/components/ui/button';
-import { VideoPlayer } from '@/components/motion/video-player';
+import { VideoPlayer } from '@/motion/ui/video-player';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   getAspectRatioClassName,
