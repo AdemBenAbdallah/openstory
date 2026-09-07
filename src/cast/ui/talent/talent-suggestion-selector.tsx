@@ -11,18 +11,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/dialog';
+import { Button } from '@/ui/button';
+import { Input } from '@/ui/input';
+import { ScrollArea } from '@/ui/scroll-area';
+import { Skeleton } from '@/ui/skeleton';
 import { useTalent } from '@/cast/ui/use-talent';
 import type { TalentWithSheets } from '@/lib/db/schema';
 import { AddTalentDialog } from '@/cast/ui/talent-library/add-talent-dialog';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { Check, Plus, Search, User, Users, X } from 'lucide-react';
 import { useState } from 'react';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 type TalentSuggestionSelectorProps = {
   selectedTalentIds: string[];

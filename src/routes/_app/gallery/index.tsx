@@ -1,7 +1,7 @@
-import { PageContainer } from '@/components/layout/page-container';
+import { PageContainer } from '@/ui/layout/page-container';
 import { SampleVideoCard } from '@/look/ui/sample-video-showcase';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/ui/empty-state';
+import { Skeleton } from '@/ui/skeleton';
 import { useStyles } from '@/look/ui/use-styles';
 import { buildSampleEntries } from '@/look/ui/sample-entries';
 import { createFileRoute } from '@tanstack/react-router';

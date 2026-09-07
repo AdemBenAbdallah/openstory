@@ -22,7 +22,7 @@ vi.mock('@/lib/ai/script-enhancement', () => ({
   enhanceScriptToString: mocks.enhanceScriptToString,
 }));
 
-vi.mock('@/lib/sequences/create-sequences', () => ({
+vi.mock('@/sequences/server/create-sequences', () => ({
   createSequences: mocks.createSequences,
 }));
 

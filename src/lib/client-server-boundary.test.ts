@@ -41,7 +41,7 @@
  * If this test fails: don't extend the allowlist — move the offending helper
  * out of the `functions/` file into a server-side `src/lib/**` module (see
  * `src/lib/ai/script-enhancement.ts`), or move the pure part you need into
- * `src/shared/**` (see `src/shared/scene-id.ts`).
+ * `src/shared/**` (see `src/shots/scene-id.ts`).
  */
 
 import type { Node } from '@babel/types';
@@ -203,7 +203,7 @@ const SERVER_FN_BUILDERS = new Set([
  * has already identified as one of `SERVER_FN_BUILDERS` — so matching on the
  * method NAME alone would also empty an unrelated client-side call (a form's
  * `.validator(…)`, an emitter's `.handler(…)`) and silently DCE away a real
- * leak. `src/shared/mocks/tanstack-start.ts` already contains a plain
+ * leak. `src/mocks/tanstack-start.ts` already contains a plain
  * `builder.handler(handler)`, and every route file matches `COMPILED_RE`, so
  * this is a live shape, not a hypothetical one.
  */

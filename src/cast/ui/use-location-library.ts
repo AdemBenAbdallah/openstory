@@ -19,8 +19,8 @@ import {
   finalizeLocationUploadFn,
   updateLibraryLocationFn,
 } from '@/cast/location-library.fn';
-import { usePublicOrTeamQuery } from '@/hooks/use-public-or-team-query';
-import { putToR2 } from '@/components/upload';
+import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
+import { putToR2 } from '@/ui/upload';
 import {
   libraryLocationKeys,
   sequenceLocationKeys,

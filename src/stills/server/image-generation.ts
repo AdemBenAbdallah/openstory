@@ -14,17 +14,17 @@ import {
   grokImageCost,
   isNativeGrokImageModel,
   nativeGrokImageModel,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import {
   geminiImageCost,
   isNativeGeminiImageModel,
   nativeGeminiImageModel,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   withBytePlusQuotaRetry,
   withLlmRateLimitRetry,
 } from '@/lib/ai/quota-retry';
-import { isNativeBytePlusImageModel } from '@/shared/ai/models';
+import { isNativeBytePlusImageModel } from '@/models/models';
 import type { MediaVia } from '@/lib/ai/via';
 import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
 import type { Microdollars } from '@/billing/money';

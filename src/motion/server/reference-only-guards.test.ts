@@ -12,11 +12,11 @@ import { micros } from '@/billing/money';
 import {
   isBatchMotionEligible,
   isMotionGenerating,
-} from '@/shared/shots/shot-view';
+} from '@/shots/shot-view';
 import {
   referenceOnlyCapableWith,
   referenceOnlyMotionModels,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   createSequenceSchema,
   REFERENCE_ONLY_MODEL_ERROR,

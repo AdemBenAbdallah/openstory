@@ -10,7 +10,7 @@ import {
   resolveStopAt,
   sliderStopLabel,
   type GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 
 // 'cancelled' (#1108) is video-only in practice; it behaves as a terminal
 // status here (clears 'generating') like completed/failed.

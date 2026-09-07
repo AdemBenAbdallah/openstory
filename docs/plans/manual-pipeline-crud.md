@@ -94,7 +94,7 @@ Team
 ### Staleness model (do not reinvent)
 
 - **No stored `stale` flag.** Derived: `stored inputHash` vs `recompute(now)`.
-- Helpers: `src/lib/ai/input-hash.ts`, `src/lib/shots/shot-staleness.ts`
+- Helpers: `src/lib/ai/input-hash.ts`, `src/shots/server/shot-staleness.ts`
 - Cascade plan: `update-stale-plan.ts` / `update-stale-depth.ts` → `UpdateStaleShotsWorkflow`
 - Docs: `docs/architecture/prompt-staleness-dependency-graph.md`, `workflow-snapshots-and-content-hash-staleness.md`
 

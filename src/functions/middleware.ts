@@ -19,8 +19,8 @@ import {
 } from '@/lib/auth/request-principal';
 import { requiredOAuthScope } from '@/lib/api-v1/oauth-scopes';
 import { isSystemAdmin, requireSystemAdmin } from '@/lib/auth/system-admin';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { AspectRatio } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import {
   createScopedDb,
   createSystemAdminScopedDb,
@@ -30,7 +30,7 @@ import {
   type ScopedDb,
 } from '@/lib/db/scoped';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import { resolveSceneForShotFromDb } from '@/lib/scenes/scene-script';
+import { resolveSceneForShotFromDb } from '@/shots/server/scene-script';
 import {
   assertCanWrite,
   restrictionNotice,

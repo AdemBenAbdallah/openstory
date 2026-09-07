@@ -86,7 +86,7 @@ flowchart TD
 
 ## Triggering Flow
 
-The pipeline starts from server handlers in `src/functions/sequences.ts`:
+The pipeline starts from server handlers in `src/sequences/sequences.fn.ts`:
 
 1. **`createSequenceFn`** — Creates a new sequence record, then calls `triggerWorkflow('/storyboard', input)`
 2. **`updateSequenceFn`** — If script, style, aspect ratio, or analysis model changed, triggers the same workflow
@@ -115,7 +115,7 @@ All three use `triggerWorkflow()` from `src/lib/workflow/client.ts`, which:
 
 ## Storyboard Workflow
 
-**File:** `src/lib/workflows/storyboard-workflow.ts`
+**File:** `src/sequences/server/workflows/storyboard-workflow.ts`
 
 The storyboard workflow (`StoryboardWorkflow`, a `WorkflowEntrypoint` extending `OpenStoryWorkflowEntrypoint`) validates data, generates a poster image, then delegates to the analyze-script workflow. Each unit of work runs inside `step.do('name', …)` so the Workflows engine checkpoints and auto-retries it.
 
@@ -153,13 +153,13 @@ After the analyze-script workflow completes, marks status as `completed` and emi
 
 ## Analyze Script Workflow — Phase-by-Phase
 
-**File:** `src/lib/workflows/analyze-script-workflow.ts`
+**File:** `src/sequences/server/workflows/analyze-script-workflow.ts`
 
 This is the core orchestration workflow. It runs durable units via `step.do()`, spawns child workflows via `spawnAndAwaitChild()`, and uses `Promise.all()` / `Promise.allSettled()` to fan child workflows out in parallel. It reads its input from `event.payload` and its instance id from `event.instanceId`.
 
 ### Phase 1: Scene Splitting (Streaming LLM)
 
-**Sub-workflow:** `sceneSplitWorkflow` (`src/lib/workflows/scene-split-workflow.ts`)
+**Sub-workflow:** `sceneSplitWorkflow` (`src/sequences/server/workflows/scene-split-workflow.ts`)
 
 Uses streaming LLM output to create frames progressively as scenes arrive, plus triggers preview image generation for each scene.
 
@@ -403,15 +403,15 @@ Per-scene fan-out (image, variant, motion) uses `Promise.allSettled` over `spawn
 
 | File                                                 | Purpose                                                             |
 | ---------------------------------------------------- | ------------------------------------------------------------------- |
-| `src/functions/sequences.ts`                         | Server functions that trigger the pipeline                          |
+| `src/sequences/sequences.fn.ts`                         | Server functions that trigger the pipeline                          |
 | `src/lib/workflow/client.ts`                         | `triggerWorkflow()` — resolves binding + `binding.create()`         |
 | `src/lib/workflow/trigger-bindings.ts`               | `TRIGGER_TO_BINDING` — maps trigger path → Workflows binding        |
 | `src/lib/workflow/base-workflow.ts`                  | `OpenStoryWorkflowEntrypoint` — base class, `onFailure`, `ScopedDb` |
 | `src/lib/workflow/await-child.ts`                    | `spawnAndAwaitChild()` — parent→child fan-out + await               |
 | `src/lib/workflows/llm-call-helper.ts`               | `durableLLMCallCf` / `durableStreamingLLMCallCf`                    |
-| `src/lib/workflows/storyboard-workflow.ts`           | Wrapper: verify, clear, poster, spawn analyze-script                |
-| `src/lib/workflows/analyze-script-workflow.ts`       | Core orchestration (phases 1-5)                                     |
-| `src/lib/workflows/scene-split-workflow.ts`          | Phase 1: two parallel LLM calls, boundary split + preview images    |
+| `src/sequences/server/workflows/storyboard-workflow.ts`           | Wrapper: verify, clear, poster, spawn analyze-script                |
+| `src/sequences/server/workflows/analyze-script-workflow.ts`       | Core orchestration (phases 1-5)                                     |
+| `src/sequences/server/workflows/scene-split-workflow.ts`          | Phase 1: two parallel LLM calls, boundary split + preview images    |
 | `src/lib/ai/boundary-split.ts`                       | Anchor resolution + verbatim script slicing                         |
 | `src/lib/ai/tag-reconcile.ts`                        | Canonicalize scene continuity tags onto bible tags after the join   |
 | `src/lib/ai/streaming-scene-parser.ts`               | Incremental JSON parser for the boundary-annotation stream          |

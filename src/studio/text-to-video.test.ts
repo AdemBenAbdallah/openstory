@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   IMAGE_TO_VIDEO_MODELS,
   isValidImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   buildStudioVideoInput,
   renumberStudioReferences,

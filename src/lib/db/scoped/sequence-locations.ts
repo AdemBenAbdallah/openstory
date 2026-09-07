@@ -21,9 +21,9 @@ import {
 import {
   loadSceneContextBySequenceFromDb,
   resolveSceneForShot,
-} from '@/lib/scenes/scene-script';
+} from '@/shots/server/scene-script';
 import { typedEntries } from '@/shared/utils/typed-object';
-import { matchLocationsToScene } from '@/shared/scenes/scene-matching';
+import { matchLocationsToScene } from '@/shots/scene-matching';
 import { createLocationSheetVariantsMethods } from './location-sheet-variants';
 import { buildEventInsert } from './sequence-events';
 

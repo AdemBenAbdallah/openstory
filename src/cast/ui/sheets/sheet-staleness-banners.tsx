@@ -1,9 +1,9 @@
-import { DivergentAlternateBanner } from '@/components/staleness/divergent-alternate-banner';
-import { StalenessIndicator } from '@/components/staleness/staleness-indicator';
+import { DivergentAlternateBanner } from '@/shots/ui/staleness/divergent-alternate-banner';
+import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
 import type {
   StalenessEntityType,
   BannerDensity,
-} from '@/components/staleness/staleness-indicator';
+} from '@/shots/ui/staleness/staleness-indicator';
 
 type SheetEntityType = Exclude<StalenessEntityType, 'shot' | 'sequence'>;
 

@@ -15,12 +15,12 @@ import {
   supportsReferenceImages,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
-import { aspectRatioSchema } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { aspectRatioSchema } from '@/models/aspect-ratios';
 import {
   DEFAULT_RESOLUTION,
   resolutionSchema,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
 import {
   STUDIO_VIDEO_MODES,

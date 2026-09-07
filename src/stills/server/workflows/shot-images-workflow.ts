@@ -13,7 +13,7 @@
  */
 
 import { resolveImageModels } from '@/lib/ai/resolve-image-models';
-import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
+import { aspectRatioToImageSize } from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
@@ -35,7 +35,7 @@ import {
   matchCharactersToShotImage,
   matchElementsToShotImage,
   matchLocationsToScene,
-} from '@/shared/scenes/scene-matching';
+} from '@/shots/scene-matching';
 import {
   computeShotImageSceneHash,
   computeShotImagesHashFromDto,

@@ -10,7 +10,7 @@
 import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import type { z } from 'zod';
 import { buildKlingElementsInput } from './build-kling-elements';
 import { buildReferenceVideoPrompt } from './build-reference-video-prompt';
@@ -18,7 +18,7 @@ import {
   inlineReferenceDescription,
   substituteReferenceTags,
 } from '@/stills/reference-legend';
-import { pickVideoResolution } from '@/shared/constants/resolutions';
+import { pickVideoResolution } from '@/models/resolutions';
 import {
   MOTION_JSON_SCHEMAS,
   MOTION_TRANSFORMS,

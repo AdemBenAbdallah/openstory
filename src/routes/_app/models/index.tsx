@@ -1,8 +1,8 @@
-import { PageContainer } from '@/components/layout/page-container';
-import { ModelCatalogView } from '@/components/models/model-catalog-view';
-import { PageIntro } from '@/components/typography/page-intro';
+import { PageContainer } from '@/ui/layout/page-container';
+import { ModelCatalogView } from '@/models/ui/model-catalog-view';
+import { PageIntro } from '@/ui/typography/page-intro';
 import { MODELS_ENABLED } from '@/shared/flags';
-import { CATALOG_ACTIVITIES } from '@/shared/models/catalog';
+import { CATALOG_ACTIVITIES } from '@/models/catalog';
 import { createFileRoute, notFound, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
 

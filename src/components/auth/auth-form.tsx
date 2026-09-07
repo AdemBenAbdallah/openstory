@@ -3,17 +3,17 @@
  * Email entry with Google OAuth option - navigates to /verify for OTP
  */
 
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Button } from '@/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@/ui/card';
+import { Input } from '@/ui/input';
+import { Label } from '@/ui/label';
 import type { AuthOptions } from '@/functions/auth-options';
 import { authClient } from '@/components/auth/client';
 import { DEV_OTP_CODE } from '@/shared/auth/dev-otp';

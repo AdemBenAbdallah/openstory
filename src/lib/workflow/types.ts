@@ -8,8 +8,8 @@ import type {
   IMAGE_TO_VIDEO_MODELS,
   ImageToVideoModel,
   TextToImageModel,
-} from '@/shared/ai/models';
-import type { AnalysisModelId } from '@/shared/ai/models.config';
+} from '@/models/models';
+import type { AnalysisModelId } from '@/models/models.config';
 import type {
   AssemblableMotionPrompt,
   CharacterBibleEntry,
@@ -49,8 +49,8 @@ export type UserEditProvenance = {
   inputHash: string | null;
   analysisModel: string | null;
 };
-import type { AspectRatio, ImageSize } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { AspectRatio, ImageSize } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type {
   CharacterMinimal,
   GeneratedAssetActivity,
@@ -60,12 +60,12 @@ import type {
   StyleConfig,
 } from '@/lib/db/schema';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
-import type { UpdateStalePlan } from '@/lib/shots/update-stale-plan';
+import type { UpdateStalePlan } from '@/shots/server/update-stale-plan';
 import type { StudioCreateInput } from '@/studio/schema';
 import type {
   GenerationCheckpoint,
   GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import { z } from 'zod';
 import type { musicDesignResultSchema } from '../ai/response-schemas';
 

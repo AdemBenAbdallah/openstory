@@ -4,7 +4,7 @@
  * optional email field so we can reply.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/ui/dialog';
+import { Input } from '@/ui/input';
+import { Textarea } from '@/ui/textarea';
 import { submitFeedbackFn } from '@/functions/feedback';
 import { useUser } from '@/hooks/use-user';
 import { useMutation } from '@tanstack/react-query';

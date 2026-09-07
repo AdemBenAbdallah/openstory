@@ -12,13 +12,13 @@
 
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
 import { ActionCost } from '@/billing/ui/action-cost';
-import { AspectRatioIcon } from '@/components/icons/aspect-ratio-icon';
-import { ImageModelSelector } from '@/components/model/image-model-selector';
-import { MotionModelSelector } from '@/components/model/motion-model-selector';
-import type { MentionItem } from '@/components/scenes/prompt-mention/mention-items';
-import { AspectRatioPills } from '@/components/settings/aspect-ratio-pills';
-import { ResolutionPills } from '@/components/settings/resolution-pills';
-import { IMAGE_MODELS } from '@/shared/ai/models';
+import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
+import { ImageModelSelector } from '@/models/ui/pickers/image-model-selector';
+import { MotionModelSelector } from '@/models/ui/pickers/motion-model-selector';
+import type { MentionItem } from '@/shots/ui/prompt-mention/mention-items';
+import { AspectRatioPills } from '@/ui/settings/aspect-ratio-pills';
+import { ResolutionPills } from '@/ui/settings/resolution-pills';
+import { IMAGE_MODELS } from '@/models/models';
 import { imageResolutionTiers } from '@/stills/build-image-request';
 import { motionResolutionTiers } from '@/motion/model-capabilities';
 import {
@@ -26,13 +26,13 @@ import {
   DEFAULT_RESOLUTION,
   RESOLUTION_OPTIONS,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import {
   StudioReferencePicker,
   useStudioLibrary,
   type StudioReference,
 } from './studio-reference-picker';
-import { MarkdownEditor } from '@/components/text-editor/markdown-editor';
+import { MarkdownEditor } from '@/ui/text-editor/markdown-editor';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,25 +42,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { AppImage } from '@/components/ui/app-image';
-import { Button } from '@/components/ui/button';
+} from '@/ui/alert-dialog';
+import { AppImage } from '@/ui/app-image';
+import { Button } from '@/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+} from '@/ui/select';
+import { Separator } from '@/ui/separator';
+import { Skeleton } from '@/ui/skeleton';
+import { Switch } from '@/ui/switch';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import {
   useCreateStudioAssets,
@@ -77,7 +77,7 @@ import {
   supportsReferenceImages,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   estimateImageCost,
   estimateStudioVideoCost,
@@ -87,9 +87,9 @@ import {
   ASPECT_RATIOS,
   DEFAULT_ASPECT_RATIO,
   type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
-import { VoiceInputButton } from '@/components/voice/voice-input-button';
-import { useEditorDictation } from '@/hooks/use-dictation';
+} from '@/models/aspect-ratios';
+import { VoiceInputButton } from '@/ui/voice/voice-input-button';
+import { useEditorDictation } from '@/ui/use-dictation';
 import {
   pickShufflePrompt,
   studioShufflePrompts,
@@ -119,8 +119,8 @@ import {
   extractImagesFromSnapshot,
   snapshotDataTransfer,
   toastDragImportCorsError,
-} from '@/components/drag-images';
-import { cn } from '@/components/utils';
+} from '@/ui/drag-images';
+import { cn } from '@/ui/utils';
 import { usePostHog } from '@posthog/react';
 import {
   ArrowUp,

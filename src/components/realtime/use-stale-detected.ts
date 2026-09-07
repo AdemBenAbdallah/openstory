@@ -1,4 +1,4 @@
-import { shotKeys } from '@/hooks/use-shots';
+import { shotKeys } from '@/shots/ui/use-shots';
 import type { StaleDetectedPayload } from '@/shared/realtime';
 import { useRealtime } from '@/components/realtime/client';
 import { useQueryClient } from '@tanstack/react-query';

@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui/input';
+import { Input } from '@/ui/input';
 import { useNavigate } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';

@@ -14,7 +14,7 @@ import { join } from 'node:path';
 import {
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
-} from '@/shared/ai/models';
+} from '@/models/models';
 
 function runCommand(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {

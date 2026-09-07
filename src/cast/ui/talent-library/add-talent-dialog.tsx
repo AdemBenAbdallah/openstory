@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,13 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { useHydrated } from '@/hooks/use-hydrated';
+} from '@/ui/dialog';
+import { Input } from '@/ui/input';
+import { Label } from '@/ui/label';
+import { Textarea } from '@/ui/textarea';
+import { useHydrated } from '@/ui/use-hydrated';
 import { useAnalyzeTalentMedia, useCreateTalent } from '@/cast/ui/use-talent';
-import { getFileKey } from '@/components/upload';
+import { getFileKey } from '@/ui/upload';
 import { statementFor } from '@/shared/compliance/attestations';
 import type { Talent } from '@/lib/db/schema';
 import { sheetProgressCopy } from '@/cast/sheet-progress-copy';
@@ -25,7 +25,7 @@ import {
 } from '@/cast/subject-kind';
 import { Loader2, Plus, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
 import { PortraitAttestationFields } from './portrait-attestation-fields';
 import { TalentMediaUpload } from './talent-media-upload';
 

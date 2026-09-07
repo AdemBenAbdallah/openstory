@@ -1,10 +1,10 @@
-import { BlobLoader } from '@/components/ui/blob-loader';
+import { BlobLoader } from '@/ui/blob-loader';
 import {
   CONTENT_REJECTION_USER_HINT,
   CONTENT_REJECTION_USER_TITLE,
   isContentRejectionError,
 } from '@/shared/ai/content-rejection';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { AlertCircle, Info, Loader2 } from 'lucide-react';
 
 // 'cancelled' (#1108) renders like 'pending': no failure banner, no spinner —

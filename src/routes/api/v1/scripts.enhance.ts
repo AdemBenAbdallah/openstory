@@ -23,7 +23,7 @@ import { apiEnhanceScriptSchema } from '@/lib/api-v1/enhance-input-schema';
 import {
   DEFAULT_VIDEO_MODEL,
   isValidImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { apiJsonError, runApiV1Handler } from '@/lib/api-v1/errors';
 import { createFileRoute } from '@tanstack/react-router';
 

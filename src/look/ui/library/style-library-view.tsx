@@ -1,19 +1,19 @@
-import { GalleryIcon } from '@/components/icons/gallery-icon';
+import { GalleryIcon } from '@/ui/icons/gallery-icon';
 import { StyleDetailDialog } from '@/look/ui/style-detail-dialog';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/components/ui/empty';
+} from '@/ui/empty';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/components/ui/input-group';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/input-group';
+import { Skeleton } from '@/ui/skeleton';
 import { groupStylesByCategory } from '@/look/ui/style-assets';
 import { filterStyles } from './style-filters';
 import type { Style } from '@/lib/db/schema';

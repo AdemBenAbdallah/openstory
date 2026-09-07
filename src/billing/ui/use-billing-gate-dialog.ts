@@ -6,7 +6,7 @@
  * INSUFFICIENT_CREDITS.
  */
 
-import { createDialogStore } from '@/hooks/create-dialog-store';
+import { createDialogStore } from '@/ui/create-dialog-store';
 
 /** Why the gate opened — the `reason` on `billing_gate_shown` (#1301). */
 export type BillingGateReason = 'insufficient' | 'zero' | 'manual';

@@ -8,7 +8,7 @@
 import {
   DEFAULT_ASPECT_RATIO,
   type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import type { StyleSampleVideo } from '@/lib/db/schema/libraries';
 import { briefForStyle } from '@/look/brief-for-style';
 import { styleCanonicalVideoUrl } from './style-assets';

@@ -22,7 +22,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
 import { GENERATED_STYLE_BRIEFS } from '@/look/style-briefs.generated';
 import { styleSlug } from '@/look/style-slug';
 import { concatClips, downloadTo } from './sample-media';

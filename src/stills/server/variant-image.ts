@@ -1,4 +1,4 @@
-import type { ImageSize } from '@/shared/constants/aspect-ratios';
+import type { ImageSize } from '@/models/aspect-ratios';
 
 type GridLayout = {
   cols: number;

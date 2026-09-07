@@ -1,9 +1,9 @@
-import { AppImage } from '@/components/ui/app-image';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AppImage } from '@/ui/app-image';
+import { Skeleton } from '@/ui/skeleton';
 import {
   getAspectRatioClassName,
   type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import {
   captureVideoPlay,
   captureVideoPlayFailed,
@@ -11,8 +11,8 @@ import {
   createPlaybackTracker,
   type PlaybackTracker,
   type VideoPlaySource,
-} from '@/components/theatre/player-events';
-import { cn } from '@/components/utils';
+} from '@/sequences/ui/theatre/player-events';
+import { cn } from '@/ui/utils';
 import { usePostHog } from '@posthog/react';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 

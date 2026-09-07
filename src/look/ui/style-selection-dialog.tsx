@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@/ui/dialog';
 import { StyleLibraryView } from '@/look/ui/library/style-library-view';
 import type { Style } from '@/lib/db/schema';
 import type { FC, ReactNode } from 'react';

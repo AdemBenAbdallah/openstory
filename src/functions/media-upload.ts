@@ -36,25 +36,25 @@ import { computeVideoManifestInputHash } from '@/lib/ai/input-hash';
 import {
   shotPromptSequence,
   usesStartFrame,
-} from '@/shared/shots/use-start-frame';
+} from '@/shots/use-start-frame';
 import { generateId } from '@/shared/id';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { ValidationError } from '@/shared/errors';
 import { buildVideoManifest } from '@/motion/server/render-segments';
 import { getGenerationChannel } from '@/shared/realtime';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
 import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
-import { getFrameImageUrl } from '@/lib/shots/frame-image';
+import { getFrameImageUrl } from '@/shots/server/frame-image';
 import {
   computeUploadedStillInputHash,
   parseUploadedStoragePath,
   resolveUploadExtension,
   uploadExtensionList,
   type UploadMediaSurface,
-} from '@/lib/shots/upload-media';
-import { USER_UPLOAD_MODEL } from '@/shared/shots/user-upload-model';
+} from '@/shots/server/upload-media';
+import { USER_UPLOAD_MODEL } from '@/shots/user-upload-model';
 import { STORAGE_BUCKETS, type StorageBucket } from '@/lib/storage/buckets';
 import { getMimeTypeFromExtension } from '@/lib/storage/file';
 import { createServerFn } from '@tanstack/react-start';

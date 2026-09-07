@@ -4,15 +4,15 @@
  * Gift codes and BYOK (Settings → API keys) are footer links.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/ui/dialog';
+import { Textarea } from '@/ui/textarea';
 import { requestFounderCreditsFn } from '@/billing/billing.fn';
 import { useWelcomeCreditsGate } from './welcome-credits-dialog';
 import { openAddCreditsDialog } from './use-add-credits-dialog';
@@ -25,7 +25,7 @@ import {
   useBillingGateDialogOpen,
   type BillingGateReason,
 } from './use-billing-gate-dialog';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { usePostHog } from '@posthog/react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';

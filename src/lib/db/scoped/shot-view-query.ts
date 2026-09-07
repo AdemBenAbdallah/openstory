@@ -35,7 +35,7 @@ import {
   pendingUpscaleUrlFromVersion,
   shotViewMissingFrame,
   toShotView,
-} from '@/shared/shots/shot-view';
+} from '@/shots/shot-view';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import {
   getFrameVariantsByIds,

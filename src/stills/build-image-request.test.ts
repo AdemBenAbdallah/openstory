@@ -1,4 +1,4 @@
-import { EDIT_ENDPOINTS } from '@/shared/ai/models';
+import { EDIT_ENDPOINTS } from '@/models/models';
 import { typedEntries } from '@/shared/utils/typed-object';
 import { describe, expect, it } from 'vitest';
 import {

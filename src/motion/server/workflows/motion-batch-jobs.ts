@@ -20,7 +20,7 @@
 import {
   DEFAULT_VIDEO_MODEL,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 
 export type MotionJob<F> = {
   shot: F;

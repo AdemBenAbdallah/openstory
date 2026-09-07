@@ -12,12 +12,12 @@ import {
   TURBO_DEFAULT_AUDIO,
   TURBO_DEFAULT_IMAGE,
   TURBO_DEFAULT_VIDEO,
-} from '@/shared/ai/generation-mode';
+} from '@/models/generation-mode';
 import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import { TYPICAL_SHORT_COST_USD } from '@/billing/constants';
 import { microsToUsd } from '@/billing/money';
 import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
-import { DEFAULT_ASPECT_RATIO } from '@/shared/constants/aspect-ratios';
+import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 
 /** Enhance's default target duration — the short we quote. */
 const TYPICAL_SHORT_SECONDS = 30;

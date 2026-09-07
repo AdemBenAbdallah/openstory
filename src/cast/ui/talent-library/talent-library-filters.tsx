@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import { useNavigate } from '@tanstack/react-router';
 import { Star, Users } from 'lucide-react';
 import type React from 'react';

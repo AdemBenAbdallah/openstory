@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from '@/ui/alert-dialog';
 import { Loader2 } from 'lucide-react';
 
 type LocationRecastConfirmDialogProps = {

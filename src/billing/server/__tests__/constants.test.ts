@@ -1,9 +1,9 @@
-import { DEFAULT_ASPECT_RATIO } from '@/shared/constants/aspect-ratios';
+import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 import {
   TURBO_DEFAULT_AUDIO,
   TURBO_DEFAULT_IMAGE,
   TURBO_DEFAULT_VIDEO,
-} from '@/shared/ai/generation-mode';
+} from '@/models/generation-mode';
 import { describe, expect, it } from 'vitest';
 import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
 import {

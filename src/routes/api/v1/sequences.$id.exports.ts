@@ -39,7 +39,7 @@ import {
 import {
   effectiveExportMusicUrl,
   hashSequenceExportInputs,
-} from '@/components/theatre/source-shots-hash';
+} from '@/sequences/ui/theatre/source-shots-hash';
 import { triggerWorkflow } from '@/lib/workflow/client';
 import type { SequenceExportWorkflowInput } from '@/lib/workflow/types';
 import { createFileRoute } from '@tanstack/react-router';

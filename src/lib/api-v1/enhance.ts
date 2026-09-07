@@ -12,19 +12,19 @@
  * pulling this in.
  */
 
-import type { EnhanceScriptInput } from '@/functions/ai';
+import type { EnhanceScriptInput } from '@/models/ai.fn';
 import {
   type EnhanceChunk,
   streamScriptEnhancement,
 } from '@/lib/ai/script-enhancement';
-import { assessDurationFit } from '@/shared/ai/enhance-duration';
-import { toEnhanceInputs } from '@/shared/ai/enhance-inputs';
+import { assessDurationFit } from '@/models/enhance-duration';
+import { toEnhanceInputs } from '@/models/enhance-inputs';
 import {
   DEFAULT_VIDEO_MODEL,
   isValidImageToVideoModel,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
-import { aspectRatioSchema } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { aspectRatioSchema } from '@/models/aspect-ratios';
 import type { ScopedDb } from '@/lib/db/scoped';
 import { handleApiError } from '@/shared/errors';
 import { getLogger, toErrorPayload } from '@/shared/observability/logger';

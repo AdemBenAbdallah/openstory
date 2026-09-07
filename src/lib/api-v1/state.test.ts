@@ -12,12 +12,12 @@ import {
   frameFixture,
   frameVariantFixture,
   videoVariantFixture,
-} from '@/shared/mocks/frame-fixtures';
+} from '@/mocks/frame-fixtures';
 import {
   type ShotView,
   type ShotViewSources,
   toShotView,
-} from '@/shared/shots/shot-view';
+} from '@/shots/shot-view';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 // Stub the logger so the "style failed to resolve" anomaly path is observable

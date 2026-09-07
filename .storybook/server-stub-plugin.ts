@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const STUB_RUNTIME = path.resolve(
   __dirname,
-  '../src/shared/mocks/server-stub.ts'
+  '@/mocks/server-stub.ts'
 );
 
 // Module paths whose import graph must NOT enter the Storybook bundle.

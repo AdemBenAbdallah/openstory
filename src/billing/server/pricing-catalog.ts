@@ -13,8 +13,8 @@ import {
   AUDIO_MODELS,
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
-} from '@/shared/ai/models';
-import { SCRIPT_ANALYSIS_MODELS } from '@/shared/ai/models.config';
+} from '@/models/models';
+import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 import {
   OPENROUTER_PRICING,
   OPENROUTER_PRICING_LAST_UPDATED,

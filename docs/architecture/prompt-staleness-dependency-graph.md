@@ -689,7 +689,7 @@ Ordered by value / risk.
 | Visual prompt stamp                      | `src/lib/workflows/visual-prompt-scene-workflow.ts`                           |
 | Motion prompt stamp                      | `src/lib/workflows/motion-prompt-scene-workflow.ts`                           |
 | Bible persistence (cast)                 | `src/cast/server/workflows/character-bible-workflow.ts`, `location-bible-workflow.ts` |
-| Pipeline orchestration                   | `src/lib/workflows/analyze-script-workflow.ts`                                |
+| Pipeline orchestration                   | `src/sequences/server/workflows/analyze-script-workflow.ts`                                |
 | Staleness verify (prompts + thumbnail)   | `src/functions/frames.ts` (`getFrameStalenessFn`)                             |
 | Thumbnail snapshot hash                  | `src/lib/workflows/regenerate-frames-snapshot.ts`                             |
 | Design rationale                         | `docs/architecture/workflow-snapshots-and-content-hash-staleness.md`          |

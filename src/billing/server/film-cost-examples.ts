@@ -18,13 +18,13 @@ import {
   TURBO_DEFAULT_AUDIO,
   TURBO_DEFAULT_IMAGE,
   TURBO_DEFAULT_VIDEO,
-} from '@/shared/ai/generation-mode';
+} from '@/models/generation-mode';
 import {
   AUDIO_MODELS,
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
-} from '@/shared/ai/models';
-import { DEFAULT_ASPECT_RATIO } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 import {
   estimateCharacterSheetCount,
   estimateImageCost,

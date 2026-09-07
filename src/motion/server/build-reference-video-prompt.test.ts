@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getMotionReferenceEndpoint } from '@/shared/ai/models';
+import { getMotionReferenceEndpoint } from '@/models/models';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   buildReferenceVideoPrompt,

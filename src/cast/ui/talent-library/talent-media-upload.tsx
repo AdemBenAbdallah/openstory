@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   FileUpload,
   FileUploadDropzone,
@@ -12,10 +12,10 @@ import {
   FileUploadList,
   FileUploadTrigger,
   type FileUploadProps,
-} from '@/components/ui/file-upload';
-import { Badge } from '@/components/ui/badge';
+} from '@/ui/file-upload';
+import { Badge } from '@/ui/badge';
 import { useUploadTalentMedia, useUploadTempMedia } from '@/cast/ui/use-talent';
-import { getFileKey } from '@/components/upload';
+import { getFileKey } from '@/ui/upload';
 import { Upload, X } from 'lucide-react';
 
 type TalentMediaUploadProps = {

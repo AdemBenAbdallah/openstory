@@ -9,18 +9,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AppImage } from '@/components/ui/app-image';
+} from '@/ui/alert-dialog';
+import { Button } from '@/ui/button';
+import { ScrollArea } from '@/ui/scroll-area';
+import { Skeleton } from '@/ui/skeleton';
+import { AppImage } from '@/ui/app-image';
 import {
   useDeleteSequenceElement,
   useRenameSequenceElementToken,
   useSequenceElements,
   useShotCountsForAllElements,
 } from '@/cast/ui/use-sequence-elements';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft, ImagePlus, Loader2, Trash2 } from 'lucide-react';
 import { useState } from 'react';

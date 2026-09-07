@@ -6,7 +6,7 @@ import {
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import type {
   CharacterBibleEntry,
   ElementBibleEntry,
@@ -21,7 +21,7 @@ import {
   matchCharactersToScene,
   matchElementsToScene,
   matchLocationsToScene,
-} from '@/shared/scenes/scene-matching';
+} from '@/shots/scene-matching';
 
 export type ShotPromptContext = {
   scene: Scene;

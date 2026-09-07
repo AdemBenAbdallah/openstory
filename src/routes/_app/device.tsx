@@ -4,16 +4,16 @@
  * Approval mints a normal API key, revocable under Settings → Developer.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/card';
+import { Input } from '@/ui/input';
+import { Skeleton } from '@/ui/skeleton';
 import {
   decideDeviceGrantFn,
   lookupDeviceGrantFn,

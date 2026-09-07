@@ -1,13 +1,13 @@
 import { ActionCost } from '@/billing/ui/action-cost';
-import { ImageModelSelector } from '@/components/model/image-model-selector';
-import { UploadMediaButton } from '@/components/scenes/upload-media-button';
+import { ImageModelSelector } from '@/models/ui/pickers/image-model-selector';
+import { UploadMediaButton } from '@/shots/ui/upload-media-button';
 import { SheetComparisonDialog } from '@/cast/ui/sheets/sheet-comparison-dialog';
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
 import { SheetVersionStrip } from '@/cast/ui/sheets/sheet-version-strip';
-import { StalenessIndicator } from '@/components/staleness/staleness-indicator';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
+import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
+import { Button } from '@/ui/button';
+import { ScrollArea } from '@/ui/scroll-area';
+import { Skeleton } from '@/ui/skeleton';
 import { useUploadCharacterSheet } from '@/hooks/use-media-upload';
 import {
   characterSheetVariantKeys,
@@ -42,10 +42,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from '@/ui/alert-dialog';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
-import { useSequence } from '@/hooks/use-sequences';
-import type { TextToImageModel } from '@/shared/ai/models';
+import { useSequence } from '@/sequences/ui/use-sequences';
+import type { TextToImageModel } from '@/models/models';
 import { estimateImageCost } from '@/billing/cost-estimation';
 import { resolveSheetImageModel } from '@/cast/sheet-image-model';
 import { useQueryClient } from '@tanstack/react-query';
@@ -63,7 +63,7 @@ import { toast } from 'sonner';
 import { CharacterBibleForm } from './character-bible-form';
 import { RecastConfirmDialog } from './recast-confirm-dialog';
 import { TalentPickerDialog } from './talent-picker-dialog';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 type CharacterDetailViewProps = {
   sequenceId: string;

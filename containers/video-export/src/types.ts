@@ -2,7 +2,7 @@
  * Wire contract between the Worker (the export workflow) and this container.
  *
  * Keep in sync with the Worker-side copy in
- * `src/lib/workflows/sequence-export-workflow.ts` (`ContainerExportJob`).
+ * `src/sequences/server/workflows/sequence-export-workflow.ts` (`ContainerExportJob`).
  */
 
 export type ExportSceneInput = {

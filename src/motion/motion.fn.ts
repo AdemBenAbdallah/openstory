@@ -7,16 +7,16 @@ import { createServerFn } from '@tanstack/react-start';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
-} from '@/lib/scenes/scene-script';
+} from '@/shots/server/scene-script';
 import type { Shot } from '@/lib/db/schema';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { AUDIO_MODELS } from '@/shared/ai/models';
+import { AUDIO_MODELS } from '@/models/models';
 import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
 import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { REFERENCE_ONLY_MODEL_ERROR } from '@/lib/schemas/sequence.schemas';
-import { resolveVideoModel } from '@/shared/ai/resolve-asset-models';
+import { resolveVideoModel } from '@/models/resolve-asset-models';
 import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import {
   estimateVideoCost,
@@ -33,7 +33,7 @@ import {
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
 import { resolveShotDuration } from './resolve-shot-duration';
 import { generateMotionSchema } from '@/lib/schemas/shot.schemas';
-import { dbSceneId } from '@/shared/scene-id';
+import { dbSceneId } from '@/shots/scene-id';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
 import { NotFoundError } from '@/shared/errors';
 import { getLogger } from '@/shared/observability/logger';
@@ -52,11 +52,11 @@ import {
 import {
   rendersReferenceOnly,
   shotPromptSequence,
-} from '@/shared/shots/use-start-frame';
-import { isBatchMotionEligible, toShotView } from '@/shared/shots/shot-view';
-import { rescanContinuityFromPrompt } from '@/lib/scenes/rescan-continuity-from-prompt';
-import { buildUserEditProvenance } from '@/lib/prompts/user-edit-provenance';
-import { shouldRecordUserEdit } from '@/lib/workflows/user-edit-predicate';
+} from '@/shots/use-start-frame';
+import { isBatchMotionEligible, toShotView } from '@/shots/shot-view';
+import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-from-prompt';
+import { buildUserEditProvenance } from '@/shots/server/user-edit-provenance';
+import { shouldRecordUserEdit } from '@/shots/server/workflows/user-edit-predicate';
 
 import { shotAccessMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
 

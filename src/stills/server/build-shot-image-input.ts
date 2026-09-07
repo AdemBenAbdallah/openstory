@@ -7,10 +7,10 @@
  * matching, same snapshot hash.
  */
 
-import type { TextToImageModel } from '@/shared/ai/models';
+import type { TextToImageModel } from '@/models/models';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+import { aspectRatioToImageSize } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type {
   CharacterMinimal,
   Shot,
@@ -20,7 +20,7 @@ import type {
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import type {
   ShotImageSceneSnapshot,
   ImageWorkflowInput,
@@ -29,7 +29,7 @@ import {
   matchCharactersToShotImage,
   matchElementsToShotImage,
   matchLocationsToScene,
-} from '@/shared/scenes/scene-matching';
+} from '@/shots/scene-matching';
 import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 
 function sortedHashes(

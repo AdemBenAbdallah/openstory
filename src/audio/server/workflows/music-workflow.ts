@@ -3,7 +3,7 @@
  */
 
 import { computeSequenceMusicInputHash } from '@/lib/ai/input-hash';
-import { DEFAULT_MUSIC_MODEL } from '@/shared/ai/models';
+import { DEFAULT_MUSIC_MODEL } from '@/models/models';
 import { uploadAudioToStorage } from '@/audio/server/audio-storage';
 import { recordProvenance } from '@/lib/compliance/provenance';
 import { buildR2Key, STORAGE_BUCKETS } from '@/lib/storage/buckets';

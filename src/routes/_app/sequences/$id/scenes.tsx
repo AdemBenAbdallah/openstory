@@ -1,19 +1,19 @@
-import { ScenesView } from '@/components/scenes/scenes-view';
-import { getScenesFn } from '@/functions/scenes';
-import { getShotsFn } from '@/functions/shots';
+import { ScenesView } from '@/shots/ui/scenes-view';
+import { getScenesFn } from '@/shots/scenes.fn';
+import { getShotsFn } from '@/shots/shots.fn';
 import {
   estimateGenerationSliceFn,
   getSequenceFn,
-} from '@/functions/sequences';
-import { sceneKeys } from '@/hooks/use-scenes';
-import { shotKeys } from '@/hooks/use-shots';
-import { sequenceKeys } from '@/hooks/use-sequences';
-import { scenesSearchSchema } from '@/components/scenes/scene-selection';
+} from '@/sequences/sequences.fn';
+import { sceneKeys } from '@/shots/ui/use-scenes';
+import { shotKeys } from '@/shots/ui/use-shots';
+import { sequenceKeys } from '@/sequences/ui/use-sequences';
+import { scenesSearchSchema } from '@/shots/ui/scene-selection';
 import {
   continueStageFromState,
   artifactsFromSequenceState,
   DEFAULT_GENERATION_STOP_AT,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/sequences/$id/scenes')({

@@ -9,7 +9,7 @@
  * Claim uses its own per-user key so a gift Skip cannot suppress it.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Switch } from '@/components/ui/switch';
+} from '@/ui/dialog';
+import { Switch } from '@/ui/switch';
 import {
   claimWelcomeCreditsFn,
   createSetupCheckoutSessionFn,
@@ -37,7 +37,7 @@ import {
 } from '@/billing/constants';
 import type { WelcomeDialogMode } from '@/billing/constants';
 import { microsToDisplayUsd } from '@/billing/money';
-import { hasPendingGenerate } from '@/components/generation/pending-generate';
+import { hasPendingGenerate } from '@/sequences/ui/generation/pending-generate';
 import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';

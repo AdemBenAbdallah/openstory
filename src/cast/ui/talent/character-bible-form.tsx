@@ -1,5 +1,5 @@
 import { BibleField } from '@/cast/ui/bible-field';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import { useUpdateSequenceCharacter } from '@/cast/ui/use-sequence-characters';
 import type { CharacterWithSheet } from '@/lib/db/schema';
 import { errorMessage } from '@/shared/errors';

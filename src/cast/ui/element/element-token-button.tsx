@@ -6,13 +6,13 @@
  * surfaced inline in the popover.
  */
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/ui/button';
+import { Input } from '@/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/ui/popover';
 import { deriveTokenFromFilename } from '@/cast/derive-token';
 import { Pencil } from 'lucide-react';
 import { useRef, useState } from 'react';

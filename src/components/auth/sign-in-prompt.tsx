@@ -9,8 +9,8 @@
  */
 
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/components/ui/button';
-import { EmptyState } from '@/components/ui/empty-state';
+import { Button } from '@/ui/button';
+import { EmptyState } from '@/ui/empty-state';
 import { LogIn } from 'lucide-react';
 import type { ReactNode } from 'react';
 

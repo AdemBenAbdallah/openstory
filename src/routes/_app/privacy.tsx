@@ -1,4 +1,4 @@
-import { PRIVACY_EMAIL, SITE_CONFIG } from '@/shared/marketing/constants';
+import { PRIVACY_EMAIL, SITE_CONFIG } from '@/ui/marketing/constants';
 import { createFileRoute } from '@tanstack/react-router';
 
 const title = `Privacy Policy — ${SITE_CONFIG.name}`;

@@ -71,7 +71,7 @@ Stamp == verify **by construction**: the upload hash goes through
 `buildRegenerateShotSnapshot` — the same function `computeShotStaleness`
 verifies with — including resolving the `user-upload` sentinel model through
 `safeTextToImageModel` exactly as verify does
-(`src/lib/shots/upload-media.ts`).
+(`src/shots/server/upload-media.ts`).
 
 ### 1.4 Upload hash-stamping semantics (per surface)
 
@@ -173,14 +173,14 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
 | `setCharacterSheetFromUploadFn` / `setLocationSheetFromUploadFn`                                  | `{sequenceId, characterId/locationDbId, publicUrl}` → updated row                               | §1.4 sheets (append version + select)                            |
 | `regenerateCharacterSheetFn` / `regenerateLocationSheetFn`                                        | `{sequenceId, characterId/locationDbId}` → `{workflowRunId}`                                    | sheet only — no recast, no shot regen                            |
 
-### Prompts (`src/functions/prompt-variants.ts`)
+### Prompts (`src/shots/prompt-variants.fn.ts`)
 
 | Fn                                | Input → output                                               | Rule                                                                     |
 | --------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | `saveShotPromptFn` (pre-existing) | `{…, promptType, text}` → `{unchanged} \| {versionId}`       | §1.3 A                                                                   |
 | `saveMusicPromptFn`               | `{sequenceId, prompt, tags?}` → `{unchanged} \| {versionId}` | user-edit → hash null → 'untracked'; no forced regen; no completion gate |
 
-### Structure (`src/functions/scenes.ts`, `src/functions/shots.ts`)
+### Structure (`src/shots/scenes.fn.ts`, `src/shots/shots.fn.ts`)
 
 | Fn                                          | Input → output                                                                           | Rule                                           |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------- |
@@ -221,7 +221,7 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
   storyboard wipe). That is why `renameSequenceFn` / `setSequenceMusicFn` exist
   as separate minimal writes. Documented, not fixed: route any new
   single-field sequence write around it, never through it
-  (`src/functions/sequences.ts`).
+  (`src/sequences/sequences.fn.ts`).
 - **Integer timestamp columns round-trip at SECOND precision.** Two writes
   40ms apart store the SAME value — which is why the scene cascade restore
   matches by the event's recorded `shotIds`, not by timestamp equality (that
@@ -252,11 +252,11 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
 
 | Concern                                                                      | File                                                                                             |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Upload helpers (sentinel model, path/extension validation, still-hash stamp) | `src/lib/shots/upload-media.ts`                                                                  |
+| Upload helpers (sentinel model, path/extension validation, still-hash stamp) | `src/shots/server/upload-media.ts`                                                                  |
 | Atomic replace + upload appends (stills)                                     | `src/lib/db/scoped/frame-variants.ts` (`replaceContent`, `appendUploadedVersion`)                |
 | Video upload append / guarded complete / cancel                              | `src/lib/db/scoped/video-variants.ts`                                                            |
 | Music retire-not-overwrite                                                   | `src/lib/db/scoped/sequence-variants.ts`                                                         |
 | Soft-delete + reorder (structure)                                            | `src/lib/db/scoped/scenes.ts`, `shots.ts`                                                        |
 | Soft-delete + bible CRUD (cast/world)                                        | `src/lib/db/scoped/characters.ts`, `sequence-locations.ts`, `sequence-elements.ts`               |
-| Staleness matrix tests (the executable §1 contract)                          | `src/lib/shots/staleness-matrix.test.ts`                                                         |
+| Staleness matrix tests (the executable §1 contract)                          | `src/shots/server/staleness-matrix.test.ts`                                                         |
 | Acceptance tests (media, cast, structure)                                    | `src/lib/db/scoped/media-upload.test.ts`, `sequence-cast-crud.test.ts`, `structure-crud.test.ts` |

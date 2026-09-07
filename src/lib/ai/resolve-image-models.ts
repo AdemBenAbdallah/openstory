@@ -1,4 +1,4 @@
-import { DEFAULT_IMAGE_MODEL, type TextToImageModel } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, type TextToImageModel } from '@/models/models';
 
 /**
  * Resolve an image models array from the dual-field pattern

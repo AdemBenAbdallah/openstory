@@ -1,5 +1,5 @@
-import { sequenceKeys } from '@/hooks/use-sequences';
-import { sequenceVariantKeys } from '@/hooks/use-sequence-variants';
+import { sequenceKeys } from '@/sequences/ui/use-sequences';
+import { sequenceVariantKeys } from '@/sequences/ui/use-sequence-variants';
 import type { StaleDetectedPayload } from '@/shared/realtime';
 import { useRealtime } from '@/components/realtime/client';
 import { useQueryClient } from '@tanstack/react-query';

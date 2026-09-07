@@ -8,7 +8,7 @@
  * of server-only imports.
  */
 
-import type { ImageToVideoModel } from '@/shared/ai/models';
+import type { ImageToVideoModel } from '@/models/models';
 import { durationGridForModel } from './model-capabilities';
 
 export { durationGridForModel };

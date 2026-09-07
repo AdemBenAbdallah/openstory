@@ -14,17 +14,17 @@ import { getEnv } from '#env';
 import {
   nativeGeminiTextModel,
   type NativeGeminiTextModel,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   nativeGrokTextModel,
   type NativeGrokTextModel,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import {
   LLMTR_BASE_URL,
   llmtrCompatibleApi,
   llmtrTextModel,
 } from '@/lib/ai/llmtr';
-import type { TextModel } from '@/shared/ai/models';
+import type { TextModel } from '@/models/models';
 import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
 import { HTTPClient } from '@openrouter/sdk/lib/http';
 import { createModel, extendAdapter } from '@tanstack/ai';

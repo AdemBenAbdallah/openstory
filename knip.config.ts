@@ -10,14 +10,14 @@ export default {
     '.storybook/**/*.{ts,tsx}',
     'content-collections.ts', // content-collections build config (root)
     // MSW request mocks (registered by path, not statically imported).
-    'src/shared/mocks/browser.ts',
-    'src/shared/mocks/server.ts',
+    'src/mocks/browser.ts',
+    'src/mocks/server.ts',
     // Swapped in by .storybook/server-stub-plugin.ts via a Vite alias (string
     // path), so knip can't trace them from an import.
-    'src/shared/mocks/server-stub.ts',
-    'src/shared/mocks/tanstack-start.ts',
+    'src/mocks/server-stub.ts',
+    'src/mocks/tanstack-start.ts',
     // Aliased for `cloudflare:workers` in .storybook/main.ts (string path).
-    'src/shared/mocks/cloudflare-workers.ts',
+    'src/mocks/cloudflare-workers.ts',
     // Aliased for @react-email/code-block in vite.config.ts (string path) to
     // keep prismjs out of the worker's startup path.
     'src/lib/emails/stubs/code-block.tsx',

@@ -7,7 +7,7 @@ import {
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { studioVideoEndpointIds } from '@/studio/text-to-video';
 
 export function getFalEndpointIds(): string[] {

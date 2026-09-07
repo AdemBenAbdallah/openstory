@@ -11,20 +11,20 @@ import {
   nativeGeminiImageModel,
   type GeminiImageResolution,
   type NativeGeminiImageModel,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   capReferenceImages,
   getEditEndpoint,
   getTextToImageModelId,
   IMAGE_MODELS,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   DEFAULT_ASPECT_RATIO,
   DEFAULT_IMAGE_SIZE,
   type AspectRatio,
   type ImageSize,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import {
   clampDimensions,
   pickImageResolution,
@@ -34,7 +34,7 @@ import {
   tiersForTokens,
   type PixelBounds,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import { getLogger } from '@/shared/observability/logger';
 
 const logger = getLogger(['openstory', 'image', 'build-image-request']);

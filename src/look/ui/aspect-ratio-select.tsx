@@ -1,18 +1,18 @@
-import { AspectRatioIcon } from '@/components/icons/aspect-ratio-icon';
-import { Button } from '@/components/ui/button';
+import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
+import { Button } from '@/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/ui/dropdown-menu';
 import {
   ASPECT_RATIOS,
   aspectRatioSchema,
   type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
-import { cn } from '@/components/utils';
+} from '@/models/aspect-ratios';
+import { cn } from '@/ui/utils';
 import { ChevronDown } from 'lucide-react';
 
 function isValidAspectRatio(value: string): value is AspectRatio {

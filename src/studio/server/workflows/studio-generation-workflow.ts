@@ -22,14 +22,14 @@ import {
   isContentRejectionError,
 } from '@/shared/ai/content-rejection';
 import { extractFalErrorMessage } from '@/shared/ai/fal-error';
-import { IMAGE_TO_VIDEO_MODELS } from '@/shared/ai/models';
+import { IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
 import { recordProvenance } from '@/lib/compliance/provenance';
-import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
+import { aspectRatioToImageSize } from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { GeneratedAssetOutput } from '@/lib/db/schema';
 import { generateImageWithProvider } from '@/stills/server/image-generation';

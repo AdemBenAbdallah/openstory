@@ -1,8 +1,8 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
+import { Card, CardContent } from '@/ui/card';
+import { Input } from '@/ui/input';
+import { Skeleton } from '@/ui/skeleton';
 import { listUserActivityFn } from '@/functions/admin';
 import type { UserActivityRow } from '@/lib/db/scoped';
 import {

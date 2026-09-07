@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,12 +6,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import type { StalenessEntityType } from '@/components/staleness/staleness-indicator';
-import { cn } from '@/components/utils';
+} from '@/ui/dialog';
+import type { StalenessEntityType } from '@/shots/ui/staleness/staleness-indicator';
+import { cn } from '@/ui/utils';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 type SheetAspectRatio = 'square' | 'video' | 'portrait';
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-orm/zod';
 import { shots } from '@/lib/db/schema/shots';
-import { IMAGE_MODELS, IMAGE_TO_VIDEO_MODELS } from '@/shared/ai/models';
+import { IMAGE_MODELS, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 
 /**
  * Shared Zod schemas for shot operations

@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import type { Style } from '@/lib/db/schema';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 import { ChevronDown } from 'lucide-react';
 import { useState, type FC } from 'react';
 import { getStyleGradient } from './style-gradient';

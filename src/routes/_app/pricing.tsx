@@ -5,15 +5,15 @@
 
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
 import { createFileRoute } from '@tanstack/react-router';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
 import {
   formatPlatformFeePercent,
   PLATFORM_FEE_PERCENT,
 } from '@/billing/constants';
 import { getPricingCatalogFn } from '@/billing/pricing.fn';
 import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 import { ArrowUpRight, KeyRound } from 'lucide-react';
 
 const title = `Pricing — ${SITE_CONFIG.name}`;

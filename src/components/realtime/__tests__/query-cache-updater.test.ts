@@ -10,24 +10,24 @@
 import { QueryClient } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { promptVariantKeys } from '@/hooks/use-prompt-variants';
-import { sceneFacetKeys } from '@/hooks/use-scene-facets';
-import { sceneKeys } from '@/hooks/use-scenes';
+import { promptVariantKeys } from '@/shots/ui/use-prompt-variants';
+import { sceneFacetKeys } from '@/shots/ui/use-scene-facets';
+import { sceneKeys } from '@/shots/ui/use-scenes';
 import { sequenceCharacterKeys } from '@/cast/ui/use-sequence-characters';
 import { sequenceElementKeys } from '@/cast/ui/use-sequence-elements';
 import { sequenceLocationKeys } from '@/cast/ui/use-sequence-locations';
-import { shotKeys } from '@/hooks/use-shots';
+import { shotKeys } from '@/shots/ui/use-shots';
 import type { Frame, Shot, VideoVariant } from '@/lib/db/schema';
 import {
   frameFixture,
   frameVariantFixture,
   videoVariantFixture,
-} from '@/shared/mocks/frame-fixtures';
+} from '@/mocks/frame-fixtures';
 import {
   type ShotView,
   type ShotViewSources,
   toShotView,
-} from '@/shared/shots/shot-view';
+} from '@/shots/shot-view';
 import { updateQueryCacheFromEvent } from '@/components/realtime/query-cache-updater';
 
 const SEQ = 'seq-1';

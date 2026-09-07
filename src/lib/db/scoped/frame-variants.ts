@@ -21,7 +21,7 @@
  */
 
 import type { Database } from '@/lib/db/client';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { Resolution } from '@/models/resolutions';
 import { generateId } from '@/shared/id';
 import { framePromptVersions, frameVariants, frames } from '@/lib/db/schema';
 import type {
@@ -955,7 +955,7 @@ export function createFrameVariantsMethods(db: Database) {
      * The model of each shot's SELECTED image version across a sequence, keyed
      * by the owning shot (#1066). Model identity lives on the version row that
      * produced the bytes, so this is what generate/display resolve from — see
-     * `@/shared/ai/resolve-asset-models`. One join, so the batch read paths
+     * `@/models/resolve-asset-models`. One join, so the batch read paths
      * (smart retry, the editor's model bar) don't go N+1. Shots whose anchor
      * frame has no selection are absent; the caller falls back a tier.
      *

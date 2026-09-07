@@ -1,19 +1,19 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@/ui/dialog';
 import { VideoPlayer } from '@/motion/ui/video-player';
-import { getAspectRatioClassName } from '@/shared/constants/aspect-ratios';
+import { getAspectRatioClassName } from '@/models/aspect-ratios';
 import {
   optimizedVideoUrl,
   videoPosterUrl,
 } from './cloudflare-video';
 import type { SampleEntry } from './sample-entries';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { Link } from '@tanstack/react-router';
 import { Wand2 } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';

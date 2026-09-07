@@ -1,6 +1,6 @@
 import { LocationLibraryCard } from './location-library-card';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/ui/button';
+import { Card } from '@/ui/card';
 import { useLibraryLocationDivergentVariants } from '@/cast/ui/use-library-location-sheet-variants';
 import { useLocationSheetsRealtime } from '@/cast/ui/use-location-sheets-realtime';
 import type { LibraryLocation } from '@/lib/db/schema';

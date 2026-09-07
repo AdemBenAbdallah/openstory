@@ -16,8 +16,8 @@
  */
 
 import { computeShotImageInputHash } from '@/lib/ai/input-hash';
-import type { TextToImageModel } from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import type { TextToImageModel } from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import type { ScopedDb } from '@/lib/db/scoped';
 import type {
   CharacterWithSheet,
@@ -27,12 +27,12 @@ import { getLogger } from '@/shared/observability/logger';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
-} from '@/lib/scenes/scene-script';
+} from '@/shots/server/scene-script';
 import type { RegenerateShotSnapshot } from '@/lib/workflow/types';
 import {
   buildRegenerateShotSnapshot,
   computeRegenerateShotsBatchHash,
-} from '@/lib/workflows/regenerate-shots-snapshot';
+} from '@/shots/server/workflows/regenerate-shots-snapshot';
 
 const logger = getLogger(['openstory', 'workflows', 'recast-snapshot']);
 

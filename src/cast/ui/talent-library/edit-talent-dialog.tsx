@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { SheetComparisonDialog } from '@/cast/ui/sheets/sheet-comparison-dialog';
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/ui/dialog';
+import { Input } from '@/ui/input';
+import { Label } from '@/ui/label';
+import { Textarea } from '@/ui/textarea';
 import {
   talentSheetVariantKeys,
   useDiscardTalentSheetVariant,
@@ -37,7 +37,7 @@ import type {
   TalentSheetVariant,
 } from '@/lib/db/schema';
 import { Pencil, Plus, Sparkles, X } from 'lucide-react';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 type TalentWithRelations = Talent & {
   sheets: TalentSheet[];

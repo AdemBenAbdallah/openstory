@@ -19,7 +19,7 @@ import {
   llmtrTextCostFromUsage,
   llmtrTextModel,
 } from './llmtr';
-import { SCRIPT_ANALYSIS_MODELS } from '@/shared/ai/models.config';
+import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 import { microsToUsd, ZERO_MICROS } from '@/billing/money';
 import { typedEntries } from '@/shared/utils/typed-object';
 

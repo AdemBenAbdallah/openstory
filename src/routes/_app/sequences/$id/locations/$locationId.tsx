@@ -1,4 +1,4 @@
-import { routeParams } from '@/components/layout/breadcrumbs';
+import { routeParams } from '@/ui/layout/breadcrumbs';
 import { LocationDetailView } from '@/cast/ui/locations/location-detail-view';
 import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import { createFileRoute } from '@tanstack/react-router';

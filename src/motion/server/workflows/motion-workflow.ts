@@ -15,11 +15,11 @@ import {
 import { arkAssetIdentities } from '@/lib/ai/byteplus-asset-pool';
 import { extractFalErrorMessage } from '@/shared/ai/fal-error';
 import { computeVideoManifestInputHash } from '@/lib/ai/input-hash';
-import { DEFAULT_VIDEO_MODEL, IMAGE_TO_VIDEO_MODELS } from '@/shared/ai/models';
+import { DEFAULT_VIDEO_MODEL, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import type { VideoManifest } from '@/lib/db/schema';
 import {
   MOTION_CONTENT_FALLBACK_MODEL,

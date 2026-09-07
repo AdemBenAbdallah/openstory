@@ -1,8 +1,8 @@
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
-import { DefaultNotFound } from './components/error/default-not-found';
-import { captureRouteError } from '@/components/react-errors';
-import { getQueryClient } from '@/shared/query-client';
+import { DefaultNotFound } from '@/ui/error/default-not-found';
+import { captureRouteError } from '@/ui/react-errors';
+import { getQueryClient } from '@/ui/query-client';
 import { routeTree } from './routeTree.gen';
 
 export function getRouter() {

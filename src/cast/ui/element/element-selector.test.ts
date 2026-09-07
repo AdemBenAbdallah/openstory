@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { selectFilesToAccept } from './element-selector';
 import { MAX_SEQUENCE_ELEMENTS } from './limits';
-import { getFileKey } from '@/components/upload';
+import { getFileKey } from '@/ui/upload';
 
 // Pinned lastModified so keys (`name-lastModified`) are deterministic.
 const file = (name: string) => new File([], name, { lastModified: 1 });

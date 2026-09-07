@@ -1,6 +1,6 @@
 import { TalentLibraryCard } from './talent-library-card';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/ui/button';
+import { Card } from '@/ui/card';
 import { useTalentSheetsRealtime } from '@/cast/ui/use-talent-sheets-realtime';
 import { useTeamTalentDivergentVariants } from '@/cast/ui/use-talent-sheet-variants';
 import type { TalentWithSheets } from '@/lib/db/schema';

@@ -19,7 +19,7 @@ import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
   videoModelSupportsAudio,
-} from '@/shared/ai/models';
+} from '@/models/models';
 
 /**
  * Music is a sequence-level track (`sequences.music*`) the user can mute, swap

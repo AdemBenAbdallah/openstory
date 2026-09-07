@@ -4,17 +4,17 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/dialog';
+import { Input } from '@/ui/input';
+import { ScrollArea } from '@/ui/scroll-area';
+import { Skeleton } from '@/ui/skeleton';
 import {
   type TeamLibraryLocation,
   useTeamLocationsLibrary,
 } from '@/cast/ui/use-sequence-locations';
 import { MapPin, Search } from 'lucide-react';
 import { useState } from 'react';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 type LocationPickerDialogProps = {
   open: boolean;

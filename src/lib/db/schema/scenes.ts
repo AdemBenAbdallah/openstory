@@ -38,8 +38,8 @@ import { sequences } from './sequences';
  * their id params, so a `scene.id` flows through naturally, while a bare
  * analysis `sceneId` string won't type-check where a `DbSceneId` is expected.
  */
-export { dbSceneId, type DbSceneId } from '@/shared/scene-id';
-import type { DbSceneId } from '@/shared/scene-id';
+export { dbSceneId, type DbSceneId } from '@/shots/scene-id';
+import type { DbSceneId } from '@/shots/scene-id';
 
 // Scene-level slices of the analysis `Scene` object, reused verbatim so the
 // JSON columns stay precisely typed without re-declaring the shapes. Both

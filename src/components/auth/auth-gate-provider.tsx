@@ -25,7 +25,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/ui/dialog';
 import { useUser } from '@/hooks/use-user';
 import { getAuthOptionsFn } from '@/functions/auth-options';
 import { sanitizeAuthRedirect } from '@/components/auth/navigation';

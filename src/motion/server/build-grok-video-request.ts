@@ -7,16 +7,16 @@
  * Client-safe: no env, no adapters.
  */
 
-import { NATIVE_GROK_VIDEO_MODEL } from '@/shared/ai/grok-native';
+import { NATIVE_GROK_VIDEO_MODEL } from '@/models/grok-native';
 import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import {
   pickVideoResolution,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   buildReferenceVideoPrompt,

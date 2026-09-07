@@ -21,7 +21,7 @@ import {
 } from '@/cast/sequence-characters.fn';
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
 import { addCharacterToLibraryFn } from '@/cast/talent.fn';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
 import type { CharacterWithTalent } from '@/lib/db/schema';
 
 export const sequenceCharacterKeys = {

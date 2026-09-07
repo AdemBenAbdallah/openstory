@@ -16,11 +16,11 @@ import { isBytePlusPricedModel } from '@/lib/ai/byteplus-pricing';
 import {
   isNativeGeminiImageEndpoint,
   NATIVE_GEMINI_VIDEO_MODEL,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   isNativeGrokImageEndpoint,
   NATIVE_GROK_VIDEO_MODEL,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { ModelPricingProvider } from '@/lib/db/schema/model-pricing';
 import {

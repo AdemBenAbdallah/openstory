@@ -7,10 +7,10 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
 const STORYBOARD_TRIGGERS = [
-  'src/lib/sequences/create-sequences.ts',
-  'src/functions/sequences.ts',
+  'src/sequences/server/create-sequences.ts',
+  'src/sequences/sequences.fn.ts',
   'src/stills/shot-image.fn.ts',
-  'src/lib/sequences/smart-retry.ts',
+  'src/sequences/server/smart-retry.ts',
 ] as const;
 
 describe('storyboard envelope wiring', () => {
@@ -26,7 +26,7 @@ describe('storyboard envelope wiring', () => {
 
   test('create-sequences reserves inside the analysis-model loop', () => {
     const source = readFileSync(
-      'src/lib/sequences/create-sequences.ts',
+      'src/sequences/server/create-sequences.ts',
       'utf8'
     );
     const mapIdx = source.indexOf('analysisModels.map');
@@ -38,7 +38,7 @@ describe('storyboard envelope wiring', () => {
 
   test('analyze-script grows or stops before spawning shot-images', () => {
     const source = readFileSync(
-      'src/lib/workflows/analyze-script-workflow.ts',
+      'src/sequences/server/workflows/analyze-script-workflow.ts',
       'utf8'
     );
     expect(source).toMatch(/gateStoryboardRenders/);

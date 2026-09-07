@@ -10,7 +10,7 @@ import { z } from 'zod';
 import {
   isValidTextToImageModel,
   safeTextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import type { CharacterBibleUpdate } from '@/lib/db/scoped/characters';
 import { resolveSequenceStyleConfig } from '@/look/style-config';
 import { buildCastingAttributes } from './character-prompt';

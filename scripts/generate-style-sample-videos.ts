@@ -50,13 +50,13 @@ import {
   safeTextToImageModel,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { microsToUsd } from '@/billing/money';
 import { loadLocalFalPricing } from './load-local-fal-pricing';
 import {
   aspectRatioSchema,
   type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import { calculateMotionMetadata } from '@/motion/server/motion-generation';
 import {
   createSampleSequence,

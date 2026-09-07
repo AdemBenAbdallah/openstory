@@ -23,8 +23,8 @@ import {
   DEFAULT_IMAGE_MODEL,
   safeTextToImageModel,
   supportsReferenceImages,
-} from '@/shared/ai/models';
-import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { aspectRatioToImageSize } from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { ElementVisionStatus } from '@/lib/db/schema';
 import {

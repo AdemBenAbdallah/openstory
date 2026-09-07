@@ -2,7 +2,7 @@ import {
   DEFAULT_IMAGE_MODEL,
   safeTextToImageModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { parseStyleConfig } from '@/look/style-config';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { buildStyledImagePrompt } from '@/look/server/style-image-prompt';

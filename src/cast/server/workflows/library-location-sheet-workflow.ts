@@ -2,7 +2,7 @@
  * The `libraryLocationSheetWorkflow` durable workflow.
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import {
   deductWorkflowCredits,
   extractImageCost,

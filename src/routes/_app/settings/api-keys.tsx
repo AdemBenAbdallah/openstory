@@ -5,7 +5,7 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { ApiKeySettings } from '@/components/settings/api-key-settings';
+import { ApiKeySettings } from '@/ui/settings/api-key-settings';
 
 const searchSchema = z.object({
   success: z.string().optional(),

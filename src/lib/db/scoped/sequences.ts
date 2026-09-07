@@ -3,16 +3,16 @@
  * Team-scoped sequence CRUD and per-sequence update methods.
  */
 
-import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
+import { DEFAULT_ANALYSIS_MODEL } from '@/models/models.config';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
 import {
   type AspectRatio,
   DEFAULT_ASPECT_RATIO,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import {
   DEFAULT_RESOLUTION,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import type { Database } from '@/lib/db/client';
 import {
   assembleShotViews,
@@ -33,9 +33,9 @@ import type { MusicStatus, SequenceStatus } from '@/lib/db/schema/sequences';
 import type {
   GenerationCheckpoint,
   GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import { parseStyleConfig } from '@/look/style-config';
-import type { ShotReadiness, ShotView } from '@/shared/shots/shot-view';
+import type { ShotReadiness, ShotView } from '@/shots/shot-view';
 import { getLatestPreviewByFrameIds } from './frame-variants';
 import { getPrimaryVideoByShotIds } from './video-variants';
 import {

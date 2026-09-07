@@ -6,8 +6,8 @@
 import {
   type AspectRatio,
   DEFAULT_ASPECT_RATIO,
-} from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+} from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { index, integer, snakeCase, text } from 'drizzle-orm/sqlite-core';
 import { generateId } from '@/shared/id';
@@ -19,7 +19,7 @@ import { teams } from './teams';
 import type {
   GenerationCheckpoint,
   GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import type { StoredStyleConfig } from '@/look/style-config';
 
 // Enum values as constants (SQLite doesn't have native enums)

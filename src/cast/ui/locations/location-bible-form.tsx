@@ -1,13 +1,13 @@
 import { BibleField } from '@/cast/ui/bible-field';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/ui/button';
+import { Label } from '@/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/ui/select';
 import { useUpdateSequenceLocation } from '@/cast/ui/use-sequence-locations';
 import type { SequenceLocationWithReference } from '@/lib/db/schema';
 import { errorMessage } from '@/shared/errors';

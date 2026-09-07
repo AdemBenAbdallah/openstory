@@ -7,7 +7,7 @@
  * await-child.ts.
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { CharacterMinimal } from '@/lib/db/schema';
 import { buildCharacterInsert } from './cast-records';

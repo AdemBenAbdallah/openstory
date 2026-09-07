@@ -4,10 +4,10 @@ import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_MUSIC_MODEL,
   DEFAULT_VIDEO_MODEL,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { estimateStoryboardCost } from './cost-estimation';
 import { estimateStoryboardPreflightCost } from './storyboard-preflight-cost';
-import { estimateSceneCount } from '@/shared/generation/time-estimate';
+import { estimateSceneCount } from '@/sequences/time-estimate';
 
 const base = {
   imageModel: DEFAULT_IMAGE_MODEL,

@@ -17,7 +17,7 @@ import type {
   SequenceLocationWithReference,
   Shot,
 } from '@/lib/db/schema';
-import { buildRegenerateShotSnapshot } from '@/lib/workflows/regenerate-shots-snapshot';
+import { buildRegenerateShotSnapshot } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import {
   mergeRecastSheetIntoSnapshots,
   PENDING_SHEET_HASH,

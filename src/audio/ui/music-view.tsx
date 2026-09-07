@@ -1,22 +1,22 @@
 import { ActionCost } from '@/billing/ui/action-cost';
-import type { ModelGenerationStatus } from '@/components/model/base-model-selector';
-import { MusicModelSelector } from '@/components/model/music-model-selector';
-import { PromptHistorySheet } from '@/components/prompts/prompt-history-sheet';
-import { StalenessIndicator } from '@/components/staleness/staleness-indicator';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import { VoiceInputButton } from '@/components/voice/voice-input-button';
+import type { ModelGenerationStatus } from '@/models/ui/pickers/base-model-selector';
+import { MusicModelSelector } from '@/models/ui/pickers/music-model-selector';
+import { PromptHistorySheet } from '@/shots/ui/prompts/prompt-history-sheet';
+import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
+import { Button } from '@/ui/button';
+import { Checkbox } from '@/ui/checkbox';
+import { Input } from '@/ui/input';
+import { Label } from '@/ui/label';
+import { Skeleton } from '@/ui/skeleton';
+import { Textarea } from '@/ui/textarea';
+import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import {
   getAudioModelDurationLimits,
   type AudioModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { estimateAudioCost } from '@/billing/cost-estimation';
-import { useTextDictation } from '@/hooks/use-dictation';
+import { useTextDictation } from '@/ui/use-dictation';
 import type { Sequence } from '@/lib/db/schema';
 import {
   AlertCircle,

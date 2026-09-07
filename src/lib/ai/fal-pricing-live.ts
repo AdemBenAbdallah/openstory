@@ -17,7 +17,7 @@ import {
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { typedEntries } from '@/shared/utils/typed-object';
 import { micros, type Microdollars } from '@/billing/money';
 import { modelPricing } from '@/lib/db/schema';

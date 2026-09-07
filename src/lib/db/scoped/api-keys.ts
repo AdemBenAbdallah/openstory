@@ -9,8 +9,8 @@ import { and, eq } from 'drizzle-orm';
 import type { Database } from '@/lib/db/client';
 import { getEnv } from '#env';
 import { getPlatformLlmKey } from '@/lib/ai/create-adapter';
-import { nativeGeminiTextModel } from '@/shared/ai/gemini-native';
-import { nativeGrokTextModel } from '@/shared/ai/grok-native';
+import { nativeGeminiTextModel } from '@/models/gemini-native';
+import { nativeGrokTextModel } from '@/models/grok-native';
 import {
   LLMTR_BASE_URL,
   LLMTR_VALIDATION_MODEL,

@@ -27,12 +27,12 @@
  *   bun scripts/score-style-previews.ts --model openai/gpt-5.5 --threshold 6.5
  */
 import { parseStyleConfig } from '@/look/style-config';
-import type { TextModel } from '@/shared/ai/models';
+import type { TextModel } from '@/models/models';
 import { callLLM } from '@/lib/ai/llm-client';
 import {
   ANALYSIS_MODEL_IDS,
   isValidAnalysisModelId,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import type { StyleConfig } from '@/lib/db/schema/libraries';
 import type { ChatMessage, ChatMessageContentPart } from '@/lib/prompts';
 import { styleSlug } from '@/look/style-slug';

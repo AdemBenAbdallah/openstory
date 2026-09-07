@@ -6,7 +6,7 @@
  * welcome dialog, and the pricing page CTA.
  */
 
-import { createDialogStore } from '@/hooks/create-dialog-store';
+import { createDialogStore } from '@/ui/create-dialog-store';
 
 const store = createDialogStore();
 

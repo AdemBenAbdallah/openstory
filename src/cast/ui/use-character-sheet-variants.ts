@@ -7,7 +7,7 @@ import {
   undiscardCharacterSheetVariantFn,
 } from '@/cast/character-sheet-variants.fn';
 import { sequenceCharacterKeys } from './use-sequence-characters';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
 import type { CharacterSheetVariant } from '@/lib/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

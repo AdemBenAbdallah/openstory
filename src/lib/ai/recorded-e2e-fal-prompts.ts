@@ -15,7 +15,7 @@ import {
   matchCharactersToScene,
   matchElementsToShotImage,
   matchLocationsToScene,
-} from '@/shared/scenes/scene-matching';
+} from '@/shots/scene-matching';
 import {
   extractTaggedJson,
   loadOpenrouterStage,

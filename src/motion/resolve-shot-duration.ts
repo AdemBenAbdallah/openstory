@@ -1,4 +1,4 @@
-import type { ImageToVideoModel } from '@/shared/ai/models';
+import type { ImageToVideoModel } from '@/models/models';
 import { snapDuration } from './snap-duration';
 
 export type ResolveShotDurationInput = {

@@ -7,12 +7,12 @@
  * fails if `bun motion:codegen` changes a grid the UI still reads.
  */
 
-import type { ImageToVideoModel } from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import type { ImageToVideoModel } from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import {
   tiersForTokens,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 
 /** Allowed clip lengths in seconds, sorted. Empty = duration is not a field. */
 export const MOTION_DURATION_GRID = {

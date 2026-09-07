@@ -42,7 +42,7 @@ result as an **individual team asset** decoupled from the sequence→scene→sho
   Workflows, R2 origin-relative URLs #894, `requireCredits` + BYOK via
   `scopedDb.apiKeys.resolveKey('fal')`), but every output row is sequence-anchored. Needs a new
   flat `generated_assets` table. Zod is v4 (`z.fromJSONSchema` available). Nav slot:
-  `navLinks` in `src/components/layout/app-sidebar.tsx`.
+  `navLinks` in `src/ui/layout/app-sidebar.tsx`.
 
 ## Architecture decisions
 
@@ -79,7 +79,7 @@ Columns: `id`, `teamId`, `userId`, `provider` ('fal'), `endpointId` (e.g. `fal-a
 `{ url: string; contentType: string }[]`, url is origin-relative R2), `error` text nullable,
 `workflowRunId` text nullable, `costMicros` integer nullable, `createdAt`/`updatedAt`.
 
-### Server fns: `src/functions/model-assets.ts` (Agent A owns)
+### Server fns: `src/models/model-assets.fn.ts` (Agent A owns)
 
 - `createGeneratedAssetFn({ endpointId, activity, modelName, input, inputSchema })` →
   `{ id, workflowRunId }`. Steps: auth (team member) → `z.fromJSONSchema(inputSchema)`
@@ -98,7 +98,7 @@ input }`. Wire in all 3 places (wrangler.jsonc `workflows[]` binding `ASSET_WORK
 enforces. Follow the existing image/motion workflow structure for fal key resolution, fal queue
 call, R2 upload, cost deduction, failure handling. Steps write the row status transitions.
 
-### Catalog lib: `src/shared/models/catalog.ts` + `src/functions/model-catalog.ts` (Agent B owns)
+### Catalog lib: `src/models/catalog.ts` + `src/models/model-catalog.fn.ts` (Agent B owns)
 
 - `listCatalogModels({ activity?, q?, cursor?, limit? })` → modelschemas `/v1/models` (provider
   fal), returns `{ models: CatalogModel[], nextCursor? }`. `CatalogModel`: `endpointId`,
@@ -121,7 +121,7 @@ call, R2 upload, cost deduction, failure handling. Steps write the row status tr
   renderer + widget registry (shadcn only, Tailwind layout-only). Heuristics per openfield +
   schema-studio (see research conclusions). Honor `x-fal-order-properties`, `required`-first,
   optional fields behind "+ field" chips, oneOf/anyOf tabs, depth-cap raw-JSON fallback.
-- `src/components/schema-form/asset-result.tsx` — output renderer: detect image/video/audio
+- `src/ui/schema-form/asset-result.tsx` — output renderer: detect image/video/audio
   fields by name+shape → media components; else JSON view.
 - Sidebar: add "Models" to `navLinks` in `app-sidebar.tsx`.
 

@@ -10,8 +10,8 @@
  * instead.
  */
 
-import { IMAGE_MODELS } from '@/shared/ai/models';
-import { resolveUpscaleModel } from '@/shared/ai/resolve-asset-models';
+import { IMAGE_MODELS } from '@/models/models';
+import { resolveUpscaleModel } from '@/models/resolve-asset-models';
 import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
@@ -20,8 +20,8 @@ import {
 import {
   aspectRatioToImageSize,
   DEFAULT_IMAGE_SIZE,
-} from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+} from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type { ScopedDb } from '@/lib/db/scoped';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
@@ -37,7 +37,7 @@ import type {
   UpscaleShotVariantWorkflowResult,
 } from '@/lib/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getAnchorImageUrl } from '@/lib/shots/frame-image';
+import { getAnchorImageUrl } from '@/shots/server/frame-image';
 import { getLogger } from '@/shared/observability/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'upscale-shot-variant']);

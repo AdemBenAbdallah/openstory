@@ -15,14 +15,14 @@
 
 import { z } from 'zod';
 import { enhanceScriptToString } from '@/lib/ai/script-enhancement';
-import { toEnhanceInputs } from '@/shared/ai/enhance-inputs';
+import { toEnhanceInputs } from '@/models/enhance-inputs';
 import {
   DEFAULT_VIDEO_MODEL,
   isValidImageToVideoModel,
-} from '@/shared/ai/models';
-import { isShortScript } from '@/shared/ai/should-enhance';
-import { DEFAULT_RESOLUTION } from '@/shared/constants/resolutions';
-import { DEFAULT_ASPECT_RATIO } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { isShortScript } from '@/models/should-enhance';
+import { DEFAULT_RESOLUTION } from '@/models/resolutions';
+import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 import type { ScopedDb } from '@/lib/db/scoped';
 import {
   createLibraryLocation,
@@ -30,7 +30,7 @@ import {
 } from '@/cast/server/locations/create-library-location';
 import { getLogger } from '@/shared/observability/logger';
 import { createSequenceSchema } from '@/lib/schemas/sequence.schemas';
-import { createSequences } from '@/lib/sequences/create-sequences';
+import { createSequences } from '@/sequences/server/create-sequences';
 import { STORAGE_BUCKETS, type StorageBucket } from '@/lib/storage/buckets';
 import { createLibraryTalent } from '@/cast/server/talent/create-library-talent';
 import {

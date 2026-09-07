@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { z } from 'zod';
 import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
-import { toEnhanceInputs } from '@/shared/ai/enhance-inputs';
+import { toEnhanceInputs } from '@/models/enhance-inputs';
 import { createUserPrompt } from '../script-enhancer';
 
 const NEO_NOIR_V1 = {

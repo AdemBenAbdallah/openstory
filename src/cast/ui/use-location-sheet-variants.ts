@@ -10,7 +10,7 @@ import {
   libraryLocationKeys,
   sequenceLocationKeys,
 } from './use-sequence-locations';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
 import type { LocationSheetVariant } from '@/lib/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@/ui/dialog';
 import { statementFor } from '@/shared/compliance/attestations';
 import { PortraitAttestationFields } from './portrait-attestation-fields';
 import { TalentMediaUpload } from './talent-media-upload';

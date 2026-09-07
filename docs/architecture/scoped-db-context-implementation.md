@@ -235,7 +235,7 @@ export function createFrameService(db: ScopedDbContext) {
 
 ### 4.1 Sequences
 
-Update `src/functions/sequences.ts`:
+Update `src/sequences/sequences.fn.ts`:
 
 **Before:**
 
@@ -433,11 +433,11 @@ bunx oxlint --type-aware src/functions/
 | `src/lib/services/frame.service.ts`     | Refactor to factory               |
 | `src/lib/services/character.service.ts` | Refactor to factory               |
 | `src/lib/services/team.service.ts`      | Refactor to factory               |
-| `src/functions/sequences.ts`            | Use context.db                    |
+| `src/sequences/sequences.fn.ts`            | Use context.db                    |
 | `src/functions/frames.ts`               | Use context.db                    |
 | `src/look/styles.fn.ts`               | Use context.db                    |
 | `src/functions/teams.ts`                | Use context.db                    |
-| `src/functions/ai.ts`                   | Use context.db                    |
+| `src/models/ai.fn.ts`                   | Use context.db                    |
 | `src/functions/invite-codes.ts`         | Use context.db                    |
 | `src/functions/user.ts`                 | Use context.db                    |
 | `.oxlintrc.json`                        | Add no-restricted-imports rules   |

@@ -3,7 +3,7 @@
  * Routes through native xAI / Google, LLMTR (OpenAI-compat), or OpenRouter.
  */
 
-import type { TextModel } from '@/shared/ai/models';
+import type { TextModel } from '@/models/models';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import {
   usdToMicros,
@@ -26,16 +26,16 @@ import { z } from 'zod';
 import {
   geminiTextCostFromUsage,
   nativeGeminiTextModel,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   grokTextCostFromUsage,
   nativeGrokTextModel,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import { llmtrCompatibleApi, llmtrTextCostFromUsage } from '@/lib/ai/llmtr';
 import {
   isRegionBlockedLlmError,
   regionFallbackModel,
-} from '@/shared/ai/region-policy';
+} from '@/models/region-policy';
 import { aiDebugLogger } from './ai-debug-logger';
 import {
   createAdapter,

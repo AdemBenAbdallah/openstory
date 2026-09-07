@@ -1,10 +1,10 @@
-import { DocsAppSidebar } from '@/components/docs/docs-app-sidebar';
+import { DocsAppSidebar } from '@/ui/docs/docs-app-sidebar';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/components/ui/sidebar';
-import { TooltipProvider } from '@/components/ui/tooltip';
+} from '@/ui/sidebar';
+import { TooltipProvider } from '@/ui/tooltip';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/docs')({

@@ -8,12 +8,12 @@
  * Client-safe: no env, no adapters.
  */
 
-import { NATIVE_GEMINI_VIDEO_MODEL } from '@/shared/ai/gemini-native';
+import { NATIVE_GEMINI_VIDEO_MODEL } from '@/models/gemini-native';
 import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   buildReferenceVideoPrompt,

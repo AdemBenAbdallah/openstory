@@ -2,7 +2,7 @@ import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
 import {
   isValidTextToImageModel,
   safeTextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import type { LocationBibleUpdate } from '@/lib/db/scoped/sequence-locations';
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
 import {

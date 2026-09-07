@@ -3,22 +3,22 @@
  * Auto-verifies when 6 digits entered or pasted
  */
 
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/ui/alert';
 import { finishSignInRedirect } from '@/components/auth/navigation';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/ui/card';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from '@/components/ui/input-otp';
-import { useHydrated } from '@/hooks/use-hydrated';
+} from '@/ui/input-otp';
+import { useHydrated } from '@/ui/use-hydrated';
 import { authClient } from '@/components/auth/client';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useCallback, useEffect, useState, useTransition } from 'react';

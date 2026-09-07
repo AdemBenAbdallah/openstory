@@ -6,7 +6,7 @@
  * (`spawnAndAwaitChild`).
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import { generateId } from '@/shared/id';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { SequenceLocationMinimal } from '@/lib/db/schema';

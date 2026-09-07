@@ -9,13 +9,13 @@
  * Auth is inherited from `/admin/route.tsx` (ADMIN_EMAILS gate).
  */
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
+import { Card, CardContent } from '@/ui/card';
+import { Input } from '@/ui/input';
+import { Skeleton } from '@/ui/skeleton';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/tabs';
+import { Textarea } from '@/ui/textarea';
 import {
   applyEnforcementFn,
   attributeContentReportFn,

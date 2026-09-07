@@ -7,7 +7,7 @@ import {
   CONTENT_REJECTION_EVENT,
   isContentRejectionError,
 } from '@/shared/ai/content-rejection';
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import {
   deductWorkflowCredits,
   extractImageCost,

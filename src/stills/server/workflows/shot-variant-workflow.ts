@@ -8,7 +8,7 @@
  * "selected" — it's only the source the tiles are cropped from.
  */
 
-import { DEFAULT_IMAGE_MODEL, IMAGE_MODELS } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, IMAGE_MODELS } from '@/models/models';
 import {
   deductWorkflowCredits,
   extractImageCost,
@@ -17,7 +17,7 @@ import {
 import {
   DEFAULT_IMAGE_SIZE,
   getVariantGridConfig,
-} from '@/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import { recordProvenance } from '@/lib/compliance/provenance';

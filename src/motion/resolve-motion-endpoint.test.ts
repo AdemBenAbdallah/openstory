@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { resolveMotionEndpoint } from './resolve-motion-endpoint';
 
 describe('resolveMotionEndpoint', () => {

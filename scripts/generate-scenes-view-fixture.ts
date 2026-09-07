@@ -20,7 +20,7 @@ const DB = 'dev-local-d1';
 const SEQ = process.argv[2] ?? '01KT2TPG5WYQ15H79SAV88EH45';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = resolve(ROOT, 'src/components/scenes/scenes-view.fixture.ts');
+const OUT = resolve(ROOT, 'src/shots/ui/scenes-view.fixture.ts');
 
 // Portrait placeholders (default sequence is 9:16). Cycled across shots/scenes.
 const VIDEOS = [
@@ -155,8 +155,8 @@ function emit(value: unknown): string {
 const file = `// AUTO-GENERATED Storybook fixture — real rows from local D1 (sequence ${SEQ}),
 // media URLs swapped for public placeholders. Do NOT hand-edit.
 // Regenerate via: bun scripts/generate-scenes-view-fixture.ts
-import type { SceneWithScript } from '@/hooks/use-scenes';
-import { dbSceneId } from '@/shared/scene-id';
+import type { SceneWithScript } from '@/shots/ui/use-scenes';
+import { dbSceneId } from '@/shots/scene-id';
 import type { Shot } from '@/lib/db/schema';
 import type { Sequence, Style } from '@/lib/db/schema';
 

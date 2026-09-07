@@ -1,10 +1,10 @@
-import { RouteErrorFallback } from '@/components/error/route-error-fallback';
-import { routeParams } from '@/components/layout/breadcrumbs';
-import { RenameSequenceButton } from '@/components/sequence/rename-sequence-button';
-import { SEQUENCE_HEADER_SLOT_ID } from '@/components/sequence/sequence-header-slot';
-import { getDefaultSequenceTabPath } from '@/components/sequence/sequence-tabs';
-import { getSequenceFn } from '@/functions/sequences';
-import { sequenceKeys, useSequence } from '@/hooks/use-sequences';
+import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
+import { routeParams } from '@/ui/layout/breadcrumbs';
+import { RenameSequenceButton } from '@/sequences/ui/rename-sequence-button';
+import { SEQUENCE_HEADER_SLOT_ID } from '@/sequences/ui/sequence-header-slot';
+import { getDefaultSequenceTabPath } from '@/sequences/ui/sequence-tabs';
+import { getSequenceFn } from '@/sequences/sequences.fn';
+import { sequenceKeys, useSequence } from '@/sequences/ui/use-sequences';
 import { useUser } from '@/hooks/use-user';
 import { requireSessionOrRedirect } from '@/components/auth/route-guards';
 import { isValidId } from '@/shared/id';

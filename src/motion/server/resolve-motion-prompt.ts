@@ -13,7 +13,7 @@
  */
 
 import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
-import type { ImageToVideoModel } from '@/shared/ai/models';
+import type { ImageToVideoModel } from '@/models/models';
 import { assembleMotionPrompt } from './assemble-motion-prompt';
 
 /** The `shot_prompt_versions` motion-row fields needed to rebuild a prompt. */

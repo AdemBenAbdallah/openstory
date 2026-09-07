@@ -10,7 +10,7 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashAssetIdentity } from '@/lib/ai/byteplus-assets';
-import { IMAGE_TO_VIDEO_MODELS } from '@/shared/ai/models';
+import { IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { MotionWorkflowInput } from '@/lib/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';

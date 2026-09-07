@@ -11,8 +11,8 @@ import {
   maybeRewriteDurationLabels,
   parseSceneDurationLabels,
   stripTotalLine,
-} from '@/shared/ai/enhance-duration';
-import type { ImageToVideoModel } from '@/shared/ai/models';
+} from '@/models/enhance-duration';
+import type { ImageToVideoModel } from '@/models/models';
 import { durationGridForModel } from '@/motion/snap-duration';
 import type { ChatMessage } from '@/lib/prompts';
 

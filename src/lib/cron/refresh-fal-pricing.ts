@@ -24,7 +24,7 @@ import {
   getFalEndpointIds,
   UNLISTED_FAL_ENDPOINTS,
 } from '@/lib/ai/fal-endpoints';
-import { listCatalogEndpointIds } from '@/shared/models/catalog';
+import { listCatalogEndpointIds } from '@/models/catalog';
 import {
   type FalUnitPrice,
   fetchFalBilledRates,

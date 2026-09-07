@@ -17,12 +17,12 @@
  */
 
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/ui/popover';
 import { ElementTokenButton } from './element-token-button';
 import {
   restoreSequenceElement,
@@ -36,14 +36,14 @@ import {
 import type { SequenceElement } from '@/lib/db/schema';
 import { errorMessage } from '@/shared/errors';
 import { MAX_SEQUENCE_ELEMENTS } from './limits';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   extractImagesFromSnapshot,
   snapshotDataTransfer,
   toastDragImportCorsError,
-} from '@/components/drag-images';
-import { getFileKey } from '@/components/upload';
+} from '@/ui/drag-images';
+import { getFileKey } from '@/ui/upload';
 import { ImagePlus, Loader2, Upload, X } from 'lucide-react';
 import {
   useCallback,
@@ -56,7 +56,7 @@ import {
 import { toast } from 'sonner';
 
 import { getLogger } from '@/shared/observability/logger';
-import { AppImage } from '@/components/ui/app-image';
+import { AppImage } from '@/ui/app-image';
 
 const logger = getLogger(['openstory', 'ui', 'element', 'element-selector']);
 

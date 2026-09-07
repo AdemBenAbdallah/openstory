@@ -1,11 +1,11 @@
 import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
-import { buildDurationPromptParagraph } from '@/shared/ai/enhance-duration';
-import type { EnhanceStyle } from '@/shared/ai/enhance-inputs';
+import { buildDurationPromptParagraph } from '@/models/enhance-duration';
+import type { EnhanceStyle } from '@/models/enhance-inputs';
 import {
   DEFAULT_VIDEO_MODEL,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import { z } from 'zod';
 
 const enhanceElementSchema = z.object({

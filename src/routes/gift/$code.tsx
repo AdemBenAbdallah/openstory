@@ -1,13 +1,13 @@
-import { OpenStoryLogo } from '@/components/icons/openstory-logo';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { OpenStoryLogo } from '@/ui/icons/openstory-logo';
+import { Alert, AlertDescription } from '@/ui/alert';
+import { Button } from '@/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/ui/card';
 import { redeemGiftTokenFn } from '@/billing/gift-tokens.fn';
 import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
 import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';

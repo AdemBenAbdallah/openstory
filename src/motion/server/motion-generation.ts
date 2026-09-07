@@ -29,13 +29,13 @@ import {
   geminiVideoDurationCost,
   isNativeGeminiVideoModel,
   NATIVE_GEMINI_VIDEO_MODEL,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   grokVideoCost,
   grokVideoDurationCost,
   isNativeGrokVideoModel,
   NATIVE_GROK_VIDEO_MODEL,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import {
   DEFAULT_VIDEO_MODEL,
   getBytePlusVideoModelId,
@@ -44,15 +44,15 @@ import {
   referenceOnlyCapableWith,
   supportsReferenceOnlyMotion,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { assertMediaVia, type MediaVia } from '@/lib/ai/via';
 import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { getLogger } from '@/shared/observability/logger';
 import { getPostHogClient } from '@/lib/posthog-server';
 import { ZERO_MICROS, type Microdollars } from '@/billing/money';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { AspectRatio } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type { ResolvedApiKey } from '@/lib/db/scoped/api-keys';
 import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
 import { snapDuration } from '@/motion/snap-duration';

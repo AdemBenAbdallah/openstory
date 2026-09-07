@@ -11,7 +11,7 @@
  *       against the NEW prompt text), committed in one batch; video stale.
  */
 
-import { DEFAULT_IMAGE_MODEL, safeTextToImageModel } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, safeTextToImageModel } from '@/models/models';
 import { computeVideoManifestInputHash } from '@/lib/ai/input-hash';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
 import type { Database } from '@/lib/db/client';
@@ -38,9 +38,9 @@ import {
   computeUploadedStillInputHash,
   parseUploadedStoragePath,
   resolveUploadExtension,
-} from '@/lib/shots/upload-media';
-import { USER_UPLOAD_MODEL } from '@/shared/shots/user-upload-model';
-import { buildRegenerateShotSnapshot } from '@/lib/workflows/regenerate-shots-snapshot';
+} from '@/shots/server/upload-media';
+import { USER_UPLOAD_MODEL } from '@/shots/user-upload-model';
+import { buildRegenerateShotSnapshot } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import { type Client, createClient } from '@libsql/client';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
@@ -75,7 +75,7 @@ let styleId = '';
 // (vi.doMock is not hoisted — a static import would bypass it).
 vi.doMock('#db-client', () => ({ getDb: () => db }));
 const { createScopedDb } = await import('@/lib/db/scoped');
-const { computeShotStaleness } = await import('@/lib/shots/shot-staleness');
+const { computeShotStaleness } = await import('@/shots/server/shot-staleness');
 
 async function seed() {
   await db.delete(sequenceEvents);

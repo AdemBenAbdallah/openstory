@@ -1,4 +1,4 @@
-import { routeParams } from '@/components/layout/breadcrumbs';
+import { routeParams } from '@/ui/layout/breadcrumbs';
 import { CharacterDetailView } from '@/cast/ui/talent/character-detail-view';
 import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import { createFileRoute } from '@tanstack/react-router';

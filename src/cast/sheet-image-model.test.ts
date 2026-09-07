@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import { resolveSheetImageModel } from './sheet-image-model';
 
 describe('resolveSheetImageModel', () => {

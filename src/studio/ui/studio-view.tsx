@@ -1,9 +1,9 @@
 import { StudioComposer } from './studio-composer';
 import { StudioGallery } from './studio-gallery';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/components/ui/button';
-import { PageContainer } from '@/components/layout/page-container';
-import { PageIntro } from '@/components/typography/page-intro';
+import { Button } from '@/ui/button';
+import { PageContainer } from '@/ui/layout/page-container';
+import { PageIntro } from '@/ui/typography/page-intro';
 import { useStudioAssets } from './use-studio-assets';
 import { studioPrompt } from './outputs';
 import type { StudioActivity, StudioSort } from '@/studio/schema';

@@ -4,8 +4,8 @@
  */
 
 import { AuthForm } from '@/components/auth/auth-form';
-import { OpenStoryLogo } from '@/components/icons/openstory-logo';
-import { PageContainer } from '@/components/layout/page-container';
+import { OpenStoryLogo } from '@/ui/icons/openstory-logo';
+import { PageContainer } from '@/ui/layout/page-container';
 import { getRedirectFromParams } from '@/components/auth/navigation';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';

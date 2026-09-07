@@ -35,7 +35,7 @@ import {
   matchElementsToScene,
   matchElementsToShotImage,
   matchLocationsToScene,
-} from '@/shared/scenes/scene-matching';
+} from '@/shots/scene-matching';
 
 type SceneReferenceInput = {
   continuity?: {

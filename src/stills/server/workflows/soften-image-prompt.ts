@@ -17,12 +17,12 @@ import {
   isContentRejectionError,
 } from '@/shared/ai/content-rejection';
 import { extractFalErrorMessage } from '@/shared/ai/fal-error';
-import { IMAGE_MODELS, type TextToImageModel } from '@/shared/ai/models';
+import { IMAGE_MODELS, type TextToImageModel } from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
   type AnalysisModelId,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import {
   generateImageWithProvider,

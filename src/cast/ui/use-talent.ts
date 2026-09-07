@@ -16,8 +16,8 @@ import {
   updateTalentFn,
   deleteTalentMediaFn,
 } from '@/cast/talent.fn';
-import { usePublicOrTeamQuery } from '@/hooks/use-public-or-team-query';
-import { putToR2 } from '@/components/upload';
+import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
+import { putToR2 } from '@/ui/upload';
 import type {
   CreateTalentInput,
   UpdateTalentInput,

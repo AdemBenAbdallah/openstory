@@ -4,7 +4,7 @@ import type {
   AudioModel,
   ImageToVideoModel,
   TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   estimateAudioCost,
   estimateCharacterSheetCount,

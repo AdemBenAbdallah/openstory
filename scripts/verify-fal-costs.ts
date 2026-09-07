@@ -27,7 +27,7 @@ import {
   IMAGE_TO_VIDEO_MODELS,
   type AudioModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { microsToUsd, type Microdollars } from '@/billing/money';
 import { buildModelInput } from '@/motion/server/build-model-input';
 import { snapDuration } from '@/motion/snap-duration';

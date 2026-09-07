@@ -28,13 +28,13 @@ import {
   toGeminiThinkingLevel,
 } from '@/lib/ai/llm-client';
 import { withLlmRateLimitRetry } from '@/lib/ai/quota-retry';
-import type { TextModel } from '@/shared/ai/models';
+import type { TextModel } from '@/models/models';
 import {
   analysisModelSupportsVision,
   getMaxOutputTokens,
   resolveVisionModel,
-} from '@/shared/ai/models.config';
-import { withRegionFallback } from '@/shared/ai/region-policy';
+} from '@/models/models.config';
+import { withRegionFallback } from '@/models/region-policy';
 import { extractStreamingStringField } from '@/lib/ai/stream-extract';
 import type { Microdollars } from '@/billing/money';
 import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';

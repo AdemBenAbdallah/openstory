@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   IMAGE_TO_VIDEO_MODELS,
   isValidImageToVideoModel,
-} from '@/shared/ai/models';
-import { ASPECT_RATIOS } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import { ASPECT_RATIOS } from '@/models/aspect-ratios';
 import { MOTION_INPUT_SCHEMAS, MOTION_JSON_SCHEMAS } from '@/motion/server/endpoint-map';
 import { getDurationValues, numericOf } from '@/motion/server/motion-transform';
 import { motionResolutionTokens } from '@/motion/server/build-model-input';

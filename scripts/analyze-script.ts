@@ -27,16 +27,16 @@
 
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
 import {
   ANALYSIS_MODEL_IDS,
   DEFAULT_ANALYSIS_MODEL,
   isValidAnalysisModelId,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import {
   aspectRatioSchema,
   type AspectRatio,
-} from '../src/shared/constants/aspect-ratios';
+} from '@/models/aspect-ratios';
 import { z } from 'zod';
 import {
   parseStyleConfig,

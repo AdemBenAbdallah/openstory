@@ -7,20 +7,20 @@ import {
   IMAGE_TO_VIDEO_MODELS,
   referenceOnlyCapableWith,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   isValidAnalysisModelId,
-} from '@/shared/ai/models.config';
-import { aspectRatioSchema } from '@/shared/constants/aspect-ratios';
-import { resolutionSchema } from '@/shared/constants/resolutions';
+} from '@/models/models.config';
+import { aspectRatioSchema } from '@/models/aspect-ratios';
+import { resolutionSchema } from '@/models/resolutions';
 import { sequences } from '@/lib/db/schema/sequences';
 import {
   DEFAULT_GENERATION_STOP_AT,
   flagsFromStopAt,
   generationStageSchema,
   stopAtFromFlags,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import { ulidSchemaOptional } from '@/lib/schemas/id.schemas';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-orm/zod';
 import { z } from 'zod';

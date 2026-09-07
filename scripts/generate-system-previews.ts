@@ -11,7 +11,7 @@
  *   bun scripts/generate-system-previews.ts                            # Dry-run (no FAL_KEY)
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { DEFAULT_LOCATION_TEMPLATES } from '@/cast/server/location/location-templates';
 import {

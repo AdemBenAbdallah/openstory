@@ -21,12 +21,12 @@ import {
   updateSequenceLocationFn,
 } from '@/cast/sequence-locations.fn';
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
 import {
   getPublicLibraryLocationsFn,
   getTeamLibraryLocationsFn,
 } from '@/cast/location-library.fn';
-import { usePublicOrTeamQuery } from '@/hooks/use-public-or-team-query';
+import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
 import type {
   LibraryLocation,
   SequenceLocationWithReference,

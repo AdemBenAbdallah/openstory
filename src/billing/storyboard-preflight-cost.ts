@@ -6,23 +6,23 @@
  * `autoGenerateMotion`, music only when motion+music are both on.
  */
 
-import { estimateMotionDurations } from '@/shared/ai/enhance-duration';
+import { estimateMotionDurations } from '@/models/enhance-duration';
 import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
 import {
   DEFAULT_VIDEO_MODEL,
   type AudioModel,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import { estimateStoryboardCost } from './cost-estimation';
 import type { Microdollars } from './money';
-import { estimateSceneCount } from '@/shared/generation/time-estimate';
+import { estimateSceneCount } from '@/sequences/time-estimate';
 import {
   shouldRunStage,
   type GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 
 export type StoryboardPreflightInput = {
   script: string;

@@ -10,7 +10,7 @@ import { user } from '@/lib/db/schema/auth';
 import { getLogger } from '@/shared/observability/logger';
 import { captureProductEvent } from '@/lib/observability/product-events';
 import { sendAutoTopUpFailedEmail } from '@/lib/services/email-service';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 import { and, eq } from 'drizzle-orm';
 
 const logger = getLogger(['openstory', 'emails', 'auto-top-up-failed']);

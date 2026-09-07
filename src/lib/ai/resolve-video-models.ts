@@ -1,7 +1,7 @@
 import {
   DEFAULT_VIDEO_MODEL,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 
 /**
  * Resolve a video models array from the dual-field pattern

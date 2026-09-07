@@ -22,9 +22,9 @@ import {
 import {
   loadSceneContextBySequenceFromDb,
   resolveSceneForShot,
-} from '@/lib/scenes/scene-script';
+} from '@/shots/server/scene-script';
 import { typedEntries } from '@/shared/utils/typed-object';
-import { matchCharacterToShotTags } from '@/shared/scenes/scene-matching';
+import { matchCharacterToShotTags } from '@/shots/scene-matching';
 import { createCharacterSheetVariantsMethods } from './character-sheet-variants';
 import { buildEventInsert } from './sequence-events';
 

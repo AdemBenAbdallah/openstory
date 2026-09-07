@@ -13,11 +13,11 @@
 
 import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { describe, expect, test, vi } from 'vitest';
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
-import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
+import { DEFAULT_ANALYSIS_MODEL } from '@/models/models.config';
 import type { ScopedDb } from '@/lib/db/scoped';
 import type { StyleConfig } from '@/lib/db/schema';
-import type { GenerationStage } from '@/shared/generation/pipeline';
+import type { GenerationStage } from '@/sequences/pipeline';
 import type { StoryboardTriggerInput } from '@/lib/workflow/types';
 
 const triggerWorkflowMock = vi.fn();

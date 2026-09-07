@@ -8,7 +8,7 @@
  * the public pricing page and pre-flight estimates.
  */
 import { writeFile } from 'node:fs/promises';
-import { SCRIPT_ANALYSIS_MODELS } from '@/shared/ai/models.config';
+import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 
 type OpenRouterModel = {
   id: string;

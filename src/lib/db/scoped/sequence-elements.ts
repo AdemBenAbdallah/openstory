@@ -30,8 +30,8 @@ import {
 import {
   loadSceneContextBySequenceFromDb,
   resolveSceneForShot,
-} from '@/lib/scenes/scene-script';
-import { matchElementsToShotImage } from '@/shared/scenes/scene-matching';
+} from '@/shots/server/scene-script';
+import { matchElementsToShotImage } from '@/shots/scene-matching';
 import { and, eq, inArray, isNull, like, ne, or, sql } from 'drizzle-orm';
 import { buildEventInsert } from './sequence-events';
 

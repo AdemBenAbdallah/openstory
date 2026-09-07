@@ -60,13 +60,13 @@ import {
   isValidImageToVideoModel,
   safeImageToVideoModel,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   analysisModelSupportsVision,
   DEFAULT_ANALYSIS_MODEL,
   getContextWindow,
   resolveVisionModel,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import {
   motionPromptSchema,
   type MotionPrompt,

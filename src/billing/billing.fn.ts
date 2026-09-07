@@ -35,7 +35,7 @@ import {
   isWelcomeCardAlreadyClaimedError,
   ValidationError,
 } from '@/shared/errors';
-import { FOUNDER_EMAIL } from '@/shared/marketing/constants';
+import { FOUNDER_EMAIL } from '@/ui/marketing/constants';
 import { getLogger } from '@/shared/observability/logger';
 import { captureProductEvent } from '@/lib/observability/product-events';
 import { sendFounderCreditRequestEmail } from '@/lib/services/email-service';

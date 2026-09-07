@@ -1,7 +1,7 @@
 import {
   recommendStylesForScriptFn,
   type StyleRecommendation,
-} from '@/functions/ai';
+} from '@/models/ai.fn';
 import {
   getPublicStylesFn,
   getSequenceStyleFn,
@@ -9,7 +9,7 @@ import {
   getStylesFn,
   promoteSequenceStyleFn,
 } from '@/look/styles.fn';
-import { usePublicOrTeamQuery } from '@/hooks/use-public-or-team-query';
+import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
 import { useAuthSession } from '@/components/auth/session-query';
 import { publicStylesQueryKey } from './public-styles-query';
 import { simpleHash } from '@/shared/utils/hash';

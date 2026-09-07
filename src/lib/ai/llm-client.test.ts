@@ -1,5 +1,5 @@
 import { usdToMicros, ZERO_MICROS } from '@/billing/money';
-import type { TextModel } from '@/shared/ai/models';
+import type { TextModel } from '@/models/models';
 import type { TokenUsage } from '@tanstack/ai';
 import { convertWebSearchToolToAdapterFormat } from '@tanstack/ai-openrouter/tools';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -62,7 +62,7 @@ const {
   toGlmReasoningEffort,
 } = await import('./llm-client');
 const { DEFAULT_ANALYSIS_MODEL, DEFAULT_VISION_MODEL } =
-  await import('@/shared/ai/models.config');
+  await import('@/models/models.config');
 
 const usage = (cost?: number): TokenUsage => ({
   promptTokens: 0,

@@ -3,11 +3,11 @@ import { getEnv } from '#env';
 // strips that body from the client build; the boundary test models the strip.
 // oxlint-disable-next-line no-restricted-imports
 import { getProductionDeploymentAppUrl } from '@/lib/env/environment';
-import { DocsReferrerTracker } from '@/components/docs/docs-referrer-tracker';
-import { DefaultNotFound } from '@/components/error/default-not-found';
-import { Providers } from '@/components/providers';
-import { Button } from '@/components/ui/button';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+import { DocsReferrerTracker } from '@/ui/docs/docs-referrer-tracker';
+import { DefaultNotFound } from '@/ui/error/default-not-found';
+import { Providers } from '@/ui/providers';
+import { Button } from '@/ui/button';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 import appCss from '@/styles/global.css?url';
 import type { QueryClient } from '@tanstack/react-query';
 import type { ErrorComponentProps } from '@tanstack/react-router';

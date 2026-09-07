@@ -10,7 +10,7 @@ import {
   getContextWindow,
   getMaxOutputTokens,
   SCRIPT_ANALYSIS_MODELS,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 
 describe('getMaxOutputTokens', () => {
   it('never exceeds any model’s real completion ceiling', () => {

@@ -1,17 +1,17 @@
 import type React from 'react';
 import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/dropdown-menu';
+import { Skeleton } from '@/ui/skeleton';
 import { StyleDetailDialog } from './style-detail-dialog';
 import { PromoteStyleDialog } from './promote-style-dialog';
 import { useSequenceStyle, useStyle, useStyles } from './use-styles';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { ChevronDown, Info, Library, Wand2 } from 'lucide-react';
 
 // Tinted chip treatments from the Tailwind palette. A style name always hashes

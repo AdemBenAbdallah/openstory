@@ -1,29 +1,29 @@
-import type { TabValue } from '@/components/scenes/scene-script-prompts';
-import { BlobLoader } from '@/components/ui/blob-loader';
-import { Button } from '@/components/ui/button';
+import type { TabValue } from '@/shots/ui/scene-script-prompts';
+import { BlobLoader } from '@/ui/blob-loader';
+import { Button } from '@/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Skeleton } from '@/components/ui/skeleton';
-import type { SceneWithScript } from '@/hooks/use-scenes';
+} from '@/ui/dropdown-menu';
+import { EmptyState } from '@/ui/empty-state';
+import { Skeleton } from '@/ui/skeleton';
+import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import {
   type AspectRatio,
   aspectRatioToDimensions,
   getAspectRatioClassName,
-} from '@/shared/constants/aspect-ratios';
-import { cn } from '@/components/utils';
+} from '@/models/aspect-ratios';
+import { cn } from '@/ui/utils';
 import { plainSceneTitle } from '@/shared/utils/markdown-plain';
-import { copyTextToClipboard } from '@/components/clipboard';
-import type { ShotView } from '@/shared/shots/shot-view';
+import { copyTextToClipboard } from '@/ui/clipboard';
+import type { ShotView } from '@/shots/shot-view';
 import {
   usesStartFrame,
   type StartFrameSequence,
-} from '@/shared/shots/use-start-frame';
-import { AppImage } from '@/components/ui/app-image';
+} from '@/shots/use-start-frame';
+import { AppImage } from '@/ui/app-image';
 import { playerPosterSrc } from './player-poster';
 import { usePostHog } from '@posthog/react';
 import { Download, Link, Loader2, Share2, VideoIcon } from 'lucide-react';
@@ -31,7 +31,7 @@ import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { VideoPlayer } from './video-player';
 import { VideoStateOverlay } from './video-state-overlay';
-import { getShotDownloadUrlFn } from '@/functions/shots';
+import { getShotDownloadUrlFn } from '@/shots/shots.fn';
 import { useQuery } from '@tanstack/react-query';
 
 type UseShotDownloadUrlParams = {

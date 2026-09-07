@@ -6,7 +6,7 @@ import {
   DEFAULT_MUSIC_MODEL,
   type AudioModel,
   type AudioModelConfig,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import type { Microdollars } from '@/billing/money';
 import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
 import { isContentRejectionError } from '@/shared/ai/content-rejection';

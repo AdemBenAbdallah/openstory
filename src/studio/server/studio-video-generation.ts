@@ -33,25 +33,25 @@ import {
   geminiVideoCostFromUsage,
   isNativeGeminiVideoModel,
   NATIVE_GEMINI_VIDEO_MODEL,
-} from '@/shared/ai/gemini-native';
+} from '@/models/gemini-native';
 import {
   grokVideoCost,
   isNativeGrokVideoModel,
   NATIVE_GROK_VIDEO_MODEL,
-} from '@/shared/ai/grok-native';
+} from '@/models/grok-native';
 import {
   getBytePlusVideoModelId,
   IMAGE_TO_VIDEO_MODELS,
   isNativeBytePlusVideoModel,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { assertMediaVia, type MediaVia } from '@/lib/ai/via';
 import { GROK_VIDEO_RESOLUTIONS } from '@/motion/server/build-grok-video-request';
 import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { ZERO_MICROS } from '@/billing/money';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { AspectRatio } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import type { ResolvedApiKey } from '@/lib/db/scoped/api-keys';
 import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
 import { MOTION_TRANSFORMS } from '@/motion/server/endpoint-map';

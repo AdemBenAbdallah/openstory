@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { routeParams } from '@/components/layout/breadcrumbs';
+import { routeParams } from '@/ui/layout/breadcrumbs';
 import { EditTalentDialog } from '@/cast/ui/talent-library/edit-talent-dialog';
 import { PortraitAttestationFields } from '@/cast/ui/talent-library/portrait-attestation-fields';
 import { TalentMediaUpload } from '@/cast/ui/talent-library/talent-media-upload';
 import { statementFor } from '@/shared/compliance/attestations';
-import { PageContainer } from '@/components/layout/page-container';
+import { PageContainer } from '@/ui/layout/page-container';
 import { getCurrentUserProfileFn } from '@/functions/user';
-import { PageDescription } from '@/components/typography/page-description';
-import { PageHeader } from '@/components/typography/page-header';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { PageDescription } from '@/ui/typography/page-description';
+import { PageHeader } from '@/ui/typography/page-header';
+import { Button } from '@/ui/button';
+import { Card } from '@/ui/card';
+import { Skeleton } from '@/ui/skeleton';
 import { useTalentSheetRealtime } from '@/cast/ui/use-talent-realtime';
 import {
   useTalentById,
@@ -21,7 +21,7 @@ import {
   useToggleTalentFavorite,
 } from '@/cast/ui/use-talent';
 import { sheetProgressCopy } from '@/cast/sheet-progress-copy';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import {

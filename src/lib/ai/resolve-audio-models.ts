@@ -1,4 +1,4 @@
-import { DEFAULT_MUSIC_MODEL, type AudioModel } from '@/shared/ai/models';
+import { DEFAULT_MUSIC_MODEL, type AudioModel } from '@/models/models';
 
 /**
  * Resolve an audio models array from the dual-field pattern

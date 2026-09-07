@@ -3,7 +3,7 @@ import {
   isValidTextToImageModel,
   safeTextToImageModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 
 /**
  * Image model for a character/location sheet generate or verify.

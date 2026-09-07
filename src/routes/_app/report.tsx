@@ -7,27 +7,27 @@
  * who needs it can use.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@/ui/card';
+import { Input } from '@/ui/input';
+import { Label } from '@/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/ui/select';
+import { Textarea } from '@/ui/textarea';
 import { submitContentReportFn } from '@/functions/content-reports';
 import { CONTENT_REPORT_REASONS } from '@/shared/content-reports';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';

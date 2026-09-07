@@ -141,7 +141,7 @@ type WorkflowLiveReads = Pick<ScopedDb, 'teamId' | 'userId'> & {
   characters: Pick<ScopedDb['characters'], 'getById' | 'listWithSheets'>;
   /**
    * `getSelected` only, and only for `getAnchorImageUrl`
-   * (src/lib/shots/frame-image.ts) — a thumbnail for a realtime event and the
+   * (src/shots/server/frame-image.ts) — a thumbnail for a realtime event and the
    * last-resort still for the #929 motion-prompt refresh. Render inputs never
    * come from here: they resolve through `claims` by explicit id.
    */
@@ -193,7 +193,7 @@ export type WorkflowScopedDb = WorkflowDomains & {
   liveRead: WorkflowLiveReads;
   /**
    * The unnarrowed surface, for exactly ONE consumer: the update-stale
-   * planner (`src/lib/shots/update-stale-plan.ts` and the scene / style /
+   * planner (`src/shots/server/update-stale-plan.ts` and the scene / style /
    * image-input loaders it calls).
    *
    * Staleness planning IS a live-state comparison — it diffs ~27 live rows

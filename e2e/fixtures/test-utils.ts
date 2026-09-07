@@ -14,7 +14,7 @@ import { expect } from 'playwright/test';
  */
 const HYDRATION_TIMEOUT = 15_000;
 const SEQUENCE_DRAFT_KEY = 'openstory:sequence-draft:v1';
-/** Mirrors `STORAGE_KEY` in src/hooks/use-generation-settings.ts — bump both
+/** Mirrors `STORAGE_KEY` in src/sequences/ui/use-generation-settings.ts — bump both
  *  together, or the pin lands under a key the app never reads and the recorded
  *  pipeline silently reverts to Turbo defaults. */
 const GENERATION_SETTINGS_KEY = 'openstory:generation-settings:v5';

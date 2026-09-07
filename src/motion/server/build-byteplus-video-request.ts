@@ -29,8 +29,8 @@ import {
   getMotionReferenceEndpoint,
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   inlineReferenceDescription,
@@ -39,7 +39,7 @@ import {
 import {
   pickVideoResolution,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 import { buildReferenceVideoPrompt } from './build-reference-video-prompt';
 
 /**

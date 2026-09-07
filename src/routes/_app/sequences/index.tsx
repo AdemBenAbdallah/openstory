@@ -1,7 +1,7 @@
 import { SignInPrompt } from '@/components/auth/sign-in-prompt';
-import { EvalView } from '@/components/eval/eval-view';
-import { PageContainer } from '@/components/layout/page-container';
-import { PageIntro } from '@/components/typography/page-intro';
+import { EvalView } from '@/sequences/ui/eval/eval-view';
+import { PageContainer } from '@/ui/layout/page-container';
+import { PageIntro } from '@/ui/typography/page-intro';
 import { useUser } from '@/hooks/use-user';
 import {
   sequencesListSearchSchema,
@@ -14,10 +14,10 @@ import {
   searchSpecifiesPrefs,
   type SequencesListPrefs,
   type SequencesListSearch,
-} from '@/components/sequence/list-prefs';
+} from '@/sequences/ui/list-prefs';
 import { createFileRoute } from '@tanstack/react-router';
 import { Video } from 'lucide-react';
-import { useIsomorphicLayoutEffect } from '@/hooks/use-isomorphic-layout-effect';
+import { useIsomorphicLayoutEffect } from '@/ui/use-isomorphic-layout-effect';
 import { useCallback, useRef } from 'react';
 
 type SequencesListNavigate = (opts: {

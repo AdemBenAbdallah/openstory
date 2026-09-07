@@ -8,8 +8,8 @@
  * the start frame, or the end frame.
  */
 
-import { AppImage } from '@/components/ui/app-image';
-import { Button } from '@/components/ui/button';
+import { AppImage } from '@/ui/app-image';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/ui/dialog';
+import { Skeleton } from '@/ui/skeleton';
 import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import { useSequenceElements } from '@/cast/ui/use-sequence-elements';
 import {
@@ -28,16 +28,16 @@ import {
 import {
   useSequencesWithShots,
   type SequenceWithShots,
-} from '@/hooks/use-sequences-with-shots';
+} from '@/sequences/ui/use-sequences-with-shots';
 import { useStudioAssets } from './use-studio-assets';
 import { useTalent } from '@/cast/ui/use-talent';
-import { isBrowserDisplayableStillUrl } from '@/shared/shots/shot-view';
+import { isBrowserDisplayableStillUrl } from '@/shots/shot-view';
 import {
   studioPosterOutput,
   studioPrimaryOutput,
   studioPrompt,
 } from './outputs';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import {
   ArrowLeft,
   AudioLines,

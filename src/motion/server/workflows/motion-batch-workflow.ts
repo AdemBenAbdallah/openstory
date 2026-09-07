@@ -17,7 +17,7 @@ import {
 } from '@/lib/ai/byteplus-asset-pool';
 import { reportBytePlusAssetPool } from '@/lib/ai/byteplus-observability';
 import { isBytePlusAssetsConfigured } from '@/lib/ai/byteplus-config';
-import { isNativeBytePlusVideoModel } from '@/shared/ai/models';
+import { isNativeBytePlusVideoModel } from '@/models/models';
 import { resolveAudioModels } from '@/lib/ai/resolve-audio-models';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';

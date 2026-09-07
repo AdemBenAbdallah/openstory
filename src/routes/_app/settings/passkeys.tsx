@@ -5,7 +5,7 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { PasskeySettings } from '@/components/settings/passkey-settings';
+import { PasskeySettings } from '@/ui/settings/passkey-settings';
 
 const searchSchema = z.object({
   setup: z.boolean().optional(),

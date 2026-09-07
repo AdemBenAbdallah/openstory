@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/ui/popover';
 import { useReplaceSequenceElement } from '@/cast/ui/use-sequence-elements';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import {
   extractImagesFromSnapshot,
   snapshotDataTransfer,
   toastDragImportCorsError,
-} from '@/components/drag-images';
+} from '@/ui/drag-images';
 import { Loader2, RefreshCw, Upload, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';

@@ -20,16 +20,16 @@ import {
 } from '@/functions/media-upload';
 import { characterSheetVariantKeys } from '@/cast/ui/use-character-sheet-variants';
 import { locationSheetVariantKeys } from '@/cast/ui/use-location-sheet-variants';
-import { promptVariantKeys } from '@/hooks/use-prompt-variants';
-import { segmentKeys } from '@/hooks/use-segments';
+import { promptVariantKeys } from '@/shots/ui/use-prompt-variants';
+import { segmentKeys } from '@/shots/ui/use-segments';
 import { sequenceCharacterKeys } from '@/cast/ui/use-sequence-characters';
 import { sequenceLocationKeys } from '@/cast/ui/use-sequence-locations';
-import { sequenceKeys } from '@/hooks/use-sequences';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
-import { shotKeys } from '@/hooks/use-shots';
-import { putToR2 } from '@/components/upload';
-import { fitImageFileToAspectRatio } from '@/hooks/fit-image-aspect';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import { sequenceKeys } from '@/sequences/ui/use-sequences';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
+import { shotKeys } from '@/shots/ui/use-shots';
+import { putToR2 } from '@/ui/upload';
+import { fitImageFileToAspectRatio } from '@/ui/fit-image-aspect';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 async function presignPut(

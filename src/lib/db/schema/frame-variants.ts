@@ -36,7 +36,7 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/sqlite-core';
 import { generateId } from '@/shared/id';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { Resolution } from '@/models/resolutions';
 import { frames } from './frames';
 import { sequences } from './sequences';
 import { SHOT_GENERATION_STATUSES } from './shots';

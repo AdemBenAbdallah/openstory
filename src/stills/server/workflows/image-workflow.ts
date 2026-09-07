@@ -16,13 +16,13 @@
  *      retains a stale-flagged version without repointing the primary.
  */
 
-import { DEFAULT_IMAGE_MODEL, IMAGE_MODELS } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL, IMAGE_MODELS } from '@/models/models';
 import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import { DEFAULT_IMAGE_SIZE } from '@/shared/constants/aspect-ratios';
+import { DEFAULT_IMAGE_SIZE } from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import type { Frame } from '@/lib/db/schema';
 import {

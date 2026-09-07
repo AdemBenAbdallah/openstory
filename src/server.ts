@@ -100,14 +100,14 @@ export { LocationBibleWorkflow } from '@/cast/server/workflows/location-bible-wo
 export { FramePromptBatchWorkflow } from '@/stills/server/workflows/frame-prompt-batch-workflow';
 export { MotionPromptBatchWorkflow } from '@/motion/server/workflows/motion-prompt-batch-workflow';
 export { MotionMusicPromptsWorkflow } from '@/motion/server/workflows/motion-music-prompts-workflow';
-export { RegenerateShotsWorkflow } from '@/lib/workflows/regenerate-shots-workflow';
-export { UpdateStaleShotsWorkflow } from '@/lib/workflows/update-stale-shots-workflow';
+export { RegenerateShotsWorkflow } from '@/shots/server/workflows/regenerate-shots-workflow';
+export { UpdateStaleShotsWorkflow } from '@/shots/server/workflows/update-stale-shots-workflow';
 export { RecastLocationWorkflow } from '@/cast/server/workflows/recast-location-workflow';
 export { ReplaceElementWorkflow } from '@/cast/server/workflows/replace-element-workflow';
-export { SceneSplitWorkflow } from '@/lib/workflows/scene-split-workflow';
-export { StoryboardWorkflow } from '@/lib/workflows/storyboard-workflow';
-export { AnalyzeScriptWorkflow } from '@/lib/workflows/analyze-script-workflow';
-export { SequenceExportWorkflow } from '@/lib/workflows/sequence-export-workflow';
+export { SceneSplitWorkflow } from '@/sequences/server/workflows/scene-split-workflow';
+export { StoryboardWorkflow } from '@/sequences/server/workflows/storyboard-workflow';
+export { AnalyzeScriptWorkflow } from '@/sequences/server/workflows/analyze-script-workflow';
+export { SequenceExportWorkflow } from '@/sequences/server/workflows/sequence-export-workflow';
 export { AssetGenerationWorkflow } from '@/studio/server/workflows/asset-generation-workflow';
 export { StudioGenerationWorkflow } from '@/studio/server/workflows/studio-generation-workflow';
 

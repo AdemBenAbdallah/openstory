@@ -3,7 +3,7 @@ import {
   IMAGE_TO_VIDEO_MODELS,
   safeImageToVideoModel,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { typedEntries } from '@/shared/utils/typed-object';
 import { buildModelInput, buildMotionRequest } from './build-model-input';
 import type { GenerateMotionOptions } from './motion-generation';

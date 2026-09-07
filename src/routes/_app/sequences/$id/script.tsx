@@ -1,7 +1,7 @@
-import { ScriptView } from '@/components/script/script-view';
-import { getScenesFn } from '@/functions/scenes';
-import { sceneKeys } from '@/hooks/use-scenes';
-import { useSequence } from '@/hooks/use-sequences';
+import { ScriptView } from '@/sequences/ui/script/script-view';
+import { getScenesFn } from '@/shots/scenes.fn';
+import { sceneKeys } from '@/shots/ui/use-scenes';
+import { useSequence } from '@/sequences/ui/use-sequences';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/sequences/$id/script')({

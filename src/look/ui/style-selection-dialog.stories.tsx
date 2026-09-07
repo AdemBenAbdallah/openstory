@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import { useStyles } from './use-styles';
 import { MOCK_SYSTEM_STYLES } from '@/look/server/style-templates';
 import type { Meta, StoryObj } from '@storybook/react-vite';

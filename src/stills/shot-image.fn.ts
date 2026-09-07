@@ -3,35 +3,35 @@ import {
   DEFAULT_VIDEO_MODEL,
   safeImageToVideoModel,
   safeTextToImageModel,
-} from '@/shared/ai/models';
-import { resolveUpscaleModel } from '@/shared/ai/resolve-asset-models';
-import { shotPromptSequence } from '@/shared/shots/use-start-frame';
+} from '@/models/models';
+import { resolveUpscaleModel } from '@/models/resolve-asset-models';
+import { shotPromptSequence } from '@/shots/use-start-frame';
 import {
   estimateImageCost,
   estimateStoryboardCost,
   gateEstimate,
 } from '@/billing/cost-estimation';
 import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import { getFrameImageUrl } from '@/lib/shots/frame-image';
+import { getFrameImageUrl } from '@/shots/server/frame-image';
 import {
   releaseReservationOnThrow,
   requireCredits,
   reserveRunCredits,
 } from '@/billing/server/preflight';
-import { getVariantGridConfig } from '@/shared/constants/aspect-ratios';
+import { getVariantGridConfig } from '@/models/aspect-ratios';
 import { cropTileFromGrid } from '@/stills/server/image-crop';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import {
   generateVariantSchema,
   regenerateShotSchema,
 } from '@/lib/schemas/shot.schemas';
-import { dbSceneId } from '@/shared/scene-id';
+import { dbSceneId } from '@/shots/scene-id';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
-import { rescanContinuityFromPrompt } from '@/lib/scenes/rescan-continuity-from-prompt';
+import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-from-prompt';
 import {
   getSceneLocationReferenceImages,
   prepareShotImageWorkflowInput,
-} from '@/lib/shots/shot-image-input';
+} from '@/shots/server/shot-image-input';
 import { triggerWorkflow } from '@/lib/workflow/client';
 import { triggerStoryboard } from '@/lib/workflow/launchers';
 import type {
@@ -39,7 +39,7 @@ import type {
   ShotVariantWorkflowInput,
   UpscaleShotVariantWorkflowInput,
 } from '@/lib/workflow/types';
-import { matchCharactersToShotImage } from '@/shared/scenes/scene-matching';
+import { matchCharactersToShotImage } from '@/shots/scene-matching';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';

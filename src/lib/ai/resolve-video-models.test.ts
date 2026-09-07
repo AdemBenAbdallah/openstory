@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_VIDEO_MODEL,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { resolveVideoModels } from './resolve-video-models';
 
 describe('resolveVideoModels', () => {

@@ -9,7 +9,7 @@ import { talentMatchResponseSchema } from '@/lib/ai/response-schemas';
 import { buildMatchingPromptVariables } from '@/lib/ai/talent-matching-prompt';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { getGenerationChannel } from '@/shared/realtime';
-import { GENERATION_STAGE_META } from '@/shared/generation/pipeline';
+import { GENERATION_STAGE_META } from '@/sequences/pipeline';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
 import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
 import { waitForTalentSheets } from './wait-for-sheets';

@@ -23,7 +23,7 @@ import {
   type ShotReadiness,
   type ShotView,
   toShotView,
-} from '@/shared/shots/shot-view';
+} from '@/shots/shot-view';
 import { toShareableUrl } from '@/lib/storage/buckets';
 import type { Sequence } from '@/lib/db/schema';
 import {

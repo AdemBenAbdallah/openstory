@@ -1,6 +1,6 @@
-import { AppImage } from '@/components/ui/app-image';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { AppImage } from '@/ui/app-image';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,8 +8,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
+} from '@/ui/dialog';
+import { Separator } from '@/ui/separator';
 import {
   optimizedVideoUrl,
   videoPosterUrl,

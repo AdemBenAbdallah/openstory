@@ -8,18 +8,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+} from '@/ui/alert-dialog';
+import { Button } from '@/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AppImage } from '@/components/ui/app-image';
+} from '@/ui/dialog';
+import { EmptyState } from '@/ui/empty-state';
+import { Skeleton } from '@/ui/skeleton';
+import { AppImage } from '@/ui/app-image';
 import {
   useDeleteStudioAsset,
   useStudioPendingCreates,
@@ -33,7 +33,7 @@ import {
   studioPrompt,
 } from './outputs';
 import { estimateStudioProgress } from './progress';
-import { cn } from '@/components/utils';
+import { cn } from '@/ui/utils';
 import { Download, Images, Star, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

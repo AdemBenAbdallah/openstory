@@ -1,18 +1,18 @@
 import { characterSheetVariantKeys } from '@/cast/ui/use-character-sheet-variants';
-import { promptVariantKeys } from '@/hooks/use-prompt-variants';
-import { sceneFacetKeys } from '@/hooks/use-scene-facets';
-import { sceneKeys } from '@/hooks/use-scenes';
+import { promptVariantKeys } from '@/shots/ui/use-prompt-variants';
+import { sceneFacetKeys } from '@/shots/ui/use-scene-facets';
+import { sceneKeys } from '@/shots/ui/use-scenes';
 import { sequenceElementKeys } from '@/cast/ui/use-sequence-elements';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
-import { segmentKeys } from '@/hooks/use-segments';
-import { shotKeys } from '@/hooks/use-shots';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
+import { segmentKeys } from '@/shots/ui/use-segments';
+import { shotKeys } from '@/shots/ui/use-shots';
 import { locationSheetVariantKeys } from '@/cast/ui/use-location-sheet-variants';
 import { sequenceCharacterKeys } from '@/cast/ui/use-sequence-characters';
 import { sequenceLocationKeys } from '@/cast/ui/use-sequence-locations';
-import { musicPromptStalenessKey, sequenceKeys } from '@/hooks/use-sequences';
+import { musicPromptStalenessKey, sequenceKeys } from '@/sequences/ui/use-sequences';
 import { styleKeys } from '@/look/ui/use-styles';
 import type { Sequence } from '@/lib/db/schema';
-import type { ShotView } from '@/shared/shots/shot-view';
+import type { ShotView } from '@/shots/shot-view';
 import type { QueryClient } from '@tanstack/react-query';
 
 /**

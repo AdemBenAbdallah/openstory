@@ -396,7 +396,7 @@ OpenRouter/fal when an xAI key resolves (team `xai` key → platform
 `XAI_API_KEY` → neither, which falls back to the old path unchanged). e2e never
 sets `XAI_API_KEY`, so fixtures keep exercising the fallback.
 
-`src/shared/ai/grok-native.ts` owns registry id → xAI model name plus the pricing,
+`src/models/grok-native.ts` owns registry id → xAI model name plus the pricing,
 transcribed from docs.x.ai — the adapter reports a cost for video only. Native
 spend bypasses `model_pricing` and the hourly fal reconcile, so it is
 **unaudited**: the #1069 drift detection covers none of it.
@@ -417,7 +417,7 @@ neither, which falls back to OpenRouter/fal unchanged). e2e never sets
 `GEMINI_API_KEY`, so fixtures keep exercising the fallback;
 `GEMINI_BASE_URL` is the aimock hook for the native path.
 
-`src/shared/ai/gemini-native.ts` owns registry id → Gemini model name plus the
+`src/models/gemini-native.ts` owns registry id → Gemini model name plus the
 pricing, transcribed from ai.google.dev — Google reports tokens, never cost,
 so those tables ARE the bill (like xAI, native spend is **unaudited** by the
 #1069 drift detection). Omni Flash bills video output as tokens (5,792/s of
@@ -498,7 +498,7 @@ https://fal.ai/models/{model-path}/llms.txt
 # e.g. https://fal.ai/models/fal-ai/kling-video/v2.5-turbo/pro/image-to-video/llms.txt
 ```
 
-More reliable than HTML docs; essential for `src/shared/ai/models.ts`. **For new motion models, run `bun motion:codegen`** to auto-generate schemas — don't write inline.
+More reliable than HTML docs; essential for `src/models/models.ts`. **For new motion models, run `bun motion:codegen`** to auto-generate schemas — don't write inline.
 
 Motion status checking: `checkMotionStatus(statusUrl)`, `getMotionResult(responseUrl)`, `cancelMotionGeneration(cancelUrl)` from `@/lib/services/motion.service`, or `bun scripts/check-motion-status.ts <url>`.
 

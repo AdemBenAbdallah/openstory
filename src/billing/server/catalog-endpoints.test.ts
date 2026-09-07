@@ -3,7 +3,7 @@ import {
   EDIT_ENDPOINTS,
   IMAGE_TO_VIDEO_MODELS,
   MOTION_REFERENCE_ENDPOINTS,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { catalogFalEndpointIds } from './catalog-endpoints';
 import { studioVideoEndpointId } from '@/studio/text-to-video';
 

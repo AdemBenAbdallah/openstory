@@ -9,7 +9,7 @@
  * generated — is merged into the snapshots in memory (`recast-snapshot.ts`).
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { getGenerationChannel } from '@/shared/realtime';
 import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
@@ -21,7 +21,7 @@ import type {
   RecastCharacterWorkflowInput,
   RegenerateShotsWorkflowInput,
 } from '@/lib/workflow/types';
-import { computeRegenerateShotsBatchHash } from '@/lib/workflows/regenerate-shots-snapshot';
+import { computeRegenerateShotsBatchHash } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import { mergeRecastSheetIntoSnapshots } from './recast-snapshot';
 import { computeCharacterSheetHashFromDto } from './sheet-snapshots';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';

@@ -15,14 +15,14 @@
 import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { motionResolutionTokensForModel } from '@/motion/model-capabilities';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
+import type { AspectRatio } from '@/models/aspect-ratios';
 import {
   DEFAULT_RESOLUTION,
   pickVideoResolution,
   type Resolution,
-} from '@/shared/constants/resolutions';
+} from '@/models/resolutions';
 
 const STUDIO_TEXT_TO_VIDEO_ENDPOINTS = {
   grok_imagine_video_1_5: 'xai/grok-imagine-video/v1.5/text-to-video',

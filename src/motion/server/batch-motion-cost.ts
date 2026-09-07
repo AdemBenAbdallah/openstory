@@ -11,8 +11,8 @@
  * `cost × count`.
  */
 
-import type { ImageToVideoModel } from '@/shared/ai/models';
-import { resolveVideoModel } from '@/shared/ai/resolve-asset-models';
+import type { ImageToVideoModel } from '@/models/models';
+import { resolveVideoModel } from '@/models/resolve-asset-models';
 import type { EffectiveFalPricing } from '@/billing/fal-cost';
 import {
   estimateVideoCost,
@@ -23,7 +23,7 @@ import {
   ZERO_MICROS,
   type Microdollars,
 } from '@/billing/money';
-import type { Resolution } from '@/shared/constants/resolutions';
+import type { Resolution } from '@/models/resolutions';
 import { snapDuration } from '@/motion/snap-duration';
 
 /** `useStartFrame` so a caller can price each shot on its own render route. */

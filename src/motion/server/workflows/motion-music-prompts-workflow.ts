@@ -5,7 +5,7 @@
  * and music-prompt (single scene-summaries → music design call) in parallel.
  */
 
-import { DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
+import { DEFAULT_VIDEO_MODEL } from '@/models/models';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { snapDuration } from '@/motion/snap-duration';

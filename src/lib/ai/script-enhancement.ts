@@ -11,18 +11,18 @@
  */
 
 import { getEnv } from '#env';
-import type { EnhanceScriptInput } from '@/functions/ai';
+import type { EnhanceScriptInput } from '@/models/ai.fn';
 import {
   callLLMStream,
   ENHANCE_REASONING,
   llmCostFromUsage,
   RECOMMENDED_MODELS,
 } from '@/lib/ai/llm-client';
-import { isValidAnalysisModelId } from '@/shared/ai/models.config';
+import { isValidAnalysisModelId } from '@/models/models.config';
 import {
   DEFAULT_VIDEO_MODEL,
   isValidImageToVideoModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import {
   checkForInjectionAttempts,
   sanitizeScriptContent,

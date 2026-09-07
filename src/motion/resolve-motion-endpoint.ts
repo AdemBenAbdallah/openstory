@@ -31,8 +31,8 @@
  * reject the empty list.
  */
 
-import { NATIVE_GEMINI_VIDEO_MODEL } from '@/shared/ai/gemini-native';
-import { NATIVE_GROK_VIDEO_MODEL } from '@/shared/ai/grok-native';
+import { NATIVE_GEMINI_VIDEO_MODEL } from '@/models/gemini-native';
+import { NATIVE_GROK_VIDEO_MODEL } from '@/models/grok-native';
 import {
   IMAGE_TO_VIDEO_MODELS,
   attachesInlineReferences,
@@ -40,7 +40,7 @@ import {
   getMotionReferenceEndpoint,
   type ImageToVideoModel,
   type MotionReferenceEndpointConfig,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import type { MediaVia } from '@/lib/ai/via';
 import type { MotionEndpointId } from '@/motion/server/endpoint-map';
 

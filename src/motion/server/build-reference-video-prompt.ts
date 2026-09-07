@@ -31,7 +31,7 @@
  * reference-only motion prompt template in `workflow-prompts.ts`).
  */
 
-import type { MotionReferenceEndpointConfig } from '@/shared/ai/models';
+import type { MotionReferenceEndpointConfig } from '@/models/models';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   appendLegendWithinLimit,

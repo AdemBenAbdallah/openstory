@@ -22,15 +22,15 @@ import {
   safeAudioModel,
   safeImageToVideoModel,
   safeTextToImageModel,
-} from '@/shared/ai/models';
+} from '@/models/models';
 import { estimateImageCost } from './cost-estimation';
 import { estimateStoryboardPreflightCost } from './storyboard-preflight-cost';
-import { aspectRatioSchema } from '@/shared/constants/aspect-ratios';
+import { aspectRatioSchema } from '@/models/aspect-ratios';
 import {
   generationStageSchema,
   includesStage,
-} from '@/shared/generation/pipeline';
-import { resolutionSchema } from '@/shared/constants/resolutions';
+} from '@/sequences/pipeline';
+import { resolutionSchema } from '@/models/resolutions';
 
 /** Public pricing catalog for the /pricing page, from live `model_pricing`. */
 export const getPricingCatalogFn = createServerFn({ method: 'GET' }).handler(

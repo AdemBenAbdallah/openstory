@@ -20,10 +20,10 @@ import {
   type AudioModel,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/shared/ai/models';
-import type { AspectRatio } from '@/shared/constants/aspect-ratios';
-import { aspectRatioToDimensions } from '@/shared/constants/aspect-ratios';
-import type { Resolution } from '@/shared/constants/resolutions';
+} from '@/models/models';
+import type { AspectRatio } from '@/models/aspect-ratios';
+import { aspectRatioToDimensions } from '@/models/aspect-ratios';
+import type { Resolution } from '@/models/resolutions';
 import { imageRequestDimensions } from '@/stills/build-image-request';
 import { resolveMotionEndpoint } from '@/motion/resolve-motion-endpoint';
 import {
@@ -35,7 +35,7 @@ import {
   shouldRunStage,
   stageIndex,
   type GenerationStage,
-} from '@/shared/generation/pipeline';
+} from '@/sequences/pipeline';
 import { reportFlooredEstimate } from './billing-observability';
 import { type Microdollars, addMicros, micros, multiplyMicros } from './money';
 

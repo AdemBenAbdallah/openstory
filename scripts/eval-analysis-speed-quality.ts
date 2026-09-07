@@ -33,7 +33,7 @@ import {
   SCRIPT_ANALYSIS_MODELS,
   getAnalysisModelById,
   isSelectableAnalysisModelId,
-} from '@/shared/ai/models.config';
+} from '@/models/models.config';
 import { addLineGutter } from '@/lib/ai/boundary-split';
 import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
 import { buildMatchingPromptVariables } from '@/lib/ai/talent-matching-prompt';

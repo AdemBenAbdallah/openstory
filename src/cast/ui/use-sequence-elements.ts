@@ -10,9 +10,9 @@ import {
   replaceSequenceElementFn,
   restoreSequenceElementFn,
 } from '@/cast/sequence-elements.fn';
-import { putToR2 } from '@/components/upload';
-import { sceneKeys } from '@/hooks/use-scenes';
-import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
+import { putToR2 } from '@/ui/upload';
+import { sceneKeys } from '@/shots/ui/use-scenes';
+import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
 import {
   useMutation,
   useQuery,

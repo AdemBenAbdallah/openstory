@@ -21,7 +21,7 @@
  * idempotency guard.
  */
 
-import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
 import {
   deductWorkflowCredits,
