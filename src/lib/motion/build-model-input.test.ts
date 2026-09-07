@@ -364,7 +364,9 @@ describe('buildModelInput', () => {
       });
 
       it('forwards generate_audio=false when caller suppresses audio', () => {
-        expect(buildRef({ generateAudio: false }).generate_audio).toBe(false);
+        expect(buildRef({ generateAudio: false })).toMatchObject({
+          generate_audio: false,
+        });
       });
     }
   );
@@ -498,16 +500,56 @@ describe('buildMotionRequest — reference-only', () => {
     expect(input.prompt).toContain('Image 1');
   });
 
-  it('omits image_urls entirely when nothing matched', () => {
-    const { input } = buildMotionRequest(
-      { ...referenceOnlyOptions, referenceImages: [] },
-      'seedance_v2_5'
-    );
+  // Every fal reference-to-video endpoint rejects an empty image list ("At
+  // least one reference image, video, or audio must be provided"), so a shot
+  // that matched no sheets must go to the text-to-video sibling (#1521).
+  it.each([
+    ['seedance_v2', 'bytedance/seedance-2.0/enterprise/v2/text-to-video'],
+    ['seedance_v2_5', 'bytedance/seedance-2.5/text-to-video'],
+    ['minimax_h3_max', 'minimax/h3-max/text-to-video'],
+    ['gemini_omni_flash', 'fal-ai/gemini-omni-1.1-flash'],
+  ] as const)(
+    'routes %s to text-to-video with no image field when nothing matched',
+    (model, expectedEndpoint) => {
+      const { endpointId, input } = buildMotionRequest(
+        { ...referenceOnlyOptions, referenceImages: [] },
+        model
+      );
 
-    expect(
-      'image_urls' in input ? input.image_urls : undefined
-    ).toBeUndefined();
-    expect(input.prompt).toBe(referenceOnlyOptions.prompt);
+      expect(endpointId).toBe(expectedEndpoint);
+      expect(input).not.toHaveProperty('image_url');
+      expect(input).not.toHaveProperty('image_urls');
+      expect(input).not.toHaveProperty('reference_image_urls');
+      expect(input).toMatchObject({
+        prompt: referenceOnlyOptions.prompt,
+        aspect_ratio: '16:9',
+      });
+    }
+  );
+
+  it('refuses to drop a start frame on the text-to-video route', () => {
+    expect(() =>
+      buildMotionRequest(
+        {
+          ...referenceOnlyOptions,
+          referenceImages: [],
+          imageUrl: 'https://example.com/shot.jpg',
+        },
+        'seedance_v2_5'
+      )
+    ).toThrow(/start frame in reference-only mode/);
+  });
+
+  it('keeps H3 Max quality overrides on the text-to-video route', () => {
+    const { input } = buildMotionRequest(
+      { ...referenceOnlyOptions, referenceImages: [], resolution: '720p' },
+      'minimax_h3_max'
+    );
+    expect(input).toMatchObject({
+      prompt_expansion_mode: 'balanced',
+      resolution: '768P',
+      duration: 5,
+    });
   });
 
   it('carries the sequence aspect ratio rather than adapting to a still', () => {
@@ -515,7 +557,7 @@ describe('buildMotionRequest — reference-only', () => {
       { ...referenceOnlyOptions, aspectRatio: '9:16' },
       'seedance_v2_5'
     );
-    expect(input.aspect_ratio).toBe('9:16');
+    expect(input).toMatchObject({ aspect_ratio: '9:16' });
   });
 
   it('refuses a start-frame model asked to render without one', () => {

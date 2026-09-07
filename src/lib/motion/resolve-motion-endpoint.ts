@@ -6,20 +6,29 @@
  * endpoint that takes an image list bound to per-model prompt tokens and has
  * no single start-frame `image_url` — see `MOTION_REFERENCE_ENDPOINTS`. When a
  * scene actually has references AND the model has such an endpoint, route there;
- * otherwise stay on the normal image-to-video endpoint.
+ * a reference-only scene with no references goes to that model's text-to-video
+ * sibling; otherwise stay on the normal image-to-video endpoint.
  *
- * `references` is how those images ride, if at all:
- *   - `endpoint` — dedicated reference-to-video endpoint (Seedance, H3 Max)
+ * `references` is the request shape — how the images ride, or that nothing
+ * rides at all:
+ *  | {
+      via: 'fal';
+      endpointId: MotionEndpointId;
+      references: 'endpoint'; - `endpoint` — dedicated reference-to-video endpoint (Seedance, H3 Max,
+ *     Omni Flash)
  *   - `inline` — URLs on the same generations call (Kling `elements`, Grok
  *     Imagine 1.5 native `reference`/`character` prompt parts)
  *   - `none` — URLs are not sent; tokens become descriptions in the prompt
+ *   - `text-to-video` — nothing to send: a reference-only shot that matched no
+ *     sheets goes to the model's prompt-only sibling (#1521). Every fal
+ *     reference-to-video endpoint rejects an empty image list.
  *
  * `referenceOnly` is the mode where no start frame was ever rendered: the clip
  * is driven by the cast/element/location sheets and a self-describing prompt.
- * It forces the reference route even when a shot happens to have matched no
- * references at all (a two-hander in an unmatched location still has to reach
- * an endpoint whose start frame is optional), and it is what tells the request
- * builders not to reserve `@Image1` for a still that does not exist.
+ * It is what tells the request builders not to reserve `@Image1` for a still
+ * that does not exist, and when a shot happens to have matched no references
+ * at all it picks the text-to-video sibling rather than an endpoint that would
+ * reject the empty list.
  */
 
 import { NATIVE_GEMINI_VIDEO_MODEL } from '@/lib/ai/gemini-native';
@@ -33,6 +42,7 @@ import {
   type MotionReferenceEndpointConfig,
 } from '@/lib/ai/models';
 import type { MediaVia } from '@/lib/ai/via';
+import type { MotionEndpointId } from '@/lib/motion/endpoint-map';
 
 export type MotionEndpointResolution =
   | {
@@ -47,6 +57,11 @@ export type MotionEndpointResolution =
       references: 'endpoint';
       /** Tag syntax + image cap for binding refs into the prompt. */
       referenceConfig: MotionReferenceEndpointConfig;
+    }
+  | {
+      via: 'fal';
+      endpointId: MotionEndpointId;
+      references: 'text-to-video';
     };
 
 export function resolveMotionEndpoint(
@@ -102,6 +117,17 @@ export function resolveMotionEndpoint(
   if (hasReferenceImages || referenceOnly) {
     const referenceConfig = getMotionReferenceEndpoint(modelKey);
     if (referenceConfig) {
+      if (!hasReferenceImages) {
+        // Reference-only with nothing matched (an abstract piece, an unmatched
+        // location): the reference-to-video endpoint 422s on an empty image
+        // list, so the shot goes to the prompt-only sibling. Billing and the
+        // estimator resolve through here too, so they price the same row.
+        return {
+          via: 'fal',
+          endpointId: referenceConfig.textToVideoEndpointId,
+          references: 'text-to-video',
+        };
+      }
       return {
         via: 'fal',
         endpointId: referenceConfig.endpointId,

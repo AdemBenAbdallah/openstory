@@ -150,11 +150,15 @@ player before it loses its set.
 
 `resolveMotionEndpoint(model, hasRefs, via, referenceOnly)`:
 
-- Forces the reference route even when a scene matched no sheets at all. A
-  two-hander in an unmatched location still needs an endpoint whose start frame
-  is optional.
-- Throws for a model with no such route rather than submitting a request the
-  endpoint must reject.
+- Forces the reference route whenever a scene matched at least one sheet.
+- Routes a scene that matched NO sheets (an abstract piece, an unmatched
+  location) to the model's `textToVideoEndpointId` (#1521). Every fal
+  reference-to-video endpoint rejects an empty image list ("At least one
+  reference image, video, or audio must be provided"); an empty bible is a
+  valid outcome, not a bug, so the shot renders prompt-only rather than failing.
+  The native Ark / xAI / Google builders already send plain text-to-video here.
+- Throws for a model with no reference route rather than submitting a request
+  the endpoint must reject.
 
 `buildReferenceVideoPrompt` drops the `Use @Image1 as the starting frame.` line
 and binds references from slot 1. Pointing the model at `@Image1` when
@@ -170,8 +174,8 @@ Billing prices the reference-to-video endpoint the job actually hits, not the
 image-to-video row — the post-hoc charge (`motionCostFromUsage`), the workflow
 estimate (`calculateMotionMetadata`), AND the pre-flight credit gates, which
 take `referenceOnly` through `estimateVideoCost`. A reference-only shot routes
-to r2v even having matched no sheets at all, so resolving on `hasReferenceImages`
-alone under-prices exactly the shots with the least to go on.
+to r2v (or its t2v sibling with nothing matched), so resolving on
+`hasReferenceImages` alone under-prices exactly the shots with the least to go on.
 
 `video_variants.manifest` records `frameVersionId: null` — the documented
 encoding of "reference-driven shot with no dedicated first frame". Every write
@@ -204,10 +208,12 @@ predate reference-only and so were image-to-video.
 ## Model gating
 
 Only models in `MOTION_REFERENCE_ENDPOINTS` qualify — today Seedance 2.0 and
-2.5 and MiniMax H3 Max, whose `reference-to-video` route requires only a
-prompt and takes its images in `reference_image_urls` rather than `image_urls`
-(`imageField` on the endpoint config; every builder reads it, so a fourth model
-with a fourth field name needs no code).
+2.5, MiniMax H3 Max and Gemini Omni Flash, each with a `reference-to-video`
+route that needs no start frame (H3 Max takes its images in
+`reference_image_urls` rather than `image_urls` — `imageField` on the endpoint
+config; every builder reads it, so a fifth model with a fifth field name needs
+no code) and a `textToVideoEndpointId` sibling for a shot that matched nothing
+(#1521).
 `supportsReferenceOnlyMotion` is keyed on the MODEL, not the resolved via — the
 conservative floor, safe in a pure isomorphic schema. It is NOT the question to
 ask anywhere a team's keys are reachable; see below.
