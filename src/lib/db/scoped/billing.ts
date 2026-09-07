@@ -360,7 +360,7 @@ export function createBillingMethods(
     const inserted = await db
       .insert(welcomeCardClaims)
       .values({ fingerprint, teamId })
-      .onConflictDoNothing()
+      .onConflictDoNothing({ target: welcomeCardClaims.fingerprint })
       .returning({ teamId: welcomeCardClaims.teamId });
     if (inserted.length > 0) return true;
     const [existing] = await db
