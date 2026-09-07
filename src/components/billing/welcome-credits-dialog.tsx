@@ -28,6 +28,7 @@ import { Switch } from '@/components/ui/switch';
 import {
   claimWelcomeCreditsFn,
   createSetupCheckoutSessionFn,
+  listPaymentMethodsFn,
   updateAutoTopUpFn,
 } from '@/functions/billing';
 import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
@@ -221,6 +222,14 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const { data: pmData } = useQuery({
+    queryKey: ['billing-payment-methods'],
+    queryFn: () => listPaymentMethodsFn(),
+    enabled: Boolean(user && stripeEnabled && mode === 'claim'),
+    staleTime: 60_000,
+  });
+  const hasSavedCard = (pmData?.paymentMethods.length ?? 0) > 0;
+
   const setupMutation = useMutation({
     meta: { inlineError: true },
     mutationFn: () => createSetupCheckoutSessionFn(),
@@ -251,6 +260,9 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
         queryKey: [...BILLING_BALANCE_KEY],
       });
       void queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
+      void queryClient.invalidateQueries({
+        queryKey: ['billing-payment-methods'],
+      });
     },
     onError: (err) => {
       setSetupError(
@@ -270,6 +282,9 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
         queryKey: [...BILLING_BALANCE_KEY],
       });
       await queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
+      await queryClient.invalidateQueries({
+        queryKey: ['billing-payment-methods'],
+      });
       return result;
     },
     enabled: Boolean(user && open && returnedFromStripe),
@@ -304,6 +319,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
             grantDisplay={GRANT_DISPLAY}
             bonusDisplay={BONUS_DISPLAY}
             hasSignupGrant={hasSignupGrant}
+            hasSavedCard={hasSavedCard}
             hasAutoTopUpBonus={hasAutoTopUpBonus}
             autoTopUpEnabled={autoTopUpEnabled}
             showCosts={showCosts}
@@ -354,6 +370,7 @@ type ClaimDialogContentProps = {
   grantDisplay: string;
   bonusDisplay: string;
   hasSignupGrant: boolean;
+  hasSavedCard: boolean;
   hasAutoTopUpBonus: boolean;
   autoTopUpEnabled: boolean;
   showCosts: boolean;
@@ -371,6 +388,7 @@ function ClaimDialogContent({
   grantDisplay,
   bonusDisplay,
   hasSignupGrant,
+  hasSavedCard,
   hasAutoTopUpBonus,
   autoTopUpEnabled,
   showCosts,
@@ -389,19 +407,27 @@ function ClaimDialogContent({
     <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
       <WelcomeHeader
         amount={grantDisplay}
-        description="Save a card to unlock it. We won't charge you — it just confirms you're a real person."
+        description={
+          hasSignupGrant
+            ? "That's yours. Saving a card confirms you're a real person — we won't charge you. Auto-reload adds another $10."
+            : "Save a card to unlock it. We won't charge you — it just confirms you're a real person."
+        }
       />
 
       <div className="flex flex-col gap-4 px-6 py-5">
         <ul className="flex flex-col gap-2">
           <TaskRow
-            done={hasSignupGrant}
+            done={hasSavedCard}
             icon={<CreditCard className="size-4" aria-hidden />}
             title="Save a card"
-            detail={`No payment today. Unlocks ${grantDisplay}.`}
+            detail={
+              hasSignupGrant
+                ? 'No payment today. We already credited this team.'
+                : `No payment today. Unlocks ${grantDisplay}.`
+            }
             reward={grantDisplay}
             action={
-              hasSignupGrant ? null : (
+              hasSavedCard ? null : (
                 <Button size="sm" onClick={onSaveCard} disabled={setupPending}>
                   {setupPending ? 'Opening…' : 'Save card'}
                 </Button>
@@ -420,7 +446,7 @@ function ClaimDialogContent({
                   size="sm"
                   variant="outline"
                   onClick={onEnableAutoTopUp}
-                  disabled={!hasSignupGrant || autoTopUpPending}
+                  disabled={!hasSavedCard || autoTopUpPending}
                 >
                   {autoTopUpPending ? 'Enabling…' : 'Enable'}
                 </Button>
@@ -461,7 +487,7 @@ function ClaimDialogContent({
         ) : null}
 
         <DialogFooter className="gap-2 sm:justify-stretch">
-          {hasSignupGrant ? (
+          {hasSignupGrant || hasSavedCard ? (
             <Button className="sm:flex-1" onClick={onSkip}>
               {primaryLabel}
             </Button>

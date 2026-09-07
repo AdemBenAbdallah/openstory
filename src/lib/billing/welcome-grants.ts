@@ -69,13 +69,12 @@ export type WelcomeDialogMode = 'claim' | 'gift' | 'none';
 /**
  * Which welcome surface to show.
  *
- * - `claim`: Stripe is on and the team has not received the signup grant.
- *   Saving a card is the unlock. Also used while returning from Stripe
- *   setup so the checklist can flip to done + the auto-reload bonus.
- * - `gift`: unused signup grant that was given without a card (self-host /
- *   e2e / grandfathered teams). Same moment as #1096.
- * - `none`: already spent credits, or hosted Stripe after the grant landed
- *   (they just claimed it — don't re-open the old gift nag).
+ * - `claim`: Stripe is on and the team has not spent credits yet. Saving a
+ *   card unlocks $20 (or is already done if the grant landed). Auto-reload
+ *   is the +$10. Also used while returning from Stripe setup.
+ * - `gift`: unused signup grant with no Stripe (self-host / e2e). Same
+ *   moment as #1096 — there is no card to save.
+ * - `none`: already spent credits.
  */
 export function welcomeDialogMode(input: {
   stripeEnabled: boolean;
@@ -85,8 +84,10 @@ export function welcomeDialogMode(input: {
 }): WelcomeDialogMode {
   if (input.setupPending) return 'claim';
   if (input.hasUsedCredits) return 'none';
-  if (input.stripeEnabled && !input.hasSignupGrant) return 'claim';
-  // Unused grant that appeared without a card (self-host / e2e / grandfathered).
-  if (input.hasSignupGrant && !input.stripeEnabled) return 'gift';
+  // Hosted Stripe: the checklist IS the welcome, including for teams that
+  // already have the grant (save-card may still be outstanding; auto-reload
+  // bonus is still on the table).
+  if (input.stripeEnabled) return 'claim';
+  if (input.hasSignupGrant) return 'gift';
   return 'none';
 }

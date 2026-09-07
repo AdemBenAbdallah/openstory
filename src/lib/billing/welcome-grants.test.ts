@@ -30,7 +30,7 @@ describe('welcomeDialogMode', () => {
     ).toBe('claim');
   });
 
-  it('does not re-open the gift nag after a card-gated grant', () => {
+  it('keeps the claim checklist on Stripe after the grant so auto-reload is still offered', () => {
     expect(
       welcomeDialogMode({
         stripeEnabled: true,
@@ -38,7 +38,7 @@ describe('welcomeDialogMode', () => {
         hasUsedCredits: false,
         setupPending: false,
       })
-    ).toBe('none');
+    ).toBe('claim');
   });
 
   it('keeps the unused-gift dialog when Stripe is off', () => {
