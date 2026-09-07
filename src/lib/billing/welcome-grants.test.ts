@@ -1,6 +1,7 @@
 import { grantWelcomeCreditsForTeam } from '@/lib/billing/checkout';
 import {
   grantSignupCredits,
+  shouldOfferWelcomeClaim,
   SIGNUP_GRANT_MICROS,
   welcomeDialogMode,
 } from '@/lib/billing/constants';
@@ -71,6 +72,20 @@ describe('welcomeDialogMode', () => {
         hasUsedCredits: true,
       })
     ).toBe('claim');
+  });
+});
+
+describe('shouldOfferWelcomeClaim', () => {
+  it('is true only for hosted Stripe with an unpaid grant', () => {
+    expect(
+      shouldOfferWelcomeClaim({ stripeEnabled: true, hasSignupGrant: false })
+    ).toBe(SIGNUP_GRANT_MICROS > 0);
+    expect(
+      shouldOfferWelcomeClaim({ stripeEnabled: true, hasSignupGrant: true })
+    ).toBe(false);
+    expect(
+      shouldOfferWelcomeClaim({ stripeEnabled: false, hasSignupGrant: false })
+    ).toBe(false);
   });
 });
 

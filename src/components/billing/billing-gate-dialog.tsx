@@ -14,8 +14,11 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { requestFounderCreditsFn } from '@/functions/billing';
+import { useWelcomeCreditsGate } from '@/components/billing/welcome-credits-dialog';
 import { openAddCreditsDialog } from '@/hooks/use-add-credits-dialog';
+import { useBillingBalance } from '@/hooks/use-billing-balance';
 import { useBillingGateQuery } from '@/hooks/use-billing-gate';
+import { shouldOfferWelcomeClaim } from '@/lib/billing/constants';
 import {
   closeBillingGate,
   getBillingGateReason,
@@ -341,22 +344,35 @@ export const BillingGateDialog: React.FC<BillingGateDialogProps> = ({
 /**
  * Globally-mounted gate instance (#1099), opened via `openBillingGate()` —
  * including by the query client's global mutation error handler on
- * INSUFFICIENT_CREDITS. The onboarding flow on the home composer keeps its own
- * instance for its dismissal memory.
+ * INSUFFICIENT_CREDITS. If the welcome grant is still unpaid, openers get
+ * the claim dialog instead of this gate. The onboarding flow on the home
+ * composer keeps its own instance for its dismissal memory.
  */
 export const GlobalBillingGateDialog: React.FC = () => {
   const open = useBillingGateDialogOpen();
   const { data } = useBillingGateQuery();
+  const { stripeEnabled, hasSignupGrant } = useBillingBalance();
+  const { reopen } = useWelcomeCreditsGate();
+  const offerClaim = shouldOfferWelcomeClaim({
+    stripeEnabled,
+    hasSignupGrant,
+  });
+
+  useEffect(() => {
+    if (!open || !offerClaim) return;
+    closeBillingGate();
+    reopen();
+  }, [open, offerClaim, reopen]);
 
   return (
     <BillingGateDialog
-      open={open}
+      open={open && !offerClaim}
       onOpenChange={(next) => {
         if (!next) closeBillingGate();
       }}
       hasFalKey={data?.hasFalKey ?? false}
       stripeEnabled={data?.stripeEnabled ?? true}
-      reason={open ? getBillingGateReason() : undefined}
+      reason={open && !offerClaim ? getBillingGateReason() : undefined}
     />
   );
 };

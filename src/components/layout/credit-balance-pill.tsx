@@ -33,7 +33,10 @@ import { useBillingBalanceRealtime } from '@/hooks/use-billing-balance-realtime'
 import { useBillingGateQuery } from '@/hooks/use-billing-gate';
 import { useShowCosts } from '@/hooks/use-show-costs';
 import { useUser } from '@/hooks/use-user';
-import { SIGNUP_GRANT_MICROS } from '@/lib/billing/constants';
+import {
+  SIGNUP_GRANT_MICROS,
+  shouldOfferWelcomeClaim,
+} from '@/lib/billing/constants';
 import { microsToDisplayUsd } from '@/lib/billing/money';
 import { Link } from '@tanstack/react-router';
 import { Wallet } from 'lucide-react';
@@ -57,7 +60,7 @@ export const CreditBalancePill: React.FC = () => {
 
   const isSignedOut = !userLoading && !user;
   const unclaimedWelcome = Boolean(
-    user && stripeEnabled && !hasSignupGrant && SIGNUP_GRANT_MICROS > 0
+    user && shouldOfferWelcomeClaim({ stripeEnabled, hasSignupGrant })
   );
 
   // A fal key alone covers generation (LLM calls route through fal's

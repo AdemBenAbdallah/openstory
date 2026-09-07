@@ -202,3 +202,13 @@ export function welcomeDialogMode(input: {
   if (input.hasSignupGrant) return 'gift';
   return 'none';
 }
+
+/** Hosted Stripe, grant unpaid, and the grant amount is on. Generate should
+ *  reopen the claim dialog instead of the billing gate. */
+export function shouldOfferWelcomeClaim(input: {
+  stripeEnabled: boolean;
+  hasSignupGrant: boolean;
+}): boolean {
+  if (SIGNUP_GRANT_MICROS <= 0) return false;
+  return input.stripeEnabled && !input.hasSignupGrant;
+}
