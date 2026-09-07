@@ -34,16 +34,19 @@ import { useUser } from '@/hooks/use-user';
 import {
   SIGNUP_GRANT_MICROS,
   welcomeDialogMode,
-  type WelcomeDialogMode,
 } from '@/lib/billing/constants';
+import type { WelcomeDialogMode } from '@/lib/billing/constants';
 import { microsToDisplayUsd } from '@/lib/billing/money';
 import { hasPendingGenerate } from '@/shared/generation/pending-generate';
+import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Sparkles } from 'lucide-react';
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -53,7 +56,6 @@ import {
 const DISMISSED_AT_KEY = 'openstory:welcome-credits-dismissed-at';
 const CLAIM_DISMISSED_AT_KEY = 'openstory:welcome-claim-dismissed-at';
 const LEGACY_SEEN_KEY = 'openstory:welcome-credits-seen';
-const SETUP_PENDING_KEY = 'openstory:welcome-setup-pending';
 
 const RESHOW_INTERVAL_MS = 3 * 60 * 60 * 1000;
 
@@ -115,32 +117,16 @@ function clearDismissedAt(userId: string): void {
   }
 }
 
-function markSetupPending(): void {
-  try {
-    sessionStorage.setItem(SETUP_PENDING_KEY, '1');
-  } catch {
-    // private mode / quota
-  }
-}
-
-function isSetupPending(): boolean {
-  try {
-    return sessionStorage.getItem(SETUP_PENDING_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function clearSetupPending(): void {
-  try {
-    sessionStorage.removeItem(SETUP_PENDING_KEY);
-  } catch {
-    // private mode / quota
-  }
-}
-
 function subscribeNever(): () => void {
   return () => {};
+}
+
+function claimErrorMessage(err: unknown): string {
+  if (isWelcomeCardAlreadyClaimedError(err)) {
+    return 'This card has already been used to claim welcome credits';
+  }
+  if (err instanceof Error) return err.message;
+  return 'Could not unlock credits yet';
 }
 
 const WelcomeCreditsContext = createContext<{
@@ -166,6 +152,9 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   const { data: user } = useUser();
   const { showCosts, setShowCosts } = useShowCosts();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const search = useSearch({ from: '/_app/', shouldThrow: false });
+  const welcomeSetup = search?.welcome_setup;
   const {
     stripeEnabled,
     hasUsedCredits,
@@ -182,11 +171,17 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     () => true,
     () => false
   );
-  const setupPending = useSyncExternalStore(
-    subscribeNever,
-    isSetupPending,
-    () => false
-  );
+
+  const clearWelcomeSetupSearch = useCallback(() => {
+    void navigate({
+      to: '/',
+      search: (prev) => ({
+        style: prev.style,
+        prefill: prev.prefill,
+      }),
+      replace: true,
+    });
+  }, [navigate]);
 
   const mode: WelcomeDialogMode = welcomeDialogMode({
     stripeEnabled,
@@ -202,6 +197,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   );
   const balanceSettled = balanceReady || balanceFailed;
   const skipped = skippedUserId === user?.id;
+  const returnedFromStripeSuccess = welcomeSetup === 'success';
   const open = Boolean(
     !grantOff &&
     isClient &&
@@ -209,7 +205,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     balanceSettled &&
     !(stripeEnabled && hasSignupGrant) &&
     (forcedOpen ||
-      setupPending ||
+      returnedFromStripeSuccess ||
       (mode !== 'none' && !skipped && !recentlyDismissed))
   );
   const settled = !user || grantOff || (isClient && balanceSettled);
@@ -229,29 +225,24 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
         setSkippedUserId(user.id);
       }
       setForcedOpen(false);
-      clearSetupPending();
       setSetupError(null);
+      if (welcomeSetup) clearWelcomeSetupSearch();
     }
   };
 
-  const invalidateBilling = () => {
-    void queryClient.invalidateQueries({ queryKey: [...BILLING_BALANCE_KEY] });
-    void queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
-    void queryClient.invalidateQueries({
-      queryKey: [...BILLING_PAYMENT_METHODS_KEY],
-    });
-  };
+  useEffect(() => {
+    if (welcomeSetup !== 'canceled') return;
+    clearWelcomeSetupSearch();
+  }, [welcomeSetup, clearWelcomeSetupSearch]);
 
   const setupMutation = useMutation({
     meta: { inlineError: true },
     mutationFn: () => createSetupCheckoutSessionFn(),
     onSuccess: (data) => {
-      markSetupPending();
       window.location.href = data.url;
     },
     onError: (err) => {
       setRedirectingToStripe(false);
-      clearSetupPending();
       setSetupError(
         err instanceof Error ? err.message : 'Could not open card setup'
       );
@@ -259,20 +250,32 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const returnedFromStripe =
-    setupPending && !setupMutation.isPending && !redirectingToStripe;
+    returnedFromStripeSuccess &&
+    !setupMutation.isPending &&
+    !redirectingToStripe;
 
   const claimQuery = useQuery({
     queryKey: ['welcome-credits-claim', user?.id],
     queryFn: async () => {
       const result = await claimWelcomeCreditsFn();
-      invalidateBilling();
+      await queryClient.invalidateQueries({
+        queryKey: [...BILLING_BALANCE_KEY],
+      });
+      await queryClient.invalidateQueries({ queryKey: [...BILLING_GATE_KEY] });
+      await queryClient.invalidateQueries({
+        queryKey: [...BILLING_PAYMENT_METHODS_KEY],
+      });
+      if (result.granted || result.hasSignupGrant) {
+        clearWelcomeSetupSearch();
+        return result;
+      }
       if (!result.hasCard) {
         throw new Error('Could not unlock credits yet');
       }
-      return result;
+      throw new Error('Could not unlock credits');
     },
     enabled: Boolean(user && open && returnedFromStripe),
-    retry: 3,
+    retry: (count, err) => !isWelcomeCardAlreadyClaimedError(err) && count < 3,
     retryDelay: 1000,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -294,7 +297,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
 
   const claimError =
     setupError ??
-    (claimQuery.error instanceof Error ? claimQuery.error.message : null);
+    (claimQuery.error ? claimErrorMessage(claimQuery.error) : null);
 
   return (
     <WelcomeCreditsContext.Provider value={value}>

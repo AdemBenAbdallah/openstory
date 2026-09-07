@@ -167,6 +167,7 @@ export async function grantSignupCredits(opts: {
   addCredits: AddCredits;
   alreadyGranted: boolean;
 }): Promise<{ granted: boolean; newBalance?: Microdollars }> {
+  if (SIGNUP_GRANT_MICROS <= 0) return { granted: false };
   if (opts.alreadyGranted) return { granted: false };
 
   const result = await opts.addCredits(SIGNUP_GRANT_MICROS, {
@@ -185,9 +186,9 @@ export type WelcomeDialogMode = 'claim' | 'gift' | 'none';
 /**
  * Which welcome surface to show.
  *
- * - `claim`: Stripe on and the $20 is still unpaid.
- * - `gift`: unused signup grant and Stripe off (e2e / self-host).
- * - `none`: already claimed or spent, or Stripe off with nothing to claim.
+ * - `claim`: Stripe on and the grant is unpaid (BYOK spend does not suppress this).
+ * - `gift`: Stripe off, grant exists, unused.
+ * - `none`: Stripe on and already granted, or Stripe off and (spent or no grant).
  */
 export function welcomeDialogMode(input: {
   stripeEnabled: boolean;

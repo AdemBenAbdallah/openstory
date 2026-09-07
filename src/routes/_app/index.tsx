@@ -13,6 +13,8 @@ import { z } from 'zod';
 const searchSchema = z.object({
   style: z.string().optional(),
   prefill: z.enum(['style']).optional(),
+  welcome_setup: z.enum(['success', 'canceled']).optional(),
+  session_id: z.string().max(256).optional(),
 });
 
 /**
@@ -28,6 +30,6 @@ export const Route = createFileRoute('/_app/')({
 });
 
 function HomePage() {
-  const search = Route.useSearch();
-  return <NewSequencePage {...search} composerPath="/" />;
+  const { style, prefill } = Route.useSearch();
+  return <NewSequencePage style={style} prefill={prefill} composerPath="/" />;
 }

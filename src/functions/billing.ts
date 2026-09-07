@@ -7,7 +7,7 @@ import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
 import {
   createCheckoutSession,
   createSetupCheckoutSession,
-  grantWelcomeCreditsOnPurchase,
+  grantWelcomeCreditsForPaymentMethod,
   grantWelcomeIfTeamHasCard,
   teamHasSavedCard,
 } from '@/lib/billing/checkout';
@@ -31,7 +31,10 @@ import {
   usdToMicros,
 } from '@/lib/billing/money';
 import type { TransactionType } from '@/lib/db/schema/credits';
-import { ValidationError } from '@/shared/errors';
+import {
+  isWelcomeCardAlreadyClaimedError,
+  ValidationError,
+} from '@/shared/errors';
 import { FOUNDER_EMAIL } from '@/shared/marketing/constants';
 import { getLogger } from '@/lib/observability/logger';
 import { captureProductEvent } from '@/lib/observability/product-events';
@@ -100,8 +103,8 @@ export const createSetupCheckoutSessionFn = createServerFn({ method: 'POST' })
       teamId: context.teamId,
       userId: context.user.id,
       userEmail: context.user.email,
-      successUrl: `${appUrl}/`,
-      cancelUrl: `${appUrl}/`,
+      successUrl: `${appUrl}/?welcome_setup=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${appUrl}/?welcome_setup=canceled`,
     });
 
     return { url };
@@ -115,7 +118,7 @@ export const claimWelcomeCreditsFn = createServerFn({ method: 'POST' })
   .middleware([authWithTeamMiddleware])
   .handler(async ({ context }) => {
     if (!isStripeEnabled()) {
-      return { granted: false, hasCard: false };
+      return { granted: false, hasCard: false, hasSignupGrant: false };
     }
 
     await requireTeamAdminAccess(context.user.id, context.teamId);
@@ -412,15 +415,21 @@ export const purchaseCreditsFn = createServerFn({ method: 'POST' })
       },
     });
 
-    const fingerprint = paymentMethod.card?.fingerprint;
-    if (fingerprint) {
-      await grantWelcomeCreditsOnPurchase({
+    try {
+      await grantWelcomeCreditsForPaymentMethod({
         scopedDb: context.scopedDb,
         teamId: context.teamId,
         userId: context.user.id,
+        paymentMethodId: data.paymentMethodId,
         source: 'purchase',
-        cardFingerprint: fingerprint,
       });
+    } catch (err) {
+      if (!isWelcomeCardAlreadyClaimedError(err)) {
+        logger.error(
+          'Welcome grant after purchase failed; webhook will retry',
+          { err }
+        );
+      }
     }
 
     // `null` means this exact grant already landed (replayed request) — the

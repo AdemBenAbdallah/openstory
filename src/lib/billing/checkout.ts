@@ -4,7 +4,6 @@
  */
 
 import {
-  isWelcomeCardAlreadyClaimedError,
   ValidationError,
   WelcomeCardAlreadyClaimedError,
 } from '@/shared/errors';
@@ -297,6 +296,10 @@ export async function fulfillSavedCard(opts: {
   });
 }
 
+/**
+ * Stamp the fingerprint first so a grandfathered grant still consumes the
+ * PAN. Then pay, or no-op if this team already has the ledger row.
+ */
 export async function grantWelcomeCreditsForTeam(opts: {
   scopedDb: ScopedDb;
   teamId: string;
@@ -304,14 +307,16 @@ export async function grantWelcomeCreditsForTeam(opts: {
   source: WelcomeGrantSource;
   cardFingerprint: string;
 }): Promise<{ granted: boolean }> {
-  const alreadyGranted = await opts.scopedDb.billing.hasSignupGrant();
-  if (alreadyGranted) return { granted: false };
-
   const reserved = await opts.scopedDb.billing.claimWelcomeCardFingerprint(
     opts.cardFingerprint
   );
   if (!reserved) {
     throw new WelcomeCardAlreadyClaimedError();
+  }
+
+  const alreadyGranted = await opts.scopedDb.billing.hasSignupGrant();
+  if (alreadyGranted || SIGNUP_GRANT_MICROS <= 0) {
+    return { granted: false };
   }
 
   const result = await grantSignupCredits({
@@ -320,43 +325,63 @@ export async function grantWelcomeCreditsForTeam(opts: {
     alreadyGranted: false,
   });
 
-  if (result.granted) {
-    captureProductEvent({
-      distinctId: opts.userId,
-      event: 'welcome_credits_granted',
-      properties: {
-        teamId: opts.teamId,
-        amount_usd: microsToUsd(SIGNUP_GRANT_MICROS),
-        source: opts.source,
-      },
-    });
+  if (!result.granted) {
+    // Unique-key collision without a readable signupGrant row, or a race
+    // the next Stripe retry will see via hasSignupGrant. Do not 200.
+    throw new Error('Welcome credit write failed');
   }
 
-  return { granted: result.granted };
+  captureProductEvent({
+    distinctId: opts.userId,
+    event: 'welcome_credits_granted',
+    properties: {
+      teamId: opts.teamId,
+      amount_usd: microsToUsd(SIGNUP_GRANT_MICROS),
+      source: opts.source,
+    },
+  });
+
+  return { granted: true };
 }
 
-export async function grantWelcomeCreditsOnPurchase(
-  opts: Parameters<typeof grantWelcomeCreditsForTeam>[0]
-): Promise<{ granted: boolean }> {
-  try {
-    return await grantWelcomeCreditsForTeam(opts);
-  } catch (err) {
-    if (isWelcomeCardAlreadyClaimedError(err)) {
-      return { granted: false };
-    }
-    throw err;
-  }
+/** Fingerprint from a PaymentMethod id, then grant. Throws on reuse / write fail. */
+export async function grantWelcomeCreditsForPaymentMethod(opts: {
+  scopedDb: ScopedDb;
+  teamId: string;
+  userId: string;
+  paymentMethodId: string;
+  source: WelcomeGrantSource;
+}): Promise<{ granted: boolean }> {
+  const fingerprint = await cardFingerprint(opts.paymentMethodId);
+  return grantWelcomeCreditsForTeam({
+    scopedDb: opts.scopedDb,
+    teamId: opts.teamId,
+    userId: opts.userId,
+    source: opts.source,
+    cardFingerprint: fingerprint,
+  });
 }
+
+export type WelcomeClaimResult = {
+  granted: boolean;
+  hasCard: boolean;
+  hasSignupGrant: boolean;
+};
 
 /** Return-from-Stripe safety net (webhook may still be in flight). */
 export async function grantWelcomeIfTeamHasCard(opts: {
   scopedDb: ScopedDb;
   teamId: string;
   userId: string;
-}): Promise<{ granted: boolean; hasCard: boolean }> {
+}): Promise<WelcomeClaimResult> {
+  const hasSignupGrant = () => opts.scopedDb.billing.hasSignupGrant();
   const settings = await opts.scopedDb.billing.getBillingSettings();
   if (!settings.stripeCustomerId) {
-    return { granted: false, hasCard: false };
+    return {
+      granted: false,
+      hasCard: false,
+      hasSignupGrant: await hasSignupGrant(),
+    };
   }
 
   const stripe = getStripeOrThrow();
@@ -366,7 +391,13 @@ export async function grantWelcomeIfTeamHasCard(opts: {
     limit: 1,
   });
   const pm = methods.data[0];
-  if (!pm) return { granted: false, hasCard: false };
+  if (!pm) {
+    return {
+      granted: false,
+      hasCard: false,
+      hasSignupGrant: await hasSignupGrant(),
+    };
+  }
 
   const { granted } = await fulfillSavedCard({
     scopedDb: opts.scopedDb,
@@ -376,5 +407,9 @@ export async function grantWelcomeIfTeamHasCard(opts: {
     paymentMethodId: pm.id,
     source: 'claim',
   });
-  return { granted, hasCard: true };
+  return {
+    granted,
+    hasCard: true,
+    hasSignupGrant: granted || (await hasSignupGrant()),
+  };
 }
