@@ -294,7 +294,7 @@ function createBillingReadMethods(db: Database, teamId: string) {
     return existing;
   }
 
-  /** True if this team already received the $20 welcome grant.
+  /** True if this team already received the welcome grant.
    *  Match idempotency key OR metadata.signupGrant: pre-#1516 rows have
    *  no key, so the key alone would miss them and double-pay. */
   async function hasSignupGrant(): Promise<boolean> {

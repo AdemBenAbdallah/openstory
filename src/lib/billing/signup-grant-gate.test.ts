@@ -15,7 +15,7 @@ describe('grantsWelcomeCreditsOnSignup', () => {
     expect(grantsWelcomeCreditsOnSignup()).toBe(true);
   });
 
-  it('does not credit $20 at team create when Stripe is configured', () => {
+  it('does not credit at team create when Stripe is configured', () => {
     env.E2E_TEST = undefined;
     env.STRIPE_SECRET_KEY = 'sk_test_x';
     expect(grantsWelcomeCreditsOnSignup()).toBe(false);
