@@ -6,7 +6,7 @@
 
 import { snapDuration } from '@/shared/motion/snap-duration';
 import { getChatPrompt } from '@/lib/prompts';
-import { buildMusicSceneSummaries } from '@/lib/workflows/music-scene-summaries';
+import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import {
   extractTaggedJson,
   loadOpenrouterStage,

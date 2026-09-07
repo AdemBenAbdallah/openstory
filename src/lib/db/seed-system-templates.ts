@@ -18,12 +18,12 @@ import type { Database } from './client';
 import {
   DEFAULT_SYSTEM_LOCATIONS,
   getLocationSheetUrl,
-} from '@/lib/location/location-templates';
-import { DEFAULT_SYSTEM_STYLES } from '@/lib/style/style-templates';
+} from '@/cast/server/location/location-templates';
+import { DEFAULT_SYSTEM_STYLES } from '@/look/server/style-templates';
 import {
   DEFAULT_SYSTEM_TALENT,
   getTalentSheetUrl,
-} from '@/lib/talent/talent-templates';
+} from '@/cast/server/talent/talent-templates';
 import type { createD1HttpClient } from './client-d1-http';
 import { generateId } from '@/shared/id';
 import {

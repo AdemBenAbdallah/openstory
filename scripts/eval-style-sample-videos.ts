@@ -29,8 +29,8 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
-import { styleSlug } from '@/shared/style/style-slug';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { styleSlug } from '@/look/style-slug';
 import { z } from 'zod';
 
 const run = promisify(execFile);

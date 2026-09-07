@@ -18,12 +18,12 @@ import {
   setSequenceMusicFromUploadFn,
   setShotVideoFromUploadFn,
 } from '@/functions/media-upload';
-import { characterSheetVariantKeys } from '@/hooks/use-character-sheet-variants';
-import { locationSheetVariantKeys } from '@/hooks/use-location-sheet-variants';
+import { characterSheetVariantKeys } from '@/cast/ui/use-character-sheet-variants';
+import { locationSheetVariantKeys } from '@/cast/ui/use-location-sheet-variants';
 import { promptVariantKeys } from '@/hooks/use-prompt-variants';
 import { segmentKeys } from '@/hooks/use-segments';
-import { sequenceCharacterKeys } from '@/hooks/use-sequence-characters';
-import { sequenceLocationKeys } from '@/hooks/use-sequence-locations';
+import { sequenceCharacterKeys } from '@/cast/ui/use-sequence-characters';
+import { sequenceLocationKeys } from '@/cast/ui/use-sequence-locations';
 import { sequenceKeys } from '@/hooks/use-sequences';
 import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
 import { shotKeys } from '@/hooks/use-shots';

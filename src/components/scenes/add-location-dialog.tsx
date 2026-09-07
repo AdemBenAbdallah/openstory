@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useCreateSequenceLocation } from '@/hooks/use-sequence-locations';
+import { useCreateSequenceLocation } from '@/cast/ui/use-sequence-locations';
 import { errorMessage } from '@/shared/errors';
 import { Loader2, Plus } from 'lucide-react';
 import { useState } from 'react';

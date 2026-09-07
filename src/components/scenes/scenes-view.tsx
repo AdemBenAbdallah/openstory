@@ -61,7 +61,7 @@ import {
   useShotsBySequence,
   useUndiscardVariant,
 } from '@/hooks/use-shots';
-import { useSequenceStyle } from '@/hooks/use-styles';
+import { useSequenceStyle } from '@/look/ui/use-styles';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_MUSIC_MODEL,

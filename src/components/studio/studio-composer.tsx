@@ -67,7 +67,7 @@ import {
   useDraftStudioPrompt,
   useStudioPendingCreates,
 } from '@/hooks/use-studio-assets';
-import { useUploadTempMedia } from '@/hooks/use-talent';
+import { useUploadTempMedia } from '@/cast/ui/use-talent';
 import {
   capReferenceImages,
   DEFAULT_IMAGE_MODEL,

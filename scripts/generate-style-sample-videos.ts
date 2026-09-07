@@ -71,9 +71,9 @@ import {
   CANONICAL_SCRIPT_OVERRIDES,
   NOMINAL_BEAT_SECONDS,
   type SampleBeat,
-} from '@/lib/style/sample-videos';
-import { styleSlug } from '@/shared/style/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
+} from '@/look/server/sample-videos';
+import { styleSlug } from '@/look/style-slug';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';

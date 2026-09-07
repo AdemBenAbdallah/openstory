@@ -18,7 +18,7 @@
  */
 
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { migrateStyleConfigV1ToV2 } from '@/shared/style/style-config';
+import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
 import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';
 import type {
@@ -36,7 +36,7 @@ import type {
   AnalyzeScriptWorkflowInput,
   SceneSplitWorkflowResult,
 } from '@/lib/workflow/types';
-import * as realCastRecords from '@/lib/workflows/cast-records';
+import * as realCastRecords from '@/cast/server/workflows/cast-records';
 
 vi.doMock('@/lib/db/scoped', () => ({ createScopedDb: vi.fn() }));
 vi.doMock('@/lib/ai/fal-config', () => ({ configureFalProxyFromEnv: vi.fn() }));
@@ -46,7 +46,7 @@ vi.doMock('@/lib/ai/fal-pricing-live', () => ({
 }));
 
 const createCastRecords = vi.fn(async () => ({ elements: [] }));
-vi.doMock('@/lib/workflows/cast-records', () => ({
+vi.doMock('@/cast/server/workflows/cast-records', () => ({
   ...realCastRecords,
   createCastRecords,
 }));
@@ -56,7 +56,7 @@ vi.doMock('@/shared/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 
-vi.doMock('@/lib/workflows/wait-for-sheets', () => ({
+vi.doMock('@/cast/server/workflows/wait-for-sheets', () => ({
   waitForElementVision: vi.fn(async () => undefined),
 }));
 
@@ -152,7 +152,7 @@ const checkpointWrite = (update: UpdateMock, stage: string) =>
 
 const STYLE_FAILURE = new Error('style: structured-output-parse-failed');
 const deriveAutoStyle = vi.fn(() => Promise.reject(STYLE_FAILURE));
-vi.doMock('@/lib/workflows/auto-style-step', () => ({ deriveAutoStyle }));
+vi.doMock('@/look/server/workflows/auto-style-step', () => ({ deriveAutoStyle }));
 
 // Dynamic import so the mocks above apply (vi.doMock is not hoisted).
 const { AnalyzeScriptWorkflow } = await import('./analyze-script-workflow');

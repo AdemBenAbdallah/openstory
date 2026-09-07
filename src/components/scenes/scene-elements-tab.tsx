@@ -16,9 +16,9 @@ import { facetIdsForShots, useSceneFacetMaps } from '@/hooks/use-scene-facets';
 import {
   useSequenceElements,
   useUploadElementToSequence,
-} from '@/hooks/use-sequence-elements';
+} from '@/cast/ui/use-sequence-elements';
 import type { SequenceElement } from '@/lib/db/schema';
-import { MAX_SEQUENCE_ELEMENTS } from '@/components/element/limits';
+import { MAX_SEQUENCE_ELEMENTS } from '@/cast/ui/element/limits';
 import { cn } from '@/components/utils';
 import {
   extractImagesFromSnapshot,

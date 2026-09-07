@@ -15,9 +15,9 @@
 import { resolveImageModels } from '@/lib/ai/resolve-image-models';
 import { aspectRatioToImageSize } from '@/shared/constants/aspect-ratios';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildElementReferenceImages } from '@/shared/prompts/element-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildElementReferenceImages } from '@/cast/element-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
 import { shotVariantDedupId } from '@/lib/workflow/dedup-ids';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
@@ -40,7 +40,7 @@ import {
   computeShotImageSceneHash,
   computeShotImagesHashFromDto,
   type ShotImageSceneSnapshot,
-} from '@/lib/workflows/sheet-snapshots';
+} from '@/cast/server/workflows/sheet-snapshots';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { getLogger } from '@/shared/observability/logger';
 

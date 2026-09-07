@@ -42,18 +42,18 @@ import {
   AUTO_STYLE_ID,
   type AutoStyleDraft,
   placeholderAutoStyleDraft,
-} from '@/shared/style/auto-style';
-import { parseStyleConfig } from '@/shared/style/style-config';
+} from '@/look/auto-style';
+import { parseStyleConfig } from '@/look/style-config';
 import type { Sequence } from '@/lib/db/schema';
 import {
   REFERENCE_ONLY_MODEL_ERROR,
   type CreateSequenceInput,
 } from '@/lib/schemas/sequence.schemas';
 import { UNTITLED_SEQUENCE_TITLE } from '@/shared/sequences/untitled-sequence-title';
-import { copySequenceElements } from '@/lib/sequence-elements/copy-sequence-elements';
-import { promoteTempElements } from '@/lib/sequence-elements/promote-temp-elements';
+import { copySequenceElements } from '@/cast/server/sequence-elements/copy-sequence-elements';
+import { promoteTempElements } from '@/cast/server/sequence-elements/promote-temp-elements';
 import { captureProductEvent } from '@/lib/observability/product-events';
-import { bumpStylePopularity } from '@/lib/style/bump-style-popularity';
+import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
 import { triggerStoryboard } from '@/lib/workflow/launchers';
 import type { StoryboardTriggerInput } from '@/lib/workflow/types';
 import { createServerOnlyFn } from '@tanstack/react-start';

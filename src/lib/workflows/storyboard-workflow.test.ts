@@ -15,7 +15,7 @@
  *   3. Payload without a sequenceId → no DB access at all.
  */
 
-import { migrateStyleConfigV1ToV2 } from '@/shared/style/style-config';
+import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { describe, expect, test, vi } from 'vitest';
 import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
 import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';

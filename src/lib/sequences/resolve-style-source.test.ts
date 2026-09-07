@@ -13,7 +13,7 @@ import {
   AUTO_STYLE_ID,
   AUTO_STYLE_PLACEHOLDER_NAME,
   placeholderAutoStyleDraft,
-} from '@/shared/style/auto-style';
+} from '@/look/auto-style';
 import { type Client, createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';

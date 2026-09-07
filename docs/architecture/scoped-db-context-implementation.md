@@ -278,7 +278,7 @@ export const getFramesFn = createServerFn({ method: 'GET' })
 
 ### 4.3 Styles
 
-Update `src/functions/styles.ts` - currently uses `getDb()` directly:
+Update `src/look/styles.fn.ts` - currently uses `getDb()` directly:
 
 ```typescript
 // Remove: import { getDb } from '#db-client';
@@ -435,7 +435,7 @@ bunx oxlint --type-aware src/functions/
 | `src/lib/services/team.service.ts`      | Refactor to factory               |
 | `src/functions/sequences.ts`            | Use context.db                    |
 | `src/functions/frames.ts`               | Use context.db                    |
-| `src/functions/styles.ts`               | Use context.db                    |
+| `src/look/styles.fn.ts`               | Use context.db                    |
 | `src/functions/teams.ts`                | Use context.db                    |
 | `src/functions/ai.ts`                   | Use context.db                    |
 | `src/functions/invite-codes.ts`         | Use context.db                    |

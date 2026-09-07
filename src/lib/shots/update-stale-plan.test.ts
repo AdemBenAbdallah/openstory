@@ -91,8 +91,8 @@ vi.doMock('@/lib/ai/prompt-context', () => ({
 // hash so the stored-vs-live comparison is driven purely by the fixture's
 // stored `musicPromptInputHash`.
 const realMusicSummaries =
-  await import('@/lib/workflows/music-scene-summaries');
-vi.doMock('@/lib/workflows/music-scene-summaries', () => ({
+  await import('@/audio/server/workflows/music-scene-summaries');
+vi.doMock('@/audio/server/workflows/music-scene-summaries', () => ({
   ...realMusicSummaries,
   buildMusicSceneSummaries: vi.fn(() => [
     {

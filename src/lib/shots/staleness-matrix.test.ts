@@ -28,7 +28,7 @@ import type {
 } from '@/lib/ai/scene-analysis.schema';
 import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
 import type { StyleConfig, VideoManifest } from '@/lib/db/schema';
-import { computeShotImageSceneHash } from '@/lib/workflows/sheet-snapshots';
+import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 import { describe, expect, it } from 'vitest';
 
 /** The inputs each artifact hash is computed over, before/after a mutation. */

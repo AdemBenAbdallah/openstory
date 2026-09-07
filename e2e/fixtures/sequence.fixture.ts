@@ -230,7 +230,7 @@ export async function getTestCharacter(characterId: string): Promise<{
 
 /**
  * Get sequence-level music status. Music is generated once per sequence
- * (not per shot — see src/lib/workflows/music-workflow.ts:133 TODO).
+ * (not per shot — see src/audio/server/workflows/music-workflow.ts:133 TODO).
  * Per-shot video completion is checked via getTestSequenceShots; final
  * composition is now client-side via Mediabunny, so no merged-video row
  * is written.

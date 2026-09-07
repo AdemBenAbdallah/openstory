@@ -29,8 +29,8 @@
 
 import { styles, teams } from '@/lib/db/schema';
 import type { StyleSampleVideo } from '@/lib/db/schema/libraries';
-import { buildSampleVideos } from '@/lib/style/sample-videos';
-import { styleSlug } from '@/shared/style/style-slug';
+import { buildSampleVideos } from '@/look/server/sample-videos';
+import { styleSlug } from '@/look/style-slug';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { access, readFile, readdir } from 'node:fs/promises';

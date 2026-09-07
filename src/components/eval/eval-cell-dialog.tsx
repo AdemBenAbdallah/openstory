@@ -17,9 +17,9 @@ import {
 import { VideoPlayer } from '@/components/motion/video-player';
 import { buildMentionItems } from '@/components/scenes/prompt-mention/mention-items';
 import { HighlightedPrompt } from '@/components/text-editor/mention/highlighted-prompt';
-import { useSequenceCharacters } from '@/hooks/use-sequence-characters';
-import { useSequenceElements } from '@/hooks/use-sequence-elements';
-import { useSequenceLocations } from '@/hooks/use-sequence-locations';
+import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
+import { useSequenceElements } from '@/cast/ui/use-sequence-elements';
+import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import type { SceneWithScript } from '@/hooks/use-scenes';
 import type { ShotView } from '@/shared/shots/shot-view';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';

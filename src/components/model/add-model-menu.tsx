@@ -6,7 +6,7 @@ import {
 import { useScenesBySequence } from '@/hooks/use-scenes';
 import { useAddModelToSequence, useSequence } from '@/hooks/use-sequences';
 import { useShotsBySequence } from '@/hooks/use-shots';
-import { useSequenceStyle } from '@/hooks/use-styles';
+import { useSequenceStyle } from '@/look/ui/use-styles';
 import {
   AUDIO_MODELS,
   IMAGE_MODELS,

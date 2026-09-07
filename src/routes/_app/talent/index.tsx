@@ -1,11 +1,11 @@
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { AddTalentDialog } from '@/components/talent-library/add-talent-dialog';
-import { TalentLibraryFilters } from '@/components/talent-library/talent-library-filters';
-import { TalentLibraryList } from '@/components/talent-library/talent-library-list';
+import { AddTalentDialog } from '@/cast/ui/talent-library/add-talent-dialog';
+import { TalentLibraryFilters } from '@/cast/ui/talent-library/talent-library-filters';
+import { TalentLibraryList } from '@/cast/ui/talent-library/talent-library-list';
 import { PageContainer } from '@/components/layout/page-container';
 import { PageIntro } from '@/components/typography/page-intro';
 import { EmptyState } from '@/components/ui/empty-state';
-import { useTalent } from '@/hooks/use-talent';
+import { useTalent } from '@/cast/ui/use-talent';
 import { createFileRoute } from '@tanstack/react-router';
 import { User } from 'lucide-react';
 import { z } from 'zod';

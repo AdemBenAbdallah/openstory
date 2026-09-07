@@ -26,7 +26,7 @@ has no server-side assembly — final export in the product is client-side).
 All the moving parts live in `scripts/generate-style-sample-videos.ts`,
 `scripts/upload-style-sample-videos-to-r2.ts`,
 `scripts/seed-style-sample-videos.ts`, the data/helpers in
-`src/lib/style/sample-videos.ts`, and the public-API client in
+`src/look/server/sample-videos.ts`, and the public-API client in
 `scripts/sample-pipeline.ts`.
 
 ## Prerequisites
@@ -65,7 +65,7 @@ For a **bespoke** sample, the curated beats are flattened into shot prose
 (`beatsToScript`) before being sent — the pipeline takes a script, not
 per-shot prompts, so its scene split decides the final shots. Styles with a
 hand-written script in `CANONICAL_SCRIPT_OVERRIDES`
-(`src/lib/style/sample-videos.ts` — currently `documentary`, a poor fit for
+(`src/look/server/sample-videos.ts` — currently `documentary`, a poor fit for
 the shared film brief) also send their prose verbatim (`enhance: 'off'`).
 
 **Fire-and-forget:** `--submit-only` creates all sequences (ids →

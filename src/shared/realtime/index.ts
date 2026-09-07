@@ -2,7 +2,7 @@ import { getEnv } from '#env';
 import { z } from 'zod';
 
 import { getLogger } from '@/shared/observability/logger';
-import { sheetProgressActivitySchema } from '@/shared/talent/sheet-progress-copy';
+import { sheetProgressActivitySchema } from '@/cast/sheet-progress-copy';
 import type { ChannelHistoryMessage } from '@/lib/realtime/realtime-channel.do';
 import type { EventData, EventPaths } from '@/lib/realtime/shared-types';
 

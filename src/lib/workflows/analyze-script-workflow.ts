@@ -22,9 +22,9 @@ import {
 import { creditsShortStatusError } from '@/shared/billing/credits-short';
 import { addMicros, microsToUsd } from '@/shared/billing/money';
 import { gateStoryboardRenders } from '@/lib/billing/storyboard-render-gate';
-import { reusesTalentSheet } from '@/lib/talent/reuse-talent-sheet';
+import { reusesTalentSheet } from '@/cast/server/talent/reuse-talent-sheet';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { buildCastCharacterBible } from '@/shared/prompts/character-prompt';
+import { buildCastCharacterBible } from '@/cast/character-prompt';
 import { getGenerationChannel } from '@/shared/realtime';
 import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
@@ -62,15 +62,15 @@ import {
 import {
   createCastRecords,
   findMissingElementEntries,
-} from '@/lib/workflows/cast-records';
+} from '@/cast/server/workflows/cast-records';
 import { buildStoryboardMotionBatchShots } from '@/lib/workflows/storyboard-motion-batch-shots';
 import {
   computeShotImagesHashFromDto,
   type ShotImageSceneSnapshot,
   resolveSceneShotImageReferences,
-} from '@/lib/workflows/sheet-snapshots';
-import { deriveAutoStyle } from '@/lib/workflows/auto-style-step';
-import { waitForElementVision } from '@/lib/workflows/wait-for-sheets';
+} from '@/cast/server/workflows/sheet-snapshots';
+import { deriveAutoStyle } from '@/look/server/workflows/auto-style-step';
+import { waitForElementVision } from '@/cast/server/workflows/wait-for-sheets';
 import type {
   CharacterMinimal,
   SequenceElementMinimal,

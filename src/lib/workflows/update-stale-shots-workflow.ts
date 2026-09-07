@@ -68,7 +68,7 @@ import type {
 import type { FramePromptResult } from '@/lib/workflows/frame-prompt-workflow';
 import type { MotionPromptWorkflowResult } from '@/lib/workflows/motion-prompt-workflow';
 import { getLogger } from '@/shared/observability/logger';
-import { reinforceInstrumentalTags } from '@/lib/prompts/music-prompt';
+import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,

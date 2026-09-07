@@ -23,14 +23,14 @@ import type {
   SequenceElement,
   SequenceLocationWithReference,
 } from '@/lib/db/schema';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import { getGenerationChannel } from '@/shared/realtime';
 import type {
   RegenerateShotSnapshot,
   RegenerateShotsWorkflowInput,
 } from '@/lib/workflow/types';
-import { resolveSceneShotImageReferences } from './sheet-snapshots';
+import { resolveSceneShotImageReferences } from '@/cast/server/workflows/sheet-snapshots';
 
 /**
  * Build one shot's snapshot DTO from the live scoped state. Used at trigger

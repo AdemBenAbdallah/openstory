@@ -17,9 +17,9 @@ import type {
   SequenceElement,
   SequenceLocationWithReference,
 } from '@/lib/db/schema';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildElementReferenceImages } from '@/shared/prompts/element-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildElementReferenceImages } from '@/cast/element-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import type { AspectRatio } from '@/shared/constants/aspect-ratios';
 import type {
   ShotImageSceneSnapshot,
@@ -30,7 +30,7 @@ import {
   matchElementsToShotImage,
   matchLocationsToScene,
 } from '@/shared/scenes/scene-matching';
-import { computeShotImageSceneHash } from '@/lib/workflows/sheet-snapshots';
+import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 
 function sortedHashes(
   values: ReadonlyArray<string | null | undefined>

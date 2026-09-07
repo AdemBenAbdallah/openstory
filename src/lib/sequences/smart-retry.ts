@@ -53,7 +53,7 @@ import {
 } from '@/shared/motion/resolve-motion-prompt';
 import { toShotView } from '@/shared/shots/shot-view';
 import { buildMotionReferenceImages } from '@/shared/motion/build-motion-references';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { triggerWorkflow } from '@/lib/workflow/client';
 import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import {
@@ -70,7 +70,7 @@ import type {
   MusicPromptWorkflowInput,
   MusicWorkflowInput,
 } from '@/lib/workflow/types';
-import { buildMusicSceneSummaries } from '@/lib/workflows/music-scene-summaries';
+import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import { sumShotDurationsSeconds } from '@/lib/sequences/shot-durations';
 import { getLogger } from '@/shared/observability/logger';
 

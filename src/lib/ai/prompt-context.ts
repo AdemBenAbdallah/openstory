@@ -16,7 +16,7 @@ import type {
 import type { ScopedDb } from '@/lib/db/scoped';
 import { ValidationError } from '@/shared/errors';
 import type { StyleConfig } from '@/lib/db/schema';
-import { resolveSequenceStyleConfig } from '@/shared/style/style-config';
+import { resolveSequenceStyleConfig } from '@/look/style-config';
 import {
   matchCharactersToScene,
   matchElementsToScene,

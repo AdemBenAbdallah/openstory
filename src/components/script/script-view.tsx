@@ -6,16 +6,16 @@ import { PremiumCard } from '@/components/cards/premium-card';
 import {
   ElementSelector,
   type ElementSelectorHandle,
-} from '@/components/element/element-selector';
+} from '@/cast/ui/element/element-selector';
 import { GenerateSequenceIcon } from '@/components/icons/generate-sequence-icon';
-import { LocationSuggestionSelector } from '@/components/location-library/location-suggestion-selector';
+import { LocationSuggestionSelector } from '@/cast/ui/location-library/location-suggestion-selector';
 import { buildMentionItems } from '@/components/scenes/prompt-mention/mention-items';
 import { GenerationStopAlert } from '@/components/generation/generation-stop-alert';
 import { GenerationModeToggle } from '@/components/settings/generation-mode-toggle';
 import { GenerationSettings } from '@/components/settings/generation-settings';
-import { StyleCategorySelect } from '@/components/style/style-category-select';
-import { StyleSelector } from '@/components/style/style-selector';
-import { TalentSuggestionSelector } from '@/components/talent/talent-suggestion-selector';
+import { StyleCategorySelect } from '@/look/ui/style-category-select';
+import { StyleSelector } from '@/look/ui/style-selector';
+import { TalentSuggestionSelector } from '@/cast/ui/talent/talent-suggestion-selector';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,16 +58,16 @@ import {
   type GenerationStage,
 } from '@/shared/generation/pipeline';
 import { useComposedScript } from '@/hooks/use-scenes';
-import { useSequenceCharacters } from '@/hooks/use-sequence-characters';
+import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import { useViaAvailability } from '@/hooks/use-via-availability';
 import {
   useSequenceElements,
   type DraftElementUpload,
-} from '@/hooks/use-sequence-elements';
-import { useSequenceLocations } from '@/hooks/use-sequence-locations';
+} from '@/cast/ui/use-sequence-elements';
+import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import { useCreateSequence } from '@/hooks/use-sequences';
-import { useRecommendedStyles, useStyle, useStyles } from '@/hooks/use-styles';
-import { AUTO_STYLE_ID } from '@/shared/style/auto-style';
+import { useRecommendedStyles, useStyle, useStyles } from '@/look/ui/use-styles';
+import { AUTO_STYLE_ID } from '@/look/auto-style';
 import { errorMessage } from '@/shared/errors';
 import {
   assessDurationFit,
@@ -113,7 +113,7 @@ import {
   takePendingIntent,
 } from '@/components/generation/pending-generate';
 
-import { replaceTokenInText } from '@/shared/sequence-elements/cascade-rename';
+import { replaceTokenInText } from '@/cast/cascade-rename';
 import {
   shouldRestoreComposerDraft,
   clearSequenceDraft,
@@ -126,13 +126,13 @@ import {
 import {
   pickShuffleStyle,
   sampleScriptForStyle,
-} from '@/components/style/composer-sample';
+} from '@/look/ui/composer-sample';
 import {
   ALL_COMPOSER_STYLE_CATEGORIES,
   DEFAULT_COMPOSER_STYLE_CATEGORY,
   styleAfterComposerCategoryChange,
   styleCategoryGroupKey,
-} from '@/components/style/composer-style-row';
+} from '@/look/ui/composer-style-row';
 import { cn } from '@/components/utils';
 import {
   dataTransferHasImages,

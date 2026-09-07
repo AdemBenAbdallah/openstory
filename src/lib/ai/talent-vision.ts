@@ -24,7 +24,7 @@ import {
   throwNotedRunError,
 } from './llm-client';
 import { DEFAULT_VISION_MODEL } from '@/shared/ai/models.config';
-import { talentSubjectKindSchema } from '@/shared/talent/subject-kind';
+import { talentSubjectKindSchema } from '@/cast/subject-kind';
 
 export const TALENT_VISION_MODEL = DEFAULT_VISION_MODEL;
 

@@ -40,7 +40,7 @@ import type {
   MusicPromptWorkflowInput,
   FramePromptWorkflowInput,
 } from '@/lib/workflow/types';
-import { buildMusicSceneSummaries } from '@/lib/workflows/music-scene-summaries';
+import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';

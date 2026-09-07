@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
 import { routeParams } from '@/components/layout/breadcrumbs';
-import { EditTalentDialog } from '@/components/talent-library/edit-talent-dialog';
-import { PortraitAttestationFields } from '@/components/talent-library/portrait-attestation-fields';
-import { TalentMediaUpload } from '@/components/talent-library/talent-media-upload';
+import { EditTalentDialog } from '@/cast/ui/talent-library/edit-talent-dialog';
+import { PortraitAttestationFields } from '@/cast/ui/talent-library/portrait-attestation-fields';
+import { TalentMediaUpload } from '@/cast/ui/talent-library/talent-media-upload';
 import { statementFor } from '@/shared/compliance/attestations';
 import { PageContainer } from '@/components/layout/page-container';
 import { getCurrentUserProfileFn } from '@/functions/user';
@@ -12,15 +12,15 @@ import { PageHeader } from '@/components/typography/page-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useTalentSheetRealtime } from '@/hooks/use-talent-realtime';
+import { useTalentSheetRealtime } from '@/cast/ui/use-talent-realtime';
 import {
   useTalentById,
   useDeleteTalent,
   useGenerateTalentSheet,
   useSetDefaultSheet,
   useToggleTalentFavorite,
-} from '@/hooks/use-talent';
-import { sheetProgressCopy } from '@/shared/talent/sheet-progress-copy';
+} from '@/cast/ui/use-talent';
+import { sheetProgressCopy } from '@/cast/sheet-progress-copy';
 import { cn } from '@/components/utils';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';

@@ -24,10 +24,10 @@ import {
   computeLocationSheetInputHash,
   computeVisualPromptInputHash,
 } from '@/lib/ai/input-hash';
-import { resolveSheetImageModel } from '@/shared/sheets/sheet-image-model';
+import { resolveSheetImageModel } from '@/cast/sheet-image-model';
 import { StyleConfigSchema } from '@/lib/db/schema';
 import { NotFoundError } from '@/shared/errors';
-import { computeStyleConfigHash } from '@/lib/workflows/sheet-snapshots';
+import { computeStyleConfigHash } from '@/cast/server/workflows/sheet-snapshots';
 import {
   loadShotPromptContext,
   narrowShotPromptContext,

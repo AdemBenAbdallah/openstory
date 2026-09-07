@@ -38,7 +38,7 @@ import type { Style } from '@/lib/db/schema/libraries';
 import {
   parseStyleConfig,
   StyleConfigSchema,
-} from '@/shared/style/style-config';
+} from '@/look/style-config';
 import { ulidSchema } from '@/lib/schemas/id.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';

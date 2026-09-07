@@ -1,6 +1,6 @@
 import { routeParams } from '@/components/layout/breadcrumbs';
-import { ElementDetailView } from '@/components/element/element-detail-view';
-import { useSequenceElements } from '@/hooks/use-sequence-elements';
+import { ElementDetailView } from '@/cast/ui/element/element-detail-view';
+import { useSequenceElements } from '@/cast/ui/use-sequence-elements';
 import { createFileRoute } from '@tanstack/react-router';
 
 function ElementCrumbLabel({

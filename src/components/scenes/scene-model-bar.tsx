@@ -3,7 +3,7 @@ import { ModelBadge } from '@/components/model/model-badge';
 import { Button } from '@/components/ui/button';
 import { SequenceImageModelSelector } from '@/components/model/sequence-image-model-selector';
 import { SequenceVideoModelSelector } from '@/components/model/sequence-video-model-selector';
-import { StyleBadge } from '@/components/style/style-badge';
+import { StyleBadge } from '@/look/ui/style-badge';
 import { Kbd } from '@/components/ui/kbd';
 import type { ImageToVideoModel, TextToImageModel } from '@/shared/ai/models';
 import {

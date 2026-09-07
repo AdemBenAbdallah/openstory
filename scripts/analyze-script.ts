@@ -41,7 +41,7 @@ import { z } from 'zod';
 import {
   parseStyleConfig,
   type StyleConfig,
-} from '@/shared/style/style-config';
+} from '@/look/style-config';
 import { triggerWorkflow } from '../src/lib/workflow/client';
 
 function printUsage() {

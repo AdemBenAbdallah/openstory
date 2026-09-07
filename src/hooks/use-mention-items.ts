@@ -2,12 +2,12 @@ import {
   buildMentionItems,
   type MentionItem,
 } from '@/components/scenes/prompt-mention/mention-items';
-import { useSequenceCharacters } from '@/hooks/use-sequence-characters';
+import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import {
   useRenameSequenceElementToken,
   useSequenceElements,
-} from '@/hooks/use-sequence-elements';
-import { useSequenceLocations } from '@/hooks/use-sequence-locations';
+} from '@/cast/ui/use-sequence-elements';
+import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 

@@ -1,8 +1,8 @@
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
 import { PageContainer } from '@/components/layout/page-container';
-import { StyleLibraryView } from '@/components/style-library/style-library-view';
+import { StyleLibraryView } from '@/look/ui/library/style-library-view';
 import { PageIntro } from '@/components/typography/page-intro';
-import { useStyles } from '@/hooks/use-styles';
+import { useStyles } from '@/look/ui/use-styles';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/styles/')({

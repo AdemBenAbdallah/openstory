@@ -1,6 +1,6 @@
 import { routeParams } from '@/components/layout/breadcrumbs';
-import { CharacterDetailView } from '@/components/talent/character-detail-view';
-import { useSequenceCharacters } from '@/hooks/use-sequence-characters';
+import { CharacterDetailView } from '@/cast/ui/talent/character-detail-view';
+import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import { createFileRoute } from '@tanstack/react-router';
 
 function CharacterCrumbLabel({

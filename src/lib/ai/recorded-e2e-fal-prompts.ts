@@ -6,9 +6,9 @@
  * (`matchElementsToShotImage`), same as live image stamp.
  */
 
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildElementReferenceImages } from '@/shared/prompts/element-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildElementReferenceImages } from '@/cast/element-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import { buildReferenceImagePrompt } from '@/shared/prompts/reference-image-prompt';
 import { getVariantImagePrompt } from '@/lib/prompts/variant-image';
 import {

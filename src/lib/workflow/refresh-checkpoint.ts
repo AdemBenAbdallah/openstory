@@ -24,8 +24,8 @@ import type {
   LibraryLocationMatch,
   TalentCharacterMatch,
 } from '@/lib/workflow/types';
-import { toCharacterMetadata } from '@/lib/sheets/character-sheet-trigger';
-import { toLocationMetadata } from '@/lib/sheets/location-sheet-trigger';
+import { toCharacterMetadata } from '@/cast/server/sheets/character-sheet-trigger';
+import { toLocationMetadata } from '@/cast/server/sheets/location-sheet-trigger';
 
 export async function refreshCheckpointFromCast(
   scopedDb: ScopedDb,

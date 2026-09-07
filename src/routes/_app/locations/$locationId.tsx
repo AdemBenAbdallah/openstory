@@ -1,8 +1,8 @@
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
 import { routeParams } from '@/components/layout/breadcrumbs';
 import { PageContainer } from '@/components/layout/page-container';
-import { EditLocationDialog } from '@/components/location-library/edit-location-dialog';
-import { LocationMediaUpload } from '@/components/location-library/location-media-upload';
+import { EditLocationDialog } from '@/cast/ui/location-library/edit-location-dialog';
+import { LocationMediaUpload } from '@/cast/ui/location-library/location-media-upload';
 import { PageDescription } from '@/components/typography/page-description';
 import { PageHeader } from '@/components/typography/page-header';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,8 @@ import {
   useDeleteLibraryLocation,
   useDeleteLocationSheet,
   useLibraryLocationById,
-} from '@/hooks/use-location-library';
-import { useLocationSheetRealtime } from '@/hooks/use-location-realtime';
+} from '@/cast/ui/use-location-library';
+import { useLocationSheetRealtime } from '@/cast/ui/use-location-realtime';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import {
   ArrowLeft,

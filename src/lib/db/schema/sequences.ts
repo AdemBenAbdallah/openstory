@@ -20,7 +20,7 @@ import type {
   GenerationCheckpoint,
   GenerationStage,
 } from '@/shared/generation/pipeline';
-import type { StoredStyleConfig } from '@/shared/style/style-config';
+import type { StoredStyleConfig } from '@/look/style-config';
 
 // Enum values as constants (SQLite doesn't have native enums)
 export const SEQUENCE_STATUSES = [

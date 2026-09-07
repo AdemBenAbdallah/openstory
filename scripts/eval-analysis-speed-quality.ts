@@ -38,9 +38,9 @@ import { addLineGutter } from '@/lib/ai/boundary-split';
 import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
 import { buildMatchingPromptVariables } from '@/lib/ai/talent-matching-prompt';
 import { buildLocationMatchingPromptVariables } from '@/lib/ai/location-matching-prompt';
-import { buildMusicSceneSummaries } from '@/lib/workflows/music-scene-summaries';
-import { STYLE_CATEGORIES } from '@/shared/style/auto-style';
-import { STYLE_PACE_VALUES } from '@/shared/style/style-config';
+import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
+import { STYLE_CATEGORIES } from '@/look/auto-style';
+import { STYLE_PACE_VALUES } from '@/look/style-config';
 import type { LibraryLocation } from '@/lib/db/schema/location-library';
 import {
   LOCATION_CASE,

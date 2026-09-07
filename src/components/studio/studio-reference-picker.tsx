@@ -19,18 +19,18 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useSequenceCharacters } from '@/hooks/use-sequence-characters';
-import { useSequenceElements } from '@/hooks/use-sequence-elements';
+import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
+import { useSequenceElements } from '@/cast/ui/use-sequence-elements';
 import {
   useLibraryLocations,
   useSequenceLocations,
-} from '@/hooks/use-sequence-locations';
+} from '@/cast/ui/use-sequence-locations';
 import {
   useSequencesWithShots,
   type SequenceWithShots,
 } from '@/hooks/use-sequences-with-shots';
 import { useStudioAssets } from '@/hooks/use-studio-assets';
-import { useTalent } from '@/hooks/use-talent';
+import { useTalent } from '@/cast/ui/use-talent';
 import { isBrowserDisplayableStillUrl } from '@/shared/shots/shot-view';
 import {
   studioPosterOutput,

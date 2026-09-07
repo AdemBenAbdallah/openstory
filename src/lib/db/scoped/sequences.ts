@@ -34,7 +34,7 @@ import type {
   GenerationCheckpoint,
   GenerationStage,
 } from '@/shared/generation/pipeline';
-import { parseStyleConfig } from '@/shared/style/style-config';
+import { parseStyleConfig } from '@/look/style-config';
 import type { ShotReadiness, ShotView } from '@/shared/shots/shot-view';
 import { getLatestPreviewByFrameIds } from './frame-variants';
 import { getPrimaryVideoByShotIds } from './video-variants';

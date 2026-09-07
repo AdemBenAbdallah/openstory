@@ -1,7 +1,7 @@
 import type React from 'react';
 import { AspectRatioIcon } from '@/components/icons/aspect-ratio-icon';
 import { ModelBadge } from '@/components/model/model-badge';
-import { StyleBadge } from '@/components/style/style-badge';
+import { StyleBadge } from '@/look/ui/style-badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

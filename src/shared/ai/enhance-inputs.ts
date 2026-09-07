@@ -9,7 +9,7 @@ import { getLogger } from '@/shared/observability/logger';
 import {
   parseStyleConfig,
   type StyleConfig,
-} from '@/shared/style/style-config';
+} from '@/look/style-config';
 
 const logger = getLogger(['openstory', 'ai', 'enhance-inputs']);
 

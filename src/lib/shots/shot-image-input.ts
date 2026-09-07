@@ -27,9 +27,9 @@ import type {
   Shot,
 } from '@/lib/db/schema';
 import type { ScopedDb } from '@/lib/db/scoped';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildElementReferenceImages } from '@/shared/prompts/element-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildElementReferenceImages } from '@/cast/element-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
 import { buildUserEditProvenance } from '@/lib/prompts/user-edit-provenance';
 import type {
@@ -42,7 +42,7 @@ import {
   matchElementsToShotImage,
   matchLocationsToScene,
 } from '@/shared/scenes/scene-matching';
-import { computeShotImageSceneHash } from '@/lib/workflows/sheet-snapshots';
+import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 
 /** The sequence-scoped rows reference matching needs, resolved once per run. */
 export type ShotImageRefs = Pick<

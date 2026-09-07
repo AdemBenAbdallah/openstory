@@ -27,16 +27,16 @@ import type { ScopedDb } from '@/lib/db/scoped';
 import {
   createLibraryLocation,
   enqueueLibraryLocationSheet,
-} from '@/lib/locations/create-library-location';
+} from '@/cast/server/locations/create-library-location';
 import { getLogger } from '@/shared/observability/logger';
 import { createSequenceSchema } from '@/lib/schemas/sequence.schemas';
 import { createSequences } from '@/lib/sequences/create-sequences';
 import { STORAGE_BUCKETS, type StorageBucket } from '@/lib/storage/buckets';
-import { createLibraryTalent } from '@/lib/talent/create-library-talent';
+import { createLibraryTalent } from '@/cast/server/talent/create-library-talent';
 import {
   enqueueLibraryTalentSheet,
   type EnqueueLibraryTalentSheetParams,
-} from '@/lib/talent/enqueue-library-talent-sheet';
+} from '@/cast/server/talent/enqueue-library-talent-sheet';
 import type { LibraryLocationSheetWorkflowInput } from '@/lib/workflow/types';
 import { SEQUENCE_STATUSES } from '@/lib/db/schema/sequences';
 import { createSequenceLink } from './discovery';

@@ -26,15 +26,15 @@ vi.mock('@/lib/sequences/create-sequences', () => ({
   createSequences: mocks.createSequences,
 }));
 
-vi.mock('@/lib/talent/create-library-talent', () => ({
+vi.mock('@/cast/server/talent/create-library-talent', () => ({
   createLibraryTalent: mocks.createLibraryTalent,
 }));
 
-vi.mock('@/lib/talent/enqueue-library-talent-sheet', () => ({
+vi.mock('@/cast/server/talent/enqueue-library-talent-sheet', () => ({
   enqueueLibraryTalentSheet: mocks.enqueueLibraryTalentSheet,
 }));
 
-vi.mock('@/lib/locations/create-library-location', () => ({
+vi.mock('@/cast/server/locations/create-library-location', () => ({
   createLibraryLocation: mocks.createLibraryLocation,
   enqueueLibraryLocationSheet: mocks.enqueueLibraryLocationSheet,
 }));

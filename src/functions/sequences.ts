@@ -65,7 +65,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 import { authWithTeamMiddleware, sequenceAccessMiddleware } from './middleware';
-import { bumpStylePopularity } from '@/lib/style/bump-style-popularity';
+import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
 import { simpleHash } from '@/shared/utils/hash';
 import { getLogger } from '@/shared/observability/logger';
 import { createSequences } from '@/lib/sequences/create-sequences';

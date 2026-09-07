@@ -22,7 +22,7 @@ import {
   useSequenceLocations,
   useSoftDeleteSequenceLocation,
   type SequenceLocationWithReference,
-} from '@/hooks/use-sequence-locations';
+} from '@/cast/ui/use-sequence-locations';
 import { errorMessage } from '@/shared/errors';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';

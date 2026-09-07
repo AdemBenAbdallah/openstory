@@ -1,4 +1,4 @@
-import { MusicView, MusicViewSkeleton } from '@/components/music/music-view';
+import { MusicView, MusicViewSkeleton } from '@/audio/ui/music-view';
 import { UploadMediaButton } from '@/components/scenes/upload-media-button';
 import { DivergentAlternateBanner } from '@/components/staleness/divergent-alternate-banner';
 import {

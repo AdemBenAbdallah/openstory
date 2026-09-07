@@ -12,7 +12,7 @@
 import { DEFAULT_IMAGE_MODEL } from '@/shared/ai/models';
 import { WorkflowValidationError } from '@/lib/workflow/errors';
 import type { ImageWorkflowInput } from '@/lib/workflow/types';
-import { computeShotImageSceneHash } from './sheet-snapshots';
+import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 
 const NO_SNAPSHOT_SENTINEL = '';
 

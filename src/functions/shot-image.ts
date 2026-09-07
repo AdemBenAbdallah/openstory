@@ -20,7 +20,7 @@ import {
 } from '@/lib/billing/preflight';
 import { getVariantGridConfig } from '@/shared/constants/aspect-ratios';
 import { cropTileFromGrid } from '@/lib/image/image-crop';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import {
   generateVariantSchema,
   regenerateShotSchema,

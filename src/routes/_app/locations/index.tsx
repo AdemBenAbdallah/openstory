@@ -1,11 +1,11 @@
 import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { AddLocationDialog } from '@/components/location-library/add-location-dialog';
-import { LocationLibraryFilters } from '@/components/location-library/location-library-filters';
-import { LocationLibraryList } from '@/components/location-library/location-library-list';
+import { AddLocationDialog } from '@/cast/ui/location-library/add-location-dialog';
+import { LocationLibraryFilters } from '@/cast/ui/location-library/location-library-filters';
+import { LocationLibraryList } from '@/cast/ui/location-library/location-library-list';
 import { PageContainer } from '@/components/layout/page-container';
 import { PageIntro } from '@/components/typography/page-intro';
 import { EmptyState } from '@/components/ui/empty-state';
-import { useLibraryLocations } from '@/hooks/use-sequence-locations';
+import { useLibraryLocations } from '@/cast/ui/use-sequence-locations';
 import { createFileRoute } from '@tanstack/react-router';
 import { MapPin } from 'lucide-react';
 import { z } from 'zod';

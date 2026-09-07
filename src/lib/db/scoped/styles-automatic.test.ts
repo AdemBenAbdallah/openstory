@@ -11,8 +11,8 @@ import {
   createPublicStylesReadMethods,
   createStylesMethods,
 } from '@/lib/db/scoped/styles';
-import { placeholderAutoStyleDraft } from '@/shared/style/auto-style';
-import { parseStyleConfig } from '@/shared/style/style-config';
+import { placeholderAutoStyleDraft } from '@/look/auto-style';
+import { parseStyleConfig } from '@/look/style-config';
 import { type Client, createClient } from '@libsql/client';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';

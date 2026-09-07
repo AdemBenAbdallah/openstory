@@ -685,10 +685,10 @@ Ordered by value / risk.
 | Hash helpers + `sceneInputContext`       | `src/lib/ai/input-hash.ts`                                                    |
 | Prompt context load + narrowing          | `src/lib/ai/prompt-context.ts`                                                |
 | Bible builders (DB → bible, verify side) | `src/lib/ai/bibles-from-scoped.ts`                                            |
-| Casting transform                        | `src/shared/prompts/character-prompt.ts` (`buildCastingAttributes`)           |
+| Casting transform                        | `src/cast/character-prompt.ts` (`buildCastingAttributes`)           |
 | Visual prompt stamp                      | `src/lib/workflows/visual-prompt-scene-workflow.ts`                           |
 | Motion prompt stamp                      | `src/lib/workflows/motion-prompt-scene-workflow.ts`                           |
-| Bible persistence (cast)                 | `src/lib/workflows/character-bible-workflow.ts`, `location-bible-workflow.ts` |
+| Bible persistence (cast)                 | `src/cast/server/workflows/character-bible-workflow.ts`, `location-bible-workflow.ts` |
 | Pipeline orchestration                   | `src/lib/workflows/analyze-script-workflow.ts`                                |
 | Staleness verify (prompts + thumbnail)   | `src/functions/frames.ts` (`getFrameStalenessFn`)                             |
 | Thumbnail snapshot hash                  | `src/lib/workflows/regenerate-frames-snapshot.ts`                             |

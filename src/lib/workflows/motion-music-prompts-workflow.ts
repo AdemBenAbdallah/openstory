@@ -9,7 +9,7 @@ import { DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
 import type { Scene } from '@/lib/ai/scene-analysis.schema';
 import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
 import { snapDuration } from '@/shared/motion/snap-duration';
-import { reinforceInstrumentalTags } from '@/lib/prompts/music-prompt';
+import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
 import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
 import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
 import type {
@@ -23,7 +23,7 @@ import type { MotionPromptWorkflowResult } from '@/lib/workflows/motion-prompt-w
 import {
   buildMusicSceneSummaries,
   joinMusicDesignByIndex,
-} from '@/lib/workflows/music-scene-summaries';
+} from '@/audio/server/workflows/music-scene-summaries';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { getLogger } from '@/shared/observability/logger';
 

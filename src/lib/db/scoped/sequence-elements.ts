@@ -26,7 +26,7 @@ import {
   buildShotRenameDeltas,
   replaceTokenInText,
   renameTokenInContinuity,
-} from '@/shared/sequence-elements/cascade-rename';
+} from '@/cast/cascade-rename';
 import {
   loadSceneContextBySequenceFromDb,
   resolveSceneForShot,

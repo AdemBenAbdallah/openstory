@@ -8,7 +8,7 @@ import type { Style } from '@/lib/db/schema/libraries';
 import {
   parseStyleConfig,
   StyleConfigSchema,
-} from '@/shared/style/style-config';
+} from '@/look/style-config';
 import { z } from 'zod';
 import { createSequenceLink } from './discovery';
 import { getLink, halLinksSchema, STYLES_PATH, withLinks } from './hal';

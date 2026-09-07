@@ -12,8 +12,8 @@ import {
   type ServerManagedStyleColumn,
 } from '@/lib/schemas/style.schemas';
 import { stripServerManagedColumns } from './server-managed';
-import { styleSlug } from '@/shared/style/style-slug';
-import type { AutoStyleDraft } from '@/shared/style/auto-style';
+import { styleSlug } from '@/look/style-slug';
+import type { AutoStyleDraft } from '@/look/auto-style';
 import {
   and,
   asc,

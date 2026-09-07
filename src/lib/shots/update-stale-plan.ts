@@ -61,7 +61,7 @@ import {
   depthIncludes,
   type UpdateStaleDepth,
 } from '@/shared/shots/update-stale-depth';
-import { buildMusicSceneSummaries } from '@/lib/workflows/music-scene-summaries';
+import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import { NotFoundError } from '@/shared/errors';
 import type { MusicSceneSummary } from '@/lib/workflow/types';
 

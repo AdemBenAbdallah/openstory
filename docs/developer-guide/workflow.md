@@ -193,7 +193,7 @@ flowchart LR
     LM --> Join
 ```
 
-**Talent Matching Workflow** (`src/lib/workflows/talent-matching-workflow.ts`):
+**Talent Matching Workflow** (`src/cast/server/workflows/talent-matching-workflow.ts`):
 
 Bibles already exist from Phase 1. This workflow only matches.
 
@@ -204,7 +204,7 @@ Bibles already exist from Phase 1. This workflow only matches.
    - Deduplicates matches (each talent/character used once), emits `generation.talent:matched`
 3. **Returns:** `{ characterBible, matches: talentCharacterMatches }`
 
-**Location Matching Workflow** (`src/lib/workflows/location-matching-workflow.ts`):
+**Location Matching Workflow** (`src/cast/server/workflows/location-matching-workflow.ts`):
 
 1. Uses `input.locationBible` from scene-split (no location-extraction LLM)
 2. **Location matching** (skipped if no `suggestedLocationIds`):
@@ -227,14 +227,14 @@ flowchart LR
     VP --> Join
 ```
 
-**Character Bible Workflow** (`src/lib/workflows/character-bible-workflow.ts`):
+**Character Bible Workflow** (`src/cast/server/workflows/character-bible-workflow.ts`):
 
 - Generates a reference sheet image for each character (parallel per character)
 - Uses talent match images as reference when available
 - Uploads sheets to R2 storage
 - Creates `sequence_characters` DB records
 
-**Location Bible Workflow** (`src/lib/workflows/location-bible-workflow.ts`):
+**Location Bible Workflow** (`src/cast/server/workflows/location-bible-workflow.ts`):
 
 - Inserts location records into DB from location bible
 - Generates establishing-shot reference images for each location (parallel)
@@ -418,20 +418,20 @@ Per-scene fan-out (image, variant, motion) uses `Promise.allSettled` over `spawn
 | `src/lib/workflow/sanitize-fail-response.ts`         | Error message extraction + Cloudflare error-code mapping            |
 | `src/lib/db/helpers/frames.ts`                       | `upsertFrame()` / `bulkInsertFrames()` idempotent helpers           |
 | **Extraction + Matching**                            |                                                                     |
-| `src/lib/workflows/talent-matching-workflow.ts`      | Talent matching against Phase 1 character bible                     |
-| `src/lib/workflows/location-matching-workflow.ts`    | Location matching against Phase 1 location bible                    |
+| `src/cast/server/workflows/talent-matching-workflow.ts`      | Talent matching against Phase 1 character bible                     |
+| `src/cast/server/workflows/location-matching-workflow.ts`    | Location matching against Phase 1 location bible                    |
 | **Reference Generation**                             |                                                                     |
-| `src/lib/workflows/character-bible-workflow.ts`      | Character sheet generation (parallel per character)                 |
-| `src/lib/workflows/character-sheet-workflow.ts`      | Single character sheet image generation                             |
-| `src/lib/workflows/location-bible-workflow.ts`       | Location sheet generation (parallel per location)                   |
-| `src/lib/workflows/location-sheet-workflow.ts`       | Single location reference image generation                          |
+| `src/cast/server/workflows/character-bible-workflow.ts`      | Character sheet generation (parallel per character)                 |
+| `src/cast/server/workflows/character-sheet-workflow.ts`      | Single character sheet image generation                             |
+| `src/cast/server/workflows/location-bible-workflow.ts`       | Location sheet generation (parallel per location)                   |
+| `src/cast/server/workflows/location-sheet-workflow.ts`       | Single location reference image generation                          |
 | **Prompt Generation**                                |                                                                     |
 | `src/lib/workflows/visual-prompt-workflow.ts`        | Visual prompt sub-workflow (parallel per scene)                     |
 | `src/lib/workflows/visual-prompt-scene-workflow.ts`  | Per-scene visual prompt LLM call                                    |
 | `src/lib/workflows/motion-prompt-workflow.ts`        | Motion prompt sub-workflow (parallel per scene)                     |
 | `src/lib/workflows/motion-prompt-scene-workflow.ts`  | Per-scene motion prompt LLM call                                    |
 | `src/lib/workflows/motion-music-prompts-workflow.ts` | Orchestrates motion + music prompts in parallel                     |
-| `src/lib/workflows/music-prompt-workflow.ts`         | Music design LLM call                                               |
+| `src/audio/server/workflows/music-prompt-workflow.ts`         | Music design LLM call                                               |
 | **Image Generation**                                 |                                                                     |
 | `src/lib/workflows/frame-images-workflow.ts`         | Orchestrates image + variant gen for all scenes                     |
 | `src/lib/workflows/image-workflow.ts`                | Single image generation (Fal.ai)                                    |
@@ -439,12 +439,12 @@ Per-scene fan-out (image, variant, motion) uses `Promise.allSettled` over `spawn
 | **Motion + Music Generation**                        |                                                                     |
 | `src/lib/workflows/motion-batch-workflow.ts`         | Orchestrates motion + music + merge                                 |
 | `src/lib/workflows/motion-workflow.ts`               | Single motion/video generation (Fal.ai)                             |
-| `src/lib/workflows/music-workflow.ts`                | Music generation (Fal.ai)                                           |
+| `src/audio/server/workflows/music-workflow.ts`                | Music generation (Fal.ai)                                           |
 | `src/lib/workflows/merge-video-workflow.ts`          | Merge frame videos into sequence video                              |
 | `src/lib/workflows/merge-audio-video-workflow.ts`    | Merge music audio with video                                        |
 | **Recasting + Regeneration**                         |                                                                     |
-| `src/lib/workflows/recast-character-workflow.ts`     | Recast a character and regenerate affected frames                   |
-| `src/lib/workflows/recast-location-workflow.ts`      | Recast a location and regenerate affected frames                    |
+| `src/cast/server/workflows/recast-character-workflow.ts`     | Recast a character and regenerate affected frames                   |
+| `src/cast/server/workflows/recast-location-workflow.ts`      | Recast a location and regenerate affected frames                    |
 | `src/lib/workflows/regenerate-frames-workflow.ts`    | Regenerate specific frames with new prompts                         |
 | **Schemas + Events**                                 |                                                                     |
 | `src/shared/realtime.ts`                             | Real-time event schema and channel helpers                          |

@@ -13,9 +13,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { promptVariantKeys } from '@/hooks/use-prompt-variants';
 import { sceneFacetKeys } from '@/hooks/use-scene-facets';
 import { sceneKeys } from '@/hooks/use-scenes';
-import { sequenceCharacterKeys } from '@/hooks/use-sequence-characters';
-import { sequenceElementKeys } from '@/hooks/use-sequence-elements';
-import { sequenceLocationKeys } from '@/hooks/use-sequence-locations';
+import { sequenceCharacterKeys } from '@/cast/ui/use-sequence-characters';
+import { sequenceElementKeys } from '@/cast/ui/use-sequence-elements';
+import { sequenceLocationKeys } from '@/cast/ui/use-sequence-locations';
 import { shotKeys } from '@/hooks/use-shots';
 import type { Frame, Shot, VideoVariant } from '@/lib/db/schema';
 import {

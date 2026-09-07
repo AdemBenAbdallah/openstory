@@ -26,9 +26,9 @@ import type {
   SequenceElementMinimal,
   SequenceLocationMinimal,
 } from '@/lib/db/schema';
-import { buildCharacterReferenceImages } from '@/shared/prompts/character-prompt';
-import { buildElementReferenceImages } from '@/shared/prompts/element-prompt';
-import { buildLocationReferenceImages } from '@/shared/prompts/location-prompt';
+import { buildCharacterReferenceImages } from '@/cast/character-prompt';
+import { buildElementReferenceImages } from '@/cast/element-prompt';
+import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import type { ReferenceImageDescription } from '@/shared/prompts/reference-image-prompt';
 import {
   matchCharactersToShotImage,

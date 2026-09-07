@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { DEFAULT_VISION_MODEL } from '@/shared/ai/models.config';
-import { strongestSubjectKind } from '@/shared/talent/subject-kind';
+import { strongestSubjectKind } from '@/cast/subject-kind';
 import {
   buildTalentVisionMessages,
   talentMediaAnalysisSchema,

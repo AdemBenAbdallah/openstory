@@ -11,7 +11,7 @@
  * step can re-derive it from a row the user edited in the meantime.
  */
 
-import { migrateStyleConfigV1ToV2 } from '@/shared/style/style-config';
+import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { describe, expect, test, vi } from 'vitest';
 import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/shared/ai/models';
 import { DEFAULT_ANALYSIS_MODEL } from '@/shared/ai/models.config';

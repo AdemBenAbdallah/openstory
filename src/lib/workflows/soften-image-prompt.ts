@@ -37,7 +37,7 @@ import {
   IMAGE_CONTENT_FALLBACK_MODEL,
   softenRejectedImagePrompt,
 } from '@/lib/workflows/content-soften';
-import { computeShotImageSceneHash } from '@/lib/workflows/sheet-snapshots';
+import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 import type { WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
 

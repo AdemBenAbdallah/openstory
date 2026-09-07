@@ -9,7 +9,7 @@ import {
   type SequenceWithShots,
 } from '@/hooks/use-sequences-with-shots';
 import { useTeamDivergentSequenceVariants } from '@/hooks/use-sequence-variants';
-import { useStyles } from '@/hooks/use-styles';
+import { useStyles } from '@/look/ui/use-styles';
 import { isSystemAdminFn } from '@/functions/gift-tokens';
 import { useQuery, useInfiniteQuery, useQueries } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
