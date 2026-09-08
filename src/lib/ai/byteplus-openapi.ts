@@ -5,6 +5,8 @@
  * that `@tanstack/ai-byteplus` drives with `ARK_API_KEY`. Assets live here.
  */
 
+import { acquireBytePlusOpenApiToken } from '@/lib/ai/byteplus-governor';
+import { withBytePlusQuotaRetry } from '@/lib/ai/byteplus-rate-limit';
 import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
 import {
   buildCanonicalQuery,
@@ -36,6 +38,22 @@ export async function bytePlusOpenApi<T>(
    * Without it a successful delete reads as "returned no Result" and the
    * caller leaks the Ark slot it just dropped from its own ledger.
    */
+  options?: { allowEmptyResult?: boolean }
+): Promise<T> {
+  // Every Assets action passes through here (#1519): the governor DO paces
+  // calls under the account quota, and the backoff retry is the backstop for
+  // a throttle it did not model. A throttled ingest used to fall through to
+  // the public URL, which Ark then rejects as a possible real person.
+  return withBytePlusQuotaRetry(`BytePlus ${action}`, async () => {
+    await acquireBytePlusOpenApiToken(action);
+    return bytePlusOpenApiOnce<T>(config, action, body, options);
+  });
+}
+
+async function bytePlusOpenApiOnce<T>(
+  config: BytePlusOpenApiConfig,
+  action: string,
+  body: Record<string, unknown>,
   options?: { allowEmptyResult?: boolean }
 ): Promise<T> {
   const host = config.host ?? DEFAULT_BYTEPLUS_OPENAPI_HOST;

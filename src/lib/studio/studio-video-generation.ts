@@ -5,11 +5,12 @@
  */
 
 import { getEnv } from '#env';
+import { toArkFetchableUrl } from '@/lib/ai/byteplus-asset-ingest';
 import {
-  toArkFetchableUrl,
-  toArkMediaUrl,
-} from '@/lib/ai/byteplus-asset-ingest';
-import type { AssetPoolLedger } from '@/lib/ai/byteplus-asset-pool';
+  arkUrlFor,
+  type ArkAssetMap,
+  type ArkStill,
+} from '@/lib/ai/byteplus-asset-steps';
 import {
   arkAdapterConfig,
   claimBytePlusVia,
@@ -17,9 +18,8 @@ import {
   isBytePlusConfigured,
   loadBytePlusVideo,
 } from '@/lib/ai/byteplus-config';
-import { reportBytePlusPortraitFilterFallback } from '@/lib/ai/byteplus-observability';
 import {
-  BYTEPLUS_PORTRAIT_FILTER_NO_FAL_MESSAGE,
+  BYTEPLUS_PORTRAIT_FILTER_MESSAGE,
   isBytePlusPortraitFilterError,
 } from '@/lib/ai/byteplus-portrait-filter';
 import { bytePlusVideoUnitsBilled } from '@/lib/ai/byteplus-pricing';
@@ -283,39 +283,45 @@ async function submitFalStudioVideoJob(
   };
 }
 
-async function fallbackStudioPortraitFilterToFal(
-  error: unknown,
-  options: StudioVideoJobOptions,
-  modelKey: ImageToVideoModel,
-  mode: StudioVideoMode
-): Promise<StudioVideoJobSubmission> {
-  if (!isBytePlusPortraitFilterError(error)) throw error;
-  const falKey = await resolveOptionalFalKey(options.scopedDb);
-  if (!falKey) {
-    throw new Error(BYTEPLUS_PORTRAIT_FILTER_NO_FAL_MESSAGE);
-  }
-  reportBytePlusPortraitFilterFallback('studio motion submit');
-  return submitFalStudioVideoJob(options, modelKey, mode);
-}
-
-async function urlPart(
+function urlPart(
   url: string,
   role: 'start_frame' | 'end_frame' | 'reference' | undefined,
-  ledger: AssetPoolLedger,
-  falApiKey?: string
+  arkAssets: ArkAssetMap
 ) {
-  // Start frame, end frame, and reference stills all go through the
-  // virtual library. A public URL of a photorealistic face 400s.
-  const value = await toArkMediaUrl(url, {
-    ledger,
-    slot: role === 'reference' ? 'library' : 'frame',
-    ...(falApiKey && { falApiKey }),
-  });
+  // Start frame, end frame, and reference stills were all registered by the
+  // workflow (`arkStillsForStudio` → `ingestArkAssets`, #1519); a public URL
+  // of a photorealistic face 400s, and a still missing from the map throws.
   return {
     type: 'image' as const,
-    source: { type: 'url' as const, value },
+    source: { type: 'url' as const, value: arkUrlFor(arkAssets, url) },
     ...(role && { metadata: { role } }),
   };
+}
+
+/**
+ * The stills a BytePlus studio submit needs registered: every image the
+ * user supplied (they are uploads — any of them may be a face). Videos and
+ * audio are not assets.
+ */
+export function arkStillsForStudio(
+  options: Pick<
+    StudioVideoJobOptions,
+    'mode' | 'referenceImages' | 'startImageUrl' | 'endImageUrl'
+  >
+): ArkStill[] {
+  const mode = options.mode ?? 'text';
+  if (mode === 'reference') {
+    return (options.referenceImages ?? []).map((storedUrl) => ({
+      storedUrl,
+      slot: 'library' as const,
+    }));
+  }
+  if (mode === 'frames') {
+    return [options.startImageUrl, options.endImageUrl]
+      .filter((url): url is string => Boolean(url))
+      .map((storedUrl) => ({ storedUrl, slot: 'frame' as const }));
+  }
+  return [];
 }
 
 async function buildStudioBytePlusPrompt(
@@ -324,13 +330,11 @@ async function buildStudioBytePlusPrompt(
   promptText: string
 ) {
   if (mode === 'text') return promptText;
-  const falKey = await resolveOptionalFalKey(options.scopedDb);
 
   if (mode === 'reference') {
-    const images = await Promise.all(
-      (options.referenceImages ?? []).map((url) =>
-        urlPart(url, 'reference', options.assetLedger, falKey?.key)
-      )
+    const falKey = await resolveOptionalFalKey(options.scopedDb);
+    const images = (options.referenceImages ?? []).map((url) =>
+      urlPart(url, 'reference', options.arkAssets)
     );
     const videos = await Promise.all(
       (options.referenceVideos ?? []).map(async (url) => ({
@@ -363,30 +367,18 @@ async function buildStudioBytePlusPrompt(
     throw new Error('Studio image-to-video needs a start frame');
   }
   const frames = [
-    await urlPart(
-      options.startImageUrl,
-      'start_frame',
-      options.assetLedger,
-      falKey?.key
-    ),
+    urlPart(options.startImageUrl, 'start_frame', options.arkAssets),
   ];
   if (options.endImageUrl) {
-    frames.push(
-      await urlPart(
-        options.endImageUrl,
-        'end_frame',
-        options.assetLedger,
-        falKey?.key
-      )
-    );
+    frames.push(urlPart(options.endImageUrl, 'end_frame', options.arkAssets));
   }
   return [{ type: 'text' as const, content: promptText }, ...frames];
 }
 
-/** Submitting leases ACR slots (#1361); building the request does not. */
+/** Submitting needs the registered stills (#1519); estimating does not. */
 export type SubmitStudioVideoOptions = StudioVideoJobOptions & {
-  /** `scopedDb.bytePlusAssets` — see `SubmitMotionOptions.assetLedger`. */
-  assetLedger: AssetPoolLedger;
+  /** From `ingestArkAssets` over `arkStillsForStudio` — see `SubmitMotionOptions.arkAssets`. */
+  arkAssets: ArkAssetMap;
 };
 
 export async function submitStudioVideoJob(
@@ -644,12 +636,12 @@ export async function submitStudioVideoJob(
           usedOwnKey: false,
         };
       } catch (error) {
-        return fallbackStudioPortraitFilterToFal(
-          error,
-          options,
-          modelKey,
-          mode
-        );
+        // No fal fallback (#1519): an Ark rejection is the failure the user
+        // sees and retries against.
+        if (isBytePlusPortraitFilterError(error)) {
+          throw new Error(BYTEPLUS_PORTRAIT_FILTER_MESSAGE, { cause: error });
+        }
+        throw error;
       }
     }
     case 'fal': {

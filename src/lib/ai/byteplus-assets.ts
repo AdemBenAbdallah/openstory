@@ -8,13 +8,12 @@
  * to complete H5 verification — out of scope here.
  */
 
+import { aigcGroupName } from './byteplus-config';
 import {
   bytePlusOpenApi,
   withProject,
   type BytePlusOpenApiConfig,
 } from './byteplus-openapi';
-
-export const OPENSTORY_AIGC_GROUP_NAME = 'openstory-virtual';
 
 export type BytePlusAssetKind = 'Image' | 'Video' | 'Audio';
 type BytePlusAssetStatus = 'Active' | 'Processing' | 'Failed';
@@ -25,9 +24,11 @@ export type BytePlusAsset = {
   Status?: BytePlusAssetStatus;
   AssetType?: BytePlusAssetKind;
   GroupId?: string;
+  /** ISO 8601, e.g. `2026-03-20T14:24:52Z`. */
+  CreateTime?: string;
 };
 
-export type BytePlusAssetGroup = {
+type BytePlusAssetGroup = {
   Id?: string;
   Name?: string;
   GroupType?: string;
@@ -83,15 +84,30 @@ async function createAssetGroup(
   return result.Id;
 }
 
-async function resolveAigcGroupId(
+/**
+ * The group never changes once created, and looking it up per still is what
+ * tripped `AccountFlowLimitExceeded` on ListAssetGroups (#1519). Keyed by
+ * access key so two accounts in one isolate (tests) cannot share an id.
+ */
+const aigcGroupIdByAccount = new Map<string, Promise<string>>();
+
+export async function resolveAigcGroupId(
   config: BytePlusOpenApiConfig,
   existingGroupId?: string
 ): Promise<string> {
   if (existingGroupId) return existingGroupId;
-  const existing = await listAssetGroups(config, OPENSTORY_AIGC_GROUP_NAME);
-  const found = existing[0]?.Id;
-  if (found) return found;
-  return createAssetGroup(config, OPENSTORY_AIGC_GROUP_NAME);
+  const cached = aigcGroupIdByAccount.get(config.accessKey);
+  if (cached) return cached;
+  const lookup = (async () => {
+    const name = aigcGroupName();
+    const existing = await listAssetGroups(config, name);
+    const found = existing[0]?.Id;
+    if (found) return found;
+    return createAssetGroup(config, name);
+  })();
+  aigcGroupIdByAccount.set(config.accessKey, lookup);
+  lookup.catch(() => aigcGroupIdByAccount.delete(config.accessKey));
+  return lookup;
 }
 
 async function listAssetsByName(
@@ -109,6 +125,33 @@ async function listAssetsByName(
     })
   );
   return (result.Items ?? []).filter((item) => item.Name === name);
+}
+
+/** Every asset in a group, all pages. The sweep's view of Ark (#1519). */
+export async function listAssetsInGroup(
+  config: BytePlusOpenApiConfig,
+  groupId: string
+): Promise<BytePlusAsset[]> {
+  const pageSize = 100;
+  const all: BytePlusAsset[] = [];
+  for (let page = 1; page <= 50; page += 1) {
+    const result = await bytePlusOpenApi<{
+      Items?: BytePlusAsset[];
+      TotalCount?: number;
+    }>(
+      config,
+      'ListAssets',
+      withProject(config, {
+        Filter: { GroupIds: [groupId], GroupType: 'AIGC' },
+        PageNumber: page,
+        PageSize: pageSize,
+      })
+    );
+    const items = result.Items ?? [];
+    all.push(...items);
+    if (items.length < pageSize) break;
+  }
+  return all;
 }
 
 async function createAsset(

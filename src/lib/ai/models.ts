@@ -123,6 +123,10 @@ export const IMAGE_TO_VIDEO_MODELS = {
     qualityRank: 4,
     maxPromptLength: 4096,
     performance: { estimatedGenerationTime: 208, quality: 'best' as const },
+    // Native BytePlus Ark route (#1519). fal enterprise 2.0 stays the fal via
+    // (it takes photoreal faces without asset ingest, unlike public 2.0), so
+    // this model is offered everywhere and only the route changes.
+    byteplusId: 'dreamina-seedance-2-0-260128' as const,
   },
   seedance_v2_5: {
     id: 'bytedance/seedance-2.5/image-to-video',
@@ -132,16 +136,31 @@ export const IMAGE_TO_VIDEO_MODELS = {
     qualityRank: 2,
     maxPromptLength: 4096,
     performance: { estimatedGenerationTime: 208, quality: 'best' as const },
-    // Hidden from sequence/studio pickers: public fal 2.5 400s photoreal
-    // faces without Ark `asset://` ingest, and we are not rolling Ark out.
-    // Catalog key stays so a later Ark enablement does not need a rename.
-    hidden: true,
+    // Offered only where the BytePlus via is live (#1519): public fal 2.5
+    // 400s photoreal faces without Ark `asset://` ingest, so on a fal-only
+    // deployment (production, while the Ark hold stands) it stays out of the
+    // pickers and the pricing page. See `isOfferedVideoModel`.
+    requiresVia: 'byteplus' as const,
     // Native BytePlus Ark route (#1157). Must be activated in the Ark console
     // first — an unopened model answers 404 ModelNotOpen at request time. The
     // Ark route requests 720p (see BYTEPLUS_RESOLUTION); the rate card's
     // $10.70/1M-token entry is exact for that tier only. fal has no
     // enterprise 2.5 (those paths 404); public 2.5 is the fal via.
     byteplusId: 'dreamina-seedance-2-5-260628' as const,
+  },
+  seedance_v2_mini: {
+    id: 'bytedance/seedance-2.0/mini/image-to-video',
+    name: 'Seedance 2.0 Mini',
+    vendor: 'ByteDance',
+    license: 'proprietary' as const,
+    qualityRank: 6,
+    maxPromptLength: 4096,
+    performance: { estimatedGenerationTime: 120, quality: 'best' as const },
+    // Half the 2.0 rate, 720p ceiling, 4–15s. fal has no enterprise mini, so
+    // like 2.5 the public fal endpoint 400s photoreal faces: offered only
+    // where the BytePlus via (with asset ingest) is live (#1519).
+    requiresVia: 'byteplus' as const,
+    byteplusId: 'dreamina-seedance-2-0-mini-260615' as const,
   },
 } as const;
 
@@ -484,9 +503,25 @@ function getModelsForAspectRatio(
   return Object.keys(IMAGE_TO_VIDEO_MODELS).filter(
     (key): key is ImageToVideoModel =>
       isValidImageToVideoModel(key) &&
-      !('hidden' in IMAGE_TO_VIDEO_MODELS[key]) &&
+      isOfferedVideoModel(key) &&
       isModelCompatibleWithAspectRatio(key, aspectRatio)
   );
+}
+
+/**
+ * Should a picker or the pricing page list this video model? `hidden` is
+ * never offered; `requiresVia` is offered only when that native via is
+ * reachable. No `vias` is the conservative answer (fal-only), which is what
+ * an anonymous visitor and any server-side fallback get.
+ */
+export function isOfferedVideoModel(
+  model: ImageToVideoModel,
+  vias: { byteplus?: boolean } = {}
+): boolean {
+  const entry = IMAGE_TO_VIDEO_MODELS[model];
+  if ('hidden' in entry) return false;
+  if ('requiresVia' in entry) return vias[entry.requiresVia] === true;
+  return true;
 }
 
 /**
@@ -741,6 +776,12 @@ export const MOTION_REFERENCE_ENDPOINTS: Partial<
   seedance_v2_5: {
     endpointId: 'bytedance/seedance-2.5/reference-to-video',
     textToVideoEndpointId: 'bytedance/seedance-2.5/text-to-video',
+    tag: (position) => `@Image${position}`,
+    maxImages: 9,
+  },
+  seedance_v2_mini: {
+    endpointId: 'bytedance/seedance-2.0/mini/reference-to-video',
+    textToVideoEndpointId: 'bytedance/seedance-2.0/mini/text-to-video',
     tag: (position) => `@Image${position}`,
     maxImages: 9,
   },
