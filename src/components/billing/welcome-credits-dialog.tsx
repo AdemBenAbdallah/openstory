@@ -1,7 +1,7 @@
 /**
  * Welcome Credits Dialog (#1096, #1516)
  *
- * - **claim**: Stripe on, welcome grant unpaid. Add a card (Stripe Checkout setup,
+ * - **claim**: Stripe on, $20 unpaid. Add a card (Stripe Checkout setup,
  *   no charge) to unlock it.
  * - **gift**: unused signup grant and Stripe off (e2e / self-host).
  *
