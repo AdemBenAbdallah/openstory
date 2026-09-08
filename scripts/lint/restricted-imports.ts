@@ -134,6 +134,39 @@ function create(context: Context) {
   };
 }
 
+/**
+ * `boundaries/wrong-place`: fires on every file it is enabled for. There is
+ * nothing to inspect — the override's `files` glob IS the rule — so the
+ * message is the whole config. Used to keep tests out of src/routes, where
+ * the router plugin would generate them into the route tree.
+ */
+const WRONG_PLACE_SCHEMA = [
+  {
+    type: 'object',
+    properties: { message: { type: 'string' } },
+    required: ['message'],
+    additionalProperties: false,
+  },
+];
+const wrongPlace = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'This kind of file does not belong in this folder' },
+    schema: WRONG_PLACE_SCHEMA,
+  },
+  create(context: {
+    options: { message: string }[];
+    report(d: { loc: SourceLocation; message: string }): void;
+  }) {
+    const message = context.options[0]?.message ?? 'wrong place';
+    return {
+      Program: (node: BaseNode) => {
+        if (node.loc) context.report({ loc: node.loc, message });
+      },
+    };
+  },
+};
+
 function rule(description: string) {
   return {
     meta: { type: 'problem', docs: { description }, schema: OPTIONS_SCHEMA },
@@ -155,5 +188,6 @@ export default {
     'platform-domain-blind': rule(
       'src/platform may not value-import a product domain'
     ),
+    'wrong-place': wrongPlace,
   },
 };

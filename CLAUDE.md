@@ -685,7 +685,7 @@ See `src/ui/` and any domain's `ui/` for the house pattern.
 
 **Unit-test framework:** Vitest (run via `bun run test`, never `bun test` — that invokes Bun's built-in runner and ignores `vitest.config.ts`).
 
-- Server handlers: `__tests__/` alongside routes.
+- Route handlers: test the logic next to where it lives (the domain's `server/` folder, e.g. `platform/server/api-v1/device-routes.test.ts`). Never put a test under `src/routes/` — every file there becomes a route (`boundaries/wrong-place` fails it).
 - Services/utils: co-located (`service.test.ts`).
 - Focus: business logic, not React components.
 - DB: mock `#db-client` via `vi.doMock` (not real connections); ULID primary keys.

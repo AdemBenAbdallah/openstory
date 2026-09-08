@@ -219,6 +219,26 @@
       }
     },
     {
+      // src/routes is the router's input: every file in it becomes a route
+      // (there is no routeFileIgnorePattern). Tests for a route's handler
+      // live next to the handler logic in the domain's server/ folder
+      // (e.g. platform/server/api-v1/device-routes.test.ts).
+      "files": [
+        "src/routes/**/*.test.ts",
+        "src/routes/**/*.test.tsx",
+        "src/routes/**/__tests__/**",
+        "src/routes/**/*.stories.tsx"
+      ],
+      "rules": {
+        "boundaries/wrong-place": [
+          "error",
+          {
+            "message": "Tests and stories do not live in src/routes — the router turns every file here into a route. Put the test next to the handler logic it covers (the domain's server/ folder)."
+          }
+        ]
+      }
+    },
+    {
       // Composition roots: the few platform files whose job is to wire every
       // domain together. Keep this list short — a new entry usually means a
       // file that belongs in a domain. Pinned by src/platform/domain-blind.test.ts.
