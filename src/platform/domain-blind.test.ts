@@ -1,6 +1,6 @@
 /**
  * Platform is domain-blind (#1489): nothing under `src/platform` may
- * value-import a product domain. The `no-restricted-imports` overrides in
+ * value-import a product domain. The `boundaries/platform-domain-blind` rule in
  * `.oxlintrc.json` say the same thing per file, but they match the `@/`
  * alias only — a relative `../../shots/…` walks straight past them. This test
  * resolves every value import instead, and pins the composition-root list

@@ -1,7 +1,7 @@
 import { getEnv } from '#env';
 // Used only inside createIsomorphicFn().server(…) below. The Start compiler
 // strips that body from the client build; the boundary test models the strip.
-// oxlint-disable-next-line no-restricted-imports
+// oxlint-disable-next-line boundaries/no-server-imports
 import { getProductionDeploymentAppUrl } from '@/platform/server/env/environment';
 import { DocsReferrerTracker } from '@/ui/docs/docs-referrer-tracker';
 import { DefaultNotFound } from '@/ui/error/default-not-found';

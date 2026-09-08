@@ -14,7 +14,7 @@
  *
  *  1. A `SERVER_ONLY` package specifier (below).
  *  2. Any file under a domain `server/` directory. The per-file half of this
- *     rule is `no-restricted-imports` in `.oxlintrc.json` (the
+ *     rule is `boundaries/no-server-imports` in `.oxlintrc.json` (the
  *     `@/<domain>/server/` pattern). `*.fn.ts` is exempt from that pattern
  *     because the compiler strips `.handler()`; this walk models that
  *     stripping.
@@ -215,7 +215,7 @@ function rootsAtServerFnBuilder(node: Node): boolean {
  * followed (see the import handling below).
  *
  * Dynamic `import()` keeps a module out of the eager graph, but it is not a
- * free pass: `no-restricted-imports` matches it too, so using it against
+ * free pass: `boundaries/no-server-imports` matches it too, so using it against
  * `@/lib/**` from a client file still needs an explicit `oxlint-disable`.
  */
 export function clientRetainedImports(source: string): string[] {
@@ -412,58 +412,6 @@ describe('client/server import boundary', () => {
         '@/platform/server/observability/posthog-server'
       );
     });
-  });
-
-  test('every no-restricted-imports override narrows the base `paths`, never drifts', () => {
-    // oxlint overrides REPLACE a rule's config rather than merging it, so
-    // every override that re-declares the rule carries its own copy of the
-    // `paths` entries. Nothing else keeps the copies in sync: editing an entry
-    // in the base block alone would silently leave the overrides on the old
-    // text. Each override entry must deep-equal a base entry (so the copies
-    // cannot drift), and every boundary override (one carrying the
-    // `@/**/server/**` pattern) must carry the whole base list — it only ADDS
-    // patterns. The db-access overrides at the bottom of the file deliberately
-    // keep a subset — one capability each — whether or not they also carry
-    // the platform domain-ban pattern (#1489).
-    const raw = readFileSync(join(SRC, '.oxlintrc.json'), 'utf8');
-    const parsed: unknown = JSON.parse(raw.replace(/^\s*\/\/.*$/gm, ''));
-    type Config = {
-      rules: Record<string, unknown>;
-      overrides: { files: string[]; rules: Record<string, unknown> }[];
-    };
-    const isConfig = (v: unknown): v is Config =>
-      typeof v === 'object' && v !== null && 'rules' in v && 'overrides' in v;
-    if (!isConfig(parsed)) throw new Error('.oxlintrc.json shape changed');
-    const config = parsed;
-    type Rule = [string, { paths: unknown[]; patterns?: unknown[] }];
-    const isRule = (v: unknown): v is Rule =>
-      Array.isArray(v) &&
-      typeof v[1] === 'object' &&
-      v[1] !== null &&
-      'paths' in v[1];
-    const base = config.rules['no-restricted-imports'];
-    if (!isRule(base)) throw new Error('base no-restricted-imports missing');
-    const baseEntries = base[1].paths.map((p) => JSON.stringify(p));
-    let overridesSeen = 0;
-    for (const o of config.overrides) {
-      const rule = o.rules['no-restricted-imports'];
-      if (!isRule(rule)) continue;
-      overridesSeen++;
-      for (const p of rule[1].paths) {
-        expect(baseEntries, `override ${o.files.join(', ')} drifted`).toContain(
-          JSON.stringify(p)
-        );
-      }
-      const isBoundary = rule[1].patterns?.some((p) =>
-        JSON.stringify(p).includes('@/**/server/')
-      );
-      if (isBoundary) {
-        expect(rule[1].paths.map((p) => JSON.stringify(p))).toEqual(
-          baseEntries
-        );
-      }
-    }
-    expect(overridesSeen).toBeGreaterThan(1);
   });
 
   test('the lint rule does not punch holes in the server/ import ban', () => {

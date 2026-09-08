@@ -1,7 +1,7 @@
 /**
  * Pins who may reach the raw D1 handle and who may mint a ScopedDb.
  *
- * The `no-restricted-imports` rule in `.oxlintrc.json` says the same thing,
+ * The `boundaries/no-raw-db` / `boundaries/no-scoped-factory` rules in `.oxlintrc.json` says the same thing,
  * but it matches the literal specifier: `import { getDb } from './client-d1'`
  * or `from '../db/scoped'` walks straight past it. This test resolves every
  * value import (alias, relative, bare) to the file it lands on, so the

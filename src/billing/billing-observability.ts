@@ -11,7 +11,7 @@
 
 // The Start compiler strips `.server(…)` from the client build, so this value
 // import never ships; the transitive boundary test models that strip.
-// oxlint-disable-next-line no-restricted-imports
+// oxlint-disable-next-line boundaries/no-server-imports
 import { getPostHogClient } from '@/platform/server/observability/posthog-server';
 import { getLogger } from '@/platform/logger';
 import { createIsomorphicFn } from '@tanstack/react-start';
