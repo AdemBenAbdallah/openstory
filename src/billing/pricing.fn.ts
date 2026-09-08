@@ -1,3 +1,4 @@
+import { getEnv } from '#env';
 import { isBytePlusConfigured } from '@/models/server/byteplus-config';
 import {
   getEffectiveFalPricing,
@@ -8,6 +9,7 @@ import {
   buildFilmCostExamples,
   type FilmCostExamples,
 } from '@/billing/server/film-cost-examples';
+import { isPhoneVerificationEnabled } from '@/billing/server/phone-verification';
 import {
   buildPricingCatalog,
   type PricingCatalog,
@@ -32,7 +34,11 @@ import { resolutionSchema } from '@/models/resolutions';
 /** Public pricing catalog for the /pricing page, from live `model_pricing`. */
 export const getPricingCatalogFn = createServerFn({ method: 'GET' }).handler(
   async (): Promise<
-    PricingCatalog & { filmCosts: FilmCostExamples | null }
+    PricingCatalog & {
+      filmCosts: FilmCostExamples | null;
+      /** Welcome grant can be unlocked by SMS as well as by card (#1539). */
+      phoneVerification: boolean;
+    }
   > => {
     const [falPricing, falUpdatedAt] = await Promise.all([
       getEffectiveFalPricing(),
@@ -42,9 +48,15 @@ export const getPricingCatalogFn = createServerFn({ method: 'GET' }).handler(
       ...buildPricingCatalog({
         falPricing,
         falUpdatedAt,
-        byteplusEnabled: isBytePlusConfigured(),
+        // Platform keys only — the page is public, so no team BYOK applies.
+        vias: {
+          byteplus: isBytePlusConfigured(),
+          xai: Boolean(getEnv().XAI_API_KEY),
+          google: Boolean(getEnv().GEMINI_API_KEY),
+        },
       }),
       filmCosts: buildFilmCostExamples(falPricing),
+      phoneVerification: isPhoneVerificationEnabled(),
     };
   }
 );

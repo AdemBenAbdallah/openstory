@@ -55,6 +55,12 @@ const BYTEPLUS_QUOTA_MARKERS = [
   'too many requests',
   'serverovervalue',
   'concurrency',
+  // Assets OpenAPI (#1519): `AccountFlowLimitExceeded` on List*, and
+  // `QuotaWriteQPMExceeded` on CreateAsset — a batch fanning out shots that
+  // each ingest every reference sheet trips both.
+  'flowlimitexceeded',
+  'flow control',
+  'qpmexceeded',
 ];
 
 const LLM_QUOTA_MARKERS = [

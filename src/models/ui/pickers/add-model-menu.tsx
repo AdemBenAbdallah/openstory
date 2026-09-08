@@ -15,6 +15,7 @@ import {
   IMAGE_MODELS,
   IMAGE_TO_VIDEO_MODELS,
   isModelCompatibleWithAspectRatio,
+  isOfferedVideoModel,
   isValidAudioModel,
   isValidImageToVideoModel,
   isValidTextToImageModel,
@@ -79,7 +80,8 @@ export const AddModelMenuSection = ({
   // Only the DEFAULT — `rendersReferenceOnly` resolves each shot's override
   // against it below.
   const generateStartFrames = sequence?.generateStartFrames ?? false;
-  const { referenceOnlyModels } = useViaAvailability();
+  const vias = useViaAvailability();
+  const { referenceOnlyModels } = vias;
   // Style-category gating (mirrors motion-model-selector): a model declaring a
   // `requiredStyleCategory` (none currently declare one) is only offered when
   // the sequence's style matches — otherwise it isn't a valid choice here.
@@ -139,7 +141,7 @@ export const AddModelMenuSection = ({
         .filter(isValidImageToVideoModel)
         .filter((key) => {
           const model = IMAGE_TO_VIDEO_MODELS[key];
-          if (used.has(key) || 'hidden' in model) return false;
+          if (used.has(key) || !isOfferedVideoModel(key, vias)) return false;
           if (anyReferenceOnly && !referenceOnlyModels.includes(key)) {
             return false;
           }
@@ -205,6 +207,7 @@ export const AddModelMenuSection = ({
     styleCategory,
     generateStartFrames,
     referenceOnlyModels,
+    vias,
   ]);
 
   if (candidates.length === 0) return null;

@@ -1,5 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { unledgeredAssetPool } from '@/models/server/byteplus-asset-pool';
+import type { ArkAssetMap } from '@/models/server/byteplus-asset-steps';
+
+/** What `ingestArkAssets` would have produced: every still registered. */
+const registeredAssets: ArkAssetMap = new Proxy(
+  {},
+  { get: (_, key) => (typeof key === 'string' ? `asset://${key}` : undefined) }
+);
 import {
   mockFalVideo,
   mockGenerateVideo,
@@ -87,7 +93,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'seedance_v2_5',
       duration: 5,
@@ -127,7 +133,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'Image1 walks past Image2',
       model: 'minimax_h3_max',
       mode: 'reference',
@@ -179,7 +185,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'grok_imagine_video_1_5',
       duration: 5,
@@ -206,7 +212,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'gemini_omni_flash',
       duration: 5,
@@ -242,7 +248,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'Camera pushes in',
       model: 'gemini_omni_flash',
       mode: 'frames',
@@ -278,7 +284,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'Image1 walks past Image2',
       model: 'gemini_omni_flash',
       mode: 'reference',
@@ -323,7 +329,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'gemini_omni_flash',
       duration: 5,
@@ -341,7 +347,7 @@ describe('submitStudioVideoJob', () => {
     });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'grok_imagine_video_1_5',
       duration: 5,
@@ -357,7 +363,7 @@ describe('submitStudioVideoJob', () => {
     mockGenerateVideo.mockResolvedValue({ jobId: 'ark-t2v' });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'A red fox turns toward camera',
       model: 'seedance_v2_5',
       duration: 5,
@@ -378,29 +384,26 @@ describe('submitStudioVideoJob', () => {
     );
   });
 
-  it('falls back to fal when Ark rejects a studio still as a possible real person', async () => {
+  it('never falls back to fal when Ark rejects a studio still as a possible real person (#1519)', async () => {
     testEnv.ARK_API_KEY = 'ark-test';
-    mockGenerateVideo
-      .mockRejectedValueOnce(
-        new Error(
-          "BytePlus Ark video task creation failed (400 InputImageSensitiveContentDetected.PrivacyInformation): The request failed because the input image 'content[1]' may contain real person."
-        )
+    mockGenerateVideo.mockRejectedValue(
+      new Error(
+        "BytePlus Ark video task creation failed (400 InputImageSensitiveContentDetected.PrivacyInformation): The request failed because the input image 'content[1]' may contain real person."
       )
-      .mockResolvedValueOnce({ jobId: 'fal-after-ark' });
+    );
 
-    const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
-      prompt: 'Camera pushes in',
-      model: 'seedance_v2_5',
-      mode: 'frames',
-      startImageUrl: 'https://example.com/start.jpg',
-      duration: 5,
-    });
-
-    expect(result.via).toBe('fal');
-    expect(result.jobId).toBe('fal-after-ark');
-    expect(mockFalVideo).toHaveBeenCalled();
-    expect(mockGenerateVideo).toHaveBeenCalledTimes(2);
+    await expect(
+      submitStudioVideoJob({
+        arkAssets: registeredAssets,
+        prompt: 'Camera pushes in',
+        model: 'seedance_v2_5',
+        mode: 'frames',
+        startImageUrl: 'https://example.com/start.jpg',
+        duration: 5,
+      })
+    ).rejects.toThrow(/asset:\/\//);
+    expect(mockFalVideo).not.toHaveBeenCalled();
+    expect(mockGenerateVideo).toHaveBeenCalledTimes(1);
   });
 
   it('sends studio frames to Ark as start_frame / end_frame', async () => {
@@ -408,7 +411,7 @@ describe('submitStudioVideoJob', () => {
     mockGenerateVideo.mockResolvedValue({ jobId: 'ark-frames' });
 
     const result = await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'Camera pushes in',
       model: 'seedance_v2_5',
       mode: 'frames',
@@ -424,12 +427,18 @@ describe('submitStudioVideoJob', () => {
           { type: 'text', content: expect.any(String) },
           {
             type: 'image',
-            source: { type: 'url', value: 'https://example.com/start.jpg' },
+            source: {
+              type: 'url',
+              value: 'asset://https://example.com/start.jpg',
+            },
             metadata: { role: 'start_frame' },
           },
           {
             type: 'image',
-            source: { type: 'url', value: 'https://example.com/end.jpg' },
+            source: {
+              type: 'url',
+              value: 'asset://https://example.com/end.jpg',
+            },
             metadata: { role: 'end_frame' },
           },
         ],
@@ -442,7 +451,7 @@ describe('submitStudioVideoJob', () => {
     mockGenerateVideo.mockResolvedValue({ jobId: 'ark-refs' });
 
     await submitStudioVideoJob({
-      assetLedger: unledgeredAssetPool,
+      arkAssets: registeredAssets,
       prompt: 'The fox walks',
       model: 'seedance_v2_5',
       mode: 'reference',
@@ -457,7 +466,10 @@ describe('submitStudioVideoJob', () => {
           { type: 'text', content: expect.any(String) },
           {
             type: 'image',
-            source: { type: 'url', value: 'https://example.com/fox.jpg' },
+            source: {
+              type: 'url',
+              value: 'asset://https://example.com/fox.jpg',
+            },
             metadata: { role: 'reference' },
           },
           {

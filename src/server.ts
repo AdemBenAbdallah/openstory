@@ -23,6 +23,10 @@ import {
   FAL_BILLING_RECONCILE_CRON,
   reconcileFalBilling,
 } from '@/billing/server/reconcile-fal-billing';
+import {
+  BYTEPLUS_ASSETS_RECONCILE_CRON,
+  reconcileBytePlusAssets,
+} from '@/models/server/reconcile-byteplus-assets';
 import { ensureLocalModelPricingSeeded } from '@/billing/server/seed-model-pricing';
 import { ensureSystemTemplatesSeeded } from '@/platform/server/db/seed-system-templates';
 
@@ -114,6 +118,7 @@ export { StudioGenerationWorkflow } from '@/studio/server/workflows/studio-gener
 // Realtime broker Durable Object. Re-exported so the binding's `class_name`
 // in wrangler.jsonc resolves in the Worker bundle (#802).
 export { RealtimeChannel } from '@/platform/server/realtime/realtime-channel.do';
+export { BytePlusGovernor } from '@/models/server/byteplus-governor.do';
 
 // Server-side video-export container DO (#968). Production-only binding
 // (`VIDEO_EXPORT_CONTAINER`); re-exported so its `class_name` resolves in the
@@ -170,6 +175,15 @@ const exportedHandler: ExportedHandler<WorkerEnv> = {
       ctx.waitUntil(
         reconcileFalBilling().catch((error) => {
           logger.error('reconcileFalBilling failed:', { err: error });
+        })
+      );
+      return;
+    }
+    // Hourly diff of the BytePlus asset group against the ledger (#1519).
+    if (controller.cron === BYTEPLUS_ASSETS_RECONCILE_CRON) {
+      ctx.waitUntil(
+        reconcileBytePlusAssets().catch((error) => {
+          logger.error('reconcileBytePlusAssets failed:', { err: error });
         })
       );
       return;

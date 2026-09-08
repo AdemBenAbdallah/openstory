@@ -28,6 +28,8 @@ const logger = getLogger(['openstory', 'workflow', 'motion-prompt']);
 
 export type MotionPromptWorkflowResult = {
   sceneId: string;
+  /** Clip this prompt belongs to. Omitted on pre-#1486 children. */
+  shotId?: string;
   motionPrompt: MotionPrompt;
   /**
    * The version id that ended up live for this run (#1067) — the completed
@@ -256,7 +258,7 @@ export class MotionPromptWorkflow extends OpenStoryWorkflowEntrypoint<MotionProm
         }
       );
     }
-    return { sceneId: scene.sceneId, motionPrompt, finalVersionId };
+    return { sceneId: scene.sceneId, shotId, motionPrompt, finalVersionId };
   }
 
   protected override async onFailure({

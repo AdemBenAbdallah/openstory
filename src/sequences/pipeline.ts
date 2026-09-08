@@ -319,6 +319,7 @@ export type GenerationCheckpoint = {
     analysisSceneId: string;
     shotId: string;
     frameId: string | null;
+    shotNumber?: number;
   }>;
   characterBible?: CharacterBibleEntry[];
   locationBible?: LocationBibleEntry[];
@@ -402,4 +403,13 @@ const STOP_AFTER_SENTENCE: Record<GenerationStage, string> = {
 
 export function stopAfterSentence(stopAt: GenerationStage): string {
   return STOP_AFTER_SENTENCE[stopAt];
+}
+
+/**
+ * The Generate-button scope line (#1526): names the current stop-at.
+ * Same "Stops after {stage}" copy as main; a full run is "Whole sequence".
+ */
+export function runScopeLabel(stopAt: GenerationStage): string {
+  if (stopAt === 'music' || stopAt === 'motion') return 'Whole sequence';
+  return `Stops after ${sliderStopLabel(stopAt)}`;
 }

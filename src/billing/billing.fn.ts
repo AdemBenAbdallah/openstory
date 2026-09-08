@@ -22,6 +22,7 @@ import {
   isStripeEnabled,
   MAX_TOPUP_AMOUNT_USD,
   MIN_TOPUP_AMOUNT_USD,
+  SIGNUP_GRANT_MICROS,
   totalCheckoutCents,
 } from './constants';
 import { micros, microsToDisplayUsd, microsToUsd, usdToMicros } from './money';
@@ -34,6 +35,12 @@ import { FOUNDER_EMAIL } from '@/ui/marketing/constants';
 import { getLogger } from '@/platform/logger';
 import { captureProductEvent } from '@/platform/server/observability/product-events';
 import { sendFounderCreditRequestEmail } from './server/founder-credit-request-email';
+import {
+  isPhoneVerificationEnabled,
+  normalizePhoneNumber,
+  sendPhoneVerification,
+  verifyPhoneAndGrant,
+} from './server/phone-verification';
 import { getServerAppUrl } from '@/platform/server/env/environment';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
@@ -122,6 +129,45 @@ export const claimWelcomeCreditsFn = createServerFn({ method: 'POST' })
       scopedDb: context.scopedDb,
       teamId: context.teamId,
       userId: context.user.id,
+    });
+  });
+
+const phoneNumberSchema = z.object({ phoneNumber: z.string().max(32) });
+
+/** SMS alternative to saving a card for the welcome grant (#1539). */
+export const sendWelcomePhoneCodeFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .inputValidator(zodValidator(phoneNumberSchema))
+  .handler(async ({ data, context }) => {
+    if (!isStripeEnabled() || !isPhoneVerificationEnabled()) {
+      throw new ValidationError('Phone verification is not available');
+    }
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+    return sendPhoneVerification({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      phoneNumber: normalizePhoneNumber(data.phoneNumber),
+    });
+  });
+
+export const verifyWelcomePhoneCodeFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
+  .inputValidator(
+    zodValidator(
+      phoneNumberSchema.extend({ code: z.string().trim().min(4).max(10) })
+    )
+  )
+  .handler(async ({ data, context }) => {
+    if (!isStripeEnabled() || !isPhoneVerificationEnabled()) {
+      throw new ValidationError('Phone verification is not available');
+    }
+    await requireTeamAdminAccess(context.user.id, context.teamId);
+    return verifyPhoneAndGrant({
+      scopedDb: context.scopedDb,
+      teamId: context.teamId,
+      userId: context.user.id,
+      phoneNumber: normalizePhoneNumber(data.phoneNumber),
+      code: data.code,
     });
   });
 
@@ -441,6 +487,20 @@ export const purchaseCreditsFn = createServerFn({ method: 'POST' })
 // Balance
 // ============================================================================
 
+/**
+ * Cloudflare's geo-IP country for the SMS dialog's default dial code.
+ * `request.cf` is set by workerd (locally from the developer's real
+ * connection, in prod by the edge); the header only exists behind the edge.
+ * 'XX' / 'T1' mean unknown; the client falls back to its locale.
+ */
+function requestCountry(): string | null {
+  const req = getRequest();
+  const country = req.cf?.country;
+  return typeof country === 'string'
+    ? country
+    : req.headers.get('cf-ipcountry');
+}
+
 export const getBillingBalanceFn = createServerFn({ method: 'GET' })
   .middleware([authWithTeamMiddleware])
   .handler(async ({ context }) => {
@@ -463,10 +523,17 @@ export const getBillingBalanceFn = createServerFn({ method: 'GET' })
       availableUsd: microsToUsd(funds.available),
       reservedUsd: microsToUsd(funds.reserved),
       stripeEnabled: isStripeEnabled(),
+      phoneVerificationEnabled: isPhoneVerificationEnabled(),
+      phoneCountry: requestCountry(),
       // D1 `count(*)` can arrive as a string — coerce. Prefer row presence too.
       hasUsedCredits:
         usageHistory.transactions.length > 0 || Number(usageHistory.total) > 0,
       hasSignupGrant,
+      // Credits the welcome grant did not put there — seeded, bought, or
+      // adjusted. A team that already holds credits is never offered the
+      // welcome grant (gift or claim), whatever it has spent.
+      hasOtherCredits:
+        funds.balance > (hasSignupGrant ? SIGNUP_GRANT_MICROS : 0),
       autoTopUp: {
         enabled: settings.autoTopUpEnabled,
         thresholdUsd: settings.autoTopUpThresholdMicros

@@ -1,6 +1,10 @@
 import { getEnv } from '#env';
-import { toArkMediaUrl } from '@/models/server/byteplus-asset-ingest';
-import type { AssetPoolLedger } from '@/models/server/byteplus-asset-pool';
+import { toArkFetchableUrl } from '@/models/server/byteplus-asset-ingest';
+import {
+  arkUrlFor,
+  type ArkAssetMap,
+  type ArkStill,
+} from '@/models/server/byteplus-asset-steps';
 import {
   arkAdapterConfig,
   claimBytePlusVia,
@@ -8,9 +12,8 @@ import {
   isBytePlusConfigured,
   loadBytePlusVideo,
 } from '@/models/server/byteplus-config';
-import { reportBytePlusPortraitFilterFallback } from '@/models/server/byteplus-observability';
 import {
-  BYTEPLUS_PORTRAIT_FILTER_NO_FAL_MESSAGE,
+  BYTEPLUS_PORTRAIT_FILTER_MESSAGE,
   isBytePlusPortraitFilterError,
 } from '@/models/server/byteplus-portrait-filter';
 import { bytePlusVideoUnitsBilled } from '@/billing/byteplus-pricing';
@@ -321,38 +324,41 @@ async function submitFalMotionJob(
   };
 }
 
-async function fallbackBytePlusPortraitFilterToFal(
-  error: unknown,
-  operation: string,
-  options: GenerateMotionOptions,
-  modelKey: ImageToVideoModel
-): Promise<{ jobId: string; usedOwnKey: boolean; endpointId: string }> {
-  if (!isBytePlusPortraitFilterError(error)) throw error;
-  const falKey = await resolveOptionalFalKey(options.scopedDb);
-  if (!falKey) {
-    throw new Error(BYTEPLUS_PORTRAIT_FILTER_NO_FAL_MESSAGE);
-  }
-  reportBytePlusPortraitFilterFallback(operation);
-  return submitFalMotionJob(options, modelKey);
-}
-
 /**
  * Submit a motion generation job without polling.
  * Returns the job ID so the workflow can poll with `context.sleep()` between steps.
  */
 /**
- * Submitting also LEASES pool slots, which estimating does not — so the
- * ledger rides here rather than on `GenerateMotionOptions`, which
- * `calculateMotionMetadata` shares and has nothing to lease.
+ * Submitting needs the stills the workflow already registered with BytePlus
+ * (`ingestArkAssets`, #1519), which estimating does not — so the map rides
+ * here rather than on `GenerateMotionOptions`, which `calculateMotionMetadata`
+ * shares. Only the byteplus via reads it; see {@link arkStillsForMotion} for
+ * which stills it must cover.
  */
 export type SubmitMotionOptions = GenerateMotionOptions & {
-  /**
-   * The BytePlus ACR slot ledger (`scopedDb.bytePlusAssets`, #1361). Only the
-   * byteplus via touches it: every still Seedance sees has to be leased as
-   * `asset://` from an account-wide pool of ~50 slots.
-   */
-  assetLedger: AssetPoolLedger;
+  arkAssets: ArkAssetMap;
 };
+
+/**
+ * The stills a BytePlus submit needs registered: the start frame and every
+ * reference that can carry a face. CreateAsset allows 3/min per account, so
+ * location and element sheets — no people — are not spent on. The workflow
+ * runs these through `ingestArkAssets` before the submit step.
+ */
+export function arkStillsForMotion(
+  options: Pick<GenerateMotionOptions, 'imageUrl' | 'referenceImages'>
+): ArkStill[] {
+  const stills: ArkStill[] = [];
+  if (options.imageUrl)
+    stills.push({ storedUrl: options.imageUrl, slot: 'frame' });
+  for (const ref of options.referenceImages ?? []) {
+    if (ref.role === 'location' || ref.role === 'element') continue;
+    // Cast sheets are the pool's long-lived residents — evicting one costs
+    // every shot that binds it.
+    stills.push({ storedUrl: ref.referenceImageUrl, slot: 'library' });
+  }
+  return stills;
+}
 
 export async function submitMotionJob(
   options: SubmitMotionOptions
@@ -492,31 +498,26 @@ export async function submitMotionJob(
       if (!arkKey) {
         throw new Error('ARK_API_KEY is required for the BytePlus motion via');
       }
-      // Every still Seedance sees — start frame and every reference — has
-      // to be `asset://`. A public URL of a photorealistic face (including
-      // a generated start frame) 400s as a possible real person.
+      // Every still that can carry a face was registered by the workflow
+      // (`arkStillsForMotion` → `ingestArkAssets`); the rest are plain URLs.
+      // A still missing from the map throws — nothing is re-derived here.
       const falKey = await resolveOptionalFalKey(options.scopedDb);
       const imageUrl = options.imageUrl
-        ? await toArkMediaUrl(options.imageUrl, {
-            ledger: options.assetLedger,
-            slot: 'frame',
-            ...(falKey?.key && { falApiKey: falKey.key }),
-          })
+        ? arkUrlFor(options.arkAssets, options.imageUrl)
         : undefined;
-      const referenceImages = options.referenceImages?.length
-        ? await Promise.all(
-            options.referenceImages.map(async (ref) => ({
-              ...ref,
-              // Cast/location/element sheets are the pool's long-lived
-              // residents — evicting one costs every shot that binds it.
-              referenceImageUrl: await toArkMediaUrl(ref.referenceImageUrl, {
-                ledger: options.assetLedger,
-                slot: 'library',
-                ...(falKey?.key && { falApiKey: falKey.key }),
-              }),
-            }))
-          )
-        : options.referenceImages;
+      let referenceImages = options.referenceImages;
+      if (referenceImages?.length) {
+        referenceImages = [];
+        for (const ref of options.referenceImages ?? []) {
+          const registered = ref.role !== 'location' && ref.role !== 'element';
+          referenceImages.push({
+            ...ref,
+            referenceImageUrl: registered
+              ? arkUrlFor(options.arkAssets, ref.referenceImageUrl)
+              : await toArkFetchableUrl(ref.referenceImageUrl, falKey?.key),
+          });
+        }
+      }
       const request = buildBytePlusVideoRequest(
         { ...options, imageUrl, referenceImages },
         modelKey
@@ -543,16 +544,12 @@ export async function submitMotionJob(
         jobId = job.jobId;
         usedOwnKey = false;
       } catch (error) {
-        const fal = await fallbackBytePlusPortraitFilterToFal(
-          error,
-          'motion submit',
-          options,
-          modelKey
-        );
-        jobId = fal.jobId;
-        usedOwnKey = fal.usedOwnKey;
-        stampedVia = 'fal';
-        stampedEndpointId = fal.endpointId;
+        // No fal fallback (#1519): the job was routed to Ark, so an Ark
+        // rejection is the failure the user sees and retries against.
+        if (isBytePlusPortraitFilterError(error)) {
+          throw new Error(BYTEPLUS_PORTRAIT_FILTER_MESSAGE, { cause: error });
+        }
+        throw error;
       }
       break;
     }

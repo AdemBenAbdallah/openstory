@@ -5,6 +5,7 @@ import {
 import {
   IMAGE_TO_VIDEO_MODELS,
   isModelCompatibleWithAspectRatio,
+  isOfferedVideoModel,
   isValidImageToVideoModel,
   type ImageToVideoModel,
 } from '@/models/models';
@@ -62,13 +63,14 @@ function useMotionModels({
   // Resolved server-side per team and seeded by the `_app` route loader, so the
   // list is right on first paint. Grok Imagine appears here only where an xAI
   // key resolves — on fal its id is an image-to-video endpoint.
-  const { referenceOnlyModels } = useViaAvailability();
+  const vias = useViaAvailability();
+  const { referenceOnlyModels } = vias;
   return useMemo(
     () =>
       Object.entries(IMAGE_TO_VIDEO_MODELS)
         .filter(([key, m]) => {
           if (!isValidImageToVideoModel(key)) return false;
-          if ('hidden' in m) return false;
+          if (!isOfferedVideoModel(key, vias)) return false;
           if (allowedIds && !allowedIds.includes(key)) return false;
           if (
             referenceOnly &&
@@ -121,6 +123,7 @@ function useMotionModels({
       referenceOnly,
       keepId,
       referenceOnlyModels,
+      vias,
     ]
   );
 }
@@ -198,6 +201,7 @@ type MotionModelSelectorProps = {
   selectedModel: ImageToVideoModel;
   onModelChange: (model: ImageToVideoModel) => void;
   disabled?: boolean;
+  size?: 'default' | 'sm';
   /** Per-scene generation status by model (#545); renders ✓/⟳/! in the list. */
   generatedStatuses?: Map<string, ModelGenerationStatus>;
 } & MotionModelFilterProps;
@@ -206,6 +210,7 @@ export const MotionModelSelector: React.FC<MotionModelSelectorProps> = ({
   selectedModel,
   onModelChange,
   disabled = false,
+  size = 'default',
   aspectRatio,
   styleCategory,
   recommendedVideoModel,
@@ -252,6 +257,7 @@ export const MotionModelSelector: React.FC<MotionModelSelectorProps> = ({
         }}
         disabled={disabled}
         multiSelect={false}
+        size={size}
       />
       <RecommendationHint
         status={recommendationStatus}
@@ -266,6 +272,7 @@ type MotionModelMultiSelectorProps = {
   selectedModels: ImageToVideoModel[];
   onModelsChange: (models: ImageToVideoModel[]) => void;
   disabled?: boolean;
+  size?: 'default' | 'sm';
 } & MotionModelFilterProps;
 
 export const MotionModelMultiSelector: React.FC<
@@ -274,6 +281,7 @@ export const MotionModelMultiSelector: React.FC<
   selectedModels,
   onModelsChange,
   disabled = false,
+  size = 'default',
   aspectRatio,
   styleCategory,
   recommendedVideoModel,
@@ -310,6 +318,7 @@ export const MotionModelMultiSelector: React.FC<
         }}
         disabled={disabled}
         multiSelect={true}
+        size={size}
       />
       <RecommendationHint
         status={recommendationStatus}

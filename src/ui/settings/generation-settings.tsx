@@ -11,14 +11,12 @@ import {
   MusicModelMultiSelector,
   MusicModelSelector,
 } from '@/models/ui/pickers/music-model-selector';
-import { Button } from '@/ui/shadcn/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import { Separator } from '@/ui/shadcn/separator';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_MUSIC_MODEL,
   DEFAULT_VIDEO_MODEL,
-  IMAGE_TO_VIDEO_MODELS,
   type AudioModel,
   type ImageToVideoModel,
   type TextToImageModel,
@@ -30,8 +28,7 @@ import {
   availableResolutions,
   resolutionCeilingNote,
 } from '@/models/ui/resolution-support';
-import { useMemo, useState, type FC } from 'react';
-import { useViaAvailability } from '@/models/ui/use-via-availability';
+import { useState, type FC } from 'react';
 import { AspectRatioPills } from './aspect-ratio-pills';
 import { ResolutionPills } from './resolution-pills';
 import { GenerationSettingsTrigger } from './generation-settings-trigger';
@@ -66,18 +63,6 @@ type GenerationSettingsProps = {
   singleSelectMusic?: boolean;
   /** Current style category, used to show/hide style-restricted motion models */
   styleCategory?: string;
-  /** Current style name, used in aspect-ratio recommendation tooltips */
-  styleName?: string;
-  /** Style-recommended aspect ratio — drives the "Recommended" badge */
-  recommendedAspectRatio?: string | null;
-  /**
-   * Active style-applied-defaults marker. When set, the trigger renders a
-   * sibling pill saying "From style · Reset" (fixed text — style names vary in
-   * length and would wrap the control row). Cleared on user reset.
-   */
-  appliedFromStyle?: { styleId: string; styleName: string } | null;
-  /** Restore the pre-apply snapshot. Required when `appliedFromStyle` is set. */
-  onResetStyleDefaults?: () => void;
 };
 
 export const GenerationSettings: FC<GenerationSettingsProps> = ({
@@ -100,10 +85,6 @@ export const GenerationSettings: FC<GenerationSettingsProps> = ({
   singleSelectMotion = false,
   singleSelectMusic = false,
   styleCategory,
-  styleName,
-  recommendedAspectRatio,
-  appliedFromStyle,
-  onResetStyleDefaults,
 }) => {
   const [open, setOpen] = useState(false);
   // How far the run goes is picked at Generate (#1408), so the video models
@@ -114,46 +95,11 @@ export const GenerationSettings: FC<GenerationSettingsProps> = ({
     aspectRatio,
   };
 
-  // Per-team list from the `_app` loader, so the copy names the models this
-  // team can actually pick — Grok Imagine included when xAI is reachable.
-  const { referenceOnlyModels } = useViaAvailability();
-  const referenceOnlyModelNames = useMemo(
-    () =>
-      new Intl.ListFormat('en', { style: 'long', type: 'disjunction' }).format(
-        referenceOnlyModels.map((m) => IMAGE_TO_VIDEO_MODELS[m].name)
-      ),
-    [referenceOnlyModels]
-  );
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div className="flex items-center gap-2 flex-wrap">
-        <PopoverTrigger asChild disabled={disabled}>
-          <GenerationSettingsTrigger aspectRatio={aspectRatio} />
-        </PopoverTrigger>
-        {appliedFromStyle && onResetStyleDefaults && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-2 py-0.5 text-xs">
-            {/* Mobile: just "Reset" — the label + trigger don't fit one row. */}
-            <span className="hidden sm:inline">From style</span>
-            <span
-              aria-hidden="true"
-              className="hidden text-primary/40 sm:inline"
-            >
-              ·
-            </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="h-auto px-1 py-0 text-xs font-medium text-primary hover:bg-primary/15"
-              onClick={onResetStyleDefaults}
-              disabled={disabled}
-            >
-              Reset
-            </Button>
-          </span>
-        )}
-      </div>
+      <PopoverTrigger asChild disabled={disabled}>
+        <GenerationSettingsTrigger aspectRatio={aspectRatio} />
+      </PopoverTrigger>
       <PopoverContent
         align="start"
         collisionPadding={12}
@@ -168,22 +114,6 @@ export const GenerationSettings: FC<GenerationSettingsProps> = ({
             <AspectRatioPills
               value={aspectRatio}
               onChange={onAspectRatioChange}
-              recommendedAspectRatio={recommendedAspectRatio}
-              styleName={styleName}
-            />
-          </section>
-
-          <Separator />
-
-          {/* Resolution Section */}
-          <section className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-foreground">Resolution</h3>
-            <ResolutionPills
-              value={resolution}
-              onChange={onResolutionChange}
-              available={availableResolutions(modelSelection)}
-              disabled={disabled}
-              note={resolutionCeilingNote(resolution, modelSelection)}
             />
           </section>
 
@@ -231,19 +161,12 @@ export const GenerationSettings: FC<GenerationSettingsProps> = ({
             <h3 className="text-sm font-medium text-foreground">
               {singleSelectMotion ? 'Motion Model' : 'Motion Models'}
             </h3>
-            {!generateStartFrames && (
-              <p className="text-xs text-muted-foreground">
-                Each shot renders straight to video from the character, location
-                and element references — no still is generated first. Faster and
-                cheaper, with looser control over composition. Only{' '}
-                {referenceOnlyModelNames} can do this.
-              </p>
-            )}
             {singleSelectMotion ? (
               <MotionModelSelector
                 selectedModel={videoModels[0] ?? DEFAULT_VIDEO_MODEL}
                 onModelChange={(model) => onVideoModelsChange([model])}
                 disabled={disabled}
+                size="sm"
                 aspectRatio={aspectRatio}
                 styleCategory={styleCategory}
                 referenceOnly={!generateStartFrames}
@@ -253,11 +176,20 @@ export const GenerationSettings: FC<GenerationSettingsProps> = ({
                 selectedModels={videoModels}
                 onModelsChange={onVideoModelsChange}
                 disabled={disabled}
+                size="sm"
                 aspectRatio={aspectRatio}
                 styleCategory={styleCategory}
                 referenceOnly={!generateStartFrames}
               />
             )}
+            <h3 className="text-sm font-medium text-foreground">Resolution</h3>
+            <ResolutionPills
+              value={resolution}
+              onChange={onResolutionChange}
+              available={availableResolutions(modelSelection)}
+              disabled={disabled}
+              note={resolutionCeilingNote(resolution, modelSelection)}
+            />
           </section>
 
           {onAudioModelsChange && audioModels && (

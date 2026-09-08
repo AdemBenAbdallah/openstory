@@ -71,6 +71,13 @@ type SequencePlayerProps = {
   /** PostHog `video_play` source. Theatre player on the scenes canvas. */
   playSource?: VideoPlaySource;
   sequenceId?: string;
+  /**
+   * One-shot: start playback once the player is ready. The scene-list play
+   * button sets this; consume it via `onAutoPlayConsumed` so a later rebuild
+   * does not auto-resume (#1526).
+   */
+  autoPlay?: boolean;
+  onAutoPlayConsumed?: () => void;
 };
 
 export const SequencePlayer: React.FC<SequencePlayerProps> = ({
@@ -85,6 +92,8 @@ export const SequencePlayer: React.FC<SequencePlayerProps> = ({
   cachedVideoUrl,
   playSource = 'theatre',
   sequenceId,
+  autoPlay = false,
+  onAutoPlayConsumed,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -223,6 +232,33 @@ export const SequencePlayer: React.FC<SequencePlayerProps> = ({
     }
   };
 
+  const startPlay = () => {
+    const engine = engineRef.current;
+    if (!engine) {
+      captureVideoPlayFailed(posthog, {
+        source: playSource,
+        reason: 'no_engine',
+        sequence_id: sequenceId,
+      });
+      return;
+    }
+    if (playing) return;
+    const epoch = ++playEpochRef.current;
+    setPlaying(true);
+    void engine
+      .play()
+      .then((result) => applyPlayResult(epoch, result))
+      .catch((err: unknown) => {
+        if (epoch !== playEpochRef.current) return;
+        setPlaying(false);
+        captureVideoPlayFailed(posthog, {
+          source: playSource,
+          reason: err instanceof Error ? err.message : 'play_rejected',
+          sequence_id: sequenceId,
+        });
+      });
+  };
+
   const togglePlay = () => {
     const engine = engineRef.current;
     if (!engine) {
@@ -243,21 +279,21 @@ export const SequencePlayer: React.FC<SequencePlayerProps> = ({
       flushWatched(false);
       return;
     }
-    const epoch = ++playEpochRef.current;
-    setPlaying(true);
-    void engine
-      .play()
-      .then((result) => applyPlayResult(epoch, result))
-      .catch((err: unknown) => {
-        if (epoch !== playEpochRef.current) return;
-        setPlaying(false);
-        captureVideoPlayFailed(posthog, {
-          source: playSource,
-          reason: err instanceof Error ? err.message : 'play_rejected',
-          sequence_id: sequenceId,
-        });
-      });
+    startPlay();
   };
+
+  // Scene-list play button: start once the stitch engine (or cached MP4) is
+  // ready. Cache lookup (`undefined`) must not consume the request.
+  useEffect(() => {
+    if (!autoPlay) return;
+    if (cachedVideoUrl === undefined) return;
+    if (cachedVideoUrl) return;
+    if (!meta) return;
+    startPlay();
+    onAutoPlayConsumed?.();
+    // startPlay reads the latest engine/playing; listing it would retrigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- startPlay is a render closure
+  }, [autoPlay, cachedVideoUrl, meta, onAutoPlayConsumed]);
 
   const seek = (seconds: number) => {
     const engine = engineRef.current;
@@ -298,8 +334,10 @@ export const SequencePlayer: React.FC<SequencePlayerProps> = ({
           src={cachedVideoUrl}
           aspectRatio={aspectRatio}
           className="absolute inset-0 h-full max-h-none w-full"
+          autoPlay={autoPlay}
           playSource={playSource}
           sequenceId={sequenceId}
+          onPlay={onAutoPlayConsumed}
         />
         <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
           {musicUrl && (

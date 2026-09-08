@@ -43,7 +43,15 @@ import {
   type ShotView,
 } from '@/shots/shot-view';
 import { cn } from '@/ui/utils';
-import { FileText, Images, Loader2, Music, Plus, Video } from 'lucide-react';
+import {
+  CirclePlay,
+  FileText,
+  Images,
+  Loader2,
+  Music,
+  Plus,
+  Video,
+} from 'lucide-react';
 import {
   memo,
   useCallback,
@@ -130,6 +138,8 @@ export type SceneListProps = {
   onSelectScene: (sceneId: string, additive: boolean) => void;
   onSelectShot: (shotId: string) => void;
   onClearSelection: () => void;
+  /** Zoom out to the sequence player and switch the centre column to canvas. */
+  onPlaySequence?: () => void;
   regeneratingImages: Set<string>;
   regeneratingMotion: Set<string>;
   onBatchGenerateMotion?: (args: BatchGenerateMotionArgs) => Promise<void>;
@@ -179,6 +189,7 @@ const SceneListComponent: React.FC<SceneListProps> = ({
   onSelectScene,
   onSelectShot,
   onClearSelection,
+  onPlaySequence,
   regeneratingImages,
   regeneratingMotion,
   onBatchGenerateMotion,
@@ -530,18 +541,25 @@ const SceneListComponent: React.FC<SceneListProps> = ({
 
       <button
         type="button"
-        onClick={onClearSelection}
+        onClick={() => {
+          onClearSelection();
+          if (isWholeSequence) onPlaySequence?.();
+        }}
         title={
           isWholeSequence
-            ? 'Whole sequence selected'
+            ? 'Play the whole sequence'
             : 'Show the whole sequence (Esc zooms out one level at a time)'
         }
         className={cn(
-          'border-b px-4 py-2.5 text-left text-sm transition-colors hover:bg-muted/40',
+          'flex min-h-11 w-full items-center justify-between gap-2 border-b px-4 py-2.5 text-left text-sm transition-colors hover:bg-muted/40 md:min-h-0',
           isWholeSequence && 'bg-primary/5 font-medium text-primary'
         )}
       >
         Whole sequence
+        <CirclePlay
+          className="size-3.5 shrink-0 text-muted-foreground"
+          aria-hidden
+        />
       </button>
 
       <ScrollArea className="flex-1 min-h-0">
@@ -836,7 +854,8 @@ const areEqual = (
     prevProps.onCompareDivergent !== nextProps.onCompareDivergent ||
     prevProps.onSelectScene !== nextProps.onSelectScene ||
     prevProps.onSelectShot !== nextProps.onSelectShot ||
-    prevProps.onClearSelection !== nextProps.onClearSelection
+    prevProps.onClearSelection !== nextProps.onClearSelection ||
+    prevProps.onPlaySequence !== nextProps.onPlaySequence
   ) {
     return false;
   }

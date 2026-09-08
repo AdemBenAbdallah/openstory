@@ -1,8 +1,9 @@
 /**
  * Welcome Credits Dialog (#1096, #1516)
  *
- * - **claim**: Stripe on, welcome grant unpaid. Add a card (Stripe Checkout setup,
- *   no charge) to unlock it.
+ * - **claim**: Stripe on, $20 unpaid. Add a card (Stripe Checkout setup,
+ *   no charge) to unlock it — or verify a mobile number by SMS when Twilio
+ *   is configured (#1539; wallets like WeChat Pay cannot be saved as cards).
  * - **gift**: unused signup grant and Stripe off (e2e / self-host).
  *
  * Dismiss cadence lives in localStorage (house pattern for UI prefs).
@@ -10,6 +11,8 @@
  */
 
 import { Button } from '@/ui/shadcn/button';
+import { Input } from '@/ui/shadcn/input';
+import { PhoneInput } from '@/ui/phone-input';
 import {
   Dialog,
   DialogContent,
@@ -22,20 +25,23 @@ import { Switch } from '@/ui/shadcn/switch';
 import {
   claimWelcomeCreditsFn,
   createSetupCheckoutSessionFn,
+  sendWelcomePhoneCodeFn,
+  verifyWelcomePhoneCodeFn,
 } from '@/billing/billing.fn';
 import {
   BILLING_BALANCE_KEY,
   BILLING_PAYMENT_METHODS_KEY,
   useBillingBalance,
-} from './use-billing-balance';
-import { BILLING_GATE_KEY } from './use-billing-gate';
-import { useShowCosts } from './use-show-costs';
+} from '@/billing/ui/use-billing-balance';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
+import { useShowCosts } from '@/billing/ui/use-show-costs';
 import { useUser } from '@/platform/ui/use-user';
 import { SIGNUP_GRANT_MICROS, welcomeDialogMode } from '@/billing/constants';
 import type { WelcomeDialogMode } from '@/billing/constants';
 import { microsToDisplayUsd } from '@/billing/money';
 import { hasPendingGenerate } from '@/sequences/ui/generation/pending-generate';
 import { isWelcomeCardAlreadyClaimedError } from '@/platform/errors';
+import { phoneCountries } from '@/ui/phone-countries';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Sparkles } from 'lucide-react';
@@ -154,8 +160,11 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   const welcomeSetup = search?.welcome_setup;
   const {
     stripeEnabled,
+    phoneVerificationEnabled,
+    phoneCountry,
     hasUsedCredits,
     hasSignupGrant,
+    hasOtherCredits,
     isSuccess: balanceReady,
     isError: balanceFailed,
   } = useBillingBalance();
@@ -163,6 +172,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
   const [skippedUserId, setSkippedUserId] = useState<string | null>(null);
   const [forcedOpen, setForcedOpen] = useState(false);
   const [redirectingToStripe, setRedirectingToStripe] = useState(false);
+  const [viaPhone, setViaPhone] = useState(false);
   const isClient = useSyncExternalStore(
     subscribeNever,
     () => true,
@@ -184,6 +194,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     stripeEnabled,
     hasSignupGrant,
     hasUsedCredits,
+    hasOtherCredits,
   });
 
   const grantOff = SIGNUP_GRANT_MICROS <= 0;
@@ -223,6 +234,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
       }
       setForcedOpen(false);
       setSetupError(null);
+      setViaPhone(false);
       if (welcomeSetup) clearWelcomeSetupSearch();
     }
   };
@@ -300,30 +312,53 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     <WelcomeCreditsContext.Provider value={value}>
       {children}
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        {mode === 'gift' ? (
-          <GiftDialogContent
-            grantDisplay={GRANT_DISPLAY}
-            showCosts={showCosts}
-            onShowCostsChange={setShowCosts}
-            onStart={() => handleOpenChange(false)}
-            primaryLabel={primaryLabel}
-          />
-        ) : (
-          <ClaimDialogContent
-            grantDisplay={GRANT_DISPLAY}
-            showCosts={showCosts}
-            onShowCostsChange={setShowCosts}
-            setupError={claimError}
-            opening={setupMutation.isPending || redirectingToStripe}
-            claiming={claimQuery.isPending && returnedFromStripe}
-            onAddCard={() => {
-              setSetupError(null);
-              setRedirectingToStripe(true);
-              setupMutation.mutate();
-            }}
-            onSkip={() => handleOpenChange(false)}
-          />
-        )}
+        {/* One DialogContent for every branch: swapping the whole content
+            would remount it and replay the open animation. */}
+        <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
+          {mode === 'gift' ? (
+            <GiftDialogContent
+              grantDisplay={GRANT_DISPLAY}
+              showCosts={showCosts}
+              onShowCostsChange={setShowCosts}
+              onStart={() => handleOpenChange(false)}
+              primaryLabel={primaryLabel}
+            />
+          ) : viaPhone ? (
+            <PhoneClaimDialogContent
+              grantDisplay={GRANT_DISPLAY}
+              showCosts={showCosts}
+              onShowCostsChange={setShowCosts}
+              onGranted={async () => {
+                await queryClient.invalidateQueries({
+                  queryKey: [...BILLING_BALANCE_KEY],
+                });
+                await queryClient.invalidateQueries({
+                  queryKey: [...BILLING_GATE_KEY],
+                });
+              }}
+              onUseCard={() => setViaPhone(false)}
+              defaultCountry={phoneCountry}
+            />
+          ) : (
+            <ClaimDialogContent
+              grantDisplay={GRANT_DISPLAY}
+              showCosts={showCosts}
+              onShowCostsChange={setShowCosts}
+              setupError={claimError}
+              opening={setupMutation.isPending || redirectingToStripe}
+              claiming={claimQuery.isPending && returnedFromStripe}
+              onAddCard={() => {
+                setSetupError(null);
+                setRedirectingToStripe(true);
+                setupMutation.mutate();
+              }}
+              onSkip={() => handleOpenChange(false)}
+              onUsePhone={
+                phoneVerificationEnabled ? () => setViaPhone(true) : undefined
+              }
+            />
+          )}
+        </DialogContent>
       </Dialog>
     </WelcomeCreditsContext.Provider>
   );
@@ -338,6 +373,7 @@ function ClaimDialogContent({
   claiming,
   onAddCard,
   onSkip,
+  onUsePhone,
 }: {
   grantDisplay: string;
   showCosts: boolean;
@@ -347,10 +383,11 @@ function ClaimDialogContent({
   claiming: boolean;
   onAddCard: () => void;
   onSkip: () => void;
+  onUsePhone?: () => void;
 }) {
   const busy = opening || claiming;
   return (
-    <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
+    <>
       <WelcomeHeader
         amount={grantDisplay}
         description="Add a card to unlock it. We won't charge you — it just confirms you're a real person."
@@ -360,6 +397,17 @@ function ClaimDialogContent({
         <Button className="self-center" onClick={onAddCard} disabled={busy}>
           {claiming ? 'Unlocking…' : opening ? 'Opening…' : 'Add a card'}
         </Button>
+
+        {onUsePhone ? (
+          <Button
+            variant="link"
+            className="self-center text-muted-foreground"
+            onClick={onUsePhone}
+            disabled={busy}
+          >
+            No card? Verify by SMS instead
+          </Button>
+        ) : null}
 
         {setupError ? (
           <p role="alert" className="text-xs text-destructive">
@@ -378,7 +426,163 @@ function ClaimDialogContent({
           Skip for now
         </Button>
       </div>
-    </DialogContent>
+    </>
+  );
+}
+
+function errorMessage(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
+/** SMS branch of the claim dialog: number → code → grant. Closes itself via
+ *  the balance refetch (`hasSignupGrant` flips, `open` goes false). */
+function PhoneClaimDialogContent({
+  grantDisplay,
+  showCosts,
+  onShowCostsChange,
+  onGranted,
+  onUseCard,
+  defaultCountry,
+}: {
+  grantDisplay: string;
+  showCosts: boolean;
+  onShowCostsChange: (value: boolean) => void;
+  onGranted: () => Promise<void>;
+  onUseCard: () => void;
+  defaultCountry: string | null;
+}) {
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+  const [code, setCode] = useState('');
+  const countries = useMemo(() => phoneCountries(), []);
+
+  const send = useMutation({
+    meta: { inlineError: true },
+    mutationFn: (data: { phoneNumber: string }) =>
+      sendWelcomePhoneCodeFn({ data }),
+    onSuccess: (result) => setPhoneNumber(result.phoneNumber),
+  });
+  const verify = useMutation({
+    meta: { inlineError: true },
+    mutationFn: (data: { phoneNumber: string; code: string }) =>
+      verifyWelcomePhoneCodeFn({ data }),
+    onSuccess: onGranted,
+  });
+
+  const busy = send.isPending || verify.isPending;
+  const error = verify.error
+    ? isWelcomeCardAlreadyClaimedError(verify.error)
+      ? 'This number has already been used to claim welcome credits'
+      : errorMessage(verify.error, 'Could not verify that code')
+    : send.error
+      ? errorMessage(send.error, 'Could not send a code')
+      : null;
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const field = (name: string) => {
+      const value = form.get(name);
+      return typeof value === 'string' ? value : '';
+    };
+    if (phoneNumber) {
+      verify.mutate({ phoneNumber, code });
+      return;
+    }
+    send.mutate({ phoneNumber: field('phoneNumber') });
+  };
+
+  return (
+    <>
+      <WelcomeHeader
+        amount={grantDisplay}
+        description={
+          phoneNumber
+            ? `Enter the code we texted to ${phoneNumber}.`
+            : "Verify your mobile number to unlock it. We only text you a code — it just confirms you're a real person."
+        }
+      />
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-4 px-6 py-5">
+        {phoneNumber ? (
+          // Plain field, not the slot widget, and NOT autofocused: code
+          // autofill from Messages only offers itself on an unfocused
+          // one-time-code input.
+          <Input
+            name="code"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={6}
+            autoComplete="one-time-code"
+            aria-label="Verification code"
+            placeholder="Enter code"
+            className="text-center tracking-[0.3em] tabular-nums"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+            disabled={busy}
+          />
+        ) : (
+          <PhoneInput
+            countries={countries}
+            defaultCountry={defaultCountry}
+            aria-label="Mobile number"
+            disabled={busy}
+            required
+          />
+        )}
+
+        <Button
+          type="submit"
+          className="self-center"
+          disabled={busy || (phoneNumber !== null && code.length !== 6)}
+        >
+          {phoneNumber
+            ? verify.isPending
+              ? 'Unlocking…'
+              : 'Unlock'
+            : send.isPending
+              ? 'Sending…'
+              : 'Send code'}
+        </Button>
+
+        {error ? (
+          <p role="alert" className="text-xs text-destructive">
+            {error}
+          </p>
+        ) : null}
+
+        <ShowCostsRow checked={showCosts} onCheckedChange={onShowCostsChange} />
+
+        <div className="flex justify-between">
+          {phoneNumber ? (
+            <Button
+              type="button"
+              variant="link"
+              className="text-muted-foreground"
+              onClick={() => {
+                setPhoneNumber(null);
+                setCode('');
+                verify.reset();
+              }}
+              disabled={busy}
+            >
+              Change number
+            </Button>
+          ) : (
+            <span />
+          )}
+          <Button
+            type="button"
+            variant="link"
+            className="text-muted-foreground"
+            onClick={onUseCard}
+            disabled={busy}
+          >
+            Use a card instead
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }
 
@@ -396,7 +600,7 @@ function GiftDialogContent({
   primaryLabel: string;
 }) {
   return (
-    <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
+    <>
       <WelcomeHeader
         amount={grantDisplay}
         description="Free credits on us — enough for a typical 30s short with motion and music. Generations draw from this balance at provider rates."
@@ -411,7 +615,7 @@ function GiftDialogContent({
           </Button>
         </DialogFooter>
       </div>
-    </DialogContent>
+    </>
   );
 }
 

@@ -71,7 +71,6 @@ import {
   motionPromptSchema,
   type MotionPrompt,
 } from '@/shots/scene-analysis.schema';
-import { unledgeredAssetPool } from '@/models/server/byteplus-asset-pool';
 import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
 import { fetchVideoForUpload } from '@/motion/server/video-storage';
 import {
@@ -461,9 +460,9 @@ async function generateClip(
   model: ImageToVideoModel
 ): Promise<string> {
   const job = await submitMotionJob({
-    // This script has no D1, so it cannot lease ACR slots (#1361) — Ark
-    // ingest refuses and the fal via renders these clips anyway.
-    assetLedger: unledgeredAssetPool,
+    // This script has no D1, so it cannot register ACR assets (#1361) — it
+    // runs without ARK_API_KEY and the fal via renders these clips.
+    arkAssets: {},
     imageUrl: motionUrl,
     prompt,
     model,

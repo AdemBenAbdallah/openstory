@@ -21,6 +21,7 @@ export const MOTION_DURATION_GRID = {
   minimax_hailuo_02: [],
   minimax_h3_max: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
   seedance_v2: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  seedance_v2_mini: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
   seedance_v2_5: [
     4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
     24, 25, 26, 27, 28, 29, 30,
@@ -37,6 +38,7 @@ export const MOTION_RESOLUTION_TOKENS = {
   minimax_hailuo_02: [],
   minimax_h3_max: ['480P', '768P'],
   seedance_v2: ['480p', '720p', '1080p', '4k'],
+  seedance_v2_mini: ['480p', '720p'],
   seedance_v2_5: ['480p', '720p', '1080p'],
 } as const satisfies Record<ImageToVideoModel, readonly string[]>;
 
@@ -65,6 +67,7 @@ export const MOTION_ASPECT_RATIOS = {
   minimax_hailuo_02: ['16:9', '9:16', '1:1'],
   minimax_h3_max: ['16:9', '9:16', '1:1'],
   seedance_v2: ['16:9', '9:16', '1:1'],
+  seedance_v2_mini: ['16:9', '9:16', '1:1'],
   seedance_v2_5: ['16:9', '9:16', '1:1'],
 } as const satisfies Record<ImageToVideoModel, readonly AspectRatio[]>;
 

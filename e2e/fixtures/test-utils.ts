@@ -30,10 +30,10 @@ export const RECORDED_PIPELINE_SETTINGS = {
   analysisModels: ['openai/gpt-5.6-luna'],
   imageModel: 'grok_imagine_image',
   imageModels: ['grok_imagine_image'],
-  motionModel: 'seedance_v2',
-  videoModels: ['seedance_v2'],
+  motionModel: 'minimax_h3_max',
+  videoModels: ['minimax_h3_max'],
   // Pinned, not defaulted: the tier picks each model's resolution token, and
-  // the fixtures were recorded at Seedance 720p / Grok Imagine 1k (#1449).
+  // the fixtures were recorded at H3 Max 720p / Grok Imagine 1k (#1449).
   resolution: '720p',
   autoGenerateMotion: true,
   // The fixtures were recorded on the frame-based workflow; reference-only
@@ -141,37 +141,42 @@ export async function selectComposerStyle(
     await page.getByRole('button', { name: /^Style category:/ }).click();
     await page.getByRole('menuitemradio', { name: family }).click();
   }
-  // A selected tile relabels to "View <name> details" and clicking it opens
-  // the style dialog (#1187). The bare composer defaults to Automatic (#1255);
-  // category switches still pick the family's first style. So the target may
-  // already be selected: only click while it still offers Select.
+  // Clicking a tile opens the detail dialog; "Use this style" applies it
+  // (#1526). Category switches still auto-select that family's first style.
   const grid = page.getByRole('grid', { name: 'Style selection' });
-  const tile = grid.getByRole('button', { name: `Select ${styleName} style` });
-  const selectedTile = grid.getByRole('button', {
+  const tile = grid.getByRole('button', {
     name: `View ${styleName} details`,
   });
-  await expect(tile.or(selectedTile)).toBeVisible({
-    timeout: HYDRATION_TIMEOUT,
-  });
-  if (await tile.isVisible()) {
-    await tile.click();
-  }
-  await expect(selectedTile).toBeVisible();
+  await expect(tile).toBeVisible({ timeout: HYDRATION_TIMEOUT });
+  if ((await tile.getAttribute('aria-pressed')) === 'true') return;
+  await tile.click();
+  await page
+    .getByRole('button', { name: `Use the ${styleName} style` })
+    .click();
+  await expect(tile).toHaveAttribute('aria-pressed', 'true');
 }
 
 /**
- * Switch to Quality and pick the image/motion models the recorded fal
- * fixtures cover. Style apply can remap recommendations; call this after
- * the style tile, before Generate.
+ * Open Talent or Locations from the composer. Desktop shows the pickers
+ * inline; below md they sit behind a References sheet.
+ */
+export async function openComposerReference(
+  page: Page,
+  name: 'Talent' | 'Locations'
+): Promise<void> {
+  const inner = page.getByRole('button', { name, exact: true });
+  if (!(await inner.isVisible())) {
+    await page.getByRole('button', { name: 'References' }).click();
+  }
+  await expect(inner).toBeVisible({ timeout: HYDRATION_TIMEOUT });
+  await inner.click();
+}
+
+/**
+ * Pick the image/motion models the recorded fal fixtures cover. Call this
+ * after the style tile, before Generate.
  */
 export async function selectRecordedPipelineModels(page: Page): Promise<void> {
-  const quality = page.getByRole('radio', {
-    name: 'Quality mode — quality-recommended defaults',
-  });
-  await expect(quality).toBeVisible({ timeout: HYDRATION_TIMEOUT });
-  await quality.click();
-  await expect(quality).toHaveAttribute('data-state', 'on');
-
   await page.getByRole('button', { name: 'Generation settings' }).click();
 
   await selectSingleCatalogModel(
@@ -183,8 +188,8 @@ export async function selectRecordedPipelineModels(page: Page): Promise<void> {
   await selectSingleCatalogModel(
     page,
     /^Motion Models?:/,
-    'Seedance 2.0',
-    /Motion Models?: Seedance 2.0/
+    'MiniMax H3 Max',
+    /Motion Models?: MiniMax H3 Max/
   );
 
   await page.keyboard.press('Escape');

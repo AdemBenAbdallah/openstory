@@ -13,6 +13,7 @@ import {
   isContentRejectionError,
 } from '@/models/content-rejection';
 import { arkAssetIdentities } from '@/models/server/byteplus-asset-pool';
+import { ingestArkAssets } from '@/models/server/byteplus-asset-steps';
 import { extractFalErrorMessage } from '@/models/fal-error';
 import { computeVideoManifestInputHash } from '@/shots/input-hash';
 import { DEFAULT_VIDEO_MODEL, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
@@ -36,6 +37,7 @@ import {
   canRenderReferenceOnly,
   motionCostFromUsage,
   pollMotionJob,
+  arkStillsForMotion,
   resolveMotionVia,
   submitMotionJob,
 } from '@/motion/server/motion-generation';
@@ -616,6 +618,27 @@ export class MotionWorkflow extends OpenStoryWorkflowEntrypoint<MotionWorkflowIn
       const tag =
         attempt === 0 ? '' : isRescue ? '-rescue' : `-retry-${attempt}`;
 
+      // Step 3-pre: register the stills BytePlus must see as `asset://`
+      // (#1519). CreateAsset is 3/min per account, so each create waits its
+      // turn with a durable `step.sleep` — outside the submit step, which
+      // therefore never holds a Worker open for a queue. Only when this
+      // model is actually going to Ark; a fal/xAI/Google submit needs none.
+      const submitVia = await step.do(`resolve-motion-via${tag}`, () =>
+        resolveMotionVia(activeModel, scopedDb.credentials)
+      );
+      const arkAssets =
+        submitVia === 'byteplus'
+          ? await ingestArkAssets(step, {
+              prefix: `motion${tag}`,
+              stills: arkStillsForMotion({
+                imageUrl: startImageUrl ?? undefined,
+                referenceImages: input.referenceImages,
+              }),
+              ledger: scopedDb.bytePlusAssets,
+              credentials: scopedDb.credentials,
+            })
+          : {};
+
       // Step 3a: Submit. A content rejection surfaces as a sentinel (not
       // thrown) so the loop owns the retry; a non-content 422 stays a hard
       // stop; anything else throws for CF's per-step retry.
@@ -659,7 +682,7 @@ export class MotionWorkflow extends OpenStoryWorkflowEntrypoint<MotionWorkflowIn
             // Cast/element reference images (#873) — only Kling v3 Pro emits them.
             referenceImages: input.referenceImages,
             scopedDb: scopedDb.credentials,
-            assetLedger: scopedDb.bytePlusAssets,
+            arkAssets,
           });
           return { ok: true as const, job };
         } catch (error) {

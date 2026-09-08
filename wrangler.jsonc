@@ -7,8 +7,10 @@
   "triggers": {
     // Sweep stuck generating-status rows every 5 minutes (#727) and refresh
     // the model_pricing table daily (#1069 — the expression must match
-    // FAL_PRICING_CRON in src/billing/server/refresh-fal-pricing.ts).
-    "crons": ["*/5 * * * *", "17 3 * * *", "37 * * * *"],
+    // FAL_PRICING_CRON in src/billing/server/refresh-fal-pricing.ts). Hourly at
+    // :53, diff this deployment's BytePlus asset group against the ledger
+    // (#1519 — BYTEPLUS_ASSETS_RECONCILE_CRON).
+    "crons": ["*/5 * * * *", "17 3 * * *", "37 * * * *", "53 * * * *"],
   },
   "observability": {
     "enabled": true,
@@ -114,7 +116,7 @@
     // All durable async work runs on Cloudflare Workflows. Each class is
     // re-exported from src/server.ts (so it lands in the Worker bundle) and
     // its binding is resolved by `triggerWorkflow()` via TRIGGER_TO_BINDING in
-    // src/lib/workflow/trigger-bindings.ts. Keep these three in sync — the
+    // src/platform/server/workflow/trigger-bindings.ts. Keep these three in sync — the
     // wiring-consistency test enforces it.
     {
       "name": "image-workflow",
@@ -298,12 +300,24 @@
         "name": "REALTIME",
         "class_name": "RealtimeChannel",
       },
+      // BytePlus request governor (#1519): one token bucket per account so
+      // the Assets OpenAPI stays under its per-account quota. Tag v3 — v2 is
+      // the production/preview container, which the preview patch splices
+      // in ahead of this.
+      {
+        "name": "BYTEPLUS_GOVERNOR",
+        "class_name": "BytePlusGovernor",
+      },
     ],
   },
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["RealtimeChannel"],
+    },
+    {
+      "tag": "v3",
+      "new_sqlite_classes": ["BytePlusGovernor"],
     },
   ],
   "env": {
@@ -571,6 +585,10 @@
             "name": "VIDEO_EXPORT_CONTAINER",
             "class_name": "VideoExportContainer",
           },
+          {
+            "name": "BYTEPLUS_GOVERNOR",
+            "class_name": "BytePlusGovernor",
+          },
         ],
       },
       "migrations": [
@@ -582,9 +600,13 @@
           "tag": "v2",
           "new_sqlite_classes": ["VideoExportContainer"],
         },
+        {
+          "tag": "v3",
+          "new_sqlite_classes": ["BytePlusGovernor"],
+        },
       ],
       "triggers": {
-        "crons": ["*/5 * * * *", "17 3 * * *", "37 * * * *"],
+        "crons": ["*/5 * * * *", "17 3 * * *", "37 * * * *", "53 * * * *"],
       },
       // Same forwarder as the top-level default — redeclared because
       // tail_consumers is non-inheritable across env blocks.
@@ -850,12 +872,20 @@
             "name": "REALTIME",
             "class_name": "RealtimeChannel",
           },
+          {
+            "name": "BYTEPLUS_GOVERNOR",
+            "class_name": "BytePlusGovernor",
+          },
         ],
       },
       "migrations": [
         {
           "tag": "v1",
           "new_sqlite_classes": ["RealtimeChannel"],
+        },
+        {
+          "tag": "v3",
+          "new_sqlite_classes": ["BytePlusGovernor"],
         },
       ],
       // Explicit empty array opts out of inheritance and silences wrangler's

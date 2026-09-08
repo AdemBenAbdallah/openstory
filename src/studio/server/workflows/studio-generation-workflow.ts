@@ -33,16 +33,18 @@ import { aspectRatioToImageSize } from '@/models/aspect-ratios';
 import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { GeneratedAssetOutput } from '@/platform/server/db/schema';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
+import { ingestArkAssets } from '@/models/server/byteplus-asset-steps';
 import { resolveMotionVia } from '@/motion/server/motion-generation';
 import { videoUrlFitsWorkflowCheckpoint } from '@/motion/server/video-storage';
 import { recordMediaGenerationSpan } from '@/platform/server/observability/ai-otel';
 import { getLogger } from '@/platform/logger';
+import type { StudioCreateInput } from '@/studio/schema';
 import {
   pollStudioVideoJob,
   studioVideoCostFromUsage,
+  arkStillsForStudio,
   submitStudioVideoJob,
 } from '@/studio/server/studio-video-generation';
-import type { StudioCreateInput } from '@/studio/schema';
 import { tagStudioReferences } from '@/studio/text-to-video';
 import { uploadStudioImage, uploadStudioVideo } from '@/studio/server/upload';
 import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
@@ -210,10 +212,24 @@ export class StudioGenerationWorkflow extends OpenStoryWorkflowEntrypoint<Studio
 
     for (let attempt = 0; attempt < MAX_MOTION_ATTEMPTS; attempt++) {
       const tag = attempt === 0 ? '' : `-retry-${attempt}`;
+      // Register the user's stills with BytePlus before the submit step
+      // (#1519) — see MotionWorkflow for why this sits outside it.
+      const submitVia = await step.do(`resolve-video-via${tag}`, () =>
+        resolveMotionVia(videoModel, scopedDb.credentials)
+      );
+      const arkAssets =
+        submitVia === 'byteplus'
+          ? await ingestArkAssets(step, {
+              prefix: `studio${tag}`,
+              stills: arkStillsForStudio(input),
+              ledger: scopedDb.bytePlusAssets,
+              credentials: scopedDb.credentials,
+            })
+          : {};
       const submitOutcome = await step.do(`submit-video${tag}`, async () => {
         try {
           const job = await submitStudioVideoJob({
-            assetLedger: scopedDb.bytePlusAssets,
+            arkAssets,
             prompt: input.prompt,
             model: videoModel,
             duration: input.duration,

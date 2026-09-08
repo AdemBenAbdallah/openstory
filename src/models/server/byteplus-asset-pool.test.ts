@@ -33,8 +33,13 @@ vi.mock('@/platform/server/observability/posthog-server', () => ({
   getPostHogClient: () => undefined,
 }));
 
-const { arkAssetIdentities, bytePlusAssetSlots, ingestPooledAsset } =
-  await import('./byteplus-asset-pool');
+const {
+  arkAssetIdentities,
+  bytePlusAssetSlots,
+  claimPooledAsset,
+  createPooledAsset,
+} = await import('./byteplus-asset-pool');
+const { aigcGroupName } = await import('./byteplus-config');
 
 let client: Client;
 let db: Database;
@@ -60,7 +65,7 @@ function arkStub(): { config: BytePlusOpenApiConfig; deleted: string[] } {
       const result = (() => {
         switch (action) {
           case 'ListAssetGroups':
-            return { Items: [{ Id: 'group-1', Name: 'openstory-virtual' }] };
+            return { Items: [{ Id: 'group-1', Name: aigcGroupName() }] };
           case 'ListAssets':
             return { Items: [] };
           case 'CreateAsset':
@@ -97,9 +102,13 @@ async function seedSlot(input: {
   });
 }
 
-function ingest(config: BytePlusOpenApiConfig, identity: string) {
-  return ingestPooledAsset(config, ledger, {
-    identity,
+/** Claim then create — the two steps `ingestArkAssets` runs, minus the wait. */
+async function ingest(config: BytePlusOpenApiConfig, identity: string) {
+  const claim = await claimPooledAsset(ledger, { identity, slot: 'frame' });
+  if (claim.kind === 'hit') return claim.uri;
+  return createPooledAsset(config, ledger, {
+    claim,
+    storedUrl: identity,
     publicUrl: 'https://fal/scratch.png',
     assetType: 'Image',
     slot: 'frame',
@@ -132,7 +141,7 @@ beforeEach(async () => {
   await db.delete(bytePlusAssets);
 });
 
-describe('ingestPooledAsset', () => {
+describe('claimPooledAsset + createPooledAsset', () => {
   it('reuses a resident slot without touching Ark, and renews its lease', async () => {
     const { config } = arkStub();
     await seedSlot({
