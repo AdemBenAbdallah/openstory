@@ -20,3 +20,11 @@ export function assertModelsEnabled(): void {
     throw new Error('Direct model access is not enabled');
   }
 }
+
+/**
+ * PR preview deploy. Set to `true` by the preview job's build step
+ * (.github/workflows/deploy-cloudflare.yml); unset everywhere else — local
+ * dev, e2e, production. Build-time, so it needs no request and no env read:
+ * robots.txt and the root route branch on it directly.
+ */
+export const IS_PREVIEW_DEPLOYMENT = import.meta.env.VITE_IS_PREVIEW === 'true';

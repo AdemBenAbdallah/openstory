@@ -183,10 +183,32 @@ jobs:
           bun scripts/flatten-migrations.ts
           bunx wrangler d1 migrations apply DB --remote
 
+      # The worker is named `pr-<n>`, so its URL is known before the deploy:
+      # only the account's workers.dev subdomain is needed. Baking it into the
+      # build gives preview clients a real VITE_APP_URL (instead of the
+      # openstory.so fallback) and makes VITE_IS_PREVIEW a build-time flag.
+      - name: Resolve preview URL
+        id: preview-url
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          subdomain=$(curl -sf -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain" \
+            | jq -r '.result.name')
+          if [ -z "$subdomain" ] || [ "$subdomain" = "null" ]; then
+            echo "::error::Could not resolve the workers.dev subdomain"
+            exit 1
+          fi
+          echo "url=https://pr-${PR_NUMBER}.${subdomain}.workers.dev" >> "$GITHUB_OUTPUT"
+
       - name: Build
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          VITE_APP_URL: ${{ steps.preview-url.outputs.url }}
+          VITE_IS_PREVIEW: 'true'
           VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN }}
           VITE_PUBLIC_POSTHOG_HOST: ${{ vars.VITE_PUBLIC_POSTHOG_HOST }}
           # Baked into sheet/preview URLs by the runtime self-seed
@@ -201,12 +223,17 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          EXPECTED_URL: ${{ steps.preview-url.outputs.url }}
         run: |
           output=$(bunx wrangler deploy 2>&1) || true
           echo "$output"
           url=$(echo "$output" | grep -oP 'https://[^\s]+\.workers\.dev' | tail -1)
           if [ -z "$url" ]; then
             echo "::error::Wrangler deploy failed — no URL found in output"
+            exit 1
+          fi
+          if [ "$url" != "$EXPECTED_URL" ]; then
+            echo "::error::Deployed to $url but the build was baked for $EXPECTED_URL"
             exit 1
           fi
           echo "url=$url" >> "$GITHUB_OUTPUT"

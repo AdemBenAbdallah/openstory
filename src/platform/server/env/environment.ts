@@ -33,47 +33,13 @@ export function getProductionDeploymentAppUrl(request: Request): string {
   return getServerAppUrl(request);
 }
 
-function isProductionDeployment(request: Request): boolean {
-  return (
-    !isLocalDevelopment() &&
-    getProductionDeploymentAppUrl(request) === getServerAppUrl(request)
-  );
-}
-
-/**
- * Check if this is a preview deployment.
- * Preview if: VITE_APP_URL is explicitly empty, or VITE_APP_URL doesn't match the request origin.
- */
-export function isPreviewDeployment(request: Request): boolean {
-  if (isLocalDevelopment()) return false;
-
-  const envAppUrl = getEnv().VITE_APP_URL;
-
-  // VITE_APP_URL explicitly set to empty string or not set = preview branch
-  if (!envAppUrl) return true;
-
-  // Otherwise check VITE_APP_URL to see if it's a PR url
-  if (envAppUrl.includes('pr-')) {
-    return true;
-  }
-
-  return !isProductionDeployment(request);
-}
-
-/**
- * Check if we're running in local development environment
- */
-function isLocalDevelopment(): boolean {
-  return getEnv().NODE_ENV === 'development';
-}
-
 /**
  * Is this request being served on a local/network-dev host (localhost or a
  * bare IP)? Mirrors the local-access check in `src/routes/__root.tsx`: real
  * deployments — wherever they are hosted — are always reached by hostname,
  * never a bare IP or localhost.
  *
- * This is a host-based, env-independent signal. Unlike isProductionDeployment(),
+ * This is a host-based, env-independent signal. Unlike IS_PREVIEW_DEPLOYMENT,
  * it does not rely on VITE_APP_URL / NODE_ENV being present in the worker env
  * (they are only declared under wrangler.jsonc [env.test].vars, so they are
  * undefined in production and in the e2e-built worker alike).

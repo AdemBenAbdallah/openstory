@@ -129,7 +129,7 @@
       // compiler strips `.handler()` (the boundary test models that
       // stripping); the root-level routes are pure server routes whose only
       // `createFileRoute` option is `server` (pruned from the client tree);
-      // tests and stories never ship.
+      // tests never ship.
       "files": [
         "src/**/server/**",
         "src/**/*.fn.ts",
@@ -140,7 +140,6 @@
         "src/routes/oauth/login.ts",
         "src/routes/r2.$.ts",
         "src/routes/llms*.ts",
-        "src/routes/robots*.ts",
         "src/**/*.test.ts",
         "scripts/**"
       ],
