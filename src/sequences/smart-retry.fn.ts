@@ -5,11 +5,11 @@
  */
 
 import { executeSmartRetry } from '@/sequences/server/smart-retry';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
 
 export const smartRetryFn = createServerFn({ method: 'POST' })
   .middleware([sequenceAccessMiddleware])

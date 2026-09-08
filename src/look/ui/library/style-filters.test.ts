@@ -1,4 +1,4 @@
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { describe, expect, test } from 'vitest';
 import { filterStyles } from './style-filters';
 

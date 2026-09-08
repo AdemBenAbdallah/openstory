@@ -5,8 +5,12 @@
  * column names, so a fixture reads like the DB.
  */
 
-import type { Frame, FrameVariant, VideoVariant } from '@/lib/db/schema';
-import { generateId } from '@/shared/id';
+import type {
+  Frame,
+  FrameVariant,
+  VideoVariant,
+} from '@/platform/server/db/schema';
+import { generateId } from '@/platform/id';
 
 /**
  * An anchor `frames` row. Its `id` is its own — a frame is NOT its shot (#989),

@@ -1,12 +1,12 @@
-import { getChannelHistoryFn } from '@/functions/realtime-history';
-import { useUser } from '@/hooks/use-user';
-import { useRealtime } from '@/components/realtime/client';
+import { getChannelHistoryFn } from '@/platform/realtime-history.fn';
+import { useUser } from '@/platform/ui/use-user';
+import { useRealtime } from '@/platform/ui/realtime/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { locationLibraryKeys } from './use-location-library';
 import { libraryLocationKeys } from './use-sequence-locations';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'use-location-sheets-realtime']);
 

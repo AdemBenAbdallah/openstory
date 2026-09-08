@@ -1,9 +1,6 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
-import {
-  ASPECT_RATIOS,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { ASPECT_RATIOS, type AspectRatio } from '@/models/aspect-ratios';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import type { FC, ComponentProps } from 'react';
 

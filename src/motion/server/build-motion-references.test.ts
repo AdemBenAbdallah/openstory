@@ -3,7 +3,7 @@ import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import {
   buildMotionReferenceImages,
   buildShotImageReferenceImages,

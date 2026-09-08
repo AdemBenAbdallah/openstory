@@ -3,21 +3,18 @@ import type { ModelGenerationStatus } from '@/models/ui/pickers/base-model-selec
 import { MusicModelSelector } from '@/models/ui/pickers/music-model-selector';
 import { PromptHistorySheet } from '@/shots/ui/prompts/prompt-history-sheet';
 import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
-import { Button } from '@/ui/button';
-import { Checkbox } from '@/ui/checkbox';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
-import { Skeleton } from '@/ui/skeleton';
-import { Textarea } from '@/ui/textarea';
+import { Button } from '@/ui/shadcn/button';
+import { Checkbox } from '@/ui/shadcn/checkbox';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Textarea } from '@/ui/shadcn/textarea';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
-import {
-  getAudioModelDurationLimits,
-  type AudioModel,
-} from '@/models/models';
+import { getAudioModelDurationLimits, type AudioModel } from '@/models/models';
 import { estimateAudioCost } from '@/billing/cost-estimation';
 import { useTextDictation } from '@/ui/use-dictation';
-import type { Sequence } from '@/lib/db/schema';
+import type { Sequence } from '@/platform/server/db/schema';
 import {
   AlertCircle,
   AlertTriangle,

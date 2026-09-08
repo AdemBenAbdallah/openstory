@@ -3,8 +3,8 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/ui/sidebar';
-import { TooltipProvider } from '@/ui/tooltip';
+} from '@/ui/shadcn/sidebar';
+import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/docs')({

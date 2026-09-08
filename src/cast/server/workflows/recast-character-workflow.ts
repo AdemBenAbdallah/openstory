@@ -10,23 +10,23 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getGenerationChannel } from '@/shared/realtime';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import type { CloudflareEnv } from '@/lib/workflow/types';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import type { CloudflareEnv } from '@/platform/server/workflow/types';
 import type {
   CharacterSheetWorkflowInput,
   CharacterSheetWorkflowResult,
   RecastCharacterWorkflowInput,
   RegenerateShotsWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { computeRegenerateShotsBatchHash } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import { mergeRecastSheetIntoSnapshots } from './recast-snapshot';
 import { computeCharacterSheetHashFromDto } from './sheet-snapshots';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'recast-character']);
 

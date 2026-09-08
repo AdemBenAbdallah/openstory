@@ -3,15 +3,15 @@
  * Handles uploading and managing audio files in R2 Storage
  */
 
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { uploadResponse } from '@/lib/storage/upload-response';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
 import {
   getExtensionFromUrl,
   getMimeTypeFromExtension,
-} from '@/lib/storage/file';
-import { generateId } from '@/shared/id';
+} from '@/platform/server/storage/file';
+import { generateId } from '@/platform/id';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'audio', 'audio-storage']);
 

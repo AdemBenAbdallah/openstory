@@ -1,13 +1,13 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { routeParams } from '@/ui/layout/breadcrumbs';
 import { PageContainer } from '@/ui/layout/page-container';
 import { EditLocationDialog } from '@/cast/ui/location-library/edit-location-dialog';
 import { LocationMediaUpload } from '@/cast/ui/location-library/location-media-upload';
 import { PageDescription } from '@/ui/typography/page-description';
 import { PageHeader } from '@/ui/typography/page-header';
-import { Button } from '@/ui/button';
-import { Card } from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
+import { Button } from '@/ui/shadcn/button';
+import { Card } from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   useAddLocationSheets,
   useDeleteLibraryLocation,

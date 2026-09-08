@@ -1,4 +1,4 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { PageContainer } from '@/ui/layout/page-container';
 import { StyleLibraryView } from '@/look/ui/library/style-library-view';
 import { PageIntro } from '@/ui/typography/page-intro';

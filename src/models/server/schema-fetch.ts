@@ -16,9 +16,12 @@
  * extra request.
  */
 
-import type { GeneratedAssetActivity, JsonValue } from '@/lib/db/schema';
+import type {
+  GeneratedAssetActivity,
+  JsonValue,
+} from '@/platform/server/db/schema';
 import { getEnv } from '#env';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'models', 'schema-fetch']);
 

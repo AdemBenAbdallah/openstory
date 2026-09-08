@@ -4,7 +4,7 @@
  * instead of the full ~1,350-row fal catalog.
  */
 
-import { getFalEndpointIds } from '@/lib/ai/fal-endpoints';
+import { getFalEndpointIds } from '@/models/fal-endpoints';
 import { IMAGE_MODELS, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 
 /**

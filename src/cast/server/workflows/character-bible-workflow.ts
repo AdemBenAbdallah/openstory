@@ -8,23 +8,23 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { CharacterMinimal } from '@/lib/db/schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { CharacterMinimal } from '@/platform/server/db/schema';
 import { buildCharacterInsert } from './cast-records';
 import { buildCastingAttributes } from '@/cast/character-prompt';
 import { reusesTalentSheet } from '@/cast/server/talent/reuse-talent-sheet';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { contentRejectionSummary } from '@/shared/ai/content-rejection';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { contentRejectionSummary } from '@/models/content-rejection';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   CharacterBibleWorkflowInput,
   CharacterSheetWorkflowInput,
   CharacterSheetWorkflowResult,
   TalentCharacterMatch,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'character-bible']);
 

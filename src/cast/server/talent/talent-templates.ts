@@ -1,5 +1,5 @@
-import type { Talent } from '@/lib/db/schema';
-import { getPublicAssetsDomain } from '@/lib/storage/public-assets';
+import type { Talent } from '@/platform/server/db/schema';
+import { getPublicAssetsDomain } from '@/platform/server/storage/public-assets';
 
 function sanitizeName(name: string): string {
   return name

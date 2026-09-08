@@ -15,20 +15,20 @@
  * pure in-memory merge, no DB read.
  */
 
-import { computeShotImageInputHash } from '@/lib/ai/input-hash';
+import { computeShotImageInputHash } from '@/shots/input-hash';
 import type { TextToImageModel } from '@/models/models';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import type {
   CharacterWithSheet,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/platform/server/db/schema';
+import { getLogger } from '@/platform/logger';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
 } from '@/shots/server/scene-script';
-import type { RegenerateShotSnapshot } from '@/lib/workflow/types';
+import type { RegenerateShotSnapshot } from '@/platform/server/workflow/types';
 import {
   buildRegenerateShotSnapshot,
   computeRegenerateShotsBatchHash,

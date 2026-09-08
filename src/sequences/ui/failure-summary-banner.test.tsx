@@ -1,4 +1,4 @@
-import { CONTENT_REJECTION_USER_HINT } from '@/shared/ai/content-rejection';
+import { CONTENT_REJECTION_USER_HINT } from '@/models/content-rejection';
 import { CREDITS_SHORT_TITLE } from '@/billing/credits-short';
 import type { FailureSummary } from '@/sequences/failure-analysis';
 import { renderToStaticMarkup } from 'react-dom/server';

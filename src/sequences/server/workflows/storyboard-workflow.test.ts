@@ -20,13 +20,13 @@ import { describe, expect, test, vi } from 'vitest';
 import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
 import { DEFAULT_ANALYSIS_MODEL } from '@/models/models.config';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { StoryboardWorkflowInput } from '@/lib/workflow/types';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { StoryboardWorkflowInput } from '@/platform/server/workflow/types';
 
-vi.doMock('@/lib/db/scoped', () => ({
+vi.doMock('@/platform/server/db/scoped', () => ({
   createScopedDb: vi.fn(),
 }));
-vi.doMock('@/lib/ai/fal-config', () => ({
+vi.doMock('@/models/server/fal-config', () => ({
   configureFalProxyFromEnv: vi.fn(),
 }));
 vi.doMock('@/stills/server/image-generation', () => ({
@@ -35,13 +35,15 @@ vi.doMock('@/stills/server/image-generation', () => ({
 
 const emit = vi.fn();
 const getGenerationChannel = vi.fn(() => ({ emit }));
-vi.doMock('@/shared/realtime', () => ({ getGenerationChannel }));
+vi.doMock('@/platform/realtime', () => ({ getGenerationChannel }));
 
 const spawnAndAwaitChild = vi.fn(async () => undefined);
-vi.doMock('@/lib/workflow/await-child', () => ({ spawnAndAwaitChild }));
+vi.doMock('@/platform/server/workflow/await-child', () => ({
+  spawnAndAwaitChild,
+}));
 
 const notifySequenceReady = vi.fn(async () => 'sent');
-vi.doMock('@/lib/emails/notify-sequence-ready', () => ({
+vi.doMock('@/sequences/server/notify-sequence-ready', () => ({
   notifySequenceReady,
   sequenceScenesUrl: (id: string) =>
     `https://openstory.so/sequences/${id}/scenes`,

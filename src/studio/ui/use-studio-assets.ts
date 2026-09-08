@@ -1,4 +1,4 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import {
   createStudioAssetsFn,
   deleteStudioAssetFn,

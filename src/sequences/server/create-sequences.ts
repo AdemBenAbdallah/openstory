@@ -24,19 +24,19 @@ import {
   getAnalysisModelById,
 } from '@/models/models.config';
 import { resolveModelForCountry } from '@/models/region-policy';
-import { resolveAudioModels } from '@/lib/ai/resolve-audio-models';
-import { resolveImageModels } from '@/lib/ai/resolve-image-models';
-import { resolveVideoModels } from '@/lib/ai/resolve-video-models';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { resolveAudioModels } from '@/models/resolve-audio-models';
+import { resolveImageModels } from '@/models/resolve-image-models';
+import { resolveVideoModels } from '@/models/resolve-video-models';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import {
   releaseReservationOnThrow,
   reserveRunCredits,
 } from '@/billing/server/preflight';
 import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
-import { generateId } from '@/shared/id';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { ValidationError } from '@/shared/errors';
+import { generateId } from '@/platform/id';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { toWorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { ValidationError } from '@/platform/errors';
 import { DEFAULT_RESOLUTION } from '@/models/resolutions';
 import {
   AUTO_STYLE_ID,
@@ -44,18 +44,18 @@ import {
   placeholderAutoStyleDraft,
 } from '@/look/auto-style';
 import { parseStyleConfig } from '@/look/style-config';
-import type { Sequence } from '@/lib/db/schema';
+import type { Sequence } from '@/platform/server/db/schema';
 import {
   REFERENCE_ONLY_MODEL_ERROR,
   type CreateSequenceInput,
-} from '@/lib/schemas/sequence.schemas';
+} from './sequence.schemas';
 import { UNTITLED_SEQUENCE_TITLE } from '@/sequences/untitled-sequence-title';
 import { copySequenceElements } from '@/cast/server/sequence-elements/copy-sequence-elements';
 import { promoteTempElements } from '@/cast/server/sequence-elements/promote-temp-elements';
-import { captureProductEvent } from '@/lib/observability/product-events';
+import { captureProductEvent } from '@/platform/server/observability/product-events';
 import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
-import { triggerStoryboard } from '@/lib/workflow/launchers';
-import type { StoryboardTriggerInput } from '@/lib/workflow/types';
+import { triggerStoryboard } from './launchers';
+import type { StoryboardTriggerInput } from '@/platform/server/workflow/types';
 import { createServerOnlyFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 

@@ -1,5 +1,5 @@
 import { NewSequencePage } from '@/sequences/ui/script/new-sequence-page';
-import { requireSessionOrRedirect } from '@/components/auth/route-guards';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 

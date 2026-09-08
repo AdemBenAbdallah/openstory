@@ -5,7 +5,7 @@ import { defineConfig } from 'drizzle-kit';
  * Uses test.db SQLite file for isolated e2e testing
  */
 export default defineConfig({
-  schema: './src/lib/db/schema/index.ts',
+  schema: './src/platform/server/db/schema/index.ts',
   out: './drizzle/migrations',
   dialect: 'sqlite',
   dbCredentials: {

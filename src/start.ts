@@ -1,6 +1,6 @@
 import { createCsrfMiddleware, createStart } from '@tanstack/react-start';
-import { loggerMiddleware } from '@/functions/middleware';
-import { openStoryErrorSerializationAdapter } from '@/shared/errors';
+import { loggerMiddleware } from '@/platform/middleware.fn';
+import { openStoryErrorSerializationAdapter } from '@/platform/errors';
 
 /**
  * Custom `src/start.ts` disables TanStack Start's default CSRF install.

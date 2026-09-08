@@ -12,8 +12,8 @@ import {
   STORAGE_BUCKETS,
   type StorageBucket,
   type UploadResult,
-} from '@/lib/storage/buckets';
-import { requireStoredKey } from '@/lib/storage/copy-stored-image';
+} from '@/platform/server/storage/buckets';
+import { requireStoredKey } from '@/platform/server/storage/copy-stored-image';
 
 /** Generated talent sheets are 4 equal columns: front, close-up, side, rear. */
 const TALENT_SHEET_COLS = 4;

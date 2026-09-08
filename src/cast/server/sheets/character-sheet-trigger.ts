@@ -3,12 +3,12 @@
  * regenerate-from-bible, no talent picker, no shot regen.
  */
 
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { CharacterWithSheet } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
+import type { CharacterWithSheet } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { resolveSheetImageModel } from '@/cast/sheet-image-model';
 import { resolveSequenceStyleConfig } from '@/look/style-config';
-import type { CharacterSheetWorkflowInput } from '@/lib/workflow/types';
+import type { CharacterSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeCharacterSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
 
 export function toCharacterMetadata(

@@ -23,10 +23,7 @@ import {
   isValidAnalysisModelId,
   type AnalysisModelId,
 } from '@/models/models.config';
-import {
-  DEFAULT_ASPECT_RATIO,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { DEFAULT_ASPECT_RATIO, type AspectRatio } from '@/models/aspect-ratios';
 import {
   DEFAULT_RESOLUTION,
   isResolution,
@@ -40,7 +37,7 @@ import {
 } from '@/sequences/pipeline';
 import { useCallback, useEffect, useState } from 'react';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'use-generation-settings']);
 

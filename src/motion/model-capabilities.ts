@@ -9,10 +9,7 @@
 
 import type { ImageToVideoModel } from '@/models/models';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import {
-  tiersForTokens,
-  type Resolution,
-} from '@/models/resolutions';
+import { tiersForTokens, type Resolution } from '@/models/resolutions';
 
 /** Allowed clip lengths in seconds, sorted. Empty = duration is not a field. */
 export const MOTION_DURATION_GRID = {

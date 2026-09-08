@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { routeParams } from '@/ui/layout/breadcrumbs';
 import { EditTalentDialog } from '@/cast/ui/talent-library/edit-talent-dialog';
 import { PortraitAttestationFields } from '@/cast/ui/talent-library/portrait-attestation-fields';
 import { TalentMediaUpload } from '@/cast/ui/talent-library/talent-media-upload';
-import { statementFor } from '@/shared/compliance/attestations';
+import { statementFor } from '@/platform/compliance/attestations';
 import { PageContainer } from '@/ui/layout/page-container';
-import { getCurrentUserProfileFn } from '@/functions/user';
+import { getCurrentUserProfileFn } from '@/platform/user.fn';
 import { PageDescription } from '@/ui/typography/page-description';
 import { PageHeader } from '@/ui/typography/page-header';
-import { Button } from '@/ui/button';
-import { Card } from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
+import { Button } from '@/ui/shadcn/button';
+import { Card } from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { useTalentSheetRealtime } from '@/cast/ui/use-talent-realtime';
 import {
   useTalentById,

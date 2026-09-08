@@ -2,27 +2,27 @@
  * The `locationMatchingWorkflow` durable workflow.
  *
  * The LLM call goes through `durableLLMCallCf` (the CF port of
- * `durableLLMCall`); see `src/lib/workflows/llm-call-helper.ts`.
+ * `durableLLMCall`); see `src/models/server/llm-call-helper.ts`.
  *
  * This workflow does not invoke any child workflows — it's a leaf
  * orchestrator that runs a single LLM call and assembles matches.
  */
 
-import { buildLocationMatchingPromptVariables } from '@/lib/ai/location-matching-prompt';
-import { locationMatchResponseSchema } from '@/lib/ai/response-schemas';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getGenerationChannel } from '@/shared/realtime';
+import { buildLocationMatchingPromptVariables } from '@/cast/server/location-matching-prompt';
+import { locationMatchResponseSchema } from '@/sequences/response-schemas';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
 import { GENERATION_STAGE_META } from '@/sequences/pipeline';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { durableLLMCallCf } from '@/models/server/llm-call-helper';
 import { waitForLocationReferences } from './wait-for-sheets';
 import type {
   LibraryLocationMatch,
   LocationMatchingWorkflowInput,
   LocationMatchingWorkflowOutput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'location-matching']);
 

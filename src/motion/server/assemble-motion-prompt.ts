@@ -14,7 +14,7 @@ import type {
   DialogueLine,
   MotionAudio,
   MotionDialogue,
-} from '@/lib/ai/scene-analysis.schema';
+} from '@/shots/scene-analysis.schema';
 import {
   IMAGE_TO_VIDEO_MODELS,
   type ImageToVideoModel,

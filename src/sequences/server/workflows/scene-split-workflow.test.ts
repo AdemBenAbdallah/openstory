@@ -23,22 +23,22 @@ import type {
   WorkflowStep,
   WorkflowStepConfig,
 } from 'cloudflare:workers';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { SceneSplittingScene } from '@/lib/ai/streaming-scene-parser';
-import type { SceneSplitWorkflowInput } from '@/lib/workflow/types';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { SceneSplittingScene } from '@/sequences/server/streaming-scene-parser';
+import type { SceneSplitWorkflowInput } from '@/platform/server/workflow/types';
 
 const triggerWorkflow =
   vi.fn<(path: string, body: unknown, options?: unknown) => Promise<string>>();
-vi.doMock('@/lib/workflow/client', () => ({ triggerWorkflow }));
+vi.doMock('@/platform/server/workflow/client', () => ({ triggerWorkflow }));
 
-vi.doMock('@/lib/prompts', () => ({
+vi.doMock('@/platform/server/ai/prompts-index', () => ({
   getChatPrompt: vi.fn(() =>
     Promise.resolve({ messages: [{ role: 'user', content: 'go' }] })
   ),
 }));
 
 const emit = vi.fn(() => Promise.resolve());
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 
@@ -67,7 +67,7 @@ function singleDoneChunk(): StreamChunk[] {
   ];
 }
 
-vi.doMock('@/lib/ai/llm-client', () => ({
+vi.doMock('@/models/server/llm-client', () => ({
   PROMPT_REASONING: undefined,
   llmCostFromUsage: vi.fn(() => 0),
   callLLMStream: vi.fn((params: { observationName?: string }) => ({
@@ -94,8 +94,10 @@ vi.doMock('@/lib/ai/llm-client', () => ({
  * re-emit all three every time and inflate the shot mapping.
  */
 const feed = vi.fn();
-vi.doMock('@/lib/ai/streaming-scene-parser', async () => {
-  const real = await vi.importActual('@/lib/ai/streaming-scene-parser');
+vi.doMock('@/sequences/server/streaming-scene-parser', async () => {
+  const real = await vi.importActual(
+    '@/sequences/server/streaming-scene-parser'
+  );
   return {
     ...real,
     createStreamingSceneParser: () => {
@@ -120,7 +122,7 @@ vi.doMock('@/lib/ai/streaming-scene-parser', async () => {
 
 // Dynamic import so the mocks above apply (vi.doMock is not hoisted).
 const { SceneSplitWorkflow } = await import('./scene-split-workflow');
-const { callLLMStream } = await import('@/lib/ai/llm-client');
+const { callLLMStream } = await import('@/models/server/llm-client');
 
 function sceneSplittingLlmCalls() {
   return vi

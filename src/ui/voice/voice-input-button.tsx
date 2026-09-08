@@ -9,17 +9,10 @@
  * `webkitSpeechRecognition` is missing (default Firefox today).
  */
 
-import { Button } from '@/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/ui/tooltip';
+import { Button } from '@/ui/shadcn/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/tooltip';
 import { useHydrated } from '@/ui/use-hydrated';
-import {
-  DictationError,
-  useSpeechDictation,
-} from '@/ui/use-speech-dictation';
+import { DictationError, useSpeechDictation } from '@/ui/use-speech-dictation';
 import { Mic, Square } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';

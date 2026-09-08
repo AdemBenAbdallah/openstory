@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Card, CardContent } from '@/ui/card';
+import { Card, CardContent } from '@/ui/shadcn/card';
 import { StalenessIndicator } from './staleness-indicator';
 
 const meta: Meta<typeof StalenessIndicator> = {

@@ -43,7 +43,7 @@ import {
 import { computeMusicGain } from './music-gain';
 import { type PlayAttemptResult, settlePlayWait } from './play-attempt';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'sequence-player', 'playback']);
 

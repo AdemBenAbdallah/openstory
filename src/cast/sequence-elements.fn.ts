@@ -1,26 +1,29 @@
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import { getSignedUploadUrl } from '#storage';
 import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
-} from '@/lib/ai/element-vision';
+} from '@/cast/server/element-vision';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { estimateLLMCost } from '@/billing/cost-estimation';
-import { InsufficientCreditsError, NotFoundError } from '@/shared/errors';
-import { generateId } from '@/shared/id';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { InsufficientCreditsError, NotFoundError } from '@/platform/errors';
+import { generateId } from '@/platform/id';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { deriveTokenFromFilename } from './derive-token';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import {
   getExtensionFromUrl,
   getMimeTypeFromExtension,
-} from '@/lib/storage/file';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { ElementVisionWorkflowInput } from '@/lib/workflow/types';
+} from '@/platform/server/storage/file';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { ElementVisionWorkflowInput } from '@/platform/server/workflow/types';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import {
+  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
+} from '@/platform/middleware.fn';
 
 /**
  * Sequence-element storage paths must live exactly under

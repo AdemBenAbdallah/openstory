@@ -13,23 +13,23 @@ import {
   computeShotImageInputHash,
   sha256Hex,
   type ShotImageHashInput,
-} from '@/lib/ai/input-hash';
+} from '@/shots/input-hash';
 import type { TextToImageModel } from '@/models/models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type {
   CharacterWithSheet,
   Shot,
   SequenceElement,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
+import { getGenerationChannel } from '@/platform/realtime';
 import type {
   RegenerateShotSnapshot,
   RegenerateShotsWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { resolveSceneShotImageReferences } from '@/cast/server/workflows/sheet-snapshots';
 
 /**

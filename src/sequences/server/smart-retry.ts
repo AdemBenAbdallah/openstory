@@ -37,15 +37,19 @@ import {
   estimateVideoCost,
   gateEstimate,
 } from '@/billing/cost-estimation';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import {
   releaseReservationOnThrow,
   reserveRunCredits,
 } from '@/billing/server/preflight';
 import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { CharacterWithSheet, Sequence, Shot } from '@/lib/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type {
+  CharacterWithSheet,
+  Sequence,
+  Shot,
+} from '@/platform/server/db/schema';
 import { analyzeFailures } from '@/sequences/failure-analysis';
 import {
   motionPromptFromVersion,
@@ -54,25 +58,22 @@ import {
 import { toShotView } from '@/shots/shot-view';
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { toWorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import {
   notifySequenceReady,
   sequenceScenesUrl,
-} from '@/lib/emails/notify-sequence-ready';
-import {
-  assertNoActiveStoryboard,
-  triggerStoryboard,
-} from '@/lib/workflow/launchers';
+} from './notify-sequence-ready';
+import { assertNoActiveStoryboard, triggerStoryboard } from './launchers';
 import type {
   ImageWorkflowInput,
   MotionWorkflowInput,
   MusicPromptWorkflowInput,
   MusicWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import { sumShotDurationsSeconds } from './shot-durations';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'sequences', 'smart-retry']);
 

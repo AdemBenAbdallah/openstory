@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { ShotVariant } from '@/lib/db/schema';
+import type { ShotVariant } from '@/platform/server/db/schema';
 import {
   frameFixture,
   frameVariantFixture,

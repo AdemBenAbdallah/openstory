@@ -16,7 +16,7 @@
  */
 
 import type { TextModel } from './models';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ai', 'region-policy']);
 

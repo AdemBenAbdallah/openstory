@@ -1,5 +1,5 @@
-import type { SceneRow } from '@/lib/db/schema';
-import type { Shot } from '@/lib/db/schema';
+import type { SceneRow } from '@/platform/server/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import { describe, expect, test } from 'vitest';
 import { generateChaptersVTT, type ShotChapter } from './generate-chapters';
 

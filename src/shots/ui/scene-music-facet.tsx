@@ -7,7 +7,7 @@ import {
   saveMusicPromptFn,
 } from '@/shots/prompt-variants.fn';
 import { generateMusicFn } from '@/sequences/sequences.fn';
-import { useUploadSequenceMusic } from '@/hooks/use-media-upload';
+import { useUploadSequenceMusic } from './use-media-upload';
 import { useShotsBySequence } from './use-shots';
 import {
   musicPromptStalenessKey,
@@ -22,7 +22,7 @@ import {
   useSequenceDivergentMusicVariants,
   useSetMusicFromVariant,
   useUndiscardSequenceMusicVariant,
-} from '@/sequences/ui/use-sequence-variants';
+} from '@/audio/ui/use-sequence-variants';
 import type { ModelGenerationStatus } from '@/models/ui/pickers/base-model-selector';
 import {
   DEFAULT_MUSIC_MODEL,
@@ -30,15 +30,18 @@ import {
   type AudioModel,
   isValidAudioModel,
 } from '@/models/models';
-import type { SequenceMusicVariant, Sequence } from '@/lib/db/schema';
-import { useGenerationStream } from '@/components/realtime/use-generation-stream';
-import { useSequenceStaleDetected } from '@/components/realtime/use-sequence-stale-detected';
+import type {
+  SequenceMusicVariant,
+  Sequence,
+} from '@/platform/server/db/schema';
+import { useGenerationStream } from '@/sequences/ui/use-generation-stream';
+import { useSequenceStaleDetected } from '@/sequences/ui/use-sequence-stale-detected';
 import { Music } from 'lucide-react';
 import { usePostHog } from '@posthog/react';
 import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'use-active-audio-model']);
 

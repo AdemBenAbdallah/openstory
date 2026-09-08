@@ -14,7 +14,7 @@ import { z } from 'zod';
 
 import type { MotionJSONSchema } from './endpoint-map';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'motion', 'motion-transform']);
 

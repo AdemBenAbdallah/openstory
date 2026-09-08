@@ -41,7 +41,7 @@ import {
   type ImageToVideoModel,
   type MotionReferenceEndpointConfig,
 } from '@/models/models';
-import type { MediaVia } from '@/lib/ai/via';
+import type { MediaVia } from '@/models/via';
 import type { MotionEndpointId } from '@/motion/server/endpoint-map';
 
 export type MotionEndpointResolution =

@@ -1,8 +1,8 @@
-import { SignInPrompt } from '@/components/auth/sign-in-prompt';
+import { SignInPrompt } from '@/platform/ui/auth/sign-in-prompt';
 import { EvalView } from '@/sequences/ui/eval/eval-view';
 import { PageContainer } from '@/ui/layout/page-container';
 import { PageIntro } from '@/ui/typography/page-intro';
-import { useUser } from '@/hooks/use-user';
+import { useUser } from '@/platform/ui/use-user';
 import {
   sequencesListSearchSchema,
   isDefaultSequencesListPrefs,

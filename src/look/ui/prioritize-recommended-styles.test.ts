@@ -3,7 +3,7 @@ import {
   resolveRecommendedStyles,
 } from './prioritize-recommended-styles';
 import type { StyleRecommendation } from './use-styles';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { describe, expect, it } from 'vitest';
 
 function makeStyle(id: string): Style {

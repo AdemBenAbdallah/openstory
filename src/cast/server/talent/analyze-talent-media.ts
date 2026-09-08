@@ -7,12 +7,12 @@ import {
   TALENT_VISION_MODEL,
   type TalentMediaAnalysis,
   type TalentVisionResult,
-} from '@/lib/ai/talent-vision';
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
+} from '@/cast/server/talent-vision';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { estimateLLMCost } from '@/billing/cost-estimation';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { InsufficientCreditsError } from '@/shared/errors';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { InsufficientCreditsError } from '@/platform/errors';
 
 export type AnalyzeTalentMediaForTeamInput = {
   scopedDb: ScopedDb;

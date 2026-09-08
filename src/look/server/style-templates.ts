@@ -1,7 +1,7 @@
 import type { StyleConfig } from '@/look/style-config';
 import { styleSlug } from '@/look/style-slug';
-import { getPublicAssetsDomain } from '@/lib/storage/public-assets';
-import type { Style } from '@/lib/db/schema';
+import { getPublicAssetsDomain } from '@/platform/server/storage/public-assets';
+import type { Style } from '@/platform/server/db/schema';
 
 function getStylePreviewUrl(styleName: string): string {
   return `https://${getPublicAssetsDomain()}/styles/${styleSlug(styleName)}/thumbnail.webp`;

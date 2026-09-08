@@ -1,13 +1,13 @@
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
-import { Button } from '@/ui/button';
-import { Card } from '@/ui/card';
+import { Button } from '@/ui/shadcn/button';
+import { Card } from '@/ui/shadcn/card';
 import { useToggleTalentFavorite } from '@/cast/ui/use-talent';
-import type { TalentWithSheets } from '@/lib/db/schema';
+import type { TalentWithSheets } from '@/platform/server/db/schema';
 import { cn } from '@/ui/utils';
 import { Link } from '@tanstack/react-router';
 import { ImageIcon, Loader2, Sparkles, Star, User } from 'lucide-react';
 import type React from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type TalentLibraryCardProps = {
   talent: TalentWithSheets;

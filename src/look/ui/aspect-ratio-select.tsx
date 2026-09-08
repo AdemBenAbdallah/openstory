@@ -1,12 +1,12 @@
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 import {
   ASPECT_RATIOS,
   aspectRatioSchema,

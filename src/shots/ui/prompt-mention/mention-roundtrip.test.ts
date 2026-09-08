@@ -22,7 +22,7 @@ import {
 } from './mention-items';
 import { tagifyMarkdown } from '@/ui/text-editor/mention/tagify';
 import { extractContinuityFromPrompt } from '@/shots/server/workflows/extract-continuity-from-prompt';
-import type { SequenceElementMinimal } from '@/lib/db/schema';
+import type { SequenceElementMinimal } from '@/platform/server/db/schema';
 
 const character: MentionCharacterInput = {
   id: 'c1',

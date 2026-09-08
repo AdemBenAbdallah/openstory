@@ -7,8 +7,11 @@
  */
 
 import { isStripeEnabled } from './constants';
-import { getStripeOrThrow, getStripeWebhookSecret } from '@/billing/server/stripe';
-import { createScopedDb, type ScopedDb } from '@/lib/db/scoped';
+import {
+  getStripeOrThrow,
+  getStripeWebhookSecret,
+} from '@/billing/server/stripe';
+import { createScopedDb, type ScopedDb } from '@/platform/server/db/scoped';
 import { createMiddleware } from '@tanstack/react-start';
 import type Stripe from 'stripe';
 

@@ -2,11 +2,11 @@ import { getEnv } from '#env';
 // Used only inside createIsomorphicFn().server(…) below. The Start compiler
 // strips that body from the client build; the boundary test models the strip.
 // oxlint-disable-next-line no-restricted-imports
-import { getProductionDeploymentAppUrl } from '@/lib/env/environment';
+import { getProductionDeploymentAppUrl } from '@/platform/server/env/environment';
 import { DocsReferrerTracker } from '@/ui/docs/docs-referrer-tracker';
 import { DefaultNotFound } from '@/ui/error/default-not-found';
 import { Providers } from '@/ui/providers';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { SITE_CONFIG } from '@/ui/marketing/constants';
 import appCss from '@/styles/global.css?url';
 import type { QueryClient } from '@tanstack/react-query';

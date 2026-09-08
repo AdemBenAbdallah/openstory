@@ -16,25 +16,25 @@ import {
   computeVisualPromptInputHash,
   motionPromptInputHashMatches,
   visualPromptInputHashMatches,
-} from '@/lib/ai/input-hash';
+} from '@/shots/input-hash';
 import {
   loadNarrowShotPromptContext,
   type ShotPromptContextRefs,
   type ShotPromptContextSequence,
-} from '@/lib/ai/prompt-context';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+} from './prompt-context';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import type { Frame, FrameVariant, Shot } from '@/lib/db/schema';
-import { dbSceneId } from '@/lib/db/schema/scenes';
+import type { Frame, FrameVariant, Shot } from '@/platform/server/db/schema';
+import { dbSceneId } from '@/shots/scene-id';
 import {
   SETTINGS_CHANGED_EVENT,
   SETTINGS_CHANGED_LABELS,
-} from '@/lib/db/scoped/sequence-events';
-import type { SequenceStatus } from '@/lib/db/schema/sequences';
-import type { ScopedDb } from '@/lib/db/scoped';
+} from '@/sequences/server/db/sequence-events';
+import type { SequenceStatus } from '@/platform/server/db/schema/sequences';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { buildRegenerateShotSnapshot } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import { matchElementsToShotImage } from '@/shots/scene-matching';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'shots', 'staleness']);
 

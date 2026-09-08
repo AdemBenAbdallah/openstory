@@ -8,7 +8,7 @@ import type {
   CharacterWithTalent,
   SequenceElement,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 
 /**
  * `references` = stills, clips, and audio attached to a studio composer

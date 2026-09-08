@@ -1,17 +1,17 @@
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
-import { AppImage } from '@/ui/app-image';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/ui/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs';
+} from '@/ui/shadcn/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
 import {
   useCancelPendingArtifact,
   useRestoreMusicPromptVariant,
@@ -30,7 +30,10 @@ import {
   isValidTextToImageModel,
   videoModelDisplayName,
 } from '@/models/models';
-import type { PromptVariantSource, PromptVersionStatus } from '@/lib/db/schema';
+import type {
+  PromptVariantSource,
+  PromptVersionStatus,
+} from '@/platform/server/db/schema';
 import { cn } from '@/ui/utils';
 import {
   AlertCircle,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { falCostFromUnits } from '@/lib/ai/fal-cost-billing';
+import { falCostFromUnits } from '@/billing/server/fal-cost-billing';
 import {
   estimateFalCost,
   MIN_OBSERVED_SAMPLES,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, CardContent } from '@/ui/card';
+import { Card, CardContent } from '@/ui/shadcn/card';
 import { DivergentAlternateBanner } from './divergent-alternate-banner';
 import { StalenessIndicator } from './staleness-indicator';
 

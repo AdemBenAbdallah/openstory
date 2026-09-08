@@ -17,7 +17,7 @@ import {
   callLLM,
   ENHANCE_REASONING,
   RECOMMENDED_MODELS,
-} from '@/lib/ai/llm-client';
+} from '@/models/server/llm-client';
 import {
   parseSceneDurationLabels,
   stripTotalLine,
@@ -28,8 +28,8 @@ import {
   isValidImageToVideoModel,
   type ImageToVideoModel,
 } from '@/models/models';
-import { createUserPrompt } from '@/lib/ai/script-enhancer';
-import { WORKFLOW_TEXT_PROMPTS } from '@/lib/prompts/workflow-prompts';
+import { createUserPrompt } from '@/sequences/script-enhancer';
+import { WORKFLOW_TEXT_PROMPTS } from '@/platform/server/ai/workflow-prompts';
 
 const BRIEF = `A 30-second travel film across eight places, then a title card.
 

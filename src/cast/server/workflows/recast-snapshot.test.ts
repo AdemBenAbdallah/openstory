@@ -10,13 +10,13 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import type {
   CharacterWithSheet,
   SequenceElement,
   SequenceLocationWithReference,
   Shot,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { buildRegenerateShotSnapshot } from '@/shots/server/workflows/regenerate-shots-snapshot';
 import {
   mergeRecastSheetIntoSnapshots,

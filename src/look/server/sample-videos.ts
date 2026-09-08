@@ -17,7 +17,7 @@
 import {
   StyleSampleVideoSchema,
   type StyleSampleVideo,
-} from '@/lib/db/schema/libraries';
+} from '@/platform/server/db/schema/libraries';
 import { styleSlug } from '@/look/style-slug';
 
 // Brief data + resolver moved to a schema-free module (#956) so client code can

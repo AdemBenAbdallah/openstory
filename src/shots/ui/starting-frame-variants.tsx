@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
+} from '@/ui/shadcn/dialog';
 import { useFalBillingGate } from '@/billing/ui/use-billing-gate';
 import { useGenerateVariants, useSelectVariant } from './use-shots';
 import type { TextToImageModel } from '@/models/models';

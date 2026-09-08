@@ -15,9 +15,9 @@ import {
   SECTION_ORDER,
   type MentionItem,
 } from '@/shots/ui/prompt-mention/mention-items';
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
-import { Input } from '@/ui/input';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
+import { Input } from '@/ui/shadcn/input';
 import { deriveTokenFromFilename } from '@/cast/derive-token';
 import { Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';

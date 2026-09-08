@@ -8,24 +8,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { EmptyState } from '@/ui/empty-state';
-import { Skeleton } from '@/ui/skeleton';
-import { AppImage } from '@/ui/app-image';
+} from '@/ui/shadcn/dialog';
+import { EmptyState } from '@/ui/shadcn/empty-state';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { AppImage } from '@/ui/shadcn/app-image';
 import {
   useDeleteStudioAsset,
   useStudioPendingCreates,
   useToggleStudioFavorite,
 } from './use-studio-assets';
-import type { GeneratedAsset } from '@/lib/db/schema';
+import type { GeneratedAsset } from '@/platform/server/db/schema';
 import {
   studioAspectRatio,
   studioPosterOutput,

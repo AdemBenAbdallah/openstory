@@ -1,16 +1,16 @@
 import { dbSceneId } from './scene-id';
-import { NotFoundError } from '@/shared/errors';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { NotFoundError } from '@/platform/errors';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 import {
   composeSequenceScriptFromDb,
   loadSceneContextBySequence,
 } from '@/shots/server/scene-script';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-from-prompt';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
 
 /** Ordered scenes for a sequence (#909 — the editor groups shots under these). */
 export const getScenesFn = createServerFn({ method: 'GET' })

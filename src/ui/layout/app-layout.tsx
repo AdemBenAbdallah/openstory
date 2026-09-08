@@ -3,11 +3,11 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/ui/sidebar';
-import { Separator } from '@/ui/separator';
-import { TooltipProvider } from '@/ui/tooltip';
+} from '@/ui/shadcn/sidebar';
+import { Separator } from '@/ui/shadcn/separator';
+import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import type * as React from 'react';
-import { AuthGateProvider } from '@/components/auth/auth-gate-provider';
+import { AuthGateProvider } from '@/platform/ui/auth/auth-gate-provider';
 import { AddCreditsDialog } from '@/billing/ui/add-credits-dialog';
 import { GlobalBillingGateDialog } from '@/billing/ui/billing-gate-dialog';
 import { WelcomeCreditsProvider } from '@/billing/ui/welcome-credits-dialog';

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { SequenceElementMinimal } from '@/lib/db/schema';
+import type { SequenceElementMinimal } from '@/platform/server/db/schema';
 import { collectElementResults } from './element-sheet-workflow';
 
 describe('collectElementResults', () => {

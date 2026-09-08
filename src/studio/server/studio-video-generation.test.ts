@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { unledgeredAssetPool } from '@/lib/ai/byteplus-asset-pool';
+import { unledgeredAssetPool } from '@/models/server/byteplus-asset-pool';
 import {
   mockFalVideo,
   mockGenerateVideo,

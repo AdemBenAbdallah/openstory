@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { Loader2, Upload } from 'lucide-react';
 import { useRef } from 'react';
 

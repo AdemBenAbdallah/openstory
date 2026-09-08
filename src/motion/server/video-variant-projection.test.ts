@@ -6,7 +6,7 @@
  * and the always-`null` `divergedAt` the downstream readers filter on.
  */
 
-import type { VideoManifest, VideoVariant } from '@/lib/db/schema';
+import type { VideoManifest, VideoVariant } from '@/platform/server/db/schema';
 import { describe, expect, it } from 'vitest';
 import { projectVideoVariants } from './video-variant-projection';
 

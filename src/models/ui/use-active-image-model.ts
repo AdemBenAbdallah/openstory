@@ -4,7 +4,7 @@ import {
 } from '@/models/models';
 import { useCallback, useSyncExternalStore } from 'react';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'use-active-image-model']);
 

@@ -11,13 +11,13 @@
  */
 
 import { createServerFn } from '@tanstack/react-start';
-import { sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
 import { rendersReferenceOnly } from './use-start-frame';
 import {
   assembleSequenceSegments,
   type SequenceSegment,
 } from './scene-segments';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'segments']);
 

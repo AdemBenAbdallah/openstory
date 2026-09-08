@@ -1,8 +1,5 @@
-import {
-  groupStylesByCategory,
-  styleCategoryGroupKey,
-} from './style-assets';
-import type { Style } from '@/lib/db/schema';
+import { groupStylesByCategory, styleCategoryGroupKey } from './style-assets';
+import type { Style } from '@/platform/server/db/schema';
 
 /**
  * Composer strip default. Catalogue `sortOrder` is commercial-first (#355);

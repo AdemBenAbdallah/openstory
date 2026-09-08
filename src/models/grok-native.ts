@@ -7,7 +7,7 @@
 import type { ImageToVideoModel, TextToImageModel } from './models';
 import type { AnalysisModelId } from './models.config';
 import { usdToMicros, type Microdollars } from '@/billing/money';
-import { typedEntries } from '@/shared/utils/typed-object';
+import { typedEntries } from '@/platform/typed-object';
 import type { TokenUsage } from '@tanstack/ai';
 
 // `x-ai/grok-4.20` has no single native equivalent — xAI splits it into

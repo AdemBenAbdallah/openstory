@@ -12,7 +12,7 @@
  * leftover for siblings.
  */
 
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import {
   estimateImageCost,
   estimateStudioVideoCost,
@@ -23,10 +23,10 @@ import {
   releaseReservationOnThrow,
   reserveRunCredits,
 } from '@/billing/server/preflight';
-import { requireGenerationAllowed } from '@/lib/compliance/generation-gate';
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { GeneratedAssetInput } from '@/lib/db/schema';
-import { getLogger } from '@/shared/observability/logger';
+import { requireGenerationAllowed } from '@/platform/server/compliance/generation-gate';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type { GeneratedAssetInput } from '@/platform/server/db/schema';
+import { getLogger } from '@/platform/logger';
 import {
   studioEndpointId,
   studioModelName,
@@ -34,9 +34,9 @@ import {
   type StudioCreateResult,
 } from '@/studio/schema';
 import { snapStudioVideoDuration } from '@/studio/text-to-video';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { captureProductEvent } from '@/lib/observability/product-events';
-import type { StudioGenerationWorkflowInput } from '@/lib/workflow/types';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { captureProductEvent } from '@/platform/server/observability/product-events';
+import type { StudioGenerationWorkflowInput } from '@/platform/server/workflow/types';
 
 const logger = getLogger(['openstory', 'studio', 'create']);
 

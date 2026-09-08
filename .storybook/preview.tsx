@@ -7,11 +7,11 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router';
-import { RealtimeProvider } from '@/components/realtime/client';
-import { TooltipProvider } from '@/ui/tooltip';
+import { RealtimeProvider } from '@/platform/ui/realtime/client';
+import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import { mswLoader } from 'msw-storybook-addon/csf3';
 import { setupWorker } from 'msw/browser';
-import { handlers } from '@/mocks/handlers';
+import { handlers } from '../src/mocks/handlers';
 
 import '../src/styles/global.css';
 
@@ -44,7 +44,7 @@ const withRouter: Decorator = (Story) => {
 const withProviders: Decorator = (Story) => (
   <QueryClientProvider client={queryClient}>
     <RealtimeProvider>
-      {/* Radix Tooltip needs a provider (same as src/ui/providers.tsx). */}
+      {/* Radix Tooltip needs a provider (same as src/components/providers.tsx). */}
       <TooltipProvider>
         <Story />
       </TooltipProvider>

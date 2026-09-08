@@ -23,26 +23,26 @@ import {
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
 import { DEFAULT_IMAGE_SIZE } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { Frame } from '@/lib/db/schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { Frame } from '@/platform/server/db/schema';
 import {
   CONTENT_REJECTION_EVENT,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
+} from '@/models/content-rejection';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import { uploadImageToStorage } from '@/stills/server/image-storage';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { buildR2Key, STORAGE_BUCKETS } from '@/lib/storage/buckets';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { buildR2Key, STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import { buildReferenceImagePrompt } from '@/stills/reference-image-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import { simpleHash } from '@/shared/utils/hash';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import type { ImageWorkflowInput } from '@/lib/workflow/types';
+import { getGenerationChannel } from '@/platform/realtime';
+import { simpleHash } from '@/platform/hash';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import type { ImageWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { computeImageWorkflowHashFromDto } from './image-workflow-snapshot';
 import { generateImageWithContentRetry } from './soften-image-prompt';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'image']);
 

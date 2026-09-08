@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
-import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { StyleConfig } from '@/lib/db/schema';
+import type { ElementBibleEntry } from '@/shots/scene-analysis.schema';
+import type { StyleConfig } from '@/platform/server/db/schema';
 import {
   buildElementDescription,
   buildElementSheetPrompt,

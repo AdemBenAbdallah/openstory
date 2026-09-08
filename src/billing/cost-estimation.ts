@@ -7,10 +7,7 @@
  * call site silently estimate on stale data. Estimators stay synchronous.
  */
 
-import {
-  estimateFalCost,
-  type EffectiveFalPricing,
-} from './fal-cost';
+import { estimateFalCost, type EffectiveFalPricing } from './fal-cost';
 import {
   getEditEndpoint,
   AUDIO_MODELS,
@@ -30,7 +27,7 @@ import {
   studioVideoEndpointId,
   type StudioVideoMode,
 } from '@/studio/text-to-video';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 import {
   shouldRunStage,
   stageIndex,

@@ -2,7 +2,7 @@ import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { Card } from '@/ui/card';
+import { Card } from '@/ui/shadcn/card';
 import { EvalSequenceRow } from './eval-sequence-row';
 import type { SequenceWithShots } from '@/sequences/ui/use-sequences-with-shots';
 import type { ViewMode } from './eval-view';

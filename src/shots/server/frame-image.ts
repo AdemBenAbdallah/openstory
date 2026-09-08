@@ -13,7 +13,7 @@
  * `scopedDb.frameVariants.getSelected` / `getSelectedByFrameIds` directly.
  */
 
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 
 /**
  * Only the two reads these helpers make, so a workflow can pass

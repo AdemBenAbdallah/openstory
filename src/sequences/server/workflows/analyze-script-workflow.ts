@@ -9,12 +9,12 @@
  * `motion-batch` (Phase 5 motion + music + merge tree).
  */
 
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import { sanitizeScriptContent } from '@/lib/ai/prompt-validation';
-import { resolveAudioModels } from '@/lib/ai/resolve-audio-models';
-import { resolveImageModels } from '@/lib/ai/resolve-image-models';
-import { resolveVideoModels } from '@/lib/ai/resolve-video-models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
+import { sanitizeScriptContent } from '@/sequences/prompt-validation';
+import { resolveAudioModels } from '@/models/resolve-audio-models';
+import { resolveImageModels } from '@/models/resolve-image-models';
+import { resolveVideoModels } from '@/models/resolve-video-models';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import {
   estimateReferenceSheetCost,
   estimateStoryboardRenderCost,
@@ -23,14 +23,14 @@ import { creditsShortStatusError } from '@/billing/credits-short';
 import { addMicros, microsToUsd } from '@/billing/money';
 import { gateStoryboardRenders } from '@/billing/server/storyboard-render-gate';
 import { reusesTalentSheet } from '@/cast/server/talent/reuse-talent-sheet';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { buildCastCharacterBible } from '@/cast/character-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import { handleLlmAuthFailure } from '@/lib/workflow/llm-auth-failure';
-import { sanitizeFailResponse } from '@/lib/workflow/sanitize-fail-response';
+import { getGenerationChannel } from '@/platform/realtime';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import { handleLlmAuthFailure } from '@/platform/server/workflow/llm-auth-failure';
+import { sanitizeFailResponse } from '@/platform/server/workflow/sanitize-fail-response';
 import type {
   AnalyzeScriptWorkflowInput,
   BatchMotionMusicWorkflowInput,
@@ -51,7 +51,7 @@ import type {
   TalentMatchingWorkflowOutput,
   FramePromptBatchWorkflowInput,
   FramePromptBatchWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   GENERATION_STAGE_META,
   flagsFromStopAt,
@@ -75,10 +75,10 @@ import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'analyze-script']);
 

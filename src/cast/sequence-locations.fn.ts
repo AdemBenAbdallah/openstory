@@ -1,33 +1,33 @@
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
-import {
-  isValidTextToImageModel,
-  safeTextToImageModel,
-} from '@/models/models';
-import type { LocationBibleUpdate } from '@/lib/db/scoped/sequence-locations';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
+import { isValidTextToImageModel, safeTextToImageModel } from '@/models/models';
+import type { LocationBibleUpdate } from '@/cast/server/db/sequence-locations';
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
 import {
   bibleField,
   identityToken,
   nextIdentityToken,
   slugifyTag,
-} from '@/lib/schemas/bible-field';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+} from './bible-field';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { resolveSequenceStyleConfig } from '@/look/style-config';
-import { getGenerationChannel } from '@/shared/realtime';
+import { getGenerationChannel } from '@/platform/realtime';
 import {
   buildRegenerateLocationSheetPayload,
   toLocationMetadata,
 } from '@/cast/server/sheets/location-sheet-trigger';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { RecastLocationWorkflowInput } from '@/lib/workflow/types';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { RecastLocationWorkflowInput } from '@/platform/server/workflow/types';
 import { buildRecastRegenerateSnapshots } from '@/cast/server/workflows/recast-snapshot';
 import { locationSheetHashMatchesStored } from '@/cast/server/workflows/sheet-snapshots';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { NotFoundError } from '@/shared/errors';
-import { getLogger } from '@/shared/observability/logger';
-import { authWithTeamMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import { NotFoundError } from '@/platform/errors';
+import { getLogger } from '@/platform/logger';
+import {
+  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
+} from '@/platform/middleware.fn';
 
 const logger = getLogger(['openstory', 'serverFn', 'sequence-locations']);
 

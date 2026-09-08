@@ -9,7 +9,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { GeneratedAssetOutput } from '@/lib/db/schema';
+import type { GeneratedAssetOutput } from '@/platform/server/db/schema';
 import {
   extractAssetOutputs,
   isFalValidationError,

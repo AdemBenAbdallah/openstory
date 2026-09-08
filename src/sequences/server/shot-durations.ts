@@ -1,4 +1,4 @@
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 
 /**
  * Sum a sequence's per-shot durations in seconds, falling back to 10s for any

@@ -1,6 +1,6 @@
-import { getPostHogClient } from '@/lib/posthog-server';
+import { getPostHogClient } from '@/platform/server/observability/posthog-server';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'style', 'bump-style-popularity']);
 

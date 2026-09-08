@@ -1,10 +1,10 @@
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import type { ShotView } from '@/shots/shot-view';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import { stripMarkdown } from '@/shared/utils/markdown-plain';
-import { AppImage } from '@/ui/app-image';
+import { stripMarkdown } from '@/platform/markdown-plain';
+import { AppImage } from '@/ui/shadcn/app-image';
 import type React from 'react';
 import { EvalCellDialog, type DialogTab } from './eval-cell-dialog';
 import type { ViewMode } from './eval-view';

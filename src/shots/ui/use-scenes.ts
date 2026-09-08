@@ -3,8 +3,8 @@ import {
   getScenesFn,
   updateSceneScriptFn,
 } from '@/shots/scenes.fn';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { SceneRow } from '@/lib/db/schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { SceneRow } from '@/platform/server/db/schema';
 import { sceneFacetKeys } from './use-scene-facets';
 import { sequenceKeys } from '@/sequences/ui/use-sequences';
 import { shotStalenessNamespace } from './use-shot-staleness';

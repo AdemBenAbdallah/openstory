@@ -7,17 +7,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert-dialog';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { Input } from '@/ui/input';
+} from '@/ui/shadcn/dropdown-menu';
+import { Input } from '@/ui/shadcn/input';
 import {
   restoreScene,
   restoreShot,
@@ -30,15 +30,15 @@ import {
 import { videoModelDisplayName } from '@/models/models';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { SceneWithScript } from './use-scenes';
-import type { ShotVariant } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { ShotVariant } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import {
   groupShotsBySegment,
   type SequenceSegment,
 } from '@/shots/scene-segments';
 import type { ShotView } from '@/shots/shot-view';
 import { cn } from '@/ui/utils';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   ArrowDown,

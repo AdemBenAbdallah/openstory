@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/ui/shadcn/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,12 +6,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { SidebarMenuButton, SidebarMenuItem } from '@/ui/sidebar';
+} from '@/ui/shadcn/dropdown-menu';
+import { SidebarMenuButton, SidebarMenuItem } from '@/ui/shadcn/sidebar';
 import { isSystemAdminFn } from '@/billing/gift-tokens.fn';
-import { useUser } from '@/hooks/use-user';
-import { authClient } from '@/components/auth/client';
-import { sessionQueryOptions } from '@/components/auth/session-query';
+import { useUser } from '@/platform/ui/use-user';
+import { authClient } from '@/platform/ui/auth/client';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';
 import {

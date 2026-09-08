@@ -14,7 +14,7 @@ import { defineConfig } from 'drizzle-kit';
  * CLOUDFLARE_API_TOKEN.
  */
 export default defineConfig({
-  schema: './src/lib/db/schema/index.ts',
+  schema: './src/platform/server/db/schema/index.ts',
   out: './drizzle/migrations',
   dialect: 'sqlite',
   driver: 'd1-http',

@@ -23,9 +23,12 @@
  *     env, `Authorization: Bearer`) lifts it to 5k/h. The TTL cache below
  *     keeps browsing well under the anonymous limit.
  */
-import type { GeneratedAssetActivity, JsonValue } from '@/lib/db/schema';
+import type {
+  GeneratedAssetActivity,
+  JsonValue,
+} from '@/platform/server/db/schema';
 import { getEnv } from '#env';
-import { OpenStoryError } from '@/shared/errors';
+import { OpenStoryError } from '@/platform/errors';
 import { groupModelsIntoFamilies, type ModelFamily } from './model-families';
 
 const MODELSCHEMAS_BASE_URL = 'https://modelschemas.com';
@@ -51,7 +54,7 @@ export type CatalogActivity = (typeof CATALOG_ACTIVITIES)[number];
  * here so catalog consumers (SchemaForm, the detail page) have one import
  * site for schema + value types.
  */
-export type { JsonValue } from '@/lib/db/schema';
+export type { JsonValue } from '@/platform/server/db/schema';
 
 /**
  * The JSON Schema subset fal endpoint schemas actually use (draft 2020-12

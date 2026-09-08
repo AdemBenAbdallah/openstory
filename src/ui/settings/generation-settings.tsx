@@ -11,13 +11,9 @@ import {
   MusicModelMultiSelector,
   MusicModelSelector,
 } from '@/models/ui/pickers/music-model-selector';
-import { Button } from '@/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
-import { Separator } from '@/ui/separator';
+import { Button } from '@/ui/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
+import { Separator } from '@/ui/shadcn/separator';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_MUSIC_MODEL,

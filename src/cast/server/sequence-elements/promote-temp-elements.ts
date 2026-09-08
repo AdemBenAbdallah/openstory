@@ -1,15 +1,18 @@
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import { moveFile } from '#storage';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { generateId } from '@/shared/id';
-import { STORAGE_BUCKETS, getPublicUrl } from '@/lib/storage/buckets';
-import { getExtensionFromUrl } from '@/lib/storage/file';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { ElementVisionWorkflowInput } from '@/lib/workflow/types';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { generateId } from '@/platform/id';
+import {
+  STORAGE_BUCKETS,
+  getPublicUrl,
+} from '@/platform/server/storage/buckets';
+import { getExtensionFromUrl } from '@/platform/server/storage/file';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { ElementVisionWorkflowInput } from '@/platform/server/workflow/types';
 import { z } from 'zod';
 import { deriveTokenFromFilename } from '@/cast/derive-token';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger([
   'openstory',

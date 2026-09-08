@@ -1,4 +1,4 @@
-import { Badge } from '@/ui/badge';
+import { Badge } from '@/ui/shadcn/badge';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,7 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 import { AddModelMenuSection } from './add-model-menu';
 import { ModelCoverageMarker } from './model-coverage-marker';
 import { SetModelButton } from './set-model-button';

@@ -1,7 +1,4 @@
-import {
-  getUpdateStaleShotsRunFn,
-  updateStaleShotsFn,
-} from '@/shots/shots.fn';
+import { getUpdateStaleShotsRunFn, updateStaleShotsFn } from '@/shots/shots.fn';
 import type { UpdateStaleDepth } from '@/shots/update-stale-depth';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';

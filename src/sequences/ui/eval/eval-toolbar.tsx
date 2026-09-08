@@ -1,24 +1,20 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { Card } from '@/ui/card';
-import { Input } from '@/ui/input';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { Card } from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Button } from '@/ui/button';
-import { Badge } from '@/ui/badge';
-import { Switch } from '@/ui/switch';
-import { Label } from '@/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+} from '@/ui/shadcn/select';
+import { Button } from '@/ui/shadcn/button';
+import { Badge } from '@/ui/shadcn/badge';
+import { Switch } from '@/ui/shadcn/switch';
+import { Label } from '@/ui/shadcn/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 import { IMAGE_MODELS } from '@/models/models';
 import { ASPECT_RATIOS } from '@/models/aspect-ratios';

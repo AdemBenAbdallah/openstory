@@ -3,17 +3,17 @@
  * Displays list of passkeys with add/delete functionality
  */
 
-import { Alert, AlertDescription } from '@/ui/alert';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
-import { authClient } from '@/components/auth/client';
+} from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { authClient } from '@/platform/ui/auth/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Fingerprint, Plus, Trash2 } from 'lucide-react';

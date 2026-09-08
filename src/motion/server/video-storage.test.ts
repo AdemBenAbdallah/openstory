@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 
 vi.doMock('#env', () => ({
   getEnv: () => ({}),
 }));
 
 const mockUploadResponse = vi.fn();
-vi.doMock('@/lib/storage/upload-response', () => ({
+vi.doMock('@/platform/server/storage/upload-response', () => ({
   uploadResponse: mockUploadResponse,
 }));
 

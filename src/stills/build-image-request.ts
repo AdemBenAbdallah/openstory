@@ -35,7 +35,7 @@ import {
   type PixelBounds,
   type Resolution,
 } from '@/models/resolutions';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'image', 'build-image-request']);
 

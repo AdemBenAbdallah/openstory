@@ -14,21 +14,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   listAuthorizedAppsFn,
   revokeAuthorizedAppFn,
   type AuthorizedApp,
-} from '@/functions/oauth-consent';
+} from '@/platform/oauth-consent.fn';
 import {
   useMutation,
   useQueryClient,

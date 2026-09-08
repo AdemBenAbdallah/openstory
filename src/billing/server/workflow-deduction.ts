@@ -12,7 +12,7 @@
  * need (#1069). Use `recordFalUsage` in its own workflow step instead.
  */
 
-import { isBytePlusPricedModel } from '@/lib/ai/byteplus-pricing';
+import { isBytePlusPricedModel } from '@/billing/byteplus-pricing';
 import {
   isNativeGeminiImageEndpoint,
   NATIVE_GEMINI_VIDEO_MODEL,
@@ -21,19 +21,15 @@ import {
   isNativeGrokImageEndpoint,
   NATIVE_GROK_VIDEO_MODEL,
 } from '@/models/grok-native';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { ModelPricingProvider } from '@/lib/db/schema/model-pricing';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { ModelPricingProvider } from '@/platform/server/db/schema/model-pricing';
 import {
   reportMissingBillingCost,
   reportSkippedDeduction,
 } from '@/billing/billing-observability';
-import {
-  type Microdollars,
-  microsToUsd,
-  ZERO_MICROS,
-} from '@/billing/money';
+import { type Microdollars, microsToUsd, ZERO_MICROS } from '@/billing/money';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'billing', 'workflow-deduction']);
 

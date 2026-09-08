@@ -8,10 +8,7 @@
  * frame is the same visual the canvas already shows via object-cover.
  */
 
-import {
-  getAspectRatioData,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { getAspectRatioData, type AspectRatio } from '@/models/aspect-ratios';
 
 /** Relative |actual - expected| / expected. 2% covers rounding on integer px. */
 const ASPECT_RATIO_MATCH_EPSILON = 0.02;

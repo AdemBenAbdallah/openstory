@@ -1,12 +1,15 @@
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
-import { Skeleton } from '@/ui/skeleton';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { EvalSceneCell } from './eval-scene-cell';
 import type { DialogTab } from './eval-cell-dialog';
-import { useScenesBySequence, type SceneWithScript } from '@/shots/ui/use-scenes';
+import {
+  useScenesBySequence,
+  type SceneWithScript,
+} from '@/shots/ui/use-scenes';
 import type { SequenceWithShots } from '@/sequences/ui/use-sequences-with-shots';
 import type { ViewMode } from './eval-view';
 import { getAspectRatioData } from '@/models/aspect-ratios';

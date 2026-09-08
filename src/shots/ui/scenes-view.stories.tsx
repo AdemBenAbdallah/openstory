@@ -1,14 +1,18 @@
 import { ScenesView } from './scenes-view';
 import type { SceneWithScript } from './use-scenes';
 import { dbSceneId } from '@/shots/scene-id';
-import type { Frame, FrameVariant, VideoVariant } from '@/lib/db/schema';
+import type {
+  Frame,
+  FrameVariant,
+  VideoVariant,
+} from '@/platform/server/db/schema';
 import {
   frameFixture,
   frameVariantFixture,
   videoVariantFixture,
 } from '@/mocks/frame-fixtures';
 import { toShotView, type ShotView } from '@/shots/shot-view';
-import type { Sequence, Style } from '@/lib/db/schema';
+import type { Sequence, Style } from '@/platform/server/db/schema';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   fixtureScenes,

@@ -17,12 +17,9 @@
  */
 
 import { createServerFn } from '@tanstack/react-start';
-import { claimBytePlusVia } from '@/lib/ai/byteplus-config';
-import {
-  referenceOnlyMotionModels,
-  type ImageToVideoModel,
-} from './models';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { claimBytePlusVia } from '@/models/server/byteplus-config';
+import { referenceOnlyMotionModels, type ImageToVideoModel } from './models';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 export type ViaAvailability = {
   /**

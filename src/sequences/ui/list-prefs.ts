@@ -7,10 +7,7 @@
  * No `.default()` on the search schema: a default rewrites bare /sequences with
  * a 307, which sours the sitemap entry (#814).
  */
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
 import { z } from 'zod';
 
 export const SEQUENCES_LIST_PREFS_KEY = 'openstory:sequences-list:v1';

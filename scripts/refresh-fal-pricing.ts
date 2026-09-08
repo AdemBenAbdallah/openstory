@@ -10,9 +10,9 @@
  * unknown floor and billing records $0. Uses FAL_KEY, matching the cron.
  * Writes only the derived pricing cache; safe to re-run.
  */
-import { refreshFalPricing } from '@/lib/cron/refresh-fal-pricing';
+import { refreshFalPricing } from '@/billing/server/refresh-fal-pricing';
 import { drizzle } from 'drizzle-orm/d1';
-import { relations } from '@/lib/db/schema/relations';
+import { relations } from '@/platform/server/db/schema/relations';
 import { getLocalPlatformProxy } from './local-platform-proxy';
 
 const apiKey = process.env.FAL_KEY;

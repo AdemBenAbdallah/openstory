@@ -8,7 +8,7 @@
  */
 
 import type { TextToImageModel } from '@/models/models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
 import type {
@@ -16,7 +16,7 @@ import type {
   Shot,
   SequenceElement,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
@@ -24,7 +24,7 @@ import type { AspectRatio } from '@/models/aspect-ratios';
 import type {
   ShotImageSceneSnapshot,
   ImageWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   matchCharactersToShotImage,
   matchElementsToShotImage,

@@ -17,14 +17,14 @@
  */
 
 // Type-only: the live pricing reader is server-only (D1). `falCostFromUnits`
-// (the billing half) lives in `@/lib/ai/fal-cost-billing`.
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+// (the billing half) lives in `@/billing/server/fal-cost-billing`.
+import type { EffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import {
   FAL_TYPICAL_UNITS_PER_DEFAULT_CLIP,
   TYPICAL_VIDEO_CLIP_SECONDS,
 } from './fal-typical-units';
 import { type Microdollars, multiplyMicros } from './money';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ai', 'fal-cost']);
 

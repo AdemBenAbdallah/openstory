@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
+import { TEST_FAL_PRICING as FAL_PRICING } from '@/billing/fal-pricing-fixture';
 import {
   estimateBatchMotionCost,
   resolveBatchShotVideoModel,
 } from './batch-motion-cost';
-import {
-  estimateVideoCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import { estimateVideoCost, gateEstimate } from '@/billing/cost-estimation';
 import { addMicros, micros, ZERO_MICROS } from '@/billing/money';
 import { snapDuration } from '@/motion/snap-duration';
 

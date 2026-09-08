@@ -53,10 +53,7 @@ import {
 } from '@/models/models';
 import { microsToUsd } from '@/billing/money';
 import { loadLocalFalPricing } from './load-local-fal-pricing';
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
 import { calculateMotionMetadata } from '@/motion/server/motion-generation';
 import {
   createSampleSequence,

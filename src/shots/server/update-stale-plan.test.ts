@@ -7,9 +7,9 @@
  * clean one.
  */
 
-import type { Frame, FrameVariant, Shot } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Frame, FrameVariant, Shot } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import type { ShotStalenessResult } from './shot-staleness';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -76,7 +76,7 @@ vi.doMock('./scene-script', () => ({
     script: null,
   })),
 }));
-vi.doMock('@/lib/ai/prompt-context', () => ({
+vi.doMock('./prompt-context', () => ({
   loadShotPromptContext: vi.fn(() =>
     Promise.resolve({
       characterBible: [],
@@ -106,8 +106,8 @@ vi.doMock('@/audio/server/workflows/music-scene-summaries', () => ({
     },
   ]),
 }));
-const realInputHash = await import('@/lib/ai/input-hash');
-vi.doMock('@/lib/ai/input-hash', () => ({
+const realInputHash = await import('@/shots/input-hash');
+vi.doMock('@/shots/input-hash', () => ({
   ...realInputHash,
   computeMusicPromptInputHash: vi.fn(() => Promise.resolve('live-music-hash')),
   musicPromptInputHashMatches: vi.fn((stored: string | null) =>

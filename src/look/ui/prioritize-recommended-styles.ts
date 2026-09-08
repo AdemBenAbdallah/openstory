@@ -1,5 +1,5 @@
 import type { StyleRecommendation } from './use-styles';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 
 export const RECOMMENDED_STYLE_SLOT_COUNT = 5;
 

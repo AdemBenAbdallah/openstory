@@ -19,13 +19,13 @@
 import { MarkdownEditor } from '@/ui/text-editor/markdown-editor';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import { useEditorDictation } from '@/ui/use-dictation';
-import { Button } from '@/ui/button';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+import { Button } from '@/ui/shadcn/button';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { useSequenceMentionItems } from './use-mention-items';
 import { useSaveSceneScript, type SceneWithScript } from './use-scenes';
 import { cn } from '@/ui/utils';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

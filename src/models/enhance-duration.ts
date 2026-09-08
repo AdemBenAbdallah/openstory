@@ -6,10 +6,7 @@
  */
 
 import type { ImageToVideoModel } from './models';
-import {
-  durationGridForModel,
-  snapDuration,
-} from '@/motion/snap-duration';
+import { durationGridForModel, snapDuration } from '@/motion/snap-duration';
 
 /** Enhancer labels: `Scene 3 — 5s` (hyphen / en / em dash). */
 const SCENE_DURATION_LINE = /^(Scene\s+\d+\s*)([–—-])(\s*)(\d+)(\s*s\b.*)$/i;

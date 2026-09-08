@@ -13,7 +13,7 @@
  * reads as failed instead of as a dead control.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { useComposedScript } from './use-scenes';
 import { cn } from '@/ui/utils';
 import { copyTextToClipboard } from '@/ui/clipboard';

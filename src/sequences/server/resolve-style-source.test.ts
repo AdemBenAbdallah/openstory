@@ -3,12 +3,12 @@
  * A copy of a sequence whose automatic style is still deriving must derive its
  * own, never freeze the placeholder.
  */
-import type { Database } from '@/lib/db/client';
-import { generateId } from '@/shared/id';
-import { sequences, styles, teams, user } from '@/lib/db/schema';
-import { relations } from '@/lib/db/schema/relations';
-import { createSequencesMethods } from '@/lib/db/scoped/sequences';
-import { createStylesMethods } from '@/lib/db/scoped/styles';
+import type { Database } from '@/platform/server/db/client';
+import { generateId } from '@/platform/id';
+import { sequences, styles, teams, user } from '@/platform/server/db/schema';
+import { relations } from '@/platform/server/db/schema/relations';
+import { createSequencesMethods } from '@/sequences/server/db/sequences';
+import { createStylesMethods } from '@/look/server/db/styles';
 import {
   AUTO_STYLE_ID,
   AUTO_STYLE_PLACEHOLDER_NAME,

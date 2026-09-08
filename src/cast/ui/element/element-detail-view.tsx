@@ -9,11 +9,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
-import { AppImage } from '@/ui/app-image';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { AppImage } from '@/ui/shadcn/app-image';
 import {
   useDeleteSequenceElement,
   useRenameSequenceElementToken,

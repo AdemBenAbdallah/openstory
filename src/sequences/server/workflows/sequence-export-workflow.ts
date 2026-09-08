@@ -16,19 +16,19 @@
  */
 
 import { uploadFile } from '#storage';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import {
   buildR2Key,
   STORAGE_BUCKETS,
   toShareableUrl,
-} from '@/lib/storage/buckets';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+} from '@/platform/server/storage/buckets';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import type {
   CloudflareEnv,
   SequenceExportWorkflowInput,
-} from '@/lib/workflow/types';
-import type { VideoExportContainer } from '@/lib/containers/video-export-container';
+} from '@/platform/server/workflow/types';
+import type { VideoExportContainer } from '@/sequences/server/video-export-container';
 import { getContainer } from '@cloudflare/containers';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 

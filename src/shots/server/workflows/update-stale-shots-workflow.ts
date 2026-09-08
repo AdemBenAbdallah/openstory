@@ -45,17 +45,14 @@
  * are skipped, not rendered from stale inputs.
  */
 
-import { musicPromptInputHashMatches } from '@/lib/ai/input-hash';
+import { musicPromptInputHashMatches } from '@/shots/input-hash';
 import { resolveVideoModel } from '@/models/resolve-asset-models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import {
-  estimateVideoCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
+import { estimateVideoCost, gateEstimate } from '@/billing/cost-estimation';
 import { requireCredits } from '@/billing/server/preflight';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { isInsufficientCreditsError } from '@/shared/errors';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { isInsufficientCreditsError } from '@/platform/errors';
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
 import { resolveMotionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
 import { resolveShotDuration } from '@/motion/resolve-shot-duration';
@@ -64,10 +61,10 @@ import type {
   FramePromptVersion,
   FrameVariant,
   ShotPromptVersion,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import type { FramePromptResult } from '@/stills/server/workflows/frame-prompt-workflow';
 import type { MotionPromptWorkflowResult } from '@/motion/server/workflows/motion-prompt-workflow';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
 import {
   loadSceneContextBySequence,
@@ -86,9 +83,9 @@ import {
   type ShotClaims,
   type SkippedShot,
 } from '@/shots/server/update-stale-plan';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   FramePromptWorkflowInput,
   ImageWorkflowInput,
@@ -99,7 +96,7 @@ import type {
   MusicPromptWorkflowResult,
   MusicWorkflowInput,
   UpdateStaleShotsWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
 

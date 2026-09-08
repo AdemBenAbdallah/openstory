@@ -5,13 +5,9 @@ import { StartingFrameVariants } from './starting-frame-variants';
 import { formatExportProgress } from './sequence-export-actions';
 import { SequencePlayer } from '@/sequences/ui/theatre/sequence-player';
 import type { SequenceExportState } from '@/sequences/ui/theatre/use-sequence-export';
-import { Button } from '@/ui/button';
-import { Skeleton } from '@/ui/skeleton';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/ui/tooltip';
+import { Button } from '@/ui/shadcn/button';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/tooltip';
 import type { SceneWithScript } from './use-scenes';
 import { useSetSequenceMusic } from '@/sequences/ui/use-sequences';
 import type { TabValue } from './scene-script-prompts';
@@ -23,7 +19,7 @@ import {
   type SceneSelection,
 } from './scene-selection';
 import type { ShotView } from '@/shots/shot-view';
-import type { Sequence } from '@/lib/db/schema';
+import type { Sequence } from '@/platform/server/db/schema';
 import { Download, Film, Link, Loader2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { toPlaybackScenes } from '@/sequences/ui/theatre/playback-scenes';

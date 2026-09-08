@@ -13,9 +13,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { facetIdsForShots, useSceneFacetMaps } from './use-scene-facets';
 import {
   restoreSequenceLocation,
@@ -23,13 +23,13 @@ import {
   useSoftDeleteSequenceLocation,
   type SequenceLocationWithReference,
 } from '@/cast/ui/use-sequence-locations';
-import { errorMessage } from '@/shared/errors';
+import { errorMessage } from '@/platform/errors';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ExternalLink, MapPin, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type SceneLocationTabProps = {
   sequenceId: string;

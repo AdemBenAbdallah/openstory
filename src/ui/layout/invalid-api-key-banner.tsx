@@ -1,4 +1,4 @@
-import { Alert, AlertDescription } from '@/ui/alert';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
 import { useBillingGateQuery } from '@/billing/ui/use-billing-gate';
 import { Link } from '@tanstack/react-router';
 import { AlertTriangle } from 'lucide-react';

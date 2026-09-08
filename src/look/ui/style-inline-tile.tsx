@@ -1,5 +1,5 @@
-import { AppImage } from '@/ui/app-image';
-import type { Style } from '@/lib/db/schema/libraries';
+import { AppImage } from '@/ui/shadcn/app-image';
+import type { Style } from '@/platform/server/db/schema/libraries';
 import { cn } from '@/ui/utils';
 import { Info, Sparkles } from 'lucide-react';
 import { useState } from 'react';

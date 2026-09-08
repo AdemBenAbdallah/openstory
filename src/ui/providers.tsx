@@ -1,9 +1,9 @@
-import { PostHogIdentify } from '@/components/observability/posthog-identify';
-import { sessionQueryOptions } from '@/components/auth/session-query';
-import { Toaster } from './sonner';
-import { TooltipProvider } from './tooltip';
+import { PostHogIdentify } from '@/platform/ui/observability/posthog-identify';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
+import { Toaster } from '@/ui/shadcn/sonner';
+import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import { installChunkReload } from './chunk-reload';
-import { configureLogging } from '@/shared/observability/logger';
+import { configureLogging } from '@/platform/logger';
 import { flushReactErrors } from './react-errors';
 import { PostHogProvider } from '@posthog/react';
 import posthog, { type BeforeSendFn } from 'posthog-js';
@@ -12,7 +12,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import {
   RealtimeContext,
   RealtimeProvider,
-} from '@/components/realtime/client';
+} from '@/platform/ui/realtime/client';
 import { lazy, useEffect, useState, type FC } from 'react';
 
 configureLogging();

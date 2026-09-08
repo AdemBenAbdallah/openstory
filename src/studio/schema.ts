@@ -17,11 +17,8 @@ import {
   type TextToImageModel,
 } from '@/models/models';
 import { aspectRatioSchema } from '@/models/aspect-ratios';
-import {
-  DEFAULT_RESOLUTION,
-  resolutionSchema,
-} from '@/models/resolutions';
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { DEFAULT_RESOLUTION, resolutionSchema } from '@/models/resolutions';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import {
   STUDIO_VIDEO_MODES,
   studioAudioLimit,

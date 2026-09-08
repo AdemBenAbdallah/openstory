@@ -14,15 +14,8 @@
 import type { ImageToVideoModel } from '@/models/models';
 import { resolveVideoModel } from '@/models/resolve-asset-models';
 import type { EffectiveFalPricing } from '@/billing/fal-cost';
-import {
-  estimateVideoCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
-import {
-  addMicros,
-  ZERO_MICROS,
-  type Microdollars,
-} from '@/billing/money';
+import { estimateVideoCost, gateEstimate } from '@/billing/cost-estimation';
+import { addMicros, ZERO_MICROS, type Microdollars } from '@/billing/money';
 import type { Resolution } from '@/models/resolutions';
 import { snapDuration } from '@/motion/snap-duration';
 

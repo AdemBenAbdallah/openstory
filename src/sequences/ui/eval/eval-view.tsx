@@ -8,14 +8,14 @@ import {
   useSequencesWithShots,
   type SequenceWithShots,
 } from '@/sequences/ui/use-sequences-with-shots';
-import { useTeamDivergentSequenceVariants } from '@/sequences/ui/use-sequence-variants';
+import { useTeamDivergentSequenceVariants } from '@/audio/ui/use-sequence-variants';
 import { useStyles } from '@/look/ui/use-styles';
 import { isSystemAdminFn } from '@/billing/gift-tokens.fn';
 import { useQuery, useInfiniteQuery, useQueries } from '@tanstack/react-query';
-import { Card } from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
-import { Button } from '@/ui/button';
-import { EmptyState } from '@/ui/empty-state';
+import { Card } from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Button } from '@/ui/shadcn/button';
+import { EmptyState } from '@/ui/shadcn/empty-state';
 import { VideoIcon } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import type { AspectRatio } from '@/models/aspect-ratios';
@@ -27,8 +27,8 @@ import { getCreatorIdentity } from './creator-identity';
 import {
   getAdminShotsFn,
   getAllAdminSequencesFn,
-} from '@/functions/admin-support';
-import type { Sequence } from '@/lib/db/schema';
+} from '@/platform/admin-support.fn';
+import type { Sequence } from '@/platform/server/db/schema';
 import type { ShotView } from '@/shots/shot-view';
 
 const PAGE_SIZE = 50;

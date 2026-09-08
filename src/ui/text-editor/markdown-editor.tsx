@@ -30,11 +30,7 @@ import {
   type MentionItem,
   type MentionSection,
 } from '@/shots/ui/prompt-mention/mention-items';
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-} from '@/ui/popover';
+import { Popover, PopoverAnchor, PopoverContent } from '@/ui/shadcn/popover';
 import {
   PromptMention,
   readPromptAttrs,

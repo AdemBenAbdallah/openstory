@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { composeSequenceScript, resolveSceneForShot } from './scene-script';
-import { dbSceneId, type SceneRow } from '@/lib/db/schema';
+import type { SceneRow } from '@/platform/server/db/schema';
+import { dbSceneId } from '@/shots/scene-id';
 
 describe('composeSequenceScript', () => {
   it('joins extracts in orderIndex order', () => {

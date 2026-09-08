@@ -4,7 +4,7 @@
  * this server fn so the client graph does not ship them.
  */
 
-import { isBytePlusConfigured } from '@/lib/ai/byteplus-config';
+import { isBytePlusConfigured } from '@/models/server/byteplus-config';
 import { motionPromptFromVersion } from '@/motion/server/resolve-motion-prompt';
 import {
   DEFAULT_IMAGE_MODEL,
@@ -13,7 +13,7 @@ import {
   safeTextToImageModel,
 } from '@/models/models';
 import { usesStartFrame } from './use-start-frame';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import {
   buildShotPromptPreview,
   type ShotPromptPreview,
@@ -21,7 +21,7 @@ import {
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { shotAccessMiddleware } from '@/functions/middleware';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
 
 const previewShotPromptsInputSchema = z.object({
   sequenceId: ulidSchema,

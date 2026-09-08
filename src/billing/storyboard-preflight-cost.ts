@@ -7,7 +7,7 @@
  */
 
 import { estimateMotionDurations } from '@/models/enhance-duration';
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import {
   DEFAULT_VIDEO_MODEL,
   type AudioModel,
@@ -19,10 +19,7 @@ import type { Resolution } from '@/models/resolutions';
 import { estimateStoryboardCost } from './cost-estimation';
 import type { Microdollars } from './money';
 import { estimateSceneCount } from '@/sequences/time-estimate';
-import {
-  shouldRunStage,
-  type GenerationStage,
-} from '@/sequences/pipeline';
+import { shouldRunStage, type GenerationStage } from '@/sequences/pipeline';
 
 export type StoryboardPreflightInput = {
   script: string;

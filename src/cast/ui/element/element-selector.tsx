@@ -16,13 +16,9 @@
  * files.
  */
 
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { Button } from '@/ui/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import { ElementTokenButton } from './element-token-button';
 import {
   restoreSequenceElement,
@@ -33,8 +29,8 @@ import {
   useUploadElementToSequence,
   type DraftElementUpload,
 } from '@/cast/ui/use-sequence-elements';
-import type { SequenceElement } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { SequenceElement } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import { MAX_SEQUENCE_ELEMENTS } from './limits';
 import { cn } from '@/ui/utils';
 import { useQueryClient } from '@tanstack/react-query';
@@ -55,8 +51,8 @@ import {
 } from 'react';
 import { toast } from 'sonner';
 
-import { getLogger } from '@/shared/observability/logger';
-import { AppImage } from '@/ui/app-image';
+import { getLogger } from '@/platform/logger';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 const logger = getLogger(['openstory', 'ui', 'element', 'element-selector']);
 

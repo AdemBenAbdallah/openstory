@@ -8,7 +8,7 @@ import {
 } from '@/cast/character-sheet-variants.fn';
 import { sequenceCharacterKeys } from './use-sequence-characters';
 import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
-import type { CharacterSheetVariant } from '@/lib/db/schema';
+import type { CharacterSheetVariant } from '@/platform/server/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const characterSheetVariantKeys = {

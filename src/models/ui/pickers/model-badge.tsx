@@ -1,5 +1,5 @@
-import { Badge } from '@/ui/badge';
-import { Skeleton } from '@/ui/skeleton';
+import { Badge } from '@/ui/shadcn/badge';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { getAnalysisModelById } from '@/models/models.config';
 
 export const ModelBadge = ({ model }: { model?: string }) => {

@@ -14,7 +14,7 @@
  * (`generate-style-previews.ts`) and the sample-video stills
  * (`generate-style-sample-videos.ts`) so the framing lives in one place.
  */
-import type { StyleConfig } from '@/lib/db/schema/libraries';
+import type { StyleConfig } from '@/platform/server/db/schema/libraries';
 
 const STILL_NEGATIVE =
   'Render the described scene as the subject, in this visual style — do not depict the medium, format, or a title card as the subject. ' +

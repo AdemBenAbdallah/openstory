@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import { cn } from '@/ui/utils';
 import type {
   StalenessArtifact,

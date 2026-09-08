@@ -18,7 +18,7 @@ import {
   supportsReferenceOnlyMotion,
   videoModelSupportsAudio,
 } from './models';
-import { typedEntries } from '@/shared/utils/typed-object';
+import { typedEntries } from '@/platform/typed-object';
 
 describe('turbo image models (#1390)', () => {
   it('exposes Nano Banana 2 Lite, FLUX.2 Flash, and FLUX.2 Turbo in the picker', () => {

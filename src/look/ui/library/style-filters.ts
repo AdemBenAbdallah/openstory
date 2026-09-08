@@ -2,7 +2,7 @@ import {
   SPECIALIZED_CATEGORY,
   smallCategoryKeys,
 } from '@/look/ui/style-assets';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 
 /**
  * Filters a list of styles based on category and search query.

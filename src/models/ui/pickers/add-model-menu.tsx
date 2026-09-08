@@ -2,9 +2,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '@/ui/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 import { useScenesBySequence } from '@/shots/ui/use-scenes';
-import { useAddModelToSequence, useSequence } from '@/sequences/ui/use-sequences';
+import {
+  useAddModelToSequence,
+  useSequence,
+} from '@/sequences/ui/use-sequences';
 import { useShotsBySequence } from '@/shots/ui/use-shots';
 import { useSequenceStyle } from '@/look/ui/use-styles';
 import {
@@ -28,7 +31,7 @@ import {
   TURBO_VIDEO_MODELS,
   type SelectorGroup,
 } from '@/models/generation-mode';
-import type { VariantType } from '@/lib/db/schema/shot-variants';
+import type { VariantType } from '@/platform/server/db/schema/shot-variants';
 import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 import { useViaAvailability } from '@/models/ui/use-via-availability';
 import { rendersReferenceOnly } from '@/shots/use-start-frame';

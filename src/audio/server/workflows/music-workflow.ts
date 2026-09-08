@@ -2,27 +2,27 @@
  * The `generateMusicWorkflow` durable workflow.
  */
 
-import { computeSequenceMusicInputHash } from '@/lib/ai/input-hash';
+import { computeSequenceMusicInputHash } from '@/shots/input-hash';
 import { DEFAULT_MUSIC_MODEL } from '@/models/models';
 import { uploadAudioToStorage } from '@/audio/server/audio-storage';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { buildR2Key, STORAGE_BUCKETS } from '@/lib/storage/buckets';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { buildR2Key, STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import { generateMusic } from '@/audio/server/music-generation';
 import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   MusicWorkflowInput,
   MusicWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'music']);
 

@@ -5,7 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/ui/breadcrumb';
+} from '@/ui/shadcn/breadcrumb';
 import { cn } from '@/ui/utils';
 import type { AnyRouteMatch } from '@tanstack/react-router';
 import { Link, useMatches } from '@tanstack/react-router';

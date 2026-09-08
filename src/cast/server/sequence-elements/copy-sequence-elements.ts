@@ -1,10 +1,13 @@
 import { copyFile } from '#storage';
-import { generateId } from '@/shared/id';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { STORAGE_BUCKETS, getPublicUrl } from '@/lib/storage/buckets';
-import { getExtensionFromUrl } from '@/lib/storage/file';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { ElementVisionWorkflowInput } from '@/lib/workflow/types';
+import { generateId } from '@/platform/id';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import {
+  STORAGE_BUCKETS,
+  getPublicUrl,
+} from '@/platform/server/storage/buckets';
+import { getExtensionFromUrl } from '@/platform/server/storage/file';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { ElementVisionWorkflowInput } from '@/platform/server/workflow/types';
 
 /**
  * Copy all elements from one sequence into another. R2 files are duplicated

@@ -7,7 +7,7 @@
  * route that took you out of Scenes.
  */
 
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import type { CanvasView } from './scene-selection';
 import { FileText, Film } from 'lucide-react';
 

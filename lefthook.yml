@@ -14,11 +14,11 @@ pre-commit:
       # Filter staged files against .oxlintrc.json's ignorePatterns
       # before invoking oxlint — when every staged file is ignored by
       # oxlint config, oxlint itself exits "no files to lint" + 1. The
-      # awk pipeline drops src/components/ui/* (matching .oxlintrc), and
+      # awk pipeline drops src/ui/shadcn/* (matching .oxlintrc), and
       # the surrounding `[ -n ... ] && ... || true` skips the run when
       # nothing remains.
       run: |
-        filtered=$(printf '%s\n' {staged_files} | awk '!/^src\/components\/ui\//')
+        filtered=$(printf '%s\n' {staged_files} | awk '!/^src\/ui\/shadcn\//')
         [ -n "$filtered" ] && bun run --bun oxlint --type-aware --quiet $filtered || true
       stage_fixed: true
     format:
@@ -46,7 +46,7 @@ pre-commit:
       # Transitive import-graph walk (~1.3s). The per-file lint rule above
       # catches the direct shape; this catches the leak through a helper.
       glob: '{src,scripts}/**/*.{ts,tsx}'
-      run: bun run test src/lib/client-server-boundary.test.ts
+      run: bun run test src/platform/client-server-boundary.test.ts
     migration-safety:
       glob: 'drizzle/migrations/**/*.sql'
       run: bun scripts/check-migrations.ts {staged_files}

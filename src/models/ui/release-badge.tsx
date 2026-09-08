@@ -1,4 +1,4 @@
-import { Badge } from '@/ui/badge';
+import { Badge } from '@/ui/shadcn/badge';
 import { cn } from '@/ui/utils';
 import type { FC } from 'react';
 

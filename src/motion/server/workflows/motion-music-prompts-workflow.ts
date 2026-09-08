@@ -6,26 +6,26 @@
  */
 
 import { DEFAULT_VIDEO_MODEL } from '@/models/models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { snapDuration } from '@/motion/snap-duration';
 import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
 import type {
   MotionMusicPromptsWorkflowInput,
   MotionMusicPromptsWorkflowResult,
   MotionPromptBatchWorkflowInput,
   MusicPromptWorkflowInput,
   MusicPromptWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { MotionPromptWorkflowResult } from './motion-prompt-workflow';
 import {
   buildMusicSceneSummaries,
   joinMusicDesignByIndex,
 } from '@/audio/server/workflows/music-scene-summaries';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'motion-music-prompts']);
 

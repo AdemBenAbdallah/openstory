@@ -1,20 +1,20 @@
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import { getSignedUploadUrl } from '#storage';
-import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
-import { generateId } from '@/shared/id';
+import { requireTeamAdminAccess } from '@/platform/server/auth/action-utils';
+import { generateId } from '@/platform/id';
 import {
   getPublicLibraryLocationById,
   listPublicLibraryLocations,
-} from '@/lib/db/scoped';
-import type { LibraryLocation } from '@/lib/db/schema';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
+} from '@/platform/server/db/scoped';
+import type { LibraryLocation } from '@/platform/server/db/schema';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import {
   getExtensionFromUrl,
   getMimeTypeFromExtension,
-} from '@/lib/storage/file';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { LibraryLocationSheetWorkflowInput } from '@/lib/workflow/types';
+} from '@/platform/server/storage/file';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { LibraryLocationSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLibraryLocationSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
 import {
   createLibraryLocation,
@@ -23,7 +23,7 @@ import {
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 /**
  * Verify a location exists and belongs to the given team. Throws if not found.

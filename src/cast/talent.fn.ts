@@ -1,42 +1,42 @@
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import { deleteFile, getSignedUploadUrl } from '#storage';
-import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
-import { generateId } from '@/shared/id';
+import { requireTeamAdminAccess } from '@/platform/server/auth/action-utils';
+import { generateId } from '@/platform/id';
 import {
   getPublicTalentWithRelations,
   listPublicTalent,
-} from '@/lib/db/scoped';
-import type { TalentWithSheets } from '@/lib/db/schema';
+} from '@/platform/server/db/scoped';
+import type { TalentWithSheets } from '@/platform/server/db/schema';
 import {
   recordPortraitAttestation,
   requireUploadAttestation,
   uploadAttestationSchema,
-} from '@/lib/compliance/likeness-upload';
+} from '@/cast/server/likeness-upload';
 import { getRequest } from '@tanstack/react-start/server';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import {
   createTalentSchema,
   createTalentSheetSchema,
   listTalentFilterSchema,
   updateTalentSchema,
-} from '@/lib/schemas/talent.schemas';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
+} from '@/cast/server/talent.schemas';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import {
   getExtensionFromUrl,
   getMimeTypeFromExtension,
-} from '@/lib/storage/file';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+} from '@/platform/server/storage/file';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLibraryTalentSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
-import { isTeamWritableTalent } from '@/lib/db/scoped/talent';
+import { isTeamWritableTalent } from '@/cast/server/db/talent';
 import { createLibraryTalent } from '@/cast/server/talent/create-library-talent';
 import { analyzeTalentMediaForTeam } from '@/cast/server/talent/analyze-talent-media';
 import { enqueueLibraryTalentSheet } from '@/cast/server/talent/enqueue-library-talent-sheet';
 import { maybePromoteOrGenerateSheet } from '@/cast/server/talent/promote-or-generate-sheet';
-import { isTeamTalentStoredUrl } from '@/lib/storage/copy-stored-image';
+import { isTeamTalentStoredUrl } from '@/platform/server/storage/copy-stored-image';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 const talentIdSchema = z.object({ talentId: ulidSchema });
 const sheetIdSchema = z.object({ sheetId: ulidSchema });

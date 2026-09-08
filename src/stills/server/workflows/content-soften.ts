@@ -23,21 +23,21 @@ import {
   CONTENT_REJECTION_RETRY_EVENT,
   CONTENT_REJECTION_SOFTEN_EVENT,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
+} from '@/models/content-rejection';
+import { extractFalErrorMessage } from '@/models/fal-error';
 import type { ImageToVideoModel, TextToImageModel } from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   type AnalysisModelId,
 } from '@/models/models.config';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import {
   generateImageWithProvider,
   type ImageGenerationParams,
   type ImageGenerationResult,
 } from '@/stills/server/image-generation';
-import { getLogger } from '@/shared/observability/logger';
-import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
+import { getLogger } from '@/platform/logger';
+import { durableLLMCallCf } from '@/models/server/llm-call-helper';
 import type { WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
 

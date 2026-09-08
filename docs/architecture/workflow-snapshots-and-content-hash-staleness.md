@@ -20,13 +20,13 @@ Before describing the design, it's worth stating what the original doc recommend
 
 | Original recommendation           | Why we skip it                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inngest for orchestration         | Cloudflare Workflows is already wired, and `OpenStoryWorkflowEntrypoint` (`src/lib/workflow/base-workflow.ts`) enforces `teamId`/`userId` on every run. Swapping orchestrators would be pure churn.                                                                                                                                                     |
+| Inngest for orchestration         | Cloudflare Workflows is already wired, and `OpenStoryWorkflowEntrypoint` (`src/platform/server/workflow/base-workflow.ts`) enforces `teamId`/`userId` on every run. Swapping orchestrators would be pure churn.                                                                                                                                         |
 | XState v5 lifecycle machines      | Per-artifact status columns on `frames` (`imageStatus`) and `shots` (`videoStatus`, `audioStatus`) already model `pending → generating → completed → failed`. `sequences.status` is sequence lifecycle (`draft → processing → completed → failed → archived`), not per-artifact generation. Adding XState on top would duplicate state, not replace it. |
 | Custom Redis pub/sub + PG NOTIFY  | `src/shared/realtime.ts` already provides a typed `realtimeSchema`; delivery runs through the in-repo SSE client and `RealtimeChannel` Durable Object. We extend this schema, we don't replace it.                                                                                                                                                      |
 | Postgres JSONB / SKIP LOCKED      | The app runs on Cloudflare D1 (SQLite). Cloudflare Workflows is already the durable job engine; we don't need a DB-level queue at all.                                                                                                                                                                                                                  |
-| Entity version chains / branching | `frame_variants` (`src/lib/db/schema/frame-variants.ts`) already holds alternate per-model outputs, which covers the realistic "keep old vs new" use case for frame artifacts. General-purpose branching adds complexity we don't need.                                                                                                                 |
+| Entity version chains / branching | `frame_variants` (`src/platform/server/db/schema/frame-variants.ts`) already holds alternate per-model outputs, which covers the realistic "keep old vs new" use case for frame artifacts. General-purpose branching adds complexity we don't need.                                                                                                     |
 | Property-level LWW + rebasing     | We are not a concurrent editor. TanStack Query + server functions give us implicit last-writer-wins at the server boundary.                                                                                                                                                                                                                             |
-| Dependency edge table (v1)        | Character/location → shot linkage is inferred at runtime via `characterTags` in shot metadata and `matchCharactersToScene` (`src/shots/scene-matching.ts`). Good enough until we have a reason to materialize it.                                                                                                                               |
+| Dependency edge table (v1)        | Character/location → shot linkage is inferred at runtime via `characterTags` in shot metadata and `matchCharactersToScene` (`src/shots/scene-matching.ts`). Good enough until we have a reason to materialize it.                                                                                                                                       |
 | `stale` status enum value (v1)    | Staleness is a **derived** boolean (`generatedFromInputHash !== computeInputHash(entity)`). Adding it to the enum is a v2 question if the derived form ever proves insufficient.                                                                                                                                                                        |
 
 ## Pillar 1: Input-hash staleness
@@ -70,9 +70,9 @@ We deliberately do **not** add a `content_hash` column on upstream entities them
 
 ### Where the helpers live
 
-`src/lib/ai/input-hash.ts` exports one named helper per artifact type (e.g. `computeShotImageInputHash`, `computeCharacterSheetInputHash`, `computeMotionPromptInputHash`). Each helper accepts the minimal input DTO it needs (never a whole DB row) and returns a `string`. This keeps callers honest about what counts as input and makes the helpers trivially unit-testable without DB setup.
+`src/shots/input-hash.ts` exports one named helper per artifact type (e.g. `computeShotImageInputHash`, `computeCharacterSheetInputHash`, `computeMotionPromptInputHash`). Each helper accepts the minimal input DTO it needs (never a whole DB row) and returns a `string`. This keeps callers honest about what counts as input and makes the helpers trivially unit-testable without DB setup.
 
-The existing `src/shared/utils/hash.ts` (`simpleHash`) is not cryptographic and is too weak for this purpose — it stays where it is for its existing non-security uses, and the staleness helpers use `crypto.subtle.digest('SHA-256', ...)`.
+The existing `src/platform/hash.ts` (`simpleHash`) is not cryptographic and is too weak for this purpose — it stays where it is for its existing non-security uses, and the staleness helpers use `crypto.subtle.digest('SHA-256', ...)`.
 
 Canonical serialization matters: object key order, array order for unordered sets (character refs), and trimming of free-text prompts all need to be deterministic. The helper file is the one place this is defined.
 
@@ -119,7 +119,7 @@ Workflows must not read mutable state inside a `step.do()` for anything that sho
 
 Two mechanisms, so the rule survives without a reviewer noticing it:
 
-- **`WorkflowScopedDb`** (`src/lib/db/scoped-workflow.ts`) is what `runImpl` receives instead of `ScopedDb`: the same write surface with every read-shaped method (`get*`, `list*`, `find*`, `resolve*`, `has*`, …) removed from every domain. A mid-run read is a type error. The narrowing is purely type-level — `toWorkflowScopedDb` returns the same object.
+- **`WorkflowScopedDb`** (`src/platform/server/db/scoped-workflow.ts`) is what `runImpl` receives instead of `ScopedDb`: the same write surface with every read-shaped method (`get*`, `list*`, `find*`, `resolve*`, `has*`, …) removed from every domain. A mid-run read is a type error. The narrowing is purely type-level — `toWorkflowScopedDb` returns the same object.
 - **Three named hatches** carry what a run legitimately cannot know at the trigger. One catch-all would make every exception look alike; the name at the call site is the argument:
 
   | hatch                                   | what it is                                | why it's safe                                                                                             |
@@ -130,7 +130,7 @@ Two mechanisms, so the rule survives without a reviewer noticing it:
 
   The split is load-bearing rather than cosmetic: `claims` **cannot express a selection pointer** and `credentials` **cannot express a row**, so the two failure modes behind this work — rendering from a pointer a concurrent edit moved, and treating key access as licence to read data — are unspellable, not merely discouraged.
 
-  `src/lib/workflow/no-mid-run-reads.test.ts` scans `src/lib/workflows/*.ts` and fails on any read not in its per-file allow-list, on an allow-list entry whose call site is gone, and on a read whose recorded category doesn't match the hatch its call site used (a `CLAIM-BY-ID` read reached via `liveRead` fails). Helper modules that declare a narrowed dependency type (`SheetSnapshotReadDb`, `WaitForSheetsReadDb`, `FrameImageReadDb`, `PreflightScopedDb`, `CredentialScopedDb`) are handed the hatch by their workflow caller.
+  `src/platform/server/workflow/no-mid-run-reads.test.ts` scans `src/lib/workflows/*.ts` and fails on any read not in its per-file allow-list, on an allow-list entry whose call site is gone, and on a read whose recorded category doesn't match the hatch its call site used (a `CLAIM-BY-ID` read reached via `liveRead` fails). Helper modules that declare a narrowed dependency type (`SheetSnapshotReadDb`, `WaitForSheetsReadDb`, `FrameImageReadDb`, `PreflightScopedDb`, `CredentialScopedDb`) are handed the hatch by their workflow caller.
 
 **Chained renders resolve their prompt by id, never by pointer.** `completePendingAiVersion` can end a run on either of two rows: the claim it completed, or — when a completed row already carries the same `(parent, input_hash)` and the same text — the existing row the claim retires in favour of. The prompt children return whichever one ended up live as `finalVersionId` (`FramePromptResult`, `MotionPromptWorkflowResult`), and the parent re-reads that id with `getByIdForFrame` / `getByIdForShot`. Resolving the collision by comparing the selection pointer's `inputHash` against the plan's live hash instead would be wrong twice over: `input_hash` pins the generation _inputs_, not the text, so a same-inputs-different-text version passes the check; and the pointer can move between the check and the render. No child result means the prompt didn't land, which is a stand-down, not a fallback.
 
@@ -270,7 +270,7 @@ Much of the original "stage 1" plan is live. This section separates what exists 
 
 ### Shipped
 
-- **`src/lib/ai/input-hash.ts`** — per-artifact SHA-256 helpers + unit tests.
+- **`src/shots/input-hash.ts`** — per-artifact SHA-256 helpers + unit tests.
 - **Hash columns** — on `frames`, `shots`, `characters`, `sequence_locations`, `location_sheets`, `location_library`, `talent_sheets`, `frame_variants`, `shot_variants`.
 - **Workflow snapshots** — per-workflow `*-snapshot.ts` modules; `RegenerateShotsWorkflow` is the reference implementation.
 - **Image versions (#989)** — `frame_variants` flat versions + `frames.selectedImageVersionId` pointer; drift = unselected version, not `stale:detected`.

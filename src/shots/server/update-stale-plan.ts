@@ -16,7 +16,7 @@ import {
   usesStartFrame,
   type StartFrameSequence,
 } from '@/shots/use-start-frame';
-import { musicPromptInputHashMatches } from '@/lib/ai/input-hash';
+import { musicPromptInputHashMatches } from '@/shots/input-hash';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
@@ -27,13 +27,13 @@ import {
   safeTextToImageModel,
   type TextToImageModel,
 } from '@/models/models';
-import { loadShotPromptContext } from '@/lib/ai/prompt-context';
+import { loadShotPromptContext } from './prompt-context';
 import type {
   CharacterBibleEntry,
   ElementBibleEntry,
   LocationBibleEntry,
   Scene,
-} from '@/lib/ai/scene-analysis.schema';
+} from '@/shots/scene-analysis.schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
 import type {
@@ -43,9 +43,9 @@ import type {
   Sequence,
   Shot,
   StyleConfig,
-} from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
 import { assembleSequenceSegments } from '@/shots/scene-segments';
 import {
   loadSceneContextBySequence,
@@ -62,8 +62,8 @@ import {
   type UpdateStaleDepth,
 } from '@/shots/update-stale-depth';
 import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
-import { NotFoundError } from '@/shared/errors';
-import type { MusicSceneSummary } from '@/lib/workflow/types';
+import { NotFoundError } from '@/platform/errors';
+import type { MusicSceneSummary } from '@/platform/server/workflow/types';
 
 const logger = getLogger(['openstory', 'shots', 'update-stale-plan']);
 

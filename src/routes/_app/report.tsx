@@ -7,26 +7,26 @@
  * who needs it can use.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
+} from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Textarea } from '@/ui/textarea';
-import { submitContentReportFn } from '@/functions/content-reports';
-import { CONTENT_REPORT_REASONS } from '@/shared/content-reports';
+} from '@/ui/shadcn/select';
+import { Textarea } from '@/ui/shadcn/textarea';
+import { submitContentReportFn } from '@/platform/content-reports.fn';
+import { CONTENT_REPORT_REASONS } from '@/platform/content-reports';
 import { SITE_CONFIG } from '@/ui/marketing/constants';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';

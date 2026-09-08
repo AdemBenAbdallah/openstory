@@ -1,6 +1,6 @@
 import { PromptDiffView } from '@/shots/ui/prompts/prompt-diff-view';
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
+} from '@/ui/shadcn/dialog';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import type { ShotVariant } from '@/lib/db/schema';
+import type { ShotVariant } from '@/platform/server/db/schema';
 import type { ShotView } from '@/shots/shot-view';
-import type { VariantType } from '@/lib/db/schema/shot-variants';
+import type { VariantType } from '@/platform/server/db/schema/shot-variants';
 
 type DivergencePromptDiff = {
   label: string;

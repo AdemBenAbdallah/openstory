@@ -8,14 +8,14 @@
  * THEMSELVES rather than flattening them into a third set of names.
  */
 
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
+import type { AssemblableMotionPrompt } from './scene-analysis.schema';
 import type {
   Frame,
   FramePromptVersion,
   FrameVariant,
   Shot,
   VideoVariant,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 
 /**
  * The narrow slice of a shot's sources that readiness tallies are derived from

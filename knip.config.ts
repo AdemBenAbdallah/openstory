@@ -4,9 +4,9 @@ export default {
   entry: [
     'src/router.tsx',
     'src/routes/**/*.{ts,tsx}', // file-based routes
-    'src/functions/**/*.ts', // createServerFn endpoints
+    'src/**/*.fn.ts', // createServerFn endpoints
     'scripts/**/*.ts',
-    'src/lib/auth/cli-config.ts', // `bun auth:generate` (Better Auth CLI) — was wrongly swept as dead code once
+    'src/platform/server/auth/cli-config.ts', // `bun auth:generate` (Better Auth CLI) — was wrongly swept as dead code once
     '.storybook/**/*.{ts,tsx}',
     'content-collections.ts', // content-collections build config (root)
     // MSW request mocks (registered by path, not statically imported).
@@ -20,7 +20,7 @@ export default {
     'src/mocks/cloudflare-workers.ts',
     // Aliased for @react-email/code-block in vite.config.ts (string path) to
     // keep prismjs out of the worker's startup path.
-    'src/lib/emails/stubs/code-block.tsx',
+    'src/platform/server/emails/stubs/code-block.tsx',
   ],
   project: ['src/**/*.{ts,tsx}', 'scripts/**/*.ts'],
   ignore: [
@@ -29,7 +29,7 @@ export default {
     '**/*.test.ts',
     // shadcn/ui: a vendored component library kept at full API surface on
     // purpose (managed by the shadcn CLI, not hand-pruned).
-    'src/components/ui/**',
+    'src/ui/shadcn/**',
   ],
   ignoreDependencies: [
     // Tailwind plugin / PostCSS / Tailwind — used via CSS + @tailwindcss/vite, not imported.

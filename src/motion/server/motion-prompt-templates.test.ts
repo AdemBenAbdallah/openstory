@@ -10,7 +10,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { getChatPrompt } from '@/lib/prompts/index';
+import { getChatPrompt } from '@/platform/server/ai/prompts-index';
 
 const IMAGE_TO_VIDEO = 'phase/motion-prompt-scene-generation-chat';
 const REFERENCE_ONLY = 'phase/motion-prompt-reference-only-chat';

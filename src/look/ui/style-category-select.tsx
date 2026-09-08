@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,13 +6,13 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 import {
   ALL_COMPOSER_STYLE_CATEGORIES,
   composerStyleCategoryOptions,
 } from './composer-style-row';
 import { styleCategoryLabel } from './style-assets';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { ChevronDown } from 'lucide-react';
 
 type StyleCategorySelectProps = {

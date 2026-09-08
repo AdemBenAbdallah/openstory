@@ -7,7 +7,7 @@
  * quick styles stay compact while curated templates stay rich.
  *
  * Drizzle-free on purpose: importable from client bundles, scripts, and the
- * DB schema layer alike. `src/lib/db/schema/libraries.ts` re-exports the types
+ * DB schema layer alike. `src/platform/server/db/schema/libraries.ts` re-exports the types
  * for the column `$type<>()`.
  *
  * Stored blobs may be v1 (flat) or v2 (grouped). Every read of a stored
@@ -16,7 +16,7 @@
  * are typed `StoredStyleConfig` so direct field access does not compile.
  */
 import { z } from 'zod';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'style', 'style-config']);
 

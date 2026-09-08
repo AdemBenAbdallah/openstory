@@ -1,5 +1,5 @@
 import { UpdateAllDialog } from '@/shots/ui/staleness/update-all-dialog';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   type ShotStaleness,
   shotIsStale,

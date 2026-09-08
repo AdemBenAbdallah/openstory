@@ -1,16 +1,16 @@
-import { Alert, AlertDescription } from '@/ui/alert';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { triggerBalanceFlash } from '@/billing/ui/use-balance-flash';
 import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
 import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';

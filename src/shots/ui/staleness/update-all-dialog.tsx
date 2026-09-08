@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
+} from '@/ui/shadcn/alert-dialog';
 import { getUpdateStalePreviewFn } from '@/shots/shots.fn';
 import type { ShotStaleness } from '@/shots/ui/use-shot-staleness';
 import { useShowCosts } from '@/billing/ui/use-show-costs';

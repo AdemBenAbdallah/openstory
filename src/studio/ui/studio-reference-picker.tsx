@@ -8,8 +8,8 @@
  * the start frame, or the end frame.
  */
 
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dialog';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { useSequenceCharacters } from '@/cast/ui/use-sequence-characters';
 import { useSequenceElements } from '@/cast/ui/use-sequence-elements';
 import {

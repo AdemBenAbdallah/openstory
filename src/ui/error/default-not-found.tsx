@@ -1,11 +1,11 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/ui/empty';
+} from '@/ui/shadcn/empty';
 import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 

@@ -29,9 +29,9 @@ import type {
   LibraryLocation,
   SequenceElement,
   TalentWithSheets,
-} from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
 import type { WorkflowSleepDuration, WorkflowStep } from 'cloudflare:workers';
 
 const logger = getLogger(['openstory', 'workflow', 'wait-for-sheets']);

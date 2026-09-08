@@ -17,19 +17,19 @@
 import type { CreateGeneratedAssetData } from '@/models/model-assets.fn';
 import { usdToMicros, type Microdollars } from '@/billing/money';
 import { requireCredits } from '@/billing/server/preflight';
-import { requireGenerationAllowed } from '@/lib/compliance/generation-gate';
-import type { ScopedDb } from '@/lib/db/scoped';
+import { requireGenerationAllowed } from '@/platform/server/compliance/generation-gate';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import type {
   GeneratedAssetActivity,
   GeneratedAssetInput,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import {
   fetchModelInputSchema,
   type ModelInputJsonSchema,
 } from './schema-fetch';
-import { getLogger } from '@/shared/observability/logger';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { AssetGenerationWorkflowInput } from '@/lib/workflow/types';
+import { getLogger } from '@/platform/logger';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { AssetGenerationWorkflowInput } from '@/platform/server/workflow/types';
 import { z } from 'zod';
 
 const logger = getLogger(['openstory', 'functions', 'model-assets']);

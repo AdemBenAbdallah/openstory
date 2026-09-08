@@ -11,16 +11,16 @@ import {
   clipContentRejectionMessage,
   flaggedInputs,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
-import { arkAssetIdentities } from '@/lib/ai/byteplus-asset-pool';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
-import { computeVideoManifestInputHash } from '@/lib/ai/input-hash';
+} from '@/models/content-rejection';
+import { arkAssetIdentities } from '@/models/server/byteplus-asset-pool';
+import { extractFalErrorMessage } from '@/models/fal-error';
+import { computeVideoManifestInputHash } from '@/shots/input-hash';
 import { DEFAULT_VIDEO_MODEL, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
 } from '@/models/models.config';
-import type { VideoManifest } from '@/lib/db/schema';
+import type { VideoManifest } from '@/platform/server/db/schema';
 import {
   MOTION_CONTENT_FALLBACK_MODEL,
   softenRejectedMotionPrompt,
@@ -29,7 +29,7 @@ import {
   deductWorkflowCredits,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { ensureImageUnderLimit } from '@/stills/server/image-compress';
 import {
   calculateMotionMetadata,
@@ -39,7 +39,7 @@ import {
   resolveMotionVia,
   submitMotionJob,
 } from '@/motion/server/motion-generation';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import { gateEstimate } from '@/billing/cost-estimation';
 import type { TokenUsage } from '@tanstack/ai';
 import { buildVideoManifest } from '@/motion/server/render-segments';
@@ -47,14 +47,14 @@ import {
   uploadVideoToStorage,
   videoUrlFitsWorkflowCheckpoint,
 } from '@/motion/server/video-storage';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { buildR2Key, STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { recordMediaGenerationSpan } from '@/lib/observability/ai-otel';
-import { getLogger } from '@/shared/observability/logger';
-import { getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import type { MotionWorkflowInput } from '@/lib/workflow/types';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { buildR2Key, STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { recordMediaGenerationSpan } from '@/platform/server/observability/ai-otel';
+import { getLogger } from '@/platform/logger';
+import { getGenerationChannel } from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import type { MotionWorkflowInput } from '@/platform/server/workflow/types';
 import {
   persistMotionCompletion,
   persistMotionFailure,

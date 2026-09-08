@@ -22,7 +22,7 @@ import {
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
 import { addCharacterToLibraryFn } from '@/cast/talent.fn';
 import { shotStalenessNamespace } from '@/shots/ui/use-shot-staleness';
-import type { CharacterWithTalent } from '@/lib/db/schema';
+import type { CharacterWithTalent } from '@/platform/server/db/schema';
 
 export const sequenceCharacterKeys = {
   all: ['sequence-characters'] as const,

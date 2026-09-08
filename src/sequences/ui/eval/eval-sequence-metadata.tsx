@@ -2,13 +2,13 @@ import type React from 'react';
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
 import { ModelBadge } from '@/models/ui/pickers/model-badge';
 import { StyleBadge } from '@/look/ui/style-badge';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 import { useArchiveSequence } from '@/sequences/ui/use-sequences';
 import type { SequenceWithShots } from '@/sequences/ui/use-sequences-with-shots';
 import { getImageModelById } from '@/models/models';
@@ -17,7 +17,7 @@ import {
   isCreditsShortError,
 } from '@/billing/credits-short';
 import { getAspectRatioData } from '@/models/aspect-ratios';
-import { errorMessage } from '@/shared/errors';
+import { errorMessage } from '@/platform/errors';
 import { formatDistanceToNow } from '@/ui/format-date';
 import { Link } from '@tanstack/react-router';
 import {

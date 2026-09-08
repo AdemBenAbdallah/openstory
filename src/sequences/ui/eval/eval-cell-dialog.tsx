@@ -4,16 +4,16 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs';
+} from '@/ui/shadcn/dialog';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
+} from '@/ui/shadcn/select';
 import { VideoPlayer } from '@/motion/ui/video-player';
 import { buildMentionItems } from '@/shots/ui/prompt-mention/mention-items';
 import { HighlightedPrompt } from '@/ui/text-editor/mention/highlighted-prompt';
@@ -23,9 +23,9 @@ import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import type { ShotView } from '@/shots/shot-view';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import { stripMarkdown } from '@/shared/utils/markdown-plain';
+import { stripMarkdown } from '@/platform/markdown-plain';
 import { Clapperboard, FileTextIcon, ImageIcon, TextIcon } from 'lucide-react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import {

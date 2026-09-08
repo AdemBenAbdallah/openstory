@@ -10,18 +10,18 @@
  * staleness then reads fresh forever.
  */
 
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import {
   computeMotionPromptInputHash,
   computeVisualPromptInputHash,
-} from '@/lib/ai/input-hash';
+} from '@/shots/input-hash';
 import {
   loadNarrowShotPromptContext,
   type ShotPromptContextSequence,
-} from '@/lib/ai/prompt-context';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { getLogger } from '@/shared/observability/logger';
-import type { UserEditProvenance } from '@/lib/workflow/types';
+} from './prompt-context';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
+import type { UserEditProvenance } from '@/platform/server/workflow/types';
 
 const logger = getLogger(['openstory', 'prompts', 'user-edit-provenance']);
 

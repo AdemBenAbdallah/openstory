@@ -4,8 +4,11 @@
 
 import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
 import { describe, expect, it } from 'vitest';
-import type { LocationBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { SequenceLocationMinimal, StyleConfig } from '@/lib/db/schema';
+import type { LocationBibleEntry } from '@/shots/scene-analysis.schema';
+import type {
+  SequenceLocationMinimal,
+  StyleConfig,
+} from '@/platform/server/db/schema';
 import {
   buildLocationDescription,
   buildLocationReferenceImages,

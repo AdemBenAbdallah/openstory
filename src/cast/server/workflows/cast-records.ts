@@ -12,22 +12,22 @@ import type {
   CharacterBibleEntry,
   ElementBibleEntry,
   LocationBibleEntry,
-} from '@/lib/ai/scene-analysis.schema';
-import { generateId } from '@/shared/id';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+} from '@/shots/scene-analysis.schema';
+import { generateId } from '@/platform/id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type {
   NewCharacter,
   NewSequenceLocation,
   SequenceElementMinimal,
   SheetStatus,
-} from '@/lib/db/schema';
-import type { ReferenceStatus } from '@/lib/db/schema/sequence-locations';
+} from '@/platform/server/db/schema';
+import type { ReferenceStatus } from '@/platform/server/db/schema/sequence-locations';
 import { buildCastingAttributes } from '@/cast/character-prompt';
 import type {
   ElementSheetEntry,
   LibraryLocationMatch,
   TalentCharacterMatch,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 
 export function buildCharacterInsert(args: {
   sequenceId: string;

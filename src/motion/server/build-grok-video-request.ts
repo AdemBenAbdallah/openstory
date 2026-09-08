@@ -8,15 +8,9 @@
  */
 
 import { NATIVE_GROK_VIDEO_MODEL } from '@/models/grok-native';
-import {
-  IMAGE_TO_VIDEO_MODELS,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { IMAGE_TO_VIDEO_MODELS, type ImageToVideoModel } from '@/models/models';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import {
-  pickVideoResolution,
-  type Resolution,
-} from '@/models/resolutions';
+import { pickVideoResolution, type Resolution } from '@/models/resolutions';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {
   buildReferenceVideoPrompt,

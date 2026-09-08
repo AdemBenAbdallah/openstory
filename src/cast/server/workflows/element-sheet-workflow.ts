@@ -22,31 +22,34 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
+import type { ElementBibleEntry } from '@/shots/scene-analysis.schema';
 import {
   deductWorkflowCredits,
   extractImageCost,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import { generateId } from '@/shared/id';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { SequenceElement, SequenceElementMinimal } from '@/lib/db/schema';
+import { generateId } from '@/platform/id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type {
+  SequenceElement,
+  SequenceElementMinimal,
+} from '@/platform/server/db/schema';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
-import { recordProvenance } from '@/lib/compliance/provenance';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
 import { buildElementSheetPrompt } from '@/cast/element-prompt';
 import { rejectionReasonMessage } from './replace-element-workflow';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { uploadResponse } from '@/lib/storage/upload-response';
-import { contentRejectionSummary } from '@/shared/ai/content-rejection';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
+import { contentRejectionSummary } from '@/models/content-rejection';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import { generateImageSoftening } from '@/stills/server/workflows/content-soften';
 import { MAX_AUTO_ELEMENTS } from './cast-records';
 import type {
   ElementSheetWorkflowInput,
   ElementSheetWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'element-sheet']);
 

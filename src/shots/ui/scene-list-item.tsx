@@ -1,23 +1,18 @@
 import { DivergentAlternateBanner } from '@/shots/ui/staleness/divergent-alternate-banner';
-import { Button } from '@/ui/button';
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/ui/card';
+import { Button } from '@/ui/shadcn/button';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/shadcn/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dropdown-menu';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import type { SceneWithScript } from './use-scenes';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import { cn } from '@/ui/utils';
-import { plainSceneTitle, stripMarkdown } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle, stripMarkdown } from '@/platform/markdown-plain';
 import type { ShotView } from '@/shots/shot-view';
 import { Link } from '@tanstack/react-router';
 import {

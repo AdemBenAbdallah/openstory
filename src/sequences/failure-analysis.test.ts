@@ -1,7 +1,12 @@
 import { describe, expect, test } from 'vitest';
 import { analyzeFailures, analyzeLoadedFailures } from './failure-analysis';
-import type { Frame, SceneRow, Shot, VideoVariant } from '@/lib/db/schema';
-import type { Sequence } from '@/lib/db/schema/sequences';
+import type {
+  Frame,
+  SceneRow,
+  Shot,
+  VideoVariant,
+} from '@/platform/server/db/schema';
+import type { Sequence } from '@/platform/server/db/schema/sequences';
 import {
   frameFixture,
   frameVariantFixture,

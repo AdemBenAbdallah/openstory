@@ -2,12 +2,12 @@ import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { getGenerationChannel } from '@/shared/realtime';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { getGenerationChannel } from '@/platform/realtime';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 
-import { sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'serverFn', 'character-sheet-variants']);
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { GeneratedAsset } from '@/lib/db/schema';
+import type { GeneratedAsset } from '@/platform/server/db/schema';
 import {
   studioAspectRatio,
   studioPosterOutput,

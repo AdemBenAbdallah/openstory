@@ -13,7 +13,7 @@
  * bodies in Chrome, and XHR gives real upload progress.
  */
 
-import type { MultipartPart } from '@/lib/storage/buckets';
+import type { MultipartPart } from '@/platform/server/storage/buckets';
 import { z } from 'zod';
 
 const createResponseSchema = z.object({ uploadId: z.string().min(1) });

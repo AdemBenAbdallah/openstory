@@ -8,27 +8,27 @@ import { getEnv } from '#env';
 import {
   toArkFetchableUrl,
   toArkMediaUrl,
-} from '@/lib/ai/byteplus-asset-ingest';
-import type { AssetPoolLedger } from '@/lib/ai/byteplus-asset-pool';
+} from '@/models/server/byteplus-asset-ingest';
+import type { AssetPoolLedger } from '@/models/server/byteplus-asset-pool';
 import {
   arkAdapterConfig,
   claimBytePlusVia,
   getArkApiKey,
   isBytePlusConfigured,
   loadBytePlusVideo,
-} from '@/lib/ai/byteplus-config';
-import { reportBytePlusPortraitFilterFallback } from '@/lib/ai/byteplus-observability';
+} from '@/models/server/byteplus-config';
+import { reportBytePlusPortraitFilterFallback } from '@/models/server/byteplus-observability';
 import {
   BYTEPLUS_PORTRAIT_FILTER_NO_FAL_MESSAGE,
   isBytePlusPortraitFilterError,
-} from '@/lib/ai/byteplus-portrait-filter';
-import { bytePlusVideoUnitsBilled } from '@/lib/ai/byteplus-pricing';
-import { withBytePlusQuotaRetry } from '@/lib/ai/quota-retry';
-import { falCostFromUnits } from '@/lib/ai/fal-cost-billing';
+} from '@/models/server/byteplus-portrait-filter';
+import { bytePlusVideoUnitsBilled } from '@/billing/byteplus-pricing';
+import { withBytePlusQuotaRetry } from '@/models/server/quota-retry';
+import { falCostFromUnits } from '@/billing/server/fal-cost-billing';
 import {
   createDeadlineFetch,
   FAL_REQUEST_TIMEOUT_MS,
-} from '@/lib/ai/fal-deadline-fetch';
+} from '@/models/server/fal-deadline-fetch';
 import {
   geminiVideoCostFromUsage,
   isNativeGeminiVideoModel,
@@ -45,20 +45,20 @@ import {
   isNativeBytePlusVideoModel,
   type ImageToVideoModel,
 } from '@/models/models';
-import { assertMediaVia, type MediaVia } from '@/lib/ai/via';
+import { assertMediaVia, type MediaVia } from '@/models/via';
 import { GROK_VIDEO_RESOLUTIONS } from '@/motion/server/build-grok-video-request';
-import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
+import { workersSafeFetch } from '@/platform/server/ai/workers-safe-fetch';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { ZERO_MICROS } from '@/billing/money';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
-import type { ResolvedApiKey } from '@/lib/db/scoped/api-keys';
-import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
+import type { ResolvedApiKey } from '@/models/server/db/api-keys';
+import type { CredentialScopedDb } from '@/platform/server/db/scoped-workflow';
 import { MOTION_TRANSFORMS } from '@/motion/server/endpoint-map';
 import {
   ensureExternallyFetchableUrls,
   toDataOrCdnUrl,
-} from '@/lib/storage/external-url';
+} from '@/platform/server/storage/external-url';
 import {
   buildStudioVideoInput,
   studioReferenceEndpoint,
@@ -69,7 +69,7 @@ import {
   type StudioVideoRequest,
 } from '@/studio/text-to-video';
 import { generateVideo, type TokenUsage } from '@tanstack/ai';
-import { getVideoJobStatus } from '@/lib/ai/video-job-status';
+import { getVideoJobStatus } from '@/motion/server/video-job-status';
 import { falVideo } from '@tanstack/ai-fal';
 import { createGeminiVideo } from '@tanstack/ai-gemini';
 import { createGrokVideo } from '@tanstack/ai-grok';

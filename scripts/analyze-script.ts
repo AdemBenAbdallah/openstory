@@ -33,16 +33,10 @@ import {
   DEFAULT_ANALYSIS_MODEL,
   isValidAnalysisModelId,
 } from '@/models/models.config';
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
 import { z } from 'zod';
-import {
-  parseStyleConfig,
-  type StyleConfig,
-} from '@/look/style-config';
-import { triggerWorkflow } from '../src/lib/workflow/client';
+import { parseStyleConfig, type StyleConfig } from '@/look/style-config';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
 
 function printUsage() {
   console.log(`

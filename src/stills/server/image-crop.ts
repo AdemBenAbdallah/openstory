@@ -11,13 +11,13 @@
 
 import { getEnv } from '#env';
 import { readStorageObject, uploadFile } from '#storage';
-import { generateId } from '@/shared/id';
+import { generateId } from '@/platform/id';
 import {
   STORAGE_BUCKETS,
   isLocalStorageServing,
   r2KeyFromUrl,
   toCdnUrl,
-} from '@/lib/storage/buckets';
+} from '@/platform/server/storage/buckets';
 import { tileCropRect } from '@/stills/tile-crop';
 
 type CropTileOptions = {

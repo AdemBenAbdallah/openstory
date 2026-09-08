@@ -24,7 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/ui/sidebar';
+} from '@/ui/shadcn/sidebar';
 import { useWelcomeCreditsGate } from '@/billing/ui/welcome-credits-dialog';
 import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
 import { useBalanceFlash } from '@/billing/ui/use-balance-flash';
@@ -32,7 +32,7 @@ import { useBillingBalance } from '@/billing/ui/use-billing-balance';
 import { useBillingBalanceRealtime } from '@/billing/ui/use-billing-balance-realtime';
 import { useBillingGateQuery } from '@/billing/ui/use-billing-gate';
 import { useShowCosts } from '@/billing/ui/use-show-costs';
-import { useUser } from '@/hooks/use-user';
+import { useUser } from '@/platform/ui/use-user';
 import {
   SIGNUP_GRANT_MICROS,
   shouldOfferWelcomeClaim,

@@ -9,10 +9,10 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { hashAssetIdentity } from '@/lib/ai/byteplus-assets';
+import { hashAssetIdentity } from '@/models/server/byteplus-assets';
 import { IMAGE_TO_VIDEO_MODELS } from '@/models/models';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { MotionWorkflowInput } from '@/lib/workflow/types';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { MotionWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 
 const mockSubmit = vi.fn();
@@ -38,7 +38,7 @@ vi.doMock('@/motion/server/motion-generation', () => ({
   }),
   resolveMotionVia: mockResolveMotionVia,
 }));
-vi.doMock('@/lib/ai/fal-pricing-live', () => ({
+vi.doMock('@/billing/server/fal-pricing-live', () => ({
   getEffectiveFalPricing: async () => ({}),
 }));
 vi.doMock('@/billing/cost-estimation', () => ({
@@ -59,13 +59,13 @@ vi.doMock('@/motion/server/video-storage', () => ({
   }),
   videoUrlFitsWorkflowCheckpoint: () => true,
 }));
-vi.doMock('@/lib/compliance/provenance', () => ({
+vi.doMock('@/platform/server/compliance/provenance', () => ({
   recordProvenance: vi.fn(async () => {}),
 }));
-vi.doMock('@/lib/observability/ai-otel', () => ({
+vi.doMock('@/platform/server/observability/ai-otel', () => ({
   recordMediaGenerationSpan: mockRecordMediaGenerationSpan,
 }));
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: () => ({ emit }),
 }));
 vi.doMock('./motion-workflow-persist', () => ({
@@ -77,7 +77,7 @@ vi.doMock('@/stills/server/workflows/content-soften', () => ({
   softenRejectedMotionPrompt: mockSoften,
 }));
 // Deterministic, readable hash so the fallback step's recompute is assertable.
-vi.doMock('@/lib/ai/input-hash', () => ({
+vi.doMock('@/shots/input-hash', () => ({
   computeVideoManifestInputHash: async (
     manifest: { motionPromptVersionId: string | null }[],
     model: string

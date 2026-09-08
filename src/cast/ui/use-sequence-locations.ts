@@ -30,7 +30,7 @@ import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
 import type {
   LibraryLocation,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 
 // Re-export for backwards compatibility
 export type { SequenceLocationWithReference };

@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -6,12 +6,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
+} from '@/ui/shadcn/dialog';
 import type { StalenessEntityType } from '@/shots/ui/staleness/staleness-indicator';
 import { cn } from '@/ui/utils';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type SheetAspectRatio = 'square' | 'video' | 'portrait';
 

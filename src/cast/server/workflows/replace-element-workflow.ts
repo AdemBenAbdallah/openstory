@@ -17,7 +17,7 @@
 import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
-} from '@/lib/ai/element-vision';
+} from '@/cast/server/element-vision';
 import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import {
   DEFAULT_IMAGE_MODEL,
@@ -25,26 +25,26 @@ import {
   supportsReferenceImages,
 } from '@/models/models';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { ElementVisionStatus } from '@/lib/db/schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { ElementVisionStatus } from '@/platform/server/db/schema';
 import {
   getGenerationChannel,
   type ReplaceElementCompletePayload,
   type ReplaceElementFailedPayload,
   type ReplaceElementStartPayload,
-} from '@/shared/realtime';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+} from '@/platform/realtime';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import type {
   ImageWorkflowInput,
   MotionWorkflowInput,
   ReplaceElementShotSnapshot,
   ReplaceElementWorkflowInput,
   ReplaceElementWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'replace-element']);
 

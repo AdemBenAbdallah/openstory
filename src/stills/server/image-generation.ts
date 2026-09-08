@@ -5,11 +5,11 @@ import {
   getArkApiKey,
   isBytePlusConfigured,
   loadBytePlusImage,
-} from '@/lib/ai/byteplus-config';
-import { isContentRejectionError } from '@/shared/ai/content-rejection';
-import { falCostFromUnits } from '@/lib/ai/fal-cost-billing';
-import { FAL_GENERATION_TIMEOUT_MS } from '@/lib/ai/fal-deadline-fetch';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
+} from '@/models/server/byteplus-config';
+import { isContentRejectionError } from '@/models/content-rejection';
+import { falCostFromUnits } from '@/billing/server/fal-cost-billing';
+import { FAL_GENERATION_TIMEOUT_MS } from '@/models/server/fal-deadline-fetch';
+import { extractFalErrorMessage } from '@/models/fal-error';
 import {
   grokImageCost,
   isNativeGrokImageModel,
@@ -23,13 +23,13 @@ import {
 import {
   withBytePlusQuotaRetry,
   withLlmRateLimitRetry,
-} from '@/lib/ai/quota-retry';
+} from '@/models/server/quota-retry';
 import { isNativeBytePlusImageModel } from '@/models/models';
-import type { MediaVia } from '@/lib/ai/via';
-import { workersSafeFetch } from '@/lib/ai/workers-safe-fetch';
+import type { MediaVia } from '@/models/via';
+import { workersSafeFetch } from '@/platform/server/ai/workers-safe-fetch';
 import type { Microdollars } from '@/billing/money';
-import type { ResolvedApiKey } from '@/lib/db/scoped/api-keys';
-import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
+import type { ResolvedApiKey } from '@/models/server/db/api-keys';
+import type { CredentialScopedDb } from '@/platform/server/db/scoped-workflow';
 import { buildBytePlusImageRequest } from '@/stills/build-byteplus-image-request';
 import type { ImageGenerationParams } from '@/stills/build-image-request';
 import {
@@ -40,12 +40,12 @@ import {
 import {
   recordMediaGenerationSpan,
   type AIObservabilityMeta,
-} from '@/lib/observability/ai-otel';
+} from '@/platform/server/observability/ai-otel';
 import {
   ensureExternallyFetchableUrls,
   toDataOrCdnUrl,
   toVisionImageSource,
-} from '@/lib/storage/external-url';
+} from '@/platform/server/storage/external-url';
 import {
   generateImage,
   type ImageGenerationResult as AiImageGenerationResult,

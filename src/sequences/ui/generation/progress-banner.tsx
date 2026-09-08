@@ -8,11 +8,7 @@
  * phase detail moved into a popover, closed by default.
  */
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import { formatTimeRemaining } from '@/sequences/time-estimate';
 import { cn } from '@/ui/utils';
 import { Check, Loader2 } from 'lucide-react';

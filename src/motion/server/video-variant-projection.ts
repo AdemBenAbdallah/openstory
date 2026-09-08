@@ -18,7 +18,7 @@
  * `video_variants`.
  */
 
-import type { ShotVariant, VideoVariant } from '@/lib/db/schema';
+import type { ShotVariant, VideoVariant } from '@/platform/server/db/schema';
 
 /** Build the synthetic `ShotVariant` for one covered shot of a version. */
 function projectEntry(

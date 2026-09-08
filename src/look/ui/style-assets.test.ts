@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import {
   groupStylesByCategory,
   styleCanonicalVideoUrl,

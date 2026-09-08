@@ -1,16 +1,16 @@
 import { BibleField } from '@/cast/ui/bible-field';
-import { Button } from '@/ui/button';
-import { Label } from '@/ui/label';
+import { Button } from '@/ui/shadcn/button';
+import { Label } from '@/ui/shadcn/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
+} from '@/ui/shadcn/select';
 import { useUpdateSequenceLocation } from '@/cast/ui/use-sequence-locations';
-import type { SequenceLocationWithReference } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { SequenceLocationWithReference } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';

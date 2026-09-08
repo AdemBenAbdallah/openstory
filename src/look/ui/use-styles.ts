@@ -10,10 +10,10 @@ import {
   promoteSequenceStyleFn,
 } from '@/look/styles.fn';
 import { usePublicOrTeamQuery } from '@/ui/use-public-or-team-query';
-import { useAuthSession } from '@/components/auth/session-query';
+import { useAuthSession } from '@/platform/ui/auth/session-query';
 import { publicStylesQueryKey } from './public-styles-query';
-import { simpleHash } from '@/shared/utils/hash';
-import type { Style } from '@/lib/db/schema';
+import { simpleHash } from '@/platform/hash';
+import type { Style } from '@/platform/server/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Query keys

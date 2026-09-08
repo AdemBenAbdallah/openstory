@@ -12,25 +12,25 @@
  * trigger-binding registry stays the single place that maps paths to bindings.
  */
 
-import { resolveImageModels } from '@/lib/ai/resolve-image-models';
+import { resolveImageModels } from '@/models/resolve-image-models';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
-import { shotVariantDedupId } from '@/lib/workflow/dedup-ids';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { shotVariantDedupId } from '@/platform/server/workflow/dedup-ids';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import { NonRetryableError } from 'cloudflare:workflows';
 import type {
   ShotImagesWorkflowInput,
   ShotImagesWorkflowResult,
   ImageWorkflowInput,
   ShotVariantWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   matchCharactersToShotImage,
   matchElementsToShotImage,
@@ -42,7 +42,7 @@ import {
   type ShotImageSceneSnapshot,
 } from '@/cast/server/workflows/sheet-snapshots';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'shot-images']);
 

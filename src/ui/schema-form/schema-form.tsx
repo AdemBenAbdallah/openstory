@@ -11,22 +11,22 @@
  * live schema server-side; `errors` carries its per-field messages back in.
  */
 
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Slider } from '@/ui/slider';
-import { Switch } from '@/ui/switch';
-import { Tabs, TabsList, TabsTrigger } from '@/ui/tabs';
-import { Textarea } from '@/ui/textarea';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+} from '@/ui/shadcn/select';
+import { Slider } from '@/ui/shadcn/slider';
+import { Switch } from '@/ui/shadcn/switch';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
+import { Textarea } from '@/ui/shadcn/textarea';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import type { JsonSchema, JsonValue } from '@/models/catalog';
 import { useTextDictation } from '@/ui/use-dictation';
@@ -49,7 +49,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/ui/collapsible';
+} from '@/ui/shadcn/collapsible';
 import { ChevronDown } from 'lucide-react';
 
 /** Per-field server validation messages, keyed by dot path (`image_size.width`). */

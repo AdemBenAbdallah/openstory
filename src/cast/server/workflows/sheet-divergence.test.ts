@@ -18,7 +18,7 @@ const getTalentChannel = vi.fn((talentId?: string) => {
   return { id: talentId, emit: talentEmit };
 });
 
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel,
   getLocationChannel,
   getTalentChannel,

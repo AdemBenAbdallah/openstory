@@ -1,4 +1,4 @@
-import { Skeleton } from '@/ui/skeleton';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { cn } from '@/ui/utils';
 import { MoreHorizontal } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -18,7 +18,7 @@ import { AutoStyleTile } from './auto-style-tile';
 import { StyleDetailDialog } from './style-detail-dialog';
 import { StyleInlineTile } from './style-inline-tile';
 import { StyleSelectionDialog } from './style-selection-dialog';
-import type { Style } from '@/lib/db/schema/libraries';
+import type { Style } from '@/platform/server/db/schema/libraries';
 
 /**
  * Keep specific styles on screen without reordering the strip: any catalogue

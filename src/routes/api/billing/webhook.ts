@@ -11,17 +11,17 @@ import {
   type WelcomeGrantSource,
 } from '@/billing/server/checkout';
 import { SIGNUP_GRANT_MICROS } from '@/billing/constants';
-import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
+import { isWelcomeCardAlreadyClaimedError } from '@/platform/errors';
 import { captureCheckoutAnalyticsForStripeEvent } from '@/billing/server/checkout-events';
 import { microsToDisplayUsd, usdToMicros } from '@/billing/money';
 import { getStripeOrThrow } from '@/billing/server/stripe';
-import { getPostHogClient } from '@/lib/posthog-server';
+import { getPostHogClient } from '@/platform/server/observability/posthog-server';
 import { createFileRoute } from '@tanstack/react-router';
 import { scheduleFlushAnalytics } from '#flush-scheduler';
 import type Stripe from 'stripe';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'api', 'billing', 'webhook']);
 

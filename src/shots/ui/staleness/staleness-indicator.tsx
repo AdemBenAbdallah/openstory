@@ -5,8 +5,8 @@ import {
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from '@/ui/alert';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import { UpdateAllDialog } from './update-all-dialog';
 import type { ShotStaleness } from '@/shots/ui/use-shot-staleness';
 import type { UpdateStaleDepth } from '@/shots/update-stale-depth';

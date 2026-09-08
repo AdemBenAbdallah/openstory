@@ -18,26 +18,26 @@ import {
   DEFAULT_IMAGE_SIZE,
   getVariantGridConfig,
 } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
-import { recordProvenance } from '@/lib/compliance/provenance';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
 import { uploadImageToStorage } from '@/stills/server/image-storage';
-import { r2KeyFromUrl } from '@/lib/storage/buckets';
+import { r2KeyFromUrl } from '@/platform/server/storage/buckets';
 import {
   buildReferenceImagePrompt,
   type ReferenceImageDescription,
 } from '@/stills/reference-image-prompt';
 import { getVariantImagePrompt } from '@/stills/server/variant-image';
-import { getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import { generateImageSoftening } from './content-soften';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   ShotVariantWorkflowInput,
   ShotVariantWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'shot-variant']);
 

@@ -25,7 +25,10 @@ import {
   libraryLocationKeys,
   sequenceLocationKeys,
 } from './use-sequence-locations';
-import type { LibraryLocation, LocationSheet } from '@/lib/db/schema';
+import type {
+  LibraryLocation,
+  LocationSheet,
+} from '@/platform/server/db/schema';
 
 /** Library location with sheets for detail view */
 export type LibraryLocationWithSheets = LibraryLocation & {

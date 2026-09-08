@@ -16,18 +16,18 @@ import {
 import type { GenerationStage } from '@/sequences/pipeline';
 import { micros, type Microdollars } from '@/billing/money';
 import { DEFAULT_ANALYSIS_MODEL } from '@/models/models.config';
-import type { SequenceMusicVariant } from '@/lib/db/schema';
-import type { VariantType } from '@/lib/db/schema/shot-variants';
-import type { CreateSequenceInput } from '@/lib/schemas/sequence.schemas';
+import type { SequenceMusicVariant } from '@/platform/server/db/schema';
+import type { VariantType } from '@/platform/server/db/schema/shot-variants';
+import type { CreateSequenceInput } from '@/sequences/server/sequence.schemas';
 import { UNTITLED_SEQUENCE_TITLE } from '@/sequences/untitled-sequence-title';
-import type { Sequence } from '@/lib/db/schema';
-import { useAuthSession } from '@/components/auth/session-query';
-import { isInsufficientCreditsError } from '@/shared/errors';
+import type { Sequence } from '@/platform/server/db/schema';
+import { useAuthSession } from '@/platform/ui/auth/session-query';
+import { isInsufficientCreditsError } from '@/platform/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePostHog } from '@posthog/react';
 import { toast } from 'sonner';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'use-sequences']);
 

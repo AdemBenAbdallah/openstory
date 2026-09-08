@@ -1,16 +1,16 @@
-import { BlobLoaderContainer } from '@/ui/blob-loader';
+import { BlobLoaderContainer } from '@/ui/shadcn/blob-loader';
 import {
   CONTENT_REJECTION_USER_TITLE,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
+} from '@/models/content-rejection';
 import {
   type AspectRatio,
   getAspectRatioClassName,
 } from '@/models/aspect-ratios';
-import { Skeleton } from '@/ui/skeleton';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { cn } from '@/ui/utils';
 import { AlertCircle, Info } from 'lucide-react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import { memo } from 'react';
 import { hasUpscaleOverlay, UpscaleOverlay } from './upscale-overlay';
 

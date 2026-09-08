@@ -26,22 +26,24 @@ import type {
   WorkflowStep,
   WorkflowStepConfig,
 } from 'cloudflare:workers';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type {
   CharacterMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+} from '@/platform/server/db/schema';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   AnalyzeScriptWorkflowInput,
   SceneSplitWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import * as realCastRecords from '@/cast/server/workflows/cast-records';
 
-vi.doMock('@/lib/db/scoped', () => ({ createScopedDb: vi.fn() }));
-vi.doMock('@/lib/ai/fal-config', () => ({ configureFalProxyFromEnv: vi.fn() }));
+vi.doMock('@/platform/server/db/scoped', () => ({ createScopedDb: vi.fn() }));
+vi.doMock('@/models/server/fal-config', () => ({
+  configureFalProxyFromEnv: vi.fn(),
+}));
 // The render gate prices the remaining work; an empty map keeps it DB-free.
-vi.doMock('@/lib/ai/fal-pricing-live', () => ({
+vi.doMock('@/billing/server/fal-pricing-live', () => ({
   getEffectiveFalPricing: vi.fn(async () => ({})),
 }));
 
@@ -52,7 +54,7 @@ vi.doMock('@/cast/server/workflows/cast-records', () => ({
 }));
 
 const emit = vi.fn(async () => undefined);
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 
@@ -136,7 +138,9 @@ const spawnAndAwaitChild = vi.fn(
     return result;
   }
 );
-vi.doMock('@/lib/workflow/await-child', () => ({ spawnAndAwaitChild }));
+vi.doMock('@/platform/server/workflow/await-child', () => ({
+  spawnAndAwaitChild,
+}));
 
 const spawned = () =>
   spawnAndAwaitChild.mock.calls.map(([, args]) => args.spawnStepName);
@@ -152,7 +156,9 @@ const checkpointWrite = (update: UpdateMock, stage: string) =>
 
 const STYLE_FAILURE = new Error('style: structured-output-parse-failed');
 const deriveAutoStyle = vi.fn(() => Promise.reject(STYLE_FAILURE));
-vi.doMock('@/look/server/workflows/auto-style-step', () => ({ deriveAutoStyle }));
+vi.doMock('@/look/server/workflows/auto-style-step', () => ({
+  deriveAutoStyle,
+}));
 
 // Dynamic import so the mocks above apply (vi.doMock is not hoisted).
 const { AnalyzeScriptWorkflow } = await import('./analyze-script-workflow');

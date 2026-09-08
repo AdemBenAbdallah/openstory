@@ -3,10 +3,10 @@
  * rest of the product chrome (sidebar, breadcrumbs). Anonymous-browsable.
  */
 
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { createFileRoute } from '@tanstack/react-router';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import {
   formatPlatformFeePercent,
   PLATFORM_FEE_PERCENT,

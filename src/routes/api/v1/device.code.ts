@@ -12,10 +12,10 @@ import {
   DEVICE_CLIENT_ID,
   DEVICE_VERIFICATION_PATH,
   pruneExpiredDeviceCodes,
-} from '@/lib/api-v1/device-auth';
-import { runApiV1Handler } from '@/lib/api-v1/errors';
-import { API_V1_BASE } from '@/lib/api-v1/hal';
-import { getAuth } from '@/lib/auth/config';
+} from '@/platform/server/api-v1/device-auth';
+import { runApiV1Handler } from '@/platform/server/api-v1/errors';
+import { API_V1_BASE } from '@/platform/server/api-v1/hal';
+import { getAuth } from '@/platform/server/auth/config';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/v1/device/code')({

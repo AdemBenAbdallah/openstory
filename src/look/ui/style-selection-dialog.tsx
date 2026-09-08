@@ -6,9 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/ui/dialog';
+} from '@/ui/shadcn/dialog';
 import { StyleLibraryView } from '@/look/ui/library/style-library-view';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 /**
  * Image-regeneration trigger input builder (#1077) — the exact payload
  * assembly `generateShotImageFn` performs (reference matching, model
@@ -7,14 +7,11 @@ import type { Scene } from '@/lib/ai/scene-analysis.schema';
  * server-side without duplicating the logic.
  */
 
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import type { ShotPromptContextRefs } from '@/lib/ai/prompt-context';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
+import type { ShotPromptContextRefs } from './prompt-context';
 import { isValidTextToImageModel } from '@/models/models';
 import { resolveImageModel } from '@/models/resolve-asset-models';
-import {
-  estimateImageCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import { estimateImageCost, gateEstimate } from '@/billing/cost-estimation';
 import { requireCredits } from '@/billing/server/preflight';
 import type { Resolution } from '@/models/resolutions';
 import {
@@ -25,8 +22,8 @@ import type {
   Frame,
   SequenceLocationWithReference,
   Shot,
-} from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+} from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';
@@ -35,7 +32,7 @@ import { buildUserEditProvenance } from './user-edit-provenance';
 import type {
   ImageWorkflowInput,
   ShotImageSceneSnapshot,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { shouldRecordUserEdit } from '@/shots/server/workflows/user-edit-predicate';
 import {
   matchCharactersToShotImage,

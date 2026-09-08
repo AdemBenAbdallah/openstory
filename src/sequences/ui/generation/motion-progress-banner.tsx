@@ -1,9 +1,6 @@
-import {
-  type BannerPhase,
-  ProgressBanner,
-} from './progress-banner';
+import { type BannerPhase, ProgressBanner } from './progress-banner';
 import type { ShotView } from '@/shots/shot-view';
-import type { Sequence } from '@/lib/db/schema/sequences';
+import type { Sequence } from '@/platform/server/db/schema/sequences';
 import {
   estimateMotionSeconds,
   estimateMusicSeconds,

@@ -18,8 +18,8 @@ import type {
   LibraryLocationSheetWorkflowInput,
   LibraryTalentSheetWorkflowInput,
   LocationSheetWorkflowInput,
-} from '@/lib/workflow/types';
-import type { ScopedDb } from '@/lib/db/scoped';
+} from '@/platform/server/workflow/types';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import {
   computeCharacterSheetHashCurrent,

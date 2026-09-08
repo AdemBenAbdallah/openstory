@@ -4,8 +4,8 @@ import {
   hasContinuityAdditions,
   mergeContinuityAdditions,
 } from './extract-continuity-from-prompt';
-import type { Continuity } from '@/lib/ai/scene-analysis.schema';
-import type { SequenceElementMinimal } from '@/lib/db/schema';
+import type { Continuity } from '@/shots/scene-analysis.schema';
+import type { SequenceElementMinimal } from '@/platform/server/db/schema';
 
 const el = (token: string): SequenceElementMinimal => ({
   id: `el_${token}`,

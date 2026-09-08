@@ -5,7 +5,7 @@
  * "Modify" button in billing settings.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -13,16 +13,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
-import { Separator } from '@/ui/separator';
-import { Switch } from '@/ui/switch';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
+import { Separator } from '@/ui/shadcn/separator';
+import { Switch } from '@/ui/shadcn/switch';
 import { updateAutoTopUpFn } from '@/billing/billing.fn';
-import {
-  BILLING_BALANCE_KEY,
-  useBillingBalance,
-} from './use-billing-balance';
+import { BILLING_BALANCE_KEY, useBillingBalance } from './use-billing-balance';
 import { BILLING_GATE_KEY } from './use-billing-gate';
 import {
   formatPlatformFeePercent,

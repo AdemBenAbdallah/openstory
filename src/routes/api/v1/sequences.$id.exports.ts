@@ -16,32 +16,32 @@
  * whose `sourceShotsHash` matches is reused (#1406).
  */
 
-import { authWithTeamRequestMiddleware } from '@/functions/middleware';
-import { runApiV1Handler } from '@/lib/api-v1/errors';
-import { decideExistingExport } from '@/lib/api-v1/export-reuse';
+import { authWithTeamRequestMiddleware } from '@/platform/middleware.fn';
+import { runApiV1Handler } from '@/platform/server/api-v1/errors';
+import { decideExistingExport } from '@/platform/server/api-v1/export-reuse';
 import {
   API_V1_BASE,
   getLink,
   waitLink,
   withLinks,
   type HalLinks,
-} from '@/lib/api-v1/hal';
-import { getWaitMs, longPoll } from '@/lib/api-v1/wait';
-import type { SequenceExportDocument } from '@/lib/api-v1/state';
-import type { SequenceExport } from '@/lib/db/schema';
-import { generateId } from '@/shared/id';
-import { NotFoundError, ValidationError } from '@/shared/errors';
+} from '@/platform/server/api-v1/hal';
+import { getWaitMs, longPoll } from '@/platform/server/api-v1/wait';
+import type { SequenceExportDocument } from '@/platform/server/api-v1/state';
+import type { SequenceExport } from '@/platform/server/db/schema';
+import { generateId } from '@/platform/id';
+import { NotFoundError, ValidationError } from '@/platform/errors';
 import {
   STORAGE_BUCKETS,
   getPublicUrl,
   toShareableUrl,
-} from '@/lib/storage/buckets';
+} from '@/platform/server/storage/buckets';
 import {
   effectiveExportMusicUrl,
   hashSequenceExportInputs,
 } from '@/sequences/ui/theatre/source-shots-hash';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { SequenceExportWorkflowInput } from '@/lib/workflow/types';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { SequenceExportWorkflowInput } from '@/platform/server/workflow/types';
 import { createFileRoute } from '@tanstack/react-router';
 
 const EXPORT_FILENAME_SUFFIX = '_openstory.mp4';

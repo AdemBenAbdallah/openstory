@@ -5,7 +5,7 @@ import {
   cleanupTestSequences,
   createTestSequence,
   getTestSequenceStatus,
-} from '@/lib/test/seed';
+} from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateSequenceSchema = z.object({

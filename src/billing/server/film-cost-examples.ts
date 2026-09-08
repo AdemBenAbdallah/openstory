@@ -13,7 +13,7 @@
  * unenhanced script is 5 — intentional marketing vs preflight difference.
  */
 
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from './fal-pricing-live';
 import {
   TURBO_DEFAULT_AUDIO,
   TURBO_DEFAULT_IMAGE,

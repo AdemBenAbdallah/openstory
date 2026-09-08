@@ -5,23 +5,23 @@ import {
   SIGNUP_GRANT_MICROS,
   welcomeDialogMode,
 } from '@/billing/constants';
-import type { Database } from '@/lib/db/client';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { generateId } from '@/shared/id';
-import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
+import type { Database } from '@/platform/server/db/client';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { generateId } from '@/platform/id';
+import { isWelcomeCardAlreadyClaimedError } from '@/platform/errors';
 import {
   credits,
   teams,
   transactions,
   user,
   welcomeCardClaims,
-} from '@/lib/db/schema';
-import { relations } from '@/lib/db/schema/relations';
+} from '@/platform/server/db/schema';
+import { relations } from '@/platform/server/db/schema/relations';
 import { type Client, createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { createBillingMethods } from '@/lib/db/scoped/billing';
+import { createBillingMethods } from '@/billing/server/db/billing';
 
 describe('welcomeDialogMode', () => {
   it('asks for a card when Stripe is on and the welcome grant is still unpaid', () => {

@@ -27,8 +27,8 @@
  *   bun scripts/preview-style-sample-videos-local.ts --dry-run   # plan only, no writes
  */
 
-import { styles, teams } from '@/lib/db/schema';
-import type { StyleSampleVideo } from '@/lib/db/schema/libraries';
+import { styles, teams } from '@/platform/server/db/schema';
+import type { StyleSampleVideo } from '@/platform/server/db/schema/libraries';
 import { buildSampleVideos } from '@/look/server/sample-videos';
 import { styleSlug } from '@/look/style-slug';
 import { eq } from 'drizzle-orm';

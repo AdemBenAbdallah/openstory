@@ -1,4 +1,7 @@
-import type { GeneratedAsset, GeneratedAssetOutput } from '@/lib/db/schema';
+import type {
+  GeneratedAsset,
+  GeneratedAssetOutput,
+} from '@/platform/server/db/schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import { aspectRatioSchema } from '@/models/aspect-ratios';
 

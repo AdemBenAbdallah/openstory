@@ -4,8 +4,8 @@
  */
 
 import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
-import { sessionQueryOptions } from '@/components/auth/session-query';
-import { getAuthOptionsFn } from '@/functions/auth-options';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
+import { getAuthOptionsFn } from '@/platform/auth-options.fn';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth')({

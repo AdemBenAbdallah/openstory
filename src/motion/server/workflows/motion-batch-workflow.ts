@@ -14,17 +14,17 @@
 import {
   arkAssetIdentities,
   bytePlusAssetSlots,
-} from '@/lib/ai/byteplus-asset-pool';
-import { reportBytePlusAssetPool } from '@/lib/ai/byteplus-observability';
-import { isBytePlusAssetsConfigured } from '@/lib/ai/byteplus-config';
+} from '@/models/server/byteplus-asset-pool';
+import { reportBytePlusAssetPool } from '@/models/server/byteplus-observability';
+import { isBytePlusAssetsConfigured } from '@/models/server/byteplus-config';
 import { isNativeBytePlusVideoModel } from '@/models/models';
-import { resolveAudioModels } from '@/lib/ai/resolve-audio-models';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { resolveAudioModels } from '@/models/resolve-audio-models';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { getGenerationChannel } from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import { buildMotionJobs } from './motion-batch-jobs';
 import type {
   BatchMotionMusicWorkflowInput,
@@ -32,9 +32,9 @@ import type {
   MotionWorkflowResult,
   MusicWorkflowInput,
   MusicWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'motion-batch']);
 

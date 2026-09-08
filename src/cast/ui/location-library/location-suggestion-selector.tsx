@@ -11,18 +11,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Button } from '@/ui/button';
-import { Input } from '@/ui/input';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dialog';
+import { Button } from '@/ui/shadcn/button';
+import { Input } from '@/ui/shadcn/input';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { useLibraryLocations } from '@/cast/ui/use-sequence-locations';
-import type { LibraryLocation } from '@/lib/db/schema';
+import type { LibraryLocation } from '@/platform/server/db/schema';
 import { AddLocationDialog } from './add-location-dialog';
 import { cn } from '@/ui/utils';
 import { Check, MapPin, Plus, Search, X } from 'lucide-react';
 import { useState } from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type LocationSuggestionSelectorProps = {
   selectedLocationIds: string[];

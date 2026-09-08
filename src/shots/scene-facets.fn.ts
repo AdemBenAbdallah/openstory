@@ -18,7 +18,7 @@
  * selection changes, instead of a round trip per click.
  */
 
-import { sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,

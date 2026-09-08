@@ -12,18 +12,18 @@
  * parent still surfaces a terminal error, but only after every other sibling has
  * resolved one way or the other. */
 
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   MotionPromptWorkflowInput,
   MotionPromptBatchWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { MotionPromptWorkflowResult } from './motion-prompt-workflow';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'motion-prompt-batch']);
 

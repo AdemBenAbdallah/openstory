@@ -1,4 +1,4 @@
-import { Badge } from '@/ui/badge';
+import { Badge } from '@/ui/shadcn/badge';
 import type { CatalogModel } from '@/models/catalog';
 import { Link } from '@tanstack/react-router';
 import { AudioLines, Film, Image as ImageIcon } from 'lucide-react';

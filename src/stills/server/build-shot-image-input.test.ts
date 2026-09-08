@@ -11,8 +11,8 @@
 
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { CharacterMinimal, Shot } from '@/lib/db/schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { CharacterMinimal, Shot } from '@/platform/server/db/schema';
 import { buildShotImageWorkflowInput } from './build-shot-image-input';
 
 const NOW = new Date('2026-06-03T00:00:00.000Z');

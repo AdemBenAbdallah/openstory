@@ -1,4 +1,4 @@
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import {
   isResolution,
   RESOLUTION_OPTIONS,

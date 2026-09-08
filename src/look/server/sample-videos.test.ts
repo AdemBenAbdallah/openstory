@@ -1,4 +1,4 @@
-import { StyleSampleVideoSchema } from '@/lib/db/schema/libraries';
+import { StyleSampleVideoSchema } from '@/platform/server/db/schema/libraries';
 import { DEFAULT_STYLE_TEMPLATES } from './style-templates';
 import { describe, expect, it } from 'vitest';
 import {

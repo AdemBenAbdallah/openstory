@@ -13,20 +13,20 @@ import {
   markdownResponse,
   withDiscoveryLinkHeader,
   withHtmlAccept,
-} from '@/lib/agent/discovery';
-import { reconcileAllStuckJobs } from '@/lib/cron/reconcile-all';
+} from '@/platform/server/agent/discovery';
+import { reconcileAllStuckJobs } from '@/platform/server/cron/reconcile-all';
 import {
   FAL_PRICING_CRON,
   refreshFalPricing,
-} from '@/lib/cron/refresh-fal-pricing';
+} from '@/billing/server/refresh-fal-pricing';
 import {
   FAL_BILLING_RECONCILE_CRON,
   reconcileFalBilling,
-} from '@/lib/cron/reconcile-fal-billing';
-import { ensureLocalModelPricingSeeded } from '@/lib/db/seed-model-pricing';
-import { ensureSystemTemplatesSeeded } from '@/lib/db/seed-system-templates';
+} from '@/billing/server/reconcile-fal-billing';
+import { ensureLocalModelPricingSeeded } from '@/billing/server/seed-model-pricing';
+import { ensureSystemTemplatesSeeded } from '@/platform/server/db/seed-system-templates';
 
-import { getLogger, toErrorPayload } from '@/shared/observability/logger';
+import { getLogger, toErrorPayload } from '@/platform/logger';
 import { drizzle } from 'drizzle-orm/d1';
 
 const logger = getLogger(['openstory', 'server']);
@@ -113,12 +113,12 @@ export { StudioGenerationWorkflow } from '@/studio/server/workflows/studio-gener
 
 // Realtime broker Durable Object. Re-exported so the binding's `class_name`
 // in wrangler.jsonc resolves in the Worker bundle (#802).
-export { RealtimeChannel } from '@/lib/realtime/realtime-channel.do';
+export { RealtimeChannel } from '@/platform/server/realtime/realtime-channel.do';
 
 // Server-side video-export container DO (#968). Production-only binding
 // (`VIDEO_EXPORT_CONTAINER`); re-exported so its `class_name` resolves in the
 // bundle when CLOUDFLARE_ENV=production bakes the [env.production] block.
-export { VideoExportContainer } from '@/lib/containers/video-export-container';
+export { VideoExportContainer } from '@/sequences/server/video-export-container';
 
 // Bindings shape from wrangler.jsonc. Only declared so the scheduled() handler
 // has a real type for its env parameter (vs. the framework default of unknown).
@@ -175,7 +175,7 @@ const exportedHandler: ExportedHandler<WorkerEnv> = {
       return;
     }
     // Best-effort sweep for stuck generating-status rows across every table.
-    // See src/lib/cron/reconcile-all.ts; cron schedule is in wrangler.jsonc.
+    // See src/platform/server/cron/reconcile-all.ts; cron schedule is in wrangler.jsonc.
     ctx.waitUntil(
       reconcileAllStuckJobs().catch((error) => {
         logger.error('reconcileAllStuckJobs failed:', { err: error });

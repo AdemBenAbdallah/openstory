@@ -9,7 +9,7 @@
  * Claim uses its own per-user key so a gift Skip cannot suppress it.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Switch } from '@/ui/switch';
+} from '@/ui/shadcn/dialog';
+import { Switch } from '@/ui/shadcn/switch';
 import {
   claimWelcomeCreditsFn,
   createSetupCheckoutSessionFn,
@@ -30,15 +30,12 @@ import {
 } from './use-billing-balance';
 import { BILLING_GATE_KEY } from './use-billing-gate';
 import { useShowCosts } from './use-show-costs';
-import { useUser } from '@/hooks/use-user';
-import {
-  SIGNUP_GRANT_MICROS,
-  welcomeDialogMode,
-} from '@/billing/constants';
+import { useUser } from '@/platform/ui/use-user';
+import { SIGNUP_GRANT_MICROS, welcomeDialogMode } from '@/billing/constants';
 import type { WelcomeDialogMode } from '@/billing/constants';
 import { microsToDisplayUsd } from '@/billing/money';
 import { hasPendingGenerate } from '@/sequences/ui/generation/pending-generate';
-import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
+import { isWelcomeCardAlreadyClaimedError } from '@/platform/errors';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Sparkles } from 'lucide-react';

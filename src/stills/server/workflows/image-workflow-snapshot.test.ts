@@ -19,7 +19,7 @@ import { describe, expect, it } from 'vitest';
 import type {
   ShotImageSceneSnapshot,
   ImageWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { computeImageWorkflowHashFromDto } from './image-workflow-snapshot';
 
 const baseScene: ShotImageSceneSnapshot = {

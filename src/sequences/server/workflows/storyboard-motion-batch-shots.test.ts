@@ -6,12 +6,12 @@
 
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_VIDEO_MODEL } from '@/models/models';
-import type { MotionPrompt, Scene } from '@/lib/ai/scene-analysis.schema';
+import type { MotionPrompt, Scene } from '@/shots/scene-analysis.schema';
 import type {
   CharacterMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+} from '@/platform/server/db/schema';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import { buildStoryboardMotionBatchShots } from './storyboard-motion-batch-shots';
 
 function scene(

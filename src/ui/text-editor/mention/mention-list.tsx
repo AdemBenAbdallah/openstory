@@ -17,7 +17,7 @@ import {
   type MentionSection,
 } from '@/shots/ui/prompt-mention/mention-items';
 import { cn } from '@/ui/utils';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import {
   forwardRef,
   useEffect,

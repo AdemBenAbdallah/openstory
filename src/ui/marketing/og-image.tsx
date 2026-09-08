@@ -1,6 +1,6 @@
 import { GitHubIcon } from '@/ui/icons/github-icon';
 import { OpenStoryLogo } from '@/ui/icons/openstory-logo';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { SITE_CONFIG } from './constants';
 
 export const OgImage: React.FC = () => {

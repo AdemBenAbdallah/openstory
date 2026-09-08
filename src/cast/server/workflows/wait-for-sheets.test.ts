@@ -9,7 +9,7 @@
  * bounded number of attempts so a failed sheet can't stall the pipeline.
  */
 
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import type { WorkflowStep } from 'cloudflare:workers';
 import { describe, expect, test, vi } from 'vitest';
 import {

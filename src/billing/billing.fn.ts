@@ -3,7 +3,7 @@
  * Balance, checkout, transactions, and auto-top-up
  */
 
-import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
+import { requireTeamAdminAccess } from '@/platform/server/auth/action-utils';
 import {
   createCheckoutSession,
   createSetupCheckoutSession,
@@ -24,28 +24,23 @@ import {
   MIN_TOPUP_AMOUNT_USD,
   totalCheckoutCents,
 } from './constants';
-import {
-  micros,
-  microsToDisplayUsd,
-  microsToUsd,
-  usdToMicros,
-} from './money';
-import type { TransactionType } from '@/lib/db/schema/credits';
+import { micros, microsToDisplayUsd, microsToUsd, usdToMicros } from './money';
+import type { TransactionType } from '@/platform/server/db/schema/credits';
 import {
   isWelcomeCardAlreadyClaimedError,
   ValidationError,
-} from '@/shared/errors';
+} from '@/platform/errors';
 import { FOUNDER_EMAIL } from '@/ui/marketing/constants';
-import { getLogger } from '@/shared/observability/logger';
-import { captureProductEvent } from '@/lib/observability/product-events';
-import { sendFounderCreditRequestEmail } from '@/lib/services/email-service';
-import { getServerAppUrl } from '@/lib/env/environment';
+import { getLogger } from '@/platform/logger';
+import { captureProductEvent } from '@/platform/server/observability/product-events';
+import { sendFounderCreditRequestEmail } from './server/founder-credit-request-email';
+import { getServerAppUrl } from '@/platform/server/env/environment';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { zodValidator } from '@tanstack/zod-adapter';
 import Stripe from 'stripe';
 import { z } from 'zod';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 const logger = getLogger(['openstory', 'functions', 'billing']);
 

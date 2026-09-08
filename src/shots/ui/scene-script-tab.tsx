@@ -6,7 +6,7 @@
  * and the segment it feeds. See `ShotDurationField`.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import type { MentionItem } from '@/shots/ui/prompt-mention/mention-items';
 import { MarkdownEditor } from '@/ui/text-editor/markdown-editor';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';

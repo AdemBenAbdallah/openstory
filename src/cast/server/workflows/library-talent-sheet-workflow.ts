@@ -9,23 +9,23 @@ import {
   extractImageCost,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import { generateId } from '@/shared/id';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { generateId } from '@/platform/id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import { buildLibraryTalentSheetPrompt } from '@/cast/character-prompt';
 import { cropTalentSheetPortrait } from '@/cast/server/talent/crop-sheet-portrait';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { getTalentChannel } from '@/shared/realtime';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { copyStoredImage } from '@/lib/storage/copy-stored-image';
-import { uploadResponse } from '@/lib/storage/upload-response';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { getTalentChannel } from '@/platform/realtime';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { copyStoredImage } from '@/platform/server/storage/copy-stored-image';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import { generateImageSoftening } from '@/stills/server/workflows/content-soften';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   LibraryTalentSheetWorkflowInput,
   LibraryTalentSheetWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   computeLibraryTalentSheetHashCurrent,
   computeLibraryTalentSheetHashFromDto,
@@ -35,7 +35,7 @@ import {
   saveDivergentTalentSheet,
 } from './sheet-divergence';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'library-talent-sheet']);
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogClose,
@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/ui/dialog';
-import { statementFor } from '@/shared/compliance/attestations';
+} from '@/ui/shadcn/dialog';
+import { statementFor } from '@/platform/compliance/attestations';
 import { PortraitAttestationFields } from './portrait-attestation-fields';
 import { TalentMediaUpload } from './talent-media-upload';
 

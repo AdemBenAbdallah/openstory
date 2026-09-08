@@ -11,7 +11,7 @@ import {
   getCatalogFalPricingFn,
   type CatalogFalPricingMap,
 } from '@/billing/pricing.fn';
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import { micros } from '@/billing/money';
 
 const FAL_PRICING_QUERY_KEY = ['fal-catalog-pricing'] as const;

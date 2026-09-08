@@ -9,7 +9,7 @@
  * `credits_added` stays the wallet-ledger event and is not replaced.
  */
 
-import { captureProductEvent } from '@/lib/observability/product-events';
+import { captureProductEvent } from '@/platform/server/observability/product-events';
 import type Stripe from 'stripe';
 
 type CheckoutMethod = 'checkout' | 'saved_card';

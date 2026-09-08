@@ -15,7 +15,7 @@
   "ignorePatterns": [
     "**/mockServiceWorker.js",
     "*.gen.ts",
-    "src/components/ui/**/*.tsx",
+    "src/ui/shadcn/**/*.tsx",
     "containers/**"
   ],
   "rules": {
@@ -66,12 +66,12 @@
         "paths": [
           {
             "name": "#db-client",
-            "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/lib/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+            "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
           },
           {
-            "name": "@/lib/db/scoped",
+            "name": "@/platform/server/db/scoped",
             "importNames": ["createScopedDb"],
-            "message": "createScopedDb only in functions/middleware.ts, functions/stripe-webhook-middleware.ts and workflow/base-workflow.ts. Use context.scopedDb."
+            "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
           }
         ]
       }
@@ -90,8 +90,8 @@
       "files": [
         "scripts/**/*.ts",
         "e2e/**/*.ts",
-        "src/shared/observability/logger.ts",
-        "src/shared/mocks/**/*.ts"
+        "src/platform/logger.ts",
+        "src/mocks/**/*.ts"
       ],
       "rules": {
         "react/rules-of-hooks": "off",
@@ -99,30 +99,35 @@
       }
     },
     {
-      // Client/server boundary (#1445). `src/lib` is server-only; the
-      // client-safe half lives in `src/shared`. This is a per-file path rule
-      // so the mistake is visible in the editor — the transitive backstop is
-      // `src/lib/client-server-boundary.test.ts`. Top-level `import type` is
-      // erased at compile time and stays legal; the inline
-      // `import { type X }` form is NOT (it leaves a side-effect import), and
-      // `typescript/no-import-type-side-effects` above bans it outright.
+      // Client/server seam. Anything under `src/**/server/**` is server-only.
+      // This is a per-file path rule so the mistake is visible in the editor —
+      // the transitive backstop is `src/platform/client-server-boundary.test.ts`.
+      // Top-level `import type` is erased at compile time and stays legal.
       //
-      // `src/functions/**` is deliberately absent: a server fn's whole job is
-      // to reference `src/lib` from inside its handler, which the compiler
+      // `src/**/*.fn.ts` is deliberately absent: a server fn's whole job is
+      // to reference `**/server/**` from inside its handler, which the compiler
       // strips. The boundary test covers it instead, modelling that stripping.
-      //
-      // There are NO `!` exceptions: every `src/lib` module is off-limits to
-      // this file set (#1489). `routes/r2.$.ts` used to need one for
-      // `@/lib/storage/serve-media`, but it is a pure server route — its only
-      // `createFileRoute` option is `server: { handlers }`, which the client
-      // build prunes — so it belongs in the server-routes override below
-      // alongside `oauth/login.ts`, `llms.txt`, and `robots.txt`, not in a
-      // hole punched through this rule.
       "files": [
-        "src/components/**",
-        "src/hooks/**",
+        "src/ui/**",
         "src/routes/**",
-        "src/shared/**"
+        "src/router.tsx",
+        "src/start.ts",
+        "src/**/ui/**",
+        "src/models/*.ts",
+        "src/billing/*.ts",
+        "src/motion/*.ts",
+        "src/stills/*.ts",
+        "src/shots/*.ts",
+        "src/sequences/*.ts",
+        "src/cast/*.ts",
+        "src/look/*.ts",
+        "src/studio/*.ts",
+        "src/audio/*.ts",
+        "src/platform/*.ts",
+        "src/platform/auth/**",
+        "src/platform/compliance/**",
+        "src/platform/realtime/**",
+        "src/platform/schemas/**"
       ],
       "rules": {
         "no-restricted-imports": [
@@ -131,19 +136,240 @@
             "paths": [
               {
                 "name": "#db-client",
-                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/lib/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
               },
               {
-                "name": "@/lib/db/scoped",
+                "name": "@/platform/server/db/scoped",
                 "importNames": ["createScopedDb"],
-                "message": "createScopedDb only in functions/middleware.ts, functions/stripe-webhook-middleware.ts and workflow/base-workflow.ts. Use context.scopedDb."
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
               }
             ],
             "patterns": [
               {
-                "group": ["@/lib/*", "@/lib/**"],
+                "group": ["@/**/server/*", "@/**/server/**"],
                 "allowTypeImports": true,
-                "message": "src/lib is server-only and must not ship to the browser. Import the client-safe helper from @/shared (move it there if it is not yet), or make this a type-only import."
+                "message": "src/**/server/** is server-only and must not ship to the browser. Import a domain-root helper, or make this a type-only import. Server fns (*.fn.ts) may import it inside .handler()."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Server fns: client imports the stub; `.handler()` is stripped. They
+      // must value-import `**/server/**`. The boundary test models that
+      // stripping, so this override only keeps the db-access restrictions.
+      "files": ["src/**/*.fn.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              },
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Platform is domain-blind (#1489). Infrastructure under `src/platform`
+      // may not value-import a product domain; a file that needs one belongs
+      // to that domain. `import type` stays free. Tests are exempt (the
+      // server-routes/tests override below wins for them).
+      "files": ["src/platform/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              },
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ],
+            "patterns": [
+              {
+                "group": [
+                  "@/sequences/*",
+                  "@/sequences/**",
+                  "@/shots/*",
+                  "@/shots/**",
+                  "@/motion/*",
+                  "@/motion/**",
+                  "@/stills/*",
+                  "@/stills/**",
+                  "@/audio/*",
+                  "@/audio/**",
+                  "@/cast/*",
+                  "@/cast/**",
+                  "@/look/*",
+                  "@/look/**",
+                  "@/billing/*",
+                  "@/billing/**",
+                  "@/studio/*",
+                  "@/studio/**",
+                  "@/models/*",
+                  "@/models/**"
+                ],
+                "allowTypeImports": true,
+                "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots that wire every domain together are listed in the override below."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Platform's client-safe half gets both bans: no domains, no server.
+      "files": [
+        "src/platform/*.ts",
+        "src/platform/auth/**",
+        "src/platform/compliance/**",
+        "src/platform/realtime/**",
+        "src/platform/schemas/**",
+        "src/platform/ui/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              },
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["@/**/server/*", "@/**/server/**"],
+                "allowTypeImports": true,
+                "message": "src/**/server/** is server-only and must not ship to the browser. Import a domain-root helper, or make this a type-only import. Server fns (*.fn.ts) may import it inside .handler()."
+              },
+              {
+                "group": [
+                  "@/sequences/*",
+                  "@/sequences/**",
+                  "@/shots/*",
+                  "@/shots/**",
+                  "@/motion/*",
+                  "@/motion/**",
+                  "@/stills/*",
+                  "@/stills/**",
+                  "@/audio/*",
+                  "@/audio/**",
+                  "@/cast/*",
+                  "@/cast/**",
+                  "@/look/*",
+                  "@/look/**",
+                  "@/billing/*",
+                  "@/billing/**",
+                  "@/studio/*",
+                  "@/studio/**",
+                  "@/models/*",
+                  "@/models/**"
+                ],
+                "allowTypeImports": true,
+                "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots that wire every domain together are listed in the override below."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Platform server fns: the compiler strips `.handler()`, so the server
+      // ban does not apply, but the domain ban does.
+      "files": ["src/platform/*.fn.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              },
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ],
+            "patterns": [
+              {
+                "group": [
+                  "@/sequences/*",
+                  "@/sequences/**",
+                  "@/shots/*",
+                  "@/shots/**",
+                  "@/motion/*",
+                  "@/motion/**",
+                  "@/stills/*",
+                  "@/stills/**",
+                  "@/audio/*",
+                  "@/audio/**",
+                  "@/cast/*",
+                  "@/cast/**",
+                  "@/look/*",
+                  "@/look/**",
+                  "@/billing/*",
+                  "@/billing/**",
+                  "@/studio/*",
+                  "@/studio/**",
+                  "@/models/*",
+                  "@/models/**"
+                ],
+                "allowTypeImports": true,
+                "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots that wire every domain together are listed in the override below."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Composition roots: the few platform files whose job is to wire every
+      // domain together. Keep this list short — a new entry usually means a
+      // file that belongs in a domain.
+      "files": [
+        "src/platform/server/db/scoped.ts",
+        "src/platform/server/db/scoped-workflow.ts",
+        "src/platform/server/db/scoped/admin.ts",
+        "src/platform/server/db/seed-system-templates.ts",
+        "src/platform/server/api-v1/**",
+        "src/platform/ui/realtime/query-cache-updater.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              },
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
               }
             ]
           }
@@ -175,12 +401,12 @@
             "paths": [
               {
                 "name": "#db-client",
-                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/lib/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
               },
               {
-                "name": "@/lib/db/scoped",
+                "name": "@/platform/server/db/scoped",
                 "importNames": ["createScopedDb"],
-                "message": "createScopedDb only in functions/middleware.ts, functions/stripe-webhook-middleware.ts and workflow/base-workflow.ts. Use context.scopedDb."
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
               }
             ]
           }
@@ -190,18 +416,14 @@
     {
       // Raw `#db-client` readers. Each is a platform-wide (not team-scoped)
       // table or the scoped-db factory itself; `createScopedDb` stays restricted.
-      // `src/lib/db/db-access-allowlist.test.ts` pins the same list against every
+      // `src/platform/server/db/db-access-allowlist.test.ts` pins the same list against every
       // import form, including the relative ones this path rule cannot see.
       "files": [
-        "**/db/scoped.ts",
-        "**/db/client.ts",
-        "**/auth/config.ts",
-        "**/cron/reconcile-all.ts",
-        "**/cron/reconcile-fal-billing.ts",
-        "**/cron/refresh-fal-pricing.ts",
-        "**/ai/fal-pricing-live.ts",
-        "**/db/seed-model-pricing.ts",
-        "**/lib/test/seed.ts"
+        "src/platform/server/db/scoped.ts",
+        "src/billing/server/reconcile-fal-billing.ts",
+        "src/billing/server/refresh-fal-pricing.ts",
+        "src/billing/server/fal-pricing-live.ts",
+        "src/billing/server/seed-model-pricing.ts"
       ],
       "rules": {
         "no-restricted-imports": [
@@ -209,9 +431,60 @@
           {
             "paths": [
               {
-                "name": "@/lib/db/scoped",
+                "name": "@/platform/server/db/scoped",
                 "importNames": ["createScopedDb"],
-                "message": "createScopedDb only in functions/middleware.ts, functions/stripe-webhook-middleware.ts and workflow/base-workflow.ts. Use context.scopedDb."
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Same raw readers, platform side: they keep the domain ban above.
+      "files": [
+        "src/platform/server/db/client.ts",
+        "src/platform/server/auth/config.ts",
+        "src/platform/server/cron/reconcile-all.ts",
+        "src/platform/server/test/seed.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@/platform/server/db/scoped",
+                "importNames": ["createScopedDb"],
+                "message": "createScopedDb only in platform/middleware.fn.ts, shots/shot-access.fn.ts, billing/stripe-webhook-middleware.fn.ts and workflow/base-workflow.ts. Use context.scopedDb."
+              }
+            ],
+            "patterns": [
+              {
+                "group": [
+                  "@/sequences/*",
+                  "@/sequences/**",
+                  "@/shots/*",
+                  "@/shots/**",
+                  "@/motion/*",
+                  "@/motion/**",
+                  "@/stills/*",
+                  "@/stills/**",
+                  "@/audio/*",
+                  "@/audio/**",
+                  "@/cast/*",
+                  "@/cast/**",
+                  "@/look/*",
+                  "@/look/**",
+                  "@/billing/*",
+                  "@/billing/**",
+                  "@/studio/*",
+                  "@/studio/**",
+                  "@/models/*",
+                  "@/models/**"
+                ],
+                "allowTypeImports": true,
+                "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots that wire every domain together are listed in the override below."
               }
             ]
           }
@@ -221,10 +494,12 @@
     {
       // The request middlewares and the workflow base mint the scoped db for
       // handlers / runs; they never touch the raw handle.
+      // `base-workflow.ts` is also a composition root: every run bootstraps
+      // its environment there (fal proxy for aimock, the e2e pricing seed).
       "files": [
-        "**/functions/middleware.ts",
-        "**/functions/stripe-webhook-middleware.ts",
-        "**/workflow/base-workflow.ts"
+        "src/shots/shot-access.fn.ts",
+        "src/billing/stripe-webhook-middleware.fn.ts",
+        "src/platform/server/workflow/base-workflow.ts"
       ],
       "rules": {
         "no-restricted-imports": [
@@ -233,7 +508,52 @@
             "paths": [
               {
                 "name": "#db-client",
-                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/lib/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Same factory callers, platform side: they keep the domain ban above.
+      "files": ["src/platform/middleware.fn.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "#db-client",
+                "message": "#db-client is the raw D1 handle. Only the scoped-db factory, Better Auth, the pricing/cron jobs and the seed read it (allowlist: the db-access override at the bottom of this file + src/platform/server/db/db-access-allowlist.test.ts). Everything team-scoped goes through context.scopedDb."
+              }
+            ],
+            "patterns": [
+              {
+                "group": [
+                  "@/sequences/*",
+                  "@/sequences/**",
+                  "@/shots/*",
+                  "@/shots/**",
+                  "@/motion/*",
+                  "@/motion/**",
+                  "@/stills/*",
+                  "@/stills/**",
+                  "@/audio/*",
+                  "@/audio/**",
+                  "@/cast/*",
+                  "@/cast/**",
+                  "@/look/*",
+                  "@/look/**",
+                  "@/billing/*",
+                  "@/billing/**",
+                  "@/studio/*",
+                  "@/studio/**",
+                  "@/models/*",
+                  "@/models/**"
+                ],
+                "allowTypeImports": true,
+                "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots that wire every domain together are listed in the override below."
               }
             ]
           }

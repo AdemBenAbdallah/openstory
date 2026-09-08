@@ -4,17 +4,17 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   type TeamLibraryLocation,
   useTeamLocationsLibrary,
 } from '@/cast/ui/use-sequence-locations';
 import { MapPin, Search } from 'lucide-react';
 import { useState } from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type LocationPickerDialogProps = {
   open: boolean;

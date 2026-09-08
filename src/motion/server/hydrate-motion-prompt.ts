@@ -2,7 +2,7 @@ import type {
   MotionDialogue,
   MotionPrompt,
   Scene,
-} from '@/lib/ai/scene-analysis.schema';
+} from '@/shots/scene-analysis.schema';
 
 function hasDialogue(dialogue: MotionPrompt['dialogue']): boolean {
   return Boolean(dialogue.presence && dialogue.lines.length > 0);

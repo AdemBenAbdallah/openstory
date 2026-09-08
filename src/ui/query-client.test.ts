@@ -1,7 +1,7 @@
 import { MutationObserver, type QueryClient } from '@tanstack/react-query';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { AccountRestrictedError, AuthenticationError } from '@/shared/errors';
+import { AccountRestrictedError, AuthenticationError } from '@/platform/errors';
 import { makeQueryClient } from './query-client';
 
 describe('MutationCache', () => {

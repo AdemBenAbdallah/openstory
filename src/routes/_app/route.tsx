@@ -2,7 +2,7 @@ import { AppLayout } from '@/ui/layout/app-layout';
 import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { redirect } from '@tanstack/react-router';
-import { sessionQueryOptions } from '@/components/auth/session-query';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
 import { viaAvailabilityQueryOptions } from '@/models/ui/use-via-availability';
 
 export const Route = createFileRoute('/_app')({

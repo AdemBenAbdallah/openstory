@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { AuthGateStub } from '@/components/auth/auth-gate-provider';
+import { AuthGateStub } from '@/platform/ui/auth/auth-gate-provider';
 import { styleKeys } from '@/look/ui/use-styles';
-import type { Sequence } from '@/lib/db/schema/sequences';
+import type { Sequence } from '@/platform/server/db/schema/sequences';
 import { MOCK_SYSTEM_STYLES } from '@/look/server/style-templates';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ScriptView } from './script-view';

@@ -1,8 +1,8 @@
-import { isBytePlusConfigured } from '@/lib/ai/byteplus-config';
+import { isBytePlusConfigured } from '@/models/server/byteplus-config';
 import {
   getEffectiveFalPricing,
   getFalPricingUpdatedAt,
-} from '@/lib/ai/fal-pricing-live';
+} from '@/billing/server/fal-pricing-live';
 import { catalogFalEndpointIds } from '@/billing/server/catalog-endpoints';
 import {
   buildFilmCostExamples,
@@ -26,10 +26,7 @@ import {
 import { estimateImageCost } from './cost-estimation';
 import { estimateStoryboardPreflightCost } from './storyboard-preflight-cost';
 import { aspectRatioSchema } from '@/models/aspect-ratios';
-import {
-  generationStageSchema,
-  includesStage,
-} from '@/sequences/pipeline';
+import { generationStageSchema, includesStage } from '@/sequences/pipeline';
 import { resolutionSchema } from '@/models/resolutions';
 
 /** Public pricing catalog for the /pricing page, from live `model_pricing`. */

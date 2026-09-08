@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
+import { TEST_FAL_PRICING as FAL_PRICING } from '@/billing/fal-pricing-fixture';
 import { TURBO_DEFAULT_IMAGE } from '@/models/generation-mode';
 import { SIGNUP_GRANT_MICROS } from '@/billing/constants';
 import { buildFilmCostExamples } from './film-cost-examples';

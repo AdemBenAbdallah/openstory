@@ -1,15 +1,11 @@
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
-import { Card, CardContent } from '@/ui/card';
-import { Input } from '@/ui/input';
-import { Skeleton } from '@/ui/skeleton';
-import { listUserActivityFn } from '@/functions/admin';
-import type { UserActivityRow } from '@/lib/db/scoped';
-import {
-  micros,
-  microsToDisplayUsd,
-  microsToUsd,
-} from '@/billing/money';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
+import { Card, CardContent } from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { listUserActivityFn } from '@/platform/admin.fn';
+import type { UserActivityRow } from '@/platform/server/db/scoped';
+import { micros, microsToDisplayUsd, microsToUsd } from '@/billing/money';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import {

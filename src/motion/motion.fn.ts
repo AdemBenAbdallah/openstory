@@ -8,20 +8,17 @@ import {
   loadSceneContextBySequence,
   resolveSceneForShot,
 } from '@/shots/server/scene-script';
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
 import { AUDIO_MODELS } from '@/models/models';
 import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
-import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { REFERENCE_ONLY_MODEL_ERROR } from '@/lib/schemas/sequence.schemas';
+import { toWorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { REFERENCE_ONLY_MODEL_ERROR } from '@/sequences/server/sequence.schemas';
 import { resolveVideoModel } from '@/models/resolve-asset-models';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import {
-  estimateVideoCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
+import { estimateVideoCost, gateEstimate } from '@/billing/cost-estimation';
 import {
   estimateBatchMotionCost,
   resolveBatchShotVideoModel,
@@ -32,17 +29,17 @@ import {
 } from '@/billing/server/preflight';
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
 import { resolveShotDuration } from './resolve-shot-duration';
-import { generateMotionSchema } from '@/lib/schemas/shot.schemas';
+import { generateMotionSchema } from '@/shots/server/shot.schemas';
 import { dbSceneId } from '@/shots/scene-id';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
-import { NotFoundError } from '@/shared/errors';
-import { getLogger } from '@/shared/observability/logger';
-import { getGenerationChannel } from '@/shared/realtime';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { terminateSingleArtifactRun } from '@/lib/workflow/run-outcome';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
+import { NotFoundError } from '@/platform/errors';
+import { getLogger } from '@/platform/logger';
+import { getGenerationChannel } from '@/platform/realtime';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { terminateSingleArtifactRun } from '@/platform/server/workflow/run-outcome';
 
 const motionLogger = getLogger(['openstory', 'serverFn', 'motion']);
-import type { BatchMotionMusicWorkflowInput } from '@/lib/workflow/types';
+import type { BatchMotionMusicWorkflowInput } from '@/platform/server/workflow/types';
 
 import {
   motionPromptFromVersion,
@@ -58,7 +55,8 @@ import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-fro
 import { buildUserEditProvenance } from '@/shots/server/user-edit-provenance';
 import { shouldRecordUserEdit } from '@/shots/server/workflows/user-edit-predicate';
 
-import { shotAccessMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
 
 // -- Generate Motion for Shot -------------------------------------------
 

@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
-import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { ElementBibleEntry } from '@/shots/scene-analysis.schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { createCastRecords, findMissingElementEntries } from './cast-records';
 
 const entry = (token: string): ElementBibleEntry => ({

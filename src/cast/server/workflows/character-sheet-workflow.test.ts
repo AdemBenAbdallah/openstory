@@ -6,10 +6,10 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { CharacterSheetWorkflowInput } from '@/lib/workflow/types';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { CharacterSheetWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 
 const mockCopyStoredImage = vi.fn();
@@ -18,7 +18,7 @@ const mockDeductWorkflowCredits = vi.fn();
 const mockRecordProvenance = vi.fn();
 const mockEmit = vi.fn();
 
-vi.doMock('@/lib/storage/copy-stored-image', () => ({
+vi.doMock('@/platform/server/storage/copy-stored-image', () => ({
   copyStoredImage: mockCopyStoredImage,
 }));
 vi.doMock('@/stills/server/image-generation', () => ({
@@ -29,10 +29,10 @@ vi.doMock('@/billing/server/workflow-deduction', () => ({
   extractImageCost: () => 0,
   recordFalUsageStep: vi.fn(),
 }));
-vi.doMock('@/lib/compliance/provenance', () => ({
+vi.doMock('@/platform/server/compliance/provenance', () => ({
   recordProvenance: mockRecordProvenance,
 }));
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: () => ({ emit: mockEmit }),
 }));
 

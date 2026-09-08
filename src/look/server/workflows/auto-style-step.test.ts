@@ -3,17 +3,17 @@
  * style row, re-snapshot the sequence from it, announce it. A row that lost
  * its binding mid-run (promoted) is never rewritten.
  */
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { AutoStyleResponse } from '@/look/auto-style';
 import type { WorkflowStep } from 'cloudflare:workers';
 import { describe, expect, it, vi } from 'vitest';
 import type { z } from 'zod';
 
 const durableLLMCallCf = vi.fn();
-vi.doMock('@/lib/workflows/llm-call-helper', () => ({ durableLLMCallCf }));
+vi.doMock('@/models/server/llm-call-helper', () => ({ durableLLMCallCf }));
 
 const emit = vi.fn();
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 

@@ -43,14 +43,15 @@ const SEQUENCE_LEVEL_BY_DESIGN: Record<string, string> = {
     'defines the resolution — the default it falls back to',
   // A full storyboard run starts in the sequence's mode; per-shot overrides
   // are applied later, per shot, by the render paths.
-  'src/lib/workflow/launchers.ts': 'sequence-wide storyboard launch',
+  'src/sequences/server/launchers.ts': 'sequence-wide storyboard launch',
   // Pre-flight credit envelopes for a WHOLE run. An override shifts one shot
   // between two similarly-priced routes; the envelope is an estimate.
   'src/sequences/server/smart-retry.ts': 'whole-run credit estimate',
   'src/sequences/sequences.fn.ts': 'whole-run credit estimate',
   'src/stills/shot-image.fn.ts': 'whole-run credit estimate',
   'src/billing/pricing.fn.ts': 'whole-run credit estimate',
-  'src/sequences/ui/use-draft-generation-estimate.ts': 'whole-run credit estimate',
+  'src/sequences/ui/use-draft-generation-estimate.ts':
+    'whole-run credit estimate',
   // Continue-stage prefetch for the whole sequence, not a per-shot render.
   'src/routes/_app/sequences/$id/scenes.tsx':
     'sequence-wide continue-stage estimate',
@@ -69,9 +70,11 @@ const SEQUENCE_LEVEL_BY_DESIGN: Record<string, string> = {
   'src/models/ui/pickers/add-model-menu.tsx':
     'passes the default to the per-shot resolver',
   // Creation: no shot exists yet, so the sequence default is the only answer.
-  'src/lib/schemas/sequence.schemas.ts': 'validates the create-time default',
-  'src/sequences/server/create-sequences.ts': 'creates the row from the default',
-  'src/lib/db/scoped/sequences.ts': 'writes the column',
+  'src/sequences/server/sequence.schemas.ts':
+    'validates the create-time default',
+  'src/sequences/server/create-sequences.ts':
+    'creates the row from the default',
+  'src/sequences/server/db/sequences.ts': 'writes the column',
   // Restores the composer's stored default; there is no shot to ask.
   'src/sequences/ui/use-generation-settings.ts': 'stored composer default',
 };

@@ -10,7 +10,7 @@
  *   - Frames    — a start frame, plus an end frame where the model takes one
  */
 
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { ActionCost } from '@/billing/ui/action-cost';
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
 import { ImageModelSelector } from '@/models/ui/pickers/image-model-selector';
@@ -42,25 +42,21 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+} from '@/ui/shadcn/alert-dialog';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Separator } from '@/ui/separator';
-import { Skeleton } from '@/ui/skeleton';
-import { Switch } from '@/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+} from '@/ui/shadcn/select';
+import { Separator } from '@/ui/shadcn/separator';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Switch } from '@/ui/shadcn/switch';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import {
   useCreateStudioAssets,
@@ -90,15 +86,9 @@ import {
 } from '@/models/aspect-ratios';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import { useEditorDictation } from '@/ui/use-dictation';
-import {
-  pickShufflePrompt,
-  studioShufflePrompts,
-} from './prompt-shuffle';
+import { pickShufflePrompt, studioShufflePrompts } from './prompt-shuffle';
 import { parseStudioPaste } from './paste-import';
-import type {
-  StudioCreateInput,
-  StudioReferenceKind,
-} from '@/studio/schema';
+import type { StudioCreateInput, StudioReferenceKind } from '@/studio/schema';
 import {
   renumberStudioReferences,
   snapStudioVideoDuration,

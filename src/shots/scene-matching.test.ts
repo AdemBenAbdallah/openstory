@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { CharacterMinimal, SequenceElementMinimal } from '@/lib/db/schema';
+import type {
+  CharacterMinimal,
+  SequenceElementMinimal,
+} from '@/platform/server/db/schema';
 import {
   characterMentionedInPrompt,
   matchCharacterToShotTags,

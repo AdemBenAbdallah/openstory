@@ -7,22 +7,22 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import { generateId } from '@/shared/id';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { SequenceLocationMinimal } from '@/lib/db/schema';
+import { generateId } from '@/platform/id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { SequenceLocationMinimal } from '@/platform/server/db/schema';
 import { buildLocationInsert } from './cast-records';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   LibraryLocationMatch,
   LocationBibleWorkflowInput,
   LocationSheetWorkflowInput,
   LocationSheetWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'location-bible']);
 

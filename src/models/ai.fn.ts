@@ -7,46 +7,44 @@
  * bundle (imports used only inside handler bodies are dead-code-eliminated) —
  * so no heavy server module may be referenced at module level or from an
  * exported helper here (#1257). The enhancement core lives in
- * `@/lib/ai/script-enhancement`; handlers reference it only inside their
+ * `@/sequences/server/script-enhancement`; handlers reference it only inside their
  * bodies, which the compiler strips.
  */
 
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
 import {
   callLLMStream,
   llmCostFromUsage,
   RECOMMENDED_MODELS,
-} from '@/lib/ai/llm-client';
+} from '@/models/server/llm-client';
 import { isValidImageToVideoModel } from './models';
 import { isValidAnalysisModelId } from './models.config';
-import { sanitizeScriptContent } from '@/lib/ai/prompt-validation';
+import { sanitizeScriptContent } from '@/sequences/prompt-validation';
 import {
   sceneDurationResponseSchema,
   styleRecommendationResponseSchema,
-} from '@/lib/ai/response-schemas';
-import type { StyleRecommendationResponse } from '@/lib/ai/response-schemas';
+} from '@/sequences/response-schemas';
+import type { StyleRecommendationResponse } from '@/sequences/response-schemas';
 import {
   RateLimiter,
   scriptEnhancementRateLimiter,
-} from '@/lib/ai/script-enhancer';
+} from '@/sequences/script-enhancer';
 import {
   prepareBilling,
   streamScriptEnhancement,
-} from '@/lib/ai/script-enhancement';
+} from '@/sequences/server/script-enhancement';
 import { aspectRatioSchema } from './aspect-ratios';
-import type { Style } from '@/lib/db/schema/libraries';
-import {
-  parseStyleConfig,
-  StyleConfigSchema,
-} from '@/look/style-config';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import type { Style } from '@/platform/server/db/schema/libraries';
+import { parseStyleConfig, StyleConfigSchema } from '@/look/style-config';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware, shotAccessMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'serverFn', 'ai']);
 

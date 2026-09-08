@@ -2,10 +2,7 @@ import { usePostHog } from '@posthog/react';
 import { GitHubIcon } from '@/ui/icons/github-icon';
 import { XIcon } from '@/ui/icons/x-icon';
 import { YouTubeIcon } from '@/ui/icons/youtube-icon';
-import {
-  OpenStoryIcon,
-  OpenStoryLogo,
-} from '@/ui/icons/openstory-logo';
+import { OpenStoryIcon, OpenStoryLogo } from '@/ui/icons/openstory-logo';
 import {
   Sidebar,
   SidebarContent,
@@ -18,9 +15,9 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
   useSidebar,
-} from '@/ui/sidebar';
-import { FeedbackDialog } from '@/components/feedback/feedback-dialog';
-import { MODELS_ENABLED } from '@/shared/flags';
+} from '@/ui/shadcn/sidebar';
+import { FeedbackDialog } from '@/platform/ui/feedback/feedback-dialog';
+import { MODELS_ENABLED } from '@/platform/flags';
 import { SITE_CONFIG } from '@/ui/marketing/constants';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useCallback, useEffect, useState, useRef } from 'react';

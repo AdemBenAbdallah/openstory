@@ -2,11 +2,11 @@ import {
   addLineGutter,
   resolveBoundaries,
   sliceScenes,
-} from '@/lib/ai/boundary-split';
+} from '@/sequences/boundary-split';
 import type {
   SceneSplitBiblesResult,
   SceneSplitScenesResult,
-} from '@/lib/ai/response-schemas';
+} from '@/sequences/response-schemas';
 import type { AutoStyleResponse } from '@/look/auto-style';
 import { z } from 'zod';
 import { LOCATION_CASE, PROSE_GOLD_BEATS, TALENT_CASE } from './fixtures';

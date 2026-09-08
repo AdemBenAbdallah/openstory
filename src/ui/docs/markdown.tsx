@@ -1,7 +1,4 @@
-import {
-  isInternalDocsHref,
-  type MarkdownDocument,
-} from './markdown-ast';
+import { isInternalDocsHref, type MarkdownDocument } from './markdown-ast';
 import { cn } from '@/ui/utils';
 import {
   Markdown,

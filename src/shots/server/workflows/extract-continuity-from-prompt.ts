@@ -12,12 +12,12 @@
  * continuity so removals from the prompt don't drop linked items.
  */
 
-import type { Continuity } from '@/lib/ai/scene-analysis.schema';
+import type { Continuity } from '@/shots/scene-analysis.schema';
 import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { matchElementsToScene } from '@/shots/scene-matching';
 
 type CharacterTerm = Pick<

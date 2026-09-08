@@ -20,7 +20,7 @@ import {
 } from './scene-script-prompts';
 import { FailureSummaryBanner } from '@/sequences/ui/failure-summary-banner';
 import { SequenceHeaderPortal } from '@/sequences/ui/sequence-header-slot';
-import { ScrollArea } from '@/ui/scroll-area';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
 import { batchGenerateMotionFn } from '@/motion/motion.fn';
 import {
   continueGenerationFn,
@@ -47,7 +47,7 @@ import {
   useSceneShotStaleness,
   useSequenceShotStaleness,
 } from './use-shot-staleness';
-import { errorMessage, isInsufficientCreditsError } from '@/shared/errors';
+import { errorMessage, isInsufficientCreditsError } from '@/platform/errors';
 import { adjacentShotId } from './shot-walk';
 import { sequenceKeys, useSequence } from '@/sequences/ui/use-sequences';
 import {
@@ -90,13 +90,17 @@ import {
 } from '@/models/resolve-asset-models';
 import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
 import { isSetImageOffered } from './set-image-offer';
-import type { FrameVariant, ShotVariant, Sequence } from '@/lib/db/schema';
+import type {
+  FrameVariant,
+  ShotVariant,
+  Sequence,
+} from '@/platform/server/db/schema';
 import { rendersReferenceOnly } from '@/shots/use-start-frame';
 import { isBatchMotionEligible, type ShotView } from '@/shots/shot-view';
 import { analyzeLoadedFailures } from '@/sequences/failure-analysis';
-import type { GenerationPhaseConfig } from '@/components/realtime/generation-stream.reducer';
-import { useGenerationStream } from '@/components/realtime/use-generation-stream';
-import { useStaleDetected } from '@/components/realtime/use-stale-detected';
+import type { GenerationPhaseConfig } from '@/sequences/ui/generation-stream.reducer';
+import { useGenerationStream } from '@/sequences/ui/use-generation-stream';
+import { useStaleDetected } from './use-stale-detected';
 import { cn } from '@/ui/utils';
 import { ChevronDown } from 'lucide-react';
 import { usePostHog } from '@posthog/react';

@@ -1,4 +1,7 @@
-import { getInternalDomains, isSystemAdmin } from '@/lib/auth/system-admin';
+import {
+  getInternalDomains,
+  isSystemAdmin,
+} from '@/platform/server/auth/system-admin';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
@@ -6,7 +9,7 @@ import {
   authMiddleware,
   authWithTeamMiddleware,
   systemAdminMiddleware,
-} from '@/functions/middleware';
+} from '@/platform/middleware.fn';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 

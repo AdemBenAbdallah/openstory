@@ -1,13 +1,13 @@
 import type React from 'react';
 import { useState } from 'react';
-import { Badge } from '@/ui/badge';
+import { Badge } from '@/ui/shadcn/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dropdown-menu';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { StyleDetailDialog } from './style-detail-dialog';
 import { PromoteStyleDialog } from './promote-style-dialog';
 import { useSequenceStyle, useStyle, useStyles } from './use-styles';

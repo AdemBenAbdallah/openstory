@@ -13,8 +13,8 @@
  * the returned continuity if `changed === true`.
  */
 
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import {
   extractContinuityFromPrompt,
   hasContinuityAdditions,

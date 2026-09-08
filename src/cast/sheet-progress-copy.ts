@@ -1,7 +1,9 @@
-import { z } from 'zod';
+import {
+  type SheetProgressActivity,
+  sheetProgressActivitySchema,
+} from '@/platform/realtime';
 
-export const sheetProgressActivitySchema = z.enum(['sheet', 'portrait']);
-export type SheetProgressActivity = z.infer<typeof sheetProgressActivitySchema>;
+export type { SheetProgressActivity };
 
 /** Longer than a slow 4-panel + headshot (those finish in ~2–5 min). */
 export const SHEET_PROGRESS_STALE_MS = 10 * 60 * 1000;

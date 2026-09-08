@@ -1,5 +1,5 @@
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import {
   ASPECT_RATIOS,
   aspectRatioSchema,

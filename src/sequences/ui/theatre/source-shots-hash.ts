@@ -7,7 +7,7 @@
  * `JSON.stringify({ sceneUrls, musicUrl })`; key order is load-bearing.
  */
 
-import { sha256Hex } from '@/shared/compliance/hash';
+import { sha256Hex } from '@/platform/compliance/hash';
 
 export type SequenceExportInputs = {
   sceneUrls: readonly string[];

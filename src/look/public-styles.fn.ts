@@ -3,7 +3,7 @@
  * loader can prefetch without pulling auth middleware into the route
  * server entry (#1182).
  */
-import { listPublicStyles } from '@/lib/db/scoped';
+import { listPublicStyles } from '@/platform/server/db/scoped';
 import { createServerFn } from '@tanstack/react-start';
 
 /**

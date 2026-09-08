@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
+} from '@/ui/shadcn/alert-dialog';
 import { Loader2 } from 'lucide-react';
 
 type RecastConfirmDialogProps = {

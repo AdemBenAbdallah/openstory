@@ -1,24 +1,21 @@
 import { ModelFamilyCard } from './model-family-card';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/ui/empty';
+} from '@/ui/shadcn/empty';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/ui/input-group';
-import { Skeleton } from '@/ui/skeleton';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+} from '@/ui/shadcn/input-group';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import { listCatalogModelFamiliesFn } from '@/models/model-catalog.fn';
-import {
-  CATALOG_ACTIVITIES,
-  type CatalogActivity,
-} from '@/models/catalog';
+import { CATALOG_ACTIVITIES, type CatalogActivity } from '@/models/catalog';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Boxes, Search, X } from 'lucide-react';
 import type { ChangeEvent, FC, FormEvent } from 'react';

@@ -1,7 +1,7 @@
-import { Sheet, SheetContent, SheetTitle } from '@/ui/sheet';
+import { Sheet, SheetContent, SheetTitle } from '@/ui/shadcn/sheet';
 import type { SceneWithScript } from './use-scenes';
 import type { SceneSelection } from './scene-selection';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 import { ChevronUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { SceneList, type SceneListProps } from './scene-list';

@@ -3,32 +3,32 @@
  * Manages BYOK (Bring Your Own Key) for OpenRouter, Fal.ai, xAI, Google and LLMTR
  */
 
-import { Alert, AlertDescription } from '@/ui/alert';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
+} from '@/ui/shadcn/card';
 import { FalLogo } from '@/ui/icons/fal-logo';
 import { GoogleGIcon } from '@/ui/icons/google-g-icon';
 import { LlmtrLogo } from '@/ui/icons/llmtr-logo';
 import { OpenRouterLogo } from '@/ui/icons/openrouter-logo';
 import { XIcon } from '@/ui/icons/x-icon';
-import { Input } from '@/ui/input';
-import { Skeleton } from '@/ui/skeleton';
+import { Input } from '@/ui/shadcn/input';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   checkApiKeyStatusFn,
   deleteApiKeyFn,
   listApiKeysFn,
   revalidateApiKeyFn,
   saveApiKeyFn,
-} from '@/functions/api-keys';
-import { initiateOpenRouterOAuthFn } from '@/functions/openrouter-oauth';
-import { getCurrentUserProfileFn } from '@/functions/user';
+} from '@/platform/api-keys.fn';
+import { initiateOpenRouterOAuthFn } from '@/platform/openrouter-oauth.fn';
+import { getCurrentUserProfileFn } from '@/platform/user.fn';
 import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
 import { usePostHog } from '@posthog/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

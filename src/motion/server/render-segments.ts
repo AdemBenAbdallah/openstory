@@ -18,11 +18,11 @@
  * See docs/architecture/scene-shot-frame-redesign.md.
  */
 
-import {
-  IMAGE_TO_VIDEO_MODELS,
-  type ImageToVideoModel,
-} from '@/models/models';
-import type { VideoManifest, VideoManifestEntry } from '@/lib/db/schema';
+import { IMAGE_TO_VIDEO_MODELS, type ImageToVideoModel } from '@/models/models';
+import type {
+  VideoManifest,
+  VideoManifestEntry,
+} from '@/platform/server/db/schema';
 import { MOTION_JSON_SCHEMAS } from './endpoint-map';
 import { getDurationValues, numericOf } from './motion-transform';
 

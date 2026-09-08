@@ -36,10 +36,7 @@ import {
   inlineReferenceDescription,
   substituteReferenceTags,
 } from '@/stills/reference-legend';
-import {
-  pickVideoResolution,
-  type Resolution,
-} from '@/models/resolutions';
+import { pickVideoResolution, type Resolution } from '@/models/resolutions';
 import { buildReferenceVideoPrompt } from './build-reference-video-prompt';
 
 /**

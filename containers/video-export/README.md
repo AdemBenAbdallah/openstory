@@ -5,7 +5,7 @@ service that stitches a sequence's scene videos and mixes music + dialogue into
 one MP4, using [`mediabunny`](https://mediabunny.dev) +
 [`@mediabunny/server`](https://www.npmjs.com/package/@mediabunny/server)
 (NodeAV / FFmpeg). It runs as a **Cloudflare Container** fronted by the
-`VideoExportContainer` Durable Object (`src/lib/containers/video-export-container.ts`).
+`VideoExportContainer` Durable Object (`src/sequences/server/video-export-container.ts`).
 
 ## Why a container (and not the Worker)
 

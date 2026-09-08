@@ -4,11 +4,11 @@
  * the talent has no convergent sheet yet.
  */
 
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { isTeamWritableTalent } from '@/lib/db/scoped/talent';
-import { getLogger } from '@/shared/observability/logger';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { isTeamWritableTalent } from '@/cast/server/db/talent';
+import { getLogger } from '@/platform/logger';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLibraryTalentSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
 import {
   analyzeTalentMediaForTeam,

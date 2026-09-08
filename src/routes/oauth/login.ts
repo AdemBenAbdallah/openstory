@@ -7,8 +7,8 @@
  * `src/shared/auth/oauth-login-resume.ts`.
  */
 
-import { buildLoginRedirect } from '@/components/auth/oauth-login-resume';
-import { getLogger } from '@/shared/observability/logger';
+import { buildLoginRedirect } from '@/platform/ui/auth/oauth-login-resume';
+import { getLogger } from '@/platform/logger';
 import { createFileRoute } from '@tanstack/react-router';
 
 const logger = getLogger(['openstory', 'oauth', 'login']);

@@ -6,19 +6,19 @@
  * compose the sequence-level document from per-scene slices.
  */
 
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import {
-  dbSceneId,
-  type DbSceneId,
-  type SceneRow,
-  type SceneScriptVersion,
-  type Shot,
-} from '@/lib/db/schema';
-import type { Database } from '@/lib/db/client';
-import { createSceneScriptVersionsMethods } from '@/lib/db/scoped/scene-script-versions';
-import { createScenesMethods } from '@/lib/db/scoped/scenes';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type {
+  DbSceneId,
+  SceneRow,
+  SceneScriptVersion,
+  Shot,
+} from '@/platform/server/db/schema';
+import { dbSceneId } from '@/shots/scene-id';
+import type { Database } from '@/platform/server/db/client';
+import { createSceneScriptVersionsMethods } from '@/shots/server/db/scene-script-versions';
+import { createScenesMethods } from '@/shots/server/db/scenes';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 
 /** A scene row plus its selected script — everything a `Scene` composes from. */
 export type SceneContext = {

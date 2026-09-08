@@ -21,11 +21,11 @@ const mockLoggerInstance = {
   getChild: () => mockLoggerInstance,
 };
 
-vi.doMock('@/lib/posthog-server', () => ({
+vi.doMock('@/platform/server/observability/posthog-server', () => ({
   getPostHogClient: mockGetClient,
 }));
 
-vi.doMock('@/shared/observability/logger', () => ({
+vi.doMock('@/platform/logger', () => ({
   getLogger: () => mockLoggerInstance,
 }));
 

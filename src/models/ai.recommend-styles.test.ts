@@ -7,7 +7,7 @@
  */
 
 import { buildStyleCatalog, rankStyleRecommendations } from './ai.fn';
-import type { Style } from '@/lib/db/schema/libraries';
+import type { Style } from '@/platform/server/db/schema/libraries';
 import { describe, expect, it } from 'vitest';
 
 function makeStyle(overrides: Partial<Style> & { id: string }): Style {

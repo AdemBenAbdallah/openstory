@@ -1,5 +1,5 @@
 import { ThinkingBar } from '@/ui/ai/thinking-bar';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { ActionCost } from '@/billing/ui/action-cost';
 import { useWelcomeCreditsGate } from '@/billing/ui/welcome-credits-dialog';
 import { PremiumCard } from '@/ui/cards/premium-card';
@@ -25,15 +25,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Button, buttonVariants } from '@/ui/button';
-import { CardContent, CardFooter, CardHeader } from '@/ui/card';
-import { Kbd, KbdGroup } from '@/ui/kbd';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+} from '@/ui/shadcn/alert-dialog';
+import { Button, buttonVariants } from '@/ui/shadcn/button';
+import { CardContent, CardFooter, CardHeader } from '@/ui/shadcn/card';
+import { Kbd, KbdGroup } from '@/ui/shadcn/kbd';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import {
   Sheet,
   SheetContent,
@@ -41,9 +37,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/ui/sheet';
+} from '@/ui/shadcn/sheet';
 import { useIsMobile } from '@/ui/use-mobile';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import { enhanceScriptStreamFn } from '@/models/ai.fn';
 import { useAutoScroll } from '@/ui/use-auto-scroll';
 import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
@@ -66,9 +62,13 @@ import {
 } from '@/cast/ui/use-sequence-elements';
 import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import { useCreateSequence } from '@/sequences/ui/use-sequences';
-import { useRecommendedStyles, useStyle, useStyles } from '@/look/ui/use-styles';
+import {
+  useRecommendedStyles,
+  useStyle,
+  useStyles,
+} from '@/look/ui/use-styles';
 import { AUTO_STYLE_ID } from '@/look/auto-style';
-import { errorMessage } from '@/shared/errors';
+import { errorMessage } from '@/platform/errors';
 import {
   assessDurationFit,
   briefRequestsUnrenderableText,
@@ -104,10 +104,7 @@ import { useDraftGenerationEstimate } from '@/sequences/ui/use-draft-generation-
 import { clampResolution } from '@/models/resolutions';
 import type { Resolution } from '@/models/resolutions';
 import { availableResolutions } from '@/models/ui/resolution-support';
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
 import {
   markPendingIntent,
   takePendingIntent,
@@ -140,7 +137,7 @@ import {
   snapshotDataTransfer,
   toastDragImportCorsError,
 } from '@/ui/drag-images';
-import type { Sequence } from '@/lib/db/schema';
+import type { Sequence } from '@/platform/server/db/schema';
 import { usePostHog } from '@posthog/react';
 import {
   ImagePlus,

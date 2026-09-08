@@ -6,20 +6,23 @@
  * `durableStreamingLLMCallCf`, driven by `step.do`. Spawned per scene by
  * `MotionPromptBatchWorkflow`. */
 
-import { computeMotionPromptInputHash } from '@/lib/ai/input-hash';
-import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
+import { computeMotionPromptInputHash } from '@/shots/input-hash';
+import { narrowShotPromptContext } from '@/shots/server/prompt-context';
 import {
   motionPromptSchema,
   type MotionPrompt,
-} from '@/lib/ai/scene-analysis.schema';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getShotPromptChannel, getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import type { MotionPromptWorkflowInput } from '@/lib/workflow/types';
+} from '@/shots/scene-analysis.schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import {
+  getShotPromptChannel,
+  getGenerationChannel,
+} from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import type { MotionPromptWorkflowInput } from '@/platform/server/workflow/types';
 import { hydrateMotionPromptFromScene } from '@/motion/server/hydrate-motion-prompt';
-import { durableStreamingLLMCallCf } from '@/lib/workflows/llm-call-helper';
+import { durableStreamingLLMCallCf } from '@/models/server/llm-call-helper';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'motion-prompt']);
 

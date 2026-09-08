@@ -7,32 +7,32 @@ import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import {
-  isValidTextToImageModel,
-  safeTextToImageModel,
-} from '@/models/models';
-import type { CharacterBibleUpdate } from '@/lib/db/scoped/characters';
+import { isValidTextToImageModel, safeTextToImageModel } from '@/models/models';
+import type { CharacterBibleUpdate } from '@/cast/server/db/characters';
 import { resolveSequenceStyleConfig } from '@/look/style-config';
 import { buildCastingAttributes } from './character-prompt';
 import { shouldReuseTalentSheet } from '@/cast/server/talent/reuse-talent-sheet';
-import { getGenerationChannel } from '@/shared/realtime';
+import { getGenerationChannel } from '@/platform/realtime';
 import {
   bibleField,
   identityToken,
   nextIdentityToken,
   slugifyTag,
-} from '@/lib/schemas/bible-field';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { RecastCharacterWorkflowInput } from '@/lib/workflow/types';
+} from './bible-field';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { RecastCharacterWorkflowInput } from '@/platform/server/workflow/types';
 import { buildRecastRegenerateSnapshots } from '@/cast/server/workflows/recast-snapshot';
 import { buildRegenerateCharacterSheetPayload } from '@/cast/server/sheets/character-sheet-trigger';
 import type { SheetStaleness } from '@/cast/server/sheets/sheet-staleness';
 import { characterSheetHashMatchesStored } from '@/cast/server/workflows/sheet-snapshots';
 
-import { NotFoundError } from '@/shared/errors';
-import { getLogger } from '@/shared/observability/logger';
-import { authWithTeamMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import { NotFoundError } from '@/platform/errors';
+import { getLogger } from '@/platform/logger';
+import {
+  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
+} from '@/platform/middleware.fn';
 
 const logger = getLogger(['openstory', 'serverFn', 'sequence-characters']);
 

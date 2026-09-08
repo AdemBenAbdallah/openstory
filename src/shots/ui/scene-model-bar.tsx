@@ -1,20 +1,14 @@
 import { AspectRatioIcon } from '@/ui/icons/aspect-ratio-icon';
 import { ModelBadge } from '@/models/ui/pickers/model-badge';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { SequenceImageModelSelector } from '@/models/ui/pickers/sequence-image-model-selector';
 import { SequenceVideoModelSelector } from '@/models/ui/pickers/sequence-video-model-selector';
 import { StyleBadge } from '@/look/ui/style-badge';
-import { Kbd } from '@/ui/kbd';
+import { Kbd } from '@/ui/shadcn/kbd';
 import type { ImageToVideoModel, TextToImageModel } from '@/models/models';
-import {
-  getAspectRatioData,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
-import {
-  RESOLUTION_OPTIONS,
-  type Resolution,
-} from '@/models/resolutions';
-import { Badge } from '@/ui/badge';
+import { getAspectRatioData, type AspectRatio } from '@/models/aspect-ratios';
+import { RESOLUTION_OPTIONS, type Resolution } from '@/models/resolutions';
+import { Badge } from '@/ui/shadcn/badge';
 import type { SelectionScope } from './scene-selection';
 import { usePostHog } from '@posthog/react';
 import { Link } from '@tanstack/react-router';

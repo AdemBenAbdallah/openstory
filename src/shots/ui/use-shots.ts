@@ -1,7 +1,7 @@
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ShotVariant } from '@/lib/db/schema';
-import type { ImageVariantWithShot } from '@/lib/db/scoped/frame-variants';
+import type { ShotVariant } from '@/platform/server/db/schema';
+import type { ImageVariantWithShot } from '@/stills/server/db/frame-variants';
 import {
   isBrowserDisplayableStillUrl,
   shotAfterVariantSelect,
@@ -34,7 +34,7 @@ import {
 import { promptVariantKeys } from './use-prompt-variants';
 import { segmentKeys } from './use-segments';
 import { shotStalenessNamespace } from './use-shot-staleness';
-import type { GenerateVariantInput as SchemaGenerateVariantInput } from '@/lib/schemas/shot.schemas';
+import type { GenerateVariantInput as SchemaGenerateVariantInput } from '@/shots/server/shot.schemas';
 
 type GenerateVariantInput = SchemaGenerateVariantInput & {
   sequenceId: string;

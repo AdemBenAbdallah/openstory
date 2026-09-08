@@ -6,17 +6,17 @@
 import {
   contentRejectionSubjects,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
+} from '@/models/content-rejection';
 import {
   CREDITS_SHORT_TITLE,
   isCreditsShortError,
 } from '@/billing/credits-short';
-import type { SceneRow } from '@/lib/db/schema/scenes';
-import type { Shot } from '@/lib/db/schema/shots';
-import type { Sequence } from '@/lib/db/schema/sequences';
+import type { SceneRow } from '@/platform/server/db/schema/scenes';
+import type { Shot } from '@/platform/server/db/schema/shots';
+import type { Sequence } from '@/platform/server/db/schema/sequences';
 import type { ShotView } from '@/shots/shot-view';
 import { usesStartFrame } from '@/shots/use-start-frame';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 
 /** Scene titles keyed by scene id — the label source for each failed shot. */
 type ScenesById = ReadonlyMap<string, Pick<SceneRow, 'title' | 'orderIndex'>>;

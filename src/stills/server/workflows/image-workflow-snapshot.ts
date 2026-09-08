@@ -10,8 +10,8 @@
  */
 
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import type { ImageWorkflowInput } from '@/lib/workflow/types';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import type { ImageWorkflowInput } from '@/platform/server/workflow/types';
 import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 
 const NO_SNAPSHOT_SENTINEL = '';

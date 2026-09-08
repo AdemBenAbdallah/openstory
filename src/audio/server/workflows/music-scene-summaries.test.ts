@@ -1,4 +1,4 @@
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import { describe, expect, it } from 'vitest';
 import {
   buildMusicSceneSummaries,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { MotionPrompt, Scene } from '@/lib/ai/scene-analysis.schema';
+import type { MotionPrompt, Scene } from '@/shots/scene-analysis.schema';
 import { hydrateMotionPromptFromScene } from './hydrate-motion-prompt';
 
 const baseScene = {

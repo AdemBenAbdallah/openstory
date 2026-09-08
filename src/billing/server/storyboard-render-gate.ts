@@ -3,8 +3,8 @@
  * (and music). If grow fails, do not spawn those children (#1310).
  */
 
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getLogger } from '@/shared/observability/logger';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getLogger } from '@/platform/logger';
 import { reportReservationShort } from '@/billing/billing-observability';
 import {
   type Microdollars,

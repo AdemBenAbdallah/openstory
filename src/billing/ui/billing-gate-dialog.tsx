@@ -4,15 +4,15 @@
  * Gift codes and BYOK (Settings → API keys) are footer links.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Textarea } from '@/ui/textarea';
+} from '@/ui/shadcn/dialog';
+import { Textarea } from '@/ui/shadcn/textarea';
 import { requestFounderCreditsFn } from '@/billing/billing.fn';
 import { useWelcomeCreditsGate } from './welcome-credits-dialog';
 import { openAddCreditsDialog } from './use-add-credits-dialog';

@@ -10,8 +10,8 @@
  * a longer identifier — renaming `BAR` must not affect `BARBER`.
  */
 
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { Shot } from '@/lib/db/schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { Shot } from '@/platform/server/db/schema';
 
 /** Whole-token regex. Boundaries are anything that isn't `[A-Za-z0-9_]`. */
 function tokenRegex(token: string): RegExp {

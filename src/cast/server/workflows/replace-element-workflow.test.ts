@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ReplaceElementShotSnapshot } from '@/lib/workflow/types';
+import type { ReplaceElementShotSnapshot } from '@/platform/server/workflow/types';
 import {
   buildEditPrompt,
   decideBatchOutcome,

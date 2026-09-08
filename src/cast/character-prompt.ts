@@ -7,9 +7,12 @@
  * @module lib/services/character.service
  */
 
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
 
-import type { CharacterMinimal, StyleConfig } from '@/lib/db/schema';
+import type {
+  CharacterMinimal,
+  StyleConfig,
+} from '@/platform/server/db/schema';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 /**
  * Build a concise character description from character data

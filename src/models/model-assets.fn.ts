@@ -9,14 +9,17 @@
  * `AssetGenerationWorkflow` — see `@/models/server/generated-assets` (#1257).
  */
 
-import { assertModelsEnabled } from '@/shared/flags';
-import { GENERATED_ASSET_ACTIVITIES, type JsonValue } from '@/lib/db/schema';
+import { assertModelsEnabled } from '@/platform/flags';
+import {
+  GENERATED_ASSET_ACTIVITIES,
+  type JsonValue,
+} from '@/platform/server/db/schema';
 import { createGeneratedAsset } from '@/models/server/generated-assets';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 // ---------------------------------------------------------------------------
 // Input schemas

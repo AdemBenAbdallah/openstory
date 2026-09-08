@@ -5,11 +5,8 @@
  * client-safe logger (type-only import of StyleConfig otherwise) so this stays
  * safe to import from the client bundle.
  */
-import { getLogger } from '@/shared/observability/logger';
-import {
-  parseStyleConfig,
-  type StyleConfig,
-} from '@/look/style-config';
+import { getLogger } from '@/platform/logger';
+import { parseStyleConfig, type StyleConfig } from '@/look/style-config';
 
 const logger = getLogger(['openstory', 'ai', 'enhance-inputs']);
 

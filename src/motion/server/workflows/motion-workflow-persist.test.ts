@@ -15,8 +15,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { NewShot, NewVideoVariant } from '@/lib/db/schema';
-import type { RecordEventInput } from '@/lib/db/scoped/sequence-events';
+import type { NewShot, NewVideoVariant } from '@/platform/server/db/schema';
+import type { RecordEventInput } from '@/sequences/server/db/sequence-events';
 import {
   type MotionVideoProgressPayload,
   persistMotionCompletion,

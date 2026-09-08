@@ -2,10 +2,10 @@
  * Image content-rejection reseeds + one softened prompt retry (#1272).
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { ImageGenerationParams } from '@/stills/build-image-request';
 import type { ImageGenerationResult } from '@/stills/server/image-generation';
-import type { ImageWorkflowInput } from '@/lib/workflow/types';
+import type { ImageWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowStep } from 'cloudflare:workers';
 
 const generateImageWithProvider = vi.fn();
@@ -17,10 +17,10 @@ vi.doMock('@/stills/server/image-generation', async () => {
 });
 
 const durableLLMCallCf = vi.fn();
-vi.doMock('@/lib/workflows/llm-call-helper', () => ({ durableLLMCallCf }));
+vi.doMock('@/models/server/llm-call-helper', () => ({ durableLLMCallCf }));
 
 const emit = vi.fn();
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getGenerationChannel: vi.fn(() => ({ emit })),
 }));
 

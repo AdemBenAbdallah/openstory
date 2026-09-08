@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
+import type { AssemblableMotionPrompt } from '@/shots/scene-analysis.schema';
 import {
   motionPromptFromVersion,
   resolveMotionPrompt,

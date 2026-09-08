@@ -2,24 +2,24 @@
  * The `talentMatchingWorkflow` durable workflow.
  *
  * The LLM call goes through `durableLLMCallCf`; see
- * `src/lib/workflows/llm-call-helper.ts`.
+ * `src/models/server/llm-call-helper.ts`.
  */
 
-import { talentMatchResponseSchema } from '@/lib/ai/response-schemas';
-import { buildMatchingPromptVariables } from '@/lib/ai/talent-matching-prompt';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getGenerationChannel } from '@/shared/realtime';
+import { talentMatchResponseSchema } from '@/sequences/response-schemas';
+import { buildMatchingPromptVariables } from '@/cast/server/talent-matching-prompt';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
 import { GENERATION_STAGE_META } from '@/sequences/pipeline';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { durableLLMCallCf } from '@/models/server/llm-call-helper';
 import { waitForTalentSheets } from './wait-for-sheets';
 import type {
   TalentCharacterMatch,
   TalentMatchingWorkflowInput,
   TalentMatchingWorkflowOutput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'talent-matching']);
 

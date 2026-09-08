@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { SheetComparisonDialog } from '@/cast/ui/sheets/sheet-comparison-dialog';
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogClose,
@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
-import { Textarea } from '@/ui/textarea';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
+import { Textarea } from '@/ui/shadcn/textarea';
 import {
   libraryLocationSheetVariantKeys,
   useDiscardLibraryLocationSheetVariant,
@@ -27,8 +27,8 @@ import {
   useUpdateLibraryLocation,
   type LibraryLocationWithSheets,
 } from '@/cast/ui/use-location-library';
-import type { LocationSheetVariant } from '@/lib/db/schema';
-import { useSheetStaleDetected } from '@/components/realtime/use-sheet-stale-detected';
+import type { LocationSheetVariant } from '@/platform/server/db/schema';
+import { useSheetStaleDetected } from '@/cast/ui/use-sheet-stale-detected';
 
 type EditLocationDialogProps = {
   location: LibraryLocationWithSheets;

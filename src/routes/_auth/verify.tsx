@@ -3,9 +3,9 @@
  * Verifies the code sent to user's email
  */
 
-import { VerifyForm } from '@/components/auth/verify-form';
+import { VerifyForm } from '@/platform/ui/auth/verify-form';
 import { PageContainer } from '@/ui/layout/page-container';
-import { getRedirectFromParams } from '@/components/auth/navigation';
+import { getRedirectFromParams } from '@/platform/ui/auth/navigation';
 import { Navigate, createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 

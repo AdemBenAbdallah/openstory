@@ -7,9 +7,9 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { micros } from '@/billing/money';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { StudioCreateInput } from '@/studio/schema';
-import type { StudioGenerationWorkflowInput } from '@/lib/workflow/types';
+import type { StudioGenerationWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 
 const mockGenerateImageWithProvider = vi.fn();
@@ -30,7 +30,7 @@ vi.doMock('@/billing/server/workflow-deduction', () => ({
   deductWorkflowCredits: mockDeductWorkflowCredits,
   recordFalUsageStep: vi.fn(async () => ({})),
 }));
-vi.doMock('@/lib/compliance/provenance', () => ({
+vi.doMock('@/platform/server/compliance/provenance', () => ({
   recordProvenance: mockRecordProvenance,
 }));
 vi.doMock('@/studio/server/upload', () => ({
@@ -50,7 +50,7 @@ vi.doMock('@/studio/server/studio-video-generation', () => ({
   pollStudioVideoJob: mockPoll,
   studioVideoCostFromUsage: mockCost,
 }));
-vi.doMock('@/lib/observability/ai-otel', () => ({
+vi.doMock('@/platform/server/observability/ai-otel', () => ({
   recordMediaGenerationSpan: mockRecordMediaGenerationSpan,
 }));
 vi.doMock('@/motion/server/motion-generation', () => ({

@@ -21,7 +21,7 @@ import { putToR2 } from '@/ui/upload';
 import type {
   CreateTalentInput,
   UpdateTalentInput,
-} from '@/lib/schemas/talent.schemas';
+} from '@/cast/server/talent.schemas';
 
 /**
  * Query keys for talent data

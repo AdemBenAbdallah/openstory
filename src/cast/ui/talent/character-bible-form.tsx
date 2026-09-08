@@ -1,8 +1,8 @@
 import { BibleField } from '@/cast/ui/bible-field';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { useUpdateSequenceCharacter } from '@/cast/ui/use-sequence-characters';
-import type { CharacterWithSheet } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { CharacterWithSheet } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';

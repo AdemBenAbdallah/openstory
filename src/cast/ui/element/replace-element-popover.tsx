@@ -1,9 +1,5 @@
-import { Button } from '@/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
+import { Button } from '@/ui/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
 import { useReplaceSequenceElement } from '@/cast/ui/use-sequence-elements';
 import { cn } from '@/ui/utils';
 import {

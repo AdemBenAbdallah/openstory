@@ -7,9 +7,9 @@
  *   bun scripts/reconcile-fal-billing.ts            # default env (bun dev)
  *   bun scripts/reconcile-fal-billing.ts --test     # [env.test] (Playwright)
  */
-import { reconcileFalBilling } from '@/lib/cron/reconcile-fal-billing';
+import { reconcileFalBilling } from '@/billing/server/reconcile-fal-billing';
 import { drizzle } from 'drizzle-orm/d1';
-import { relations } from '@/lib/db/schema/relations';
+import { relations } from '@/platform/server/db/schema/relations';
 import { getLocalPlatformProxy } from './local-platform-proxy';
 
 const billingKey =

@@ -4,12 +4,12 @@
  * before triggering workflows. Skips check if team has own BYOK keys.
  */
 
-import { llmtrTextModel } from '@/lib/ai/llmtr';
+import { llmtrTextModel } from '@/models/llmtr';
 import type { Microdollars } from '@/billing/money';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { InsufficientCreditsError } from '@/shared/errors';
-import { generateId } from '@/shared/id';
-import { getLogger } from '@/shared/observability/logger';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { InsufficientCreditsError } from '@/platform/errors';
+import { generateId } from '@/platform/id';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'billing', 'preflight']);
 

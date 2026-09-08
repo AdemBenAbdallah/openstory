@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 
 const readStorageObject = vi.fn();
 const uploadFile = vi.fn();

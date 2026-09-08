@@ -1,14 +1,14 @@
 import type { TabValue } from '@/shots/ui/scene-script-prompts';
-import { BlobLoader } from '@/ui/blob-loader';
-import { Button } from '@/ui/button';
+import { BlobLoader } from '@/ui/shadcn/blob-loader';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { EmptyState } from '@/ui/empty-state';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dropdown-menu';
+import { EmptyState } from '@/ui/shadcn/empty-state';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import {
   type AspectRatio,
@@ -16,14 +16,14 @@ import {
   getAspectRatioClassName,
 } from '@/models/aspect-ratios';
 import { cn } from '@/ui/utils';
-import { plainSceneTitle } from '@/shared/utils/markdown-plain';
+import { plainSceneTitle } from '@/platform/markdown-plain';
 import { copyTextToClipboard } from '@/ui/clipboard';
 import type { ShotView } from '@/shots/shot-view';
 import {
   usesStartFrame,
   type StartFrameSequence,
 } from '@/shots/use-start-frame';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import { playerPosterSrc } from './player-poster';
 import { usePostHog } from '@posthog/react';
 import { Download, Link, Loader2, Share2, VideoIcon } from 'lucide-react';

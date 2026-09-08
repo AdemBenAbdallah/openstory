@@ -8,30 +8,30 @@ import {
   extractImageCost,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import { generateId } from '@/shared/id';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { generateId } from '@/platform/id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type { ImageGenerationParams } from '@/stills/server/image-generation';
 import {
   buildLibraryLocationSheetPrompt,
   buildLocationPreviewPrompt,
 } from '@/cast/location-prompt';
-import { recordProvenance } from '@/lib/compliance/provenance';
-import { getLocationChannel } from '@/shared/realtime';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { uploadResponse } from '@/lib/storage/upload-response';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
+import { getLocationChannel } from '@/platform/realtime';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import { generateImageSoftening } from '@/stills/server/workflows/content-soften';
 import type {
   LibraryLocationSheetWorkflowInput,
   LibraryLocationSheetWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   decideSheetDivergence,
   saveDivergentLocationSheet,
 } from './sheet-divergence';
 import { computeLibraryLocationSheetHashCurrent } from './sheet-snapshots';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'library-location-sheet']);
 

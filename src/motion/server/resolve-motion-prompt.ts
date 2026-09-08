@@ -12,7 +12,7 @@
  * there is no separate "user override" branch any more.
  */
 
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
+import type { AssemblableMotionPrompt } from '@/shots/scene-analysis.schema';
 import type { ImageToVideoModel } from '@/models/models';
 import { assembleMotionPrompt } from './assemble-motion-prompt';
 

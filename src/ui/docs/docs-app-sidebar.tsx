@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from '@/ui/sidebar';
+} from '@/ui/shadcn/sidebar';
 import { UserSidebarFooter } from '@/ui/layout/user-sidebar-footer';
 import { getDocsReturnUrl } from './docs-referrer';
 import { useRouter } from '@tanstack/react-router';

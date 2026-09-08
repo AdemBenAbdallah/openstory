@@ -6,7 +6,7 @@
  * motion-batch must not spawn.
  */
 
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { describe, expect, it, vi } from 'vitest';
 import { micros, ZERO_MICROS } from '@/billing/money';
 

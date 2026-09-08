@@ -7,9 +7,9 @@ import {
   stopAtFromSliderIndex,
 } from '@/sequences/pipeline';
 import type { GenerationStage } from '@/sequences/pipeline';
-import { Label } from '@/ui/label';
-import { Slider } from '@/ui/slider';
-import { Switch } from '@/ui/switch';
+import { Label } from '@/ui/shadcn/label';
+import { Slider } from '@/ui/shadcn/slider';
+import { Switch } from '@/ui/shadcn/switch';
 import { cn } from '@/ui/utils';
 import type { FC } from 'react';
 

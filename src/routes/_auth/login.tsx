@@ -3,10 +3,10 @@
  * Email OTP and Google OAuth authentication
  */
 
-import { AuthForm } from '@/components/auth/auth-form';
+import { AuthForm } from '@/platform/ui/auth/auth-form';
 import { OpenStoryLogo } from '@/ui/icons/openstory-logo';
 import { PageContainer } from '@/ui/layout/page-container';
-import { getRedirectFromParams } from '@/components/auth/navigation';
+import { getRedirectFromParams } from '@/platform/ui/auth/navigation';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 

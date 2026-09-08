@@ -130,7 +130,7 @@ Commit the generated fixtures alongside any code change that alters AI prompts o
 
 ## Database Changes
 
-1. Modify schema files in `src/lib/db/schema/`
+1. Modify schema files in `src/platform/server/db/schema/`
 2. Generate migration: `bun db:generate`
 3. Apply migration: `bun db:migrate:local` (also runs as part of `bun dev`)
 
@@ -168,7 +168,7 @@ A brief summary — see [CLAUDE.md](CLAUDE.md) for full patterns with examples.
 
 - DB access only in server handlers — never in components
 - Follow the [server handler pattern](CLAUDE.md#server-handler-pattern) in CLAUDE.md
-- Trigger workflows via `triggerWorkflow()` from `@/lib/workflow/client` — never direct `fetch()` calls
+- Trigger workflows via `triggerWorkflow()` from `@/platform/server/workflow/client` — never direct `fetch()` calls
 
 ## Pull Request Process
 

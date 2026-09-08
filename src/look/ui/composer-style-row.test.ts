@@ -6,7 +6,7 @@ import {
   styleAfterComposerCategoryChange,
   stylesForComposerCategory,
 } from './composer-style-row';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { describe, expect, it } from 'vitest';
 
 function makeStyle(overrides: Partial<Style> = {}): Style {

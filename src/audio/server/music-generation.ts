@@ -1,6 +1,6 @@
 import { getEnv } from '#env';
-import { falCostFromUnits } from '@/lib/ai/fal-cost-billing';
-import { FAL_GENERATION_TIMEOUT_MS } from '@/lib/ai/fal-deadline-fetch';
+import { falCostFromUnits } from '@/billing/server/fal-cost-billing';
+import { FAL_GENERATION_TIMEOUT_MS } from '@/models/server/fal-deadline-fetch';
 import {
   AUDIO_MODELS,
   DEFAULT_MUSIC_MODEL,
@@ -8,17 +8,17 @@ import {
   type AudioModelConfig,
 } from '@/models/models';
 import type { Microdollars } from '@/billing/money';
-import type { CredentialScopedDb } from '@/lib/db/scoped-workflow';
-import { isContentRejectionError } from '@/shared/ai/content-rejection';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
+import type { CredentialScopedDb } from '@/platform/server/db/scoped-workflow';
+import { isContentRejectionError } from '@/models/content-rejection';
+import { extractFalErrorMessage } from '@/models/fal-error';
 import {
   recordMediaGenerationSpan,
   type AIObservabilityMeta,
-} from '@/lib/observability/ai-otel';
+} from '@/platform/server/observability/ai-otel';
 import { generateAudio } from '@tanstack/ai';
 import { falAudio } from '@tanstack/ai-fal';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'audio', 'music-generation']);
 

@@ -1,4 +1,4 @@
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 import {
   appendLegendWithinLimit,
   substituteReferenceTags,

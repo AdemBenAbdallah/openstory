@@ -10,14 +10,17 @@
 import {
   draftStudioPrompt,
   STUDIO_DRAFT_MODEL,
-} from '@/lib/ai/studio-prompt-draft';
+} from '@/studio/server/studio-prompt-draft';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { estimateLLMCost } from '@/billing/cost-estimation';
-import { InsufficientCreditsError } from '@/shared/errors';
-import { mediaUrlSchema } from '@/shared/schemas/media-url.schemas';
-import { getLogger } from '@/shared/observability/logger';
-import { STORAGE_BUCKETS, r2KeyFromUrl } from '@/lib/storage/buckets';
-import { deleteFile } from '@/lib/storage/storage-cloudflare';
+import { InsufficientCreditsError } from '@/platform/errors';
+import { mediaUrlSchema } from '@/platform/schemas/media-url.schemas';
+import { getLogger } from '@/platform/logger';
+import {
+  STORAGE_BUCKETS,
+  r2KeyFromUrl,
+} from '@/platform/server/storage/buckets';
+import { deleteFile } from '@/platform/server/storage/storage-cloudflare';
 import { createStudioAssets } from '@/studio/server/create-studio-asset';
 import {
   studioActivitySchema,
@@ -25,11 +28,11 @@ import {
   studioReferenceKindSchema,
   studioSortSchema,
 } from './schema';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 
 const logger = getLogger(['openstory', 'serverFn', 'studio-assets']);
 

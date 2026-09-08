@@ -5,7 +5,7 @@
  */
 
 import { getEnv } from '#env';
-import { OpenStoryError } from '@/shared/errors';
+import { OpenStoryError } from '@/platform/errors';
 import Stripe from 'stripe';
 
 let stripeInstance: Stripe | null = null;

@@ -138,7 +138,7 @@ jobs:
             // (VideoExportContainer) both apply to a fresh preview worker. The
             // image is built from the Dockerfile during 'wrangler deploy' (the
             // CI runner has Docker). See containers/video-export and
-            // src/lib/containers/video-export-container.ts.
+            // src/sequences/server/video-export-container.ts.
             obj.containers = [
               {
                 class_name: 'VideoExportContainer',

@@ -1,7 +1,7 @@
-import type { StyleSampleVideo } from '@/lib/db/schema/libraries';
+import type { StyleSampleVideo } from '@/platform/server/db/schema/libraries';
 import { generateMockStyles } from '@/mocks/data-generators';
 import { buildSampleEntries } from './sample-entries';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { describe, expect, it } from 'vitest';
 
 function makeStyle(over: Partial<Style>): Style {

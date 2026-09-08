@@ -3,8 +3,8 @@
  * Full transaction history with infinite scroll
  */
 
-import { Badge } from '@/ui/badge';
-import { Skeleton } from '@/ui/skeleton';
+import { Badge } from '@/ui/shadcn/badge';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { getTransactionsFn } from '@/billing/billing.fn';
 import { BILLING_TRANSACTIONS_KEY } from '@/billing/ui/use-billing-balance-realtime';
 import { useInfiniteQuery } from '@tanstack/react-query';

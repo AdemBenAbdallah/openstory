@@ -7,9 +7,9 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 
 const mockCopyStoredImage = vi.fn();
@@ -21,7 +21,7 @@ const mockCropPortrait = vi.fn();
 const mockRecordProvenance = vi.fn();
 const mockEmit = vi.fn();
 
-vi.doMock('@/lib/storage/copy-stored-image', () => ({
+vi.doMock('@/platform/server/storage/copy-stored-image', () => ({
   copyStoredImage: mockCopyStoredImage,
 }));
 vi.doMock('@/stills/server/image-generation', () => ({
@@ -32,16 +32,16 @@ vi.doMock('@/billing/server/workflow-deduction', () => ({
   extractImageCost: () => 0,
   recordFalUsageStep: mockRecordFalUsageStep,
 }));
-vi.doMock('@/lib/storage/upload-response', () => ({
+vi.doMock('@/platform/server/storage/upload-response', () => ({
   uploadResponse: mockUploadResponse,
 }));
 vi.doMock('@/cast/server/talent/crop-sheet-portrait', () => ({
   cropTalentSheetPortrait: mockCropPortrait,
 }));
-vi.doMock('@/lib/compliance/provenance', () => ({
+vi.doMock('@/platform/server/compliance/provenance', () => ({
   recordProvenance: mockRecordProvenance,
 }));
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getTalentChannel: () => ({ emit: mockEmit }),
 }));
 

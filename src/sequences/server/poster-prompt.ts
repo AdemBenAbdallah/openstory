@@ -1,4 +1,4 @@
-import type { StyleConfig } from '@/lib/db/schema/libraries';
+import type { StyleConfig } from '@/platform/server/db/schema/libraries';
 import { UNTITLED_SEQUENCE_TITLE } from '@/sequences/untitled-sequence-title';
 
 const MAX_PROMPT_LENGTH = 2000;

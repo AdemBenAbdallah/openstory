@@ -1,6 +1,6 @@
-import { AppImage } from '@/ui/app-image';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Separator } from '@/ui/separator';
-import {
-  optimizedVideoUrl,
-  videoPosterUrl,
-} from './cloudflare-video';
+} from '@/ui/shadcn/dialog';
+import { Separator } from '@/ui/shadcn/separator';
+import { optimizedVideoUrl, videoPosterUrl } from './cloudflare-video';
 import {
   styleBespokeVideoUrl,
   styleCanonicalVideoUrl,
@@ -25,7 +22,7 @@ import {
   getConfigDisplayFields,
 } from '@/look/style-config';
 import { styleSlug } from '@/look/style-slug';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { Link } from '@tanstack/react-router';
 import { Wand2 } from 'lucide-react';
 import type { FC } from 'react';

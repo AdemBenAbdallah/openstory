@@ -8,7 +8,7 @@
  * openAddCreditsDialog().
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -16,26 +16,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/select';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   createCheckoutSessionFn,
   listPaymentMethodsFn,
   purchaseCreditsFn,
 } from '@/billing/billing.fn';
-import {
-  prepareBalanceFlash,
-  triggerBalanceFlash,
-} from './use-balance-flash';
+import { prepareBalanceFlash, triggerBalanceFlash } from './use-balance-flash';
 import {
   closeAddCreditsDialog,
   getAddCreditsSurface,
@@ -47,7 +44,7 @@ import {
   BILLING_PAYMENT_METHODS_KEY,
 } from './use-billing-balance';
 import { BILLING_GATE_KEY } from './use-billing-gate';
-import { useAuthSession } from '@/components/auth/session-query';
+import { useAuthSession } from '@/platform/ui/auth/session-query';
 import {
   DEFAULT_TOPUP_AMOUNT_USD,
   formatPlatformFeePercent,

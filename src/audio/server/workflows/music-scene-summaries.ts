@@ -1,6 +1,6 @@
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import { getLogger } from '@/shared/observability/logger';
-import type { MusicSceneSummary } from '@/lib/workflow/types';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import { getLogger } from '@/platform/logger';
+import type { MusicSceneSummary } from '@/platform/server/workflow/types';
 
 const logger = getLogger(['openstory', 'workflow', 'music']);
 

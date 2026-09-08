@@ -8,14 +8,17 @@
  */
 
 import { moveFile } from '#storage';
-import { generateId } from '@/shared/id';
-import type { LibraryLocation } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { getLogger } from '@/shared/observability/logger';
-import { STORAGE_BUCKETS, getPublicUrl } from '@/lib/storage/buckets';
-import { getExtensionFromUrl } from '@/lib/storage/file';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { LibraryLocationSheetWorkflowInput } from '@/lib/workflow/types';
+import { generateId } from '@/platform/id';
+import type { LibraryLocation } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
+import {
+  STORAGE_BUCKETS,
+  getPublicUrl,
+} from '@/platform/server/storage/buckets';
+import { getExtensionFromUrl } from '@/platform/server/storage/file';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { LibraryLocationSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLibraryLocationSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
 
 const logger = getLogger(['openstory', 'locations', 'create-library-location']);

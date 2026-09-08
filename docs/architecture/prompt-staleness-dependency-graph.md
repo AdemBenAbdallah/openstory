@@ -50,7 +50,7 @@ stored hash != recompute(now)  → "stale"      (an input changed → show "rege
 ```
 
 `recompute(now)` reads the **current persisted state** and re-derives the hash.
-Helpers live in [`src/lib/ai/input-hash.ts`](../../src/lib/ai/input-hash.ts).
+Helpers live in [`src/shots/input-hash.ts`](../../src/lib/ai/input-hash.ts).
 
 **The invariant that must hold:** the hash computed at **stamp time** (inside the
 generating workflow) and the hash computed at **verify time** (inside
@@ -195,7 +195,7 @@ Key consequences of the shape:
 
 ## 4. Per-artifact hash inputs (authoritative reference)
 
-Source of truth: [`src/lib/ai/input-hash.ts`](../../src/lib/ai/input-hash.ts).
+Source of truth: [`src/shots/input-hash.ts`](../../src/lib/ai/input-hash.ts).
 
 Listed in generation order (matching §4.1):
 
@@ -680,16 +680,16 @@ Ordered by value / risk.
 
 ## 7. Quick reference — file map
 
-| Concern                                  | File                                                                          |
-| ---------------------------------------- | ----------------------------------------------------------------------------- |
-| Hash helpers + `sceneInputContext`       | `src/lib/ai/input-hash.ts`                                                    |
-| Prompt context load + narrowing          | `src/lib/ai/prompt-context.ts`                                                |
-| Bible builders (DB → bible, verify side) | `src/lib/ai/bibles-from-scoped.ts`                                            |
-| Casting transform                        | `src/cast/character-prompt.ts` (`buildCastingAttributes`)           |
-| Visual prompt stamp                      | `src/lib/workflows/visual-prompt-scene-workflow.ts`                           |
-| Motion prompt stamp                      | `src/lib/workflows/motion-prompt-scene-workflow.ts`                           |
+| Concern                                  | File                                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| Hash helpers + `sceneInputContext`       | `src/shots/input-hash.ts`                                                             |
+| Prompt context load + narrowing          | `src/shots/server/prompt-context.ts`                                                  |
+| Bible builders (DB → bible, verify side) | `src/cast/server/bibles-from-scoped.ts`                                               |
+| Casting transform                        | `src/cast/character-prompt.ts` (`buildCastingAttributes`)                             |
+| Visual prompt stamp                      | `src/lib/workflows/visual-prompt-scene-workflow.ts`                                   |
+| Motion prompt stamp                      | `src/lib/workflows/motion-prompt-scene-workflow.ts`                                   |
 | Bible persistence (cast)                 | `src/cast/server/workflows/character-bible-workflow.ts`, `location-bible-workflow.ts` |
-| Pipeline orchestration                   | `src/sequences/server/workflows/analyze-script-workflow.ts`                                |
-| Staleness verify (prompts + thumbnail)   | `src/functions/frames.ts` (`getFrameStalenessFn`)                             |
-| Thumbnail snapshot hash                  | `src/lib/workflows/regenerate-frames-snapshot.ts`                             |
-| Design rationale                         | `docs/architecture/workflow-snapshots-and-content-hash-staleness.md`          |
+| Pipeline orchestration                   | `src/sequences/server/workflows/analyze-script-workflow.ts`                           |
+| Staleness verify (prompts + thumbnail)   | `src/functions/frames.ts` (`getFrameStalenessFn`)                                     |
+| Thumbnail snapshot hash                  | `src/lib/workflows/regenerate-frames-snapshot.ts`                                     |
+| Design rationale                         | `docs/architecture/workflow-snapshots-and-content-hash-staleness.md`                  |

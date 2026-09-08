@@ -17,10 +17,7 @@
  * pair — and therefore each child's CF instance id — unique.
  */
 
-import {
-  DEFAULT_VIDEO_MODEL,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { DEFAULT_VIDEO_MODEL, type ImageToVideoModel } from '@/models/models';
 
 export type MotionJob<F> = {
   shot: F;

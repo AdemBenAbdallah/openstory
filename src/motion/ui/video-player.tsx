@@ -1,5 +1,5 @@
-import { AppImage } from '@/ui/app-image';
-import { Skeleton } from '@/ui/skeleton';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   getAspectRatioClassName,
   type AspectRatio,

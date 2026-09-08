@@ -3,15 +3,15 @@
  * Handles uploading and managing images in R2 Storage
  */
 
-import { STORAGE_BUCKETS } from '@/lib/storage/buckets';
-import { uploadResponse } from '@/lib/storage/upload-response';
+import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
 import {
   getExtensionFromMimeType,
   getExtensionFromUrl,
   getMimeTypeFromExtension,
   sniffImageMimeType,
-} from '@/lib/storage/file';
-import { generateId } from '@/shared/id';
+} from '@/platform/server/storage/file';
+import { generateId } from '@/platform/id';
 
 interface UploadImageOptions {
   imageUrl: string;

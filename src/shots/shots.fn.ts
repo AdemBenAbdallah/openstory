@@ -1,18 +1,15 @@
 import { usesStartFrame } from './use-start-frame';
 import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
 import { resolveVideoModel } from '@/models/resolve-asset-models';
-import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { REFERENCE_ONLY_MODEL_ERROR } from '@/lib/schemas/sequence.schemas';
+import { toWorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { REFERENCE_ONLY_MODEL_ERROR } from '@/sequences/server/sequence.schemas';
 import { DEFAULT_IMAGE_MODEL, safeTextToImageModel } from '@/models/models';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
-import {
-  estimateImageCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
+import { estimateImageCost, gateEstimate } from '@/billing/cost-estimation';
 import { requireCredits } from '@/billing/server/preflight';
-import { getWorkflowRunOutcome } from '@/lib/workflow/run-outcome';
-import { workflowNameFromRunId } from '@/lib/workflow/trigger-bindings';
-import type { NewShot } from '@/lib/db/schema';
+import { getWorkflowRunOutcome } from '@/platform/server/workflow/run-outcome';
+import { workflowNameFromRunId } from '@/platform/server/workflow/trigger-bindings';
+import type { NewShot } from '@/platform/server/db/schema';
 import {
   computeShotStaleness,
   UNTRACKED_STALENESS,
@@ -41,29 +38,29 @@ import {
   bulkShotSchema,
   singleShotSchema,
   updateShotSchema,
-} from '@/lib/schemas/shot.schemas';
+} from '@/shots/server/shot.schemas';
 import { dbSceneId } from './scene-id';
-import { NotFoundError } from '@/shared/errors';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
-import { typedFromEntries } from '@/shared/utils/typed-object';
+import { NotFoundError } from '@/platform/errors';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
+import { typedFromEntries } from '@/platform/typed-object';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
 } from '@/shots/server/scene-script';
 import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-from-prompt';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { UpdateStaleShotsWorkflowInput } from '@/lib/workflow/types';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { UpdateStaleShotsWorkflowInput } from '@/platform/server/workflow/types';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 import {
   authWithTeamMiddleware,
-  shotAccessMiddleware,
   sequenceAccessMiddleware,
-} from '@/functions/middleware';
-import { ValidationError } from '@/shared/errors';
+} from '@/platform/middleware.fn';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
+import { ValidationError } from '@/platform/errors';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'serverFn', 'shots']);
 

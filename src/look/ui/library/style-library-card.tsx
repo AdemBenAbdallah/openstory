@@ -1,6 +1,6 @@
 import { StyleHoverPreview } from '@/look/ui/style-hover-preview';
 import { styleCategoryLabel } from '@/look/ui/style-assets';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import type { FC } from 'react';
 import { useCallback } from 'react';
 

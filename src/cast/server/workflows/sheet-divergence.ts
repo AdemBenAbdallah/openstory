@@ -13,15 +13,15 @@
  * in a variants row, and the UI is notified via `stale:detected`.
  */
 
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { LocationSheetVariantParentType } from '@/lib/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type { LocationSheetVariantParentType } from '@/platform/server/db/schema';
 // `ScopedDb` is imported for type extraction only; the helpers themselves
 // take a narrower `SheetDivergenceScopedDb` shape (defined below).
 import {
   getGenerationChannel,
   getLocationChannel,
   getTalentChannel,
-} from '@/shared/realtime';
+} from '@/platform/realtime';
 
 // Subset of ScopedDb used by the helpers below. Defined structurally so the
 // full ScopedDb is assignable (production passes it directly) and tests can

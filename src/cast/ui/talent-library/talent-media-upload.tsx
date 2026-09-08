@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/ui/button';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { Button } from '@/ui/shadcn/button';
 import {
   FileUpload,
   FileUploadDropzone,
@@ -12,8 +12,8 @@ import {
   FileUploadList,
   FileUploadTrigger,
   type FileUploadProps,
-} from '@/ui/file-upload';
-import { Badge } from '@/ui/badge';
+} from '@/ui/shadcn/file-upload';
+import { Badge } from '@/ui/shadcn/badge';
 import { useUploadTalentMedia, useUploadTempMedia } from '@/cast/ui/use-talent';
 import { getFileKey } from '@/ui/upload';
 import { Upload, X } from 'lucide-react';

@@ -16,8 +16,8 @@
  */
 
 import { describe, expect, test, vi } from 'vitest';
-import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
+import { TEST_FAL_PRICING as FAL_PRICING } from '@/billing/fal-pricing-fixture';
+import type { AssemblableMotionPrompt } from '@/shots/scene-analysis.schema';
 import type {
   Frame,
   FramePromptVersion,
@@ -26,23 +26,20 @@ import type {
   Shot,
   ShotPromptVersion,
   VideoVariant,
-} from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+} from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import {
   frameFixture,
   frameVariantFixture,
   videoVariantFixture,
 } from '@/mocks/frame-fixtures';
 import { toShotView, type ShotView } from '@/shots/shot-view';
-import {
-  estimateImageCost,
-  gateEstimate,
-} from '@/billing/cost-estimation';
+import { estimateImageCost, gateEstimate } from '@/billing/cost-estimation';
 
 const assertNoActiveStoryboardMock = vi.fn();
 const triggerStoryboardMock = vi.fn();
-vi.doMock('@/lib/workflow/launchers', async () => {
-  const real = await vi.importActual('@/lib/workflow/launchers');
+vi.doMock('@/sequences/server/launchers', async () => {
+  const real = await vi.importActual('@/sequences/server/launchers');
   return {
     ...real,
     assertNoActiveStoryboard: assertNoActiveStoryboardMock,
@@ -51,7 +48,7 @@ vi.doMock('@/lib/workflow/launchers', async () => {
 });
 
 const triggerWorkflowMock = vi.fn();
-vi.doMock('@/lib/workflow/client', () => ({
+vi.doMock('@/platform/server/workflow/client', () => ({
   triggerWorkflow: triggerWorkflowMock,
 }));
 
@@ -66,20 +63,21 @@ vi.doMock('@/billing/server/preflight', () => ({
 }));
 
 const notifySequenceReadyMock = vi.fn();
-vi.doMock('@/lib/emails/notify-sequence-ready', () => ({
+vi.doMock('@/sequences/server/notify-sequence-ready', () => ({
   notifySequenceReady: notifySequenceReadyMock,
   sequenceScenesUrl: (id: string) =>
     `https://openstory.so/sequences/${id}/scenes`,
 }));
 
 // The live pricing loader reads D1 (unavailable under node tests).
-vi.doMock('@/lib/ai/fal-pricing-live', () => ({
+vi.doMock('@/billing/server/fal-pricing-live', () => ({
   getEffectiveFalPricing: async () => FAL_PRICING,
 }));
 
 // Dynamic imports so the mocks above apply (vi.doMock is not hoisted).
 const { executeSmartRetry } = await import('@/sequences/server/smart-retry');
-const { GenerationInProgressError } = await import('@/lib/workflow/launchers');
+const { GenerationInProgressError } =
+  await import('@/sequences/server/launchers');
 
 const NOW = new Date('2026-06-07T00:00:00.000Z');
 

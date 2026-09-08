@@ -1,10 +1,10 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { AddTalentDialog } from '@/cast/ui/talent-library/add-talent-dialog';
 import { TalentLibraryFilters } from '@/cast/ui/talent-library/talent-library-filters';
 import { TalentLibraryList } from '@/cast/ui/talent-library/talent-library-list';
 import { PageContainer } from '@/ui/layout/page-container';
 import { PageIntro } from '@/ui/typography/page-intro';
-import { EmptyState } from '@/ui/empty-state';
+import { EmptyState } from '@/ui/shadcn/empty-state';
 import { useTalent } from '@/cast/ui/use-talent';
 import { createFileRoute } from '@tanstack/react-router';
 import { User } from 'lucide-react';

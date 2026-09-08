@@ -1,17 +1,14 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/ui/dialog';
+} from '@/ui/shadcn/dialog';
 import { VideoPlayer } from '@/motion/ui/video-player';
 import { getAspectRatioClassName } from '@/models/aspect-ratios';
-import {
-  optimizedVideoUrl,
-  videoPosterUrl,
-} from './cloudflare-video';
+import { optimizedVideoUrl, videoPosterUrl } from './cloudflare-video';
 import type { SampleEntry } from './sample-entries';
 import { cn } from '@/ui/utils';
 import { Link } from '@tanstack/react-router';

@@ -16,7 +16,7 @@ import {
   estimateVideoCost,
   gateEstimate,
 } from '@/billing/cost-estimation';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import { sumShotDurationsSeconds } from '@/sequences/server/shot-durations';
 import { addMicros, ZERO_MICROS } from '@/billing/money';
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
@@ -27,7 +27,7 @@ import {
 } from '@/billing/server/preflight';
 import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';
 import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
@@ -38,16 +38,19 @@ import {
   motionPromptFromVersion,
   resolveMotionPrompt,
 } from '@/motion/server/resolve-motion-prompt';
-import { VARIANT_TYPES, type VariantType } from '@/lib/db/schema/shot-variants';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import {
+  VARIANT_TYPES,
+  type VariantType,
+} from '@/platform/server/db/schema/shot-variants';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import {
   createSequenceSchema,
   MUSIC_REQUIRES_MOTION_ERROR,
   updateSequenceSchema,
-} from '@/lib/schemas/sequence.schemas';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { triggerStoryboard } from '@/lib/workflow/launchers';
-import { ValidationError } from '@/shared/errors';
+} from '@/sequences/server/sequence.schemas';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { triggerStoryboard } from '@/sequences/server/launchers';
+import { ValidationError } from '@/platform/errors';
 import {
   continueStageSchema,
   flagsFromStopAt,
@@ -60,22 +63,25 @@ import type {
   BatchMotionMusicWorkflowInput,
   MusicWorkflowInput,
   StoryboardTriggerInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import {
+  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
+} from '@/platform/middleware.fn';
 import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
-import { simpleHash } from '@/shared/utils/hash';
-import { getLogger } from '@/shared/observability/logger';
+import { simpleHash } from '@/platform/hash';
+import { getLogger } from '@/platform/logger';
 import { createSequences } from '@/sequences/server/create-sequences';
 import { canRenderReferenceOnly } from '@/motion/server/motion-generation';
-import { toWorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { toWorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import {
   rendersReferenceOnly,
   type StartFrameSequence,
 } from '@/shots/use-start-frame';
-import { REFERENCE_ONLY_MODEL_ERROR } from '@/lib/schemas/sequence.schemas';
+import { REFERENCE_ONLY_MODEL_ERROR } from '@/sequences/server/sequence.schemas';
 
 const logger = getLogger(['openstory', 'serverFn', 'sequences']);
 

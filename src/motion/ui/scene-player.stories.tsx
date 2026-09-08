@@ -1,6 +1,10 @@
 import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import { dbSceneId } from '@/shots/scene-id';
-import type { Frame, FrameVariant, VideoVariant } from '@/lib/db/schema';
+import type {
+  Frame,
+  FrameVariant,
+  VideoVariant,
+} from '@/platform/server/db/schema';
 import {
   frameFixture,
   frameVariantFixture,

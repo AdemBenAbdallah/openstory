@@ -4,17 +4,14 @@
  * row list with per-row Unarchive (restores the recorded prior status).
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/ui/collapsible';
-import {
-  useArchivedSequences,
-  useUnarchiveSequence,
-} from './use-sequences';
-import { errorMessage } from '@/shared/errors';
+} from '@/ui/shadcn/collapsible';
+import { useArchivedSequences, useUnarchiveSequence } from './use-sequences';
+import { errorMessage } from '@/platform/errors';
 import { formatDistanceToNow } from '@/ui/format-date';
 import { ArchiveRestore, ChevronDown, ChevronRight } from 'lucide-react';
 import { useState } from 'react';

@@ -6,10 +6,10 @@
  * and other tabs) then rethrow.
  */
 
-import { getLogger } from '@/shared/observability/logger';
-import { getTalentChannel } from '@/shared/realtime';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+import { getLogger } from '@/platform/logger';
+import { getTalentChannel } from '@/platform/realtime';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import type { SheetProgressActivity } from '@/cast/sheet-progress-copy';
 
 const logger = getLogger([

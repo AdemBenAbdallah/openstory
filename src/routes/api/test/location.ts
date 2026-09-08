@@ -6,7 +6,7 @@ import {
   cleanupTestLocations,
   createTestLocation,
   getSystemLocationByName,
-} from '@/lib/test/seed';
+} from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateLocationSchema = z.object({

@@ -5,9 +5,9 @@ import { SEQUENCE_HEADER_SLOT_ID } from '@/sequences/ui/sequence-header-slot';
 import { getDefaultSequenceTabPath } from '@/sequences/ui/sequence-tabs';
 import { getSequenceFn } from '@/sequences/sequences.fn';
 import { sequenceKeys, useSequence } from '@/sequences/ui/use-sequences';
-import { useUser } from '@/hooks/use-user';
-import { requireSessionOrRedirect } from '@/components/auth/route-guards';
-import { isValidId } from '@/shared/id';
+import { useUser } from '@/platform/ui/use-user';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
+import { isValidId } from '@/platform/id';
 import { createFileRoute, notFound, Outlet } from '@tanstack/react-router';
 
 function SequenceCrumbLabel({ id }: { id: string }) {

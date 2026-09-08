@@ -5,15 +5,12 @@
  * it can be unit-tested directly and shared by the logged-out showcase and the
  * gallery page.
  */
-import {
-  DEFAULT_ASPECT_RATIO,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
-import type { StyleSampleVideo } from '@/lib/db/schema/libraries';
+import { DEFAULT_ASPECT_RATIO, type AspectRatio } from '@/models/aspect-ratios';
+import type { StyleSampleVideo } from '@/platform/server/db/schema/libraries';
 import { briefForStyle } from '@/look/brief-for-style';
 import { styleCanonicalVideoUrl } from './style-assets';
 import { styleSlug } from '@/look/style-slug';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 
 export type SampleEntry = {
   /** Stable list key — a style can contribute more than one sample (kinds). */

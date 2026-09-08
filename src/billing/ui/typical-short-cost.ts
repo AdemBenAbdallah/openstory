@@ -13,7 +13,7 @@ import {
   TURBO_DEFAULT_IMAGE,
   TURBO_DEFAULT_VIDEO,
 } from '@/models/generation-mode';
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import { TYPICAL_SHORT_COST_USD } from '@/billing/constants';
 import { microsToUsd } from '@/billing/money';
 import { estimateStoryboardPreflightCost } from '@/billing/storyboard-preflight-cost';

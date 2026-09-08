@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { Frame, FrameVariant, Shot } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { Scene } from '@/shots/scene-analysis.schema';
+import type { Frame, FrameVariant, Shot } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 
 const buildRegenerateShotSnapshot = vi.fn();
 const loadNarrowShotPromptContext = vi.fn();
@@ -11,8 +11,8 @@ const computeMotionPromptInputHash = vi.fn();
 vi.doMock('@/shots/server/workflows/regenerate-shots-snapshot', () => ({
   buildRegenerateShotSnapshot,
 }));
-vi.doMock('@/lib/ai/prompt-context', () => ({ loadNarrowShotPromptContext }));
-vi.doMock('@/lib/ai/input-hash', () => ({
+vi.doMock('./prompt-context', () => ({ loadNarrowShotPromptContext }));
+vi.doMock('@/shots/input-hash', () => ({
   computeVisualPromptInputHash,
   computeMotionPromptInputHash,
   visualPromptInputHashMatches: vi.fn(

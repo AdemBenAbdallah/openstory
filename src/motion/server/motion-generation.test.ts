@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { TEST_FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
-import { unledgeredAssetPool } from '@/lib/ai/byteplus-asset-pool';
+import { TEST_FAL_PRICING } from '@/billing/fal-pricing-fixture';
+import { unledgeredAssetPool } from '@/models/server/byteplus-asset-pool';
 import { micros } from '@/billing/money';
 import {
   mockFalVideo,
@@ -56,7 +56,7 @@ vi.doMock('@tanstack/ai-gemini', () => ({
 }));
 
 const mockToArkMediaUrl = vi.fn(async (url: string) => `asset://${url}`);
-vi.doMock('@/lib/ai/byteplus-asset-ingest', () => ({
+vi.doMock('@/models/server/byteplus-asset-ingest', () => ({
   toArkMediaUrl: mockToArkMediaUrl,
   toArkFetchableUrl: async (url: string) => url,
 }));

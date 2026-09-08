@@ -7,8 +7,11 @@
  * @module lib/prompts/location-prompt
  */
 
-import type { LocationBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { SequenceLocationMinimal, StyleConfig } from '@/lib/db/schema';
+import type { LocationBibleEntry } from '@/shots/scene-analysis.schema';
+import type {
+  SequenceLocationMinimal,
+  StyleConfig,
+} from '@/platform/server/db/schema';
 import {
   type PromptWithReferenceImages,
   type ReferenceImageDescription,

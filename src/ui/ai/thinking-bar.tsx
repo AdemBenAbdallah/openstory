@@ -1,4 +1,4 @@
-import { Collapsible, CollapsibleContent } from '@/ui/collapsible';
+import { Collapsible, CollapsibleContent } from '@/ui/shadcn/collapsible';
 import { useAutoScroll } from '@/ui/use-auto-scroll';
 import { cn } from '@/ui/utils';
 import { Brain, ChevronRight } from 'lucide-react';

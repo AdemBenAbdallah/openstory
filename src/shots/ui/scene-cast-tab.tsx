@@ -13,23 +13,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { facetIdsForShots, useSceneFacetMaps } from './use-scene-facets';
 import {
   restoreSequenceCharacter,
   useSequenceCharacters,
   useSoftDeleteSequenceCharacter,
 } from '@/cast/ui/use-sequence-characters';
-import type { CharacterWithSheet } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { CharacterWithSheet } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Film, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type SceneCastTabProps = {
   sequenceId: string;

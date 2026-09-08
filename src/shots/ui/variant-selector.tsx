@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -7,8 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose,
-} from '@/ui/dialog';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dialog';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   getAspectRatioClassName,
   getVariantGridConfig,

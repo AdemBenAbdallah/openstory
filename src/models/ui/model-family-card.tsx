@@ -1,4 +1,4 @@
-import { Badge } from '@/ui/badge';
+import { Badge } from '@/ui/shadcn/badge';
 import type { ModelFamily } from '@/models/model-families';
 import { Link } from '@tanstack/react-router';
 import type { FC } from 'react';

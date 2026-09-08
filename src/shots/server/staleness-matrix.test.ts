@@ -20,14 +20,14 @@ import {
   computeVisualPromptInputHash,
   type CharacterBibleHashFields,
   type PromptSceneContextHashInput,
-} from '@/lib/ai/input-hash';
+} from '@/shots/input-hash';
 import type {
   CharacterBibleEntry,
   LocationBibleEntry,
   Scene,
-} from '@/lib/ai/scene-analysis.schema';
-import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
-import type { StyleConfig, VideoManifest } from '@/lib/db/schema';
+} from '@/shots/scene-analysis.schema';
+import { narrowShotPromptContext } from './prompt-context';
+import type { StyleConfig, VideoManifest } from '@/platform/server/db/schema';
 import { computeShotImageSceneHash } from '@/cast/server/workflows/sheet-snapshots';
 import { describe, expect, it } from 'vitest';
 

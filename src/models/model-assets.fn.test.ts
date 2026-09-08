@@ -15,15 +15,15 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
-import { generateId } from '@/shared/id';
-import type { Database } from '@/lib/db/client';
+import { generateId } from '@/platform/id';
+import type { Database } from '@/platform/server/db/client';
 import {
   generatedAssets,
   teams,
   user,
   type GeneratedAssetInput,
-} from '@/lib/db/schema';
-import { relations } from '@/lib/db/schema/relations';
+} from '@/platform/server/db/schema';
+import { relations } from '@/platform/server/db/schema/relations';
 import type { ModelInputJsonSchema } from '@/models/server/schema-fetch';
 
 let db: Database;
@@ -40,10 +40,10 @@ vi.doMock('@/models/server/schema-fetch', () => ({
 vi.doMock('@/billing/server/preflight', () => ({
   requireCredits: mockRequireCredits,
 }));
-vi.doMock('@/lib/workflow/client', () => ({
+vi.doMock('@/platform/server/workflow/client', () => ({
   triggerWorkflow: mockTriggerWorkflow,
 }));
-vi.doMock('@/lib/compliance/generation-gate', () => ({
+vi.doMock('@/platform/server/compliance/generation-gate', () => ({
   requireGenerationAllowed: mockRequireGenerationAllowed,
 }));
 
@@ -51,7 +51,7 @@ vi.doMock('@/lib/compliance/generation-gate', () => ({
 // vi.doMock and bypass them).
 const { createGeneratedAsset, validateAssetInput } =
   await import('@/models/server/generated-assets');
-const { createScopedDb } = await import('@/lib/db/scoped');
+const { createScopedDb } = await import('@/platform/server/db/scoped');
 
 /** A realistic fal input schema slice (flux-style). */
 const FLUX_SCHEMA: ModelInputJsonSchema = {
@@ -146,7 +146,7 @@ describe('validateAssetInput', () => {
 
 describe('createGeneratedAsset', () => {
   it('rejects a restricted account BEFORE the credit gate, leaving no row', async () => {
-    const { AccountRestrictedError } = await import('@/shared/errors');
+    const { AccountRestrictedError } = await import('@/platform/errors');
     mockRequireGenerationAllowed.mockRejectedValue(
       new AccountRestrictedError('paused')
     );

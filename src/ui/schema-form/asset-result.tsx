@@ -6,10 +6,13 @@
  * Cloudflare Image Transformations like the rest of the app.
  */
 
-import { AppImage } from '@/ui/app-image';
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Skeleton } from '@/ui/skeleton';
-import type { GeneratedAsset, GeneratedAssetOutput } from '@/lib/db/schema';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import type {
+  GeneratedAsset,
+  GeneratedAssetOutput,
+} from '@/platform/server/db/schema';
 import { AlertCircle, FileIcon } from 'lucide-react';
 import type { FC } from 'react';
 

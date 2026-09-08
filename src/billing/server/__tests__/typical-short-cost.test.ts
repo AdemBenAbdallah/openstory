@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TEST_FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
+import { TEST_FAL_PRICING } from '@/billing/fal-pricing-fixture';
 import { TYPICAL_SHORT_COST_USD } from '@/billing/constants';
 import { typicalShortCostUsd } from '@/billing/ui/typical-short-cost';
 

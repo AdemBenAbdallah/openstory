@@ -2,9 +2,9 @@ import { ActionCost } from '@/billing/ui/action-cost';
 import { GenerationStopSlider } from '@/sequences/ui/generation/generation-stop-slider';
 import { MotionModelSelector } from '@/models/ui/pickers/motion-model-selector';
 import { MusicModelSelector } from '@/models/ui/pickers/music-model-selector';
-import { Button } from '@/ui/button';
-import { Checkbox } from '@/ui/checkbox';
-import { ScrollArea } from '@/ui/scroll-area';
+import { Button } from '@/ui/shadcn/button';
+import { Checkbox } from '@/ui/shadcn/checkbox';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
 import {
   actionLabelForStage,
   DEFAULT_GENERATION_STOP_AT,
@@ -25,18 +25,14 @@ import {
   estimateAudioCost,
   estimateVideoCost,
 } from '@/billing/cost-estimation';
-import {
-  addMicros,
-  ZERO_MICROS,
-  type Microdollars,
-} from '@/billing/money';
+import { addMicros, ZERO_MICROS, type Microdollars } from '@/billing/money';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import { useGenerationSliceEstimate } from '@/sequences/ui/use-sequences';
 import type { SceneWithScript } from './use-scenes';
-import type { ShotVariant } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
+import type { ShotVariant } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
 import { resolveShotDuration } from '@/motion/resolve-shot-duration';
 import type { SceneSelection } from './scene-selection';
 import type { SequenceSegment } from '@/shots/scene-segments';

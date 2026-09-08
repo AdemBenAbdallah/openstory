@@ -1,10 +1,10 @@
-import { Checkbox } from '@/ui/checkbox';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
+import { Checkbox } from '@/ui/shadcn/checkbox';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
 import {
   PORTRAIT_RIGHTS_V1,
   type AttestationStatement,
-} from '@/shared/compliance/attestations';
+} from '@/platform/compliance/attestations';
 
 type PortraitAttestationFieldsProps = {
   statement?: AttestationStatement;

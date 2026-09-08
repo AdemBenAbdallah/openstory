@@ -4,7 +4,7 @@ import {
   safeImageToVideoModel,
   type ImageToVideoModel,
 } from '@/models/models';
-import { typedEntries } from '@/shared/utils/typed-object';
+import { typedEntries } from '@/platform/typed-object';
 import { buildModelInput, buildMotionRequest } from './build-model-input';
 import type { GenerateMotionOptions } from './motion-generation';
 

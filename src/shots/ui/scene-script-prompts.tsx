@@ -7,32 +7,26 @@ import { useViaAvailability } from '@/models/ui/use-via-availability';
 import { PromptHistorySheet } from '@/shots/ui/prompts/prompt-history-sheet';
 import { DivergentAlternateBanner } from '@/shots/ui/staleness/divergent-alternate-banner';
 import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
-import { Alert, AlertDescription } from '@/ui/alert';
-import { Button } from '@/ui/button';
-import { Checkbox } from '@/ui/checkbox';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
+import { Checkbox } from '@/ui/shadcn/checkbox';
 import { setShotUseStartFrameFn } from '@/shots/shots.fn';
-import {
-  canUseStartFrame,
-  usesStartFrame,
-} from '@/shots/use-start-frame';
+import { canUseStartFrame, usesStartFrame } from '@/shots/use-start-frame';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs';
+} from '@/ui/shadcn/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
 import { MarkdownEditor } from '@/ui/text-editor/markdown-editor';
 import { VoiceInputButton } from '@/ui/voice/voice-input-button';
 import { useEditorDictation } from '@/ui/use-dictation';
 import { useSequenceMentionItems } from './use-mention-items';
 import { shortenPromptFn } from '@/models/ai.fn';
 import { generateShotImageFn } from '@/stills/shot-image.fn';
-import {
-  cancelVideoRenderFn,
-  generateShotMotionFn,
-} from '@/motion/motion.fn';
+import { cancelVideoRenderFn, generateShotMotionFn } from '@/motion/motion.fn';
 import { regenerateShotPromptFn } from '@/shots/prompt-variants.fn';
 import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
 import { notifyInsufficientCredits } from '@/billing/ui/notify-insufficient-credits';
@@ -50,10 +44,7 @@ import {
   segmentPanelIsInformative,
 } from './segment-video-panel';
 import { UploadMediaButton } from './upload-media-button';
-import {
-  useReplaceFrameImage,
-  useReplaceShotVideo,
-} from '@/hooks/use-media-upload';
+import { useReplaceFrameImage, useReplaceShotVideo } from './use-media-upload';
 import type { SequenceSegment } from '@/shots/scene-segments';
 import type { UpdateStaleDepth } from '@/shots/update-stale-depth';
 import { copyTextToClipboard } from '@/ui/clipboard';
@@ -74,7 +65,7 @@ import {
 } from './use-scenes';
 import { sceneFacetKeys } from './use-scene-facets';
 import { useSaveShotPrompt } from './use-prompt-variants';
-import type { FrameVariant, ShotVariant } from '@/lib/db/schema';
+import type { FrameVariant, ShotVariant } from '@/platform/server/db/schema';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_VIDEO_MODEL,
@@ -90,23 +81,20 @@ import {
   estimateImageCost,
   estimateVideoCost,
 } from '@/billing/cost-estimation';
-import {
-  DEFAULT_ASPECT_RATIO,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { DEFAULT_ASPECT_RATIO, type AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
-import { getStorageDomainFn } from '@/functions/storage-config';
+import { getStorageDomainFn } from '@/platform/storage-config.fn';
 import { previewShotPromptsFn } from '@/shots/prompt-preview.fn';
 import { OptimisedPromptPanel } from './optimised-prompt-panel';
 import {
   CONTENT_REJECTION_USER_HINT,
   CONTENT_REJECTION_USER_TITLE,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
+} from '@/models/content-rejection';
 import { resolveShotDuration } from '@/motion/resolve-shot-duration';
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
+import type { AssemblableMotionPrompt } from '@/shots/scene-analysis.schema';
 
-import { useShotPromptStream } from '@/components/realtime/use-shot-prompt-stream';
+import { useShotPromptStream } from './use-shot-prompt-stream';
 import type { ShotView } from '@/shots/shot-view';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CopyIcon, History, Loader2, Minimize2, RefreshCw } from 'lucide-react';
@@ -117,7 +105,7 @@ import {
   type SceneFacet,
   type SelectionScope,
 } from './scene-selection';
-import { errorMessage, isInsufficientCreditsError } from '@/shared/errors';
+import { errorMessage, isInsufficientCreditsError } from '@/platform/errors';
 import { useUpdateStaleShots } from './use-update-stale-shots';
 import { SceneCastTab } from './scene-cast-tab';
 import { SceneStaleShots } from './scene-stale-shots';
@@ -127,7 +115,7 @@ import { SceneMusicFacet } from './scene-music-facet';
 import { SceneScriptTab } from './scene-script-tab';
 import { ShotDurationField } from './shot-duration-field';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'scenes', 'scene-script-prompts']);
 

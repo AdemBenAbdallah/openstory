@@ -15,24 +15,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/ui/alert-dialog';
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert-dialog';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Input } from '@/ui/input';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { copyTextToClipboard } from '@/ui/clipboard';
 import {
   createPublicApiKeyFn,
   listPublicApiKeysFn,
   revokePublicApiKeyFn,
-} from '@/functions/public-api-keys';
+} from '@/platform/public-api-keys.fn';
 import {
   useMutation,
   useQueryClient,

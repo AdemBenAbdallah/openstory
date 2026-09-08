@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { createMiddleware } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { getEnv } from '#env';
-import { isLocalRequestHost } from '@/lib/env/environment';
+import { isLocalRequestHost } from '@/platform/server/env/environment';
 
 /**
  * Guard middleware for all test-only API endpoints.

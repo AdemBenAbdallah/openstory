@@ -1,10 +1,10 @@
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
-import { Card } from '@/ui/card';
-import type { LibraryLocation } from '@/lib/db/schema';
+import { Card } from '@/ui/shadcn/card';
+import type { LibraryLocation } from '@/platform/server/db/schema';
 import { cn } from '@/ui/utils';
 import { Link } from '@tanstack/react-router';
 import { Loader2, MapPin } from 'lucide-react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type LocationLibraryCardProps = {
   location: LibraryLocation;

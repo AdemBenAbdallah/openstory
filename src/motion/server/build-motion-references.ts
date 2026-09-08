@@ -25,7 +25,7 @@ import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import { buildElementReferenceImages } from '@/cast/element-prompt';
 import { buildLocationReferenceImages } from '@/cast/location-prompt';

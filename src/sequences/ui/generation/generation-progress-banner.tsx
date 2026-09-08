@@ -1,12 +1,9 @@
-import {
-  type BannerPhase,
-  ProgressBanner,
-} from './progress-banner';
+import { type BannerPhase, ProgressBanner } from './progress-banner';
 import {
   estimateSceneCount,
   estimateTotalSeconds,
 } from '@/sequences/time-estimate';
-import type { GenerationStreamState } from '@/components/realtime/generation-stream.reducer';
+import type { GenerationStreamState } from '@/sequences/ui/generation-stream.reducer';
 import { useEffect, useRef, useState } from 'react';
 
 /**

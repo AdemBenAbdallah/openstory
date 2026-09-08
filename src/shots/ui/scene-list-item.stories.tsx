@@ -1,9 +1,6 @@
 import { dbSceneId } from '@/shots/scene-id';
 import type { SceneWithScript } from './use-scenes';
-import {
-  frameFixture,
-  frameVariantFixture,
-} from '@/mocks/frame-fixtures';
+import { frameFixture, frameVariantFixture } from '@/mocks/frame-fixtures';
 import { toShotView, type ShotView } from '@/shots/shot-view';
 import type { Meta, StoryObj } from '@storybook/react';
 import { SceneListItem } from './scene-list-item';

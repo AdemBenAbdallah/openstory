@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TEST_FAL_PRICING as FAL_PRICING } from '@/lib/ai/__tests__/fal-pricing-fixture';
+import { TEST_FAL_PRICING as FAL_PRICING } from './fal-pricing-fixture';
 import {
   DEFAULT_IMAGE_MODEL,
   DEFAULT_MUSIC_MODEL,

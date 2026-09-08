@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 
 const loggerWarn = vi.fn();
-vi.doMock('@/shared/observability/logger', () => ({
+vi.doMock('@/platform/logger', () => ({
   getLogger: () => ({ warn: loggerWarn, error: vi.fn(), info: vi.fn() }),
 }));
 
 const capture = vi.fn();
-vi.doMock('@/lib/posthog-server', () => ({
+vi.doMock('@/platform/server/observability/posthog-server', () => ({
   getPostHogClient: () => ({ capture }),
 }));
 

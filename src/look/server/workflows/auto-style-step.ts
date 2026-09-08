@@ -6,20 +6,17 @@
  */
 import type { AnalysisModelId } from '@/models/models.config';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { getLogger } from '@/shared/observability/logger';
-import { getGenerationChannel } from '@/shared/realtime';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { getLogger } from '@/platform/logger';
+import { getGenerationChannel } from '@/platform/realtime';
 import {
   autoStyleDraftFromResponse,
   autoStyleResponseSchema,
   STYLE_CATEGORIES,
   type AutoStyleDraft,
 } from '@/look/auto-style';
-import {
-  STYLE_PACE_VALUES,
-  type StyleConfig,
-} from '@/look/style-config';
-import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
+import { STYLE_PACE_VALUES, type StyleConfig } from '@/look/style-config';
+import { durableLLMCallCf } from '@/models/server/llm-call-helper';
 import type { WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
 

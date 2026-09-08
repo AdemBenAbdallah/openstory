@@ -7,7 +7,7 @@
  * Price cells are starting points — full rules live on the via platform.
  */
 
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from './fal-pricing-live';
 import { estimateStrategy, knownUnitsPerCall } from '@/billing/fal-cost';
 import {
   AUDIO_MODELS,
@@ -18,7 +18,7 @@ import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 import {
   OPENROUTER_PRICING,
   OPENROUTER_PRICING_LAST_UPDATED,
-} from '@/lib/ai/openrouter-pricing-data';
+} from '@/billing/openrouter-pricing-data';
 import { microsToUsd } from '@/billing/money';
 
 type PricingVia = 'fal.ai' | 'OpenRouter' | 'BytePlus';

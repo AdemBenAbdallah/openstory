@@ -1,15 +1,12 @@
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import { openAddCreditsDialog } from '@/billing/ui/use-add-credits-dialog';
 import {
   CONTENT_REJECTION_USER_HINT,
   CONTENT_REJECTION_USER_TITLE,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
-import {
-  CREDITS_SHORT_TITLE,
-  creditsShortHint,
-} from '@/billing/credits-short';
+} from '@/models/content-rejection';
+import { CREDITS_SHORT_TITLE, creditsShortHint } from '@/billing/credits-short';
 import type { FailureSummary } from '@/sequences/failure-analysis';
 import { cn } from '@/ui/utils';
 import {

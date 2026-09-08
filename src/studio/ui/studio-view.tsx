@@ -1,7 +1,7 @@
 import { StudioComposer } from './studio-composer';
 import { StudioGallery } from './studio-gallery';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/ui/button';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { Button } from '@/ui/shadcn/button';
 import { PageContainer } from '@/ui/layout/page-container';
 import { PageIntro } from '@/ui/typography/page-intro';
 import { useStudioAssets } from './use-studio-assets';

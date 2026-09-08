@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ShotVariant } from '@/lib/db/schema';
+import type { ShotVariant } from '@/platform/server/db/schema';
 import { computeSequenceModelCoverage } from './sequence-model-coverage';
 
 /**

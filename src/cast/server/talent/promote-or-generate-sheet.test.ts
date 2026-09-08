@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import {
   libraryTalentGenerateDedupId,
   libraryTalentUploadDedupId,
@@ -19,10 +19,10 @@ const mockTriggerWorkflow =
 const mockAnalyze = vi.fn();
 const mockEmit = vi.fn();
 
-vi.doMock('@/lib/workflow/client', () => ({
+vi.doMock('@/platform/server/workflow/client', () => ({
   triggerWorkflow: mockTriggerWorkflow,
 }));
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getTalentChannel: () => ({ emit: mockEmit }),
 }));
 vi.doMock('./analyze-talent-media', () => ({

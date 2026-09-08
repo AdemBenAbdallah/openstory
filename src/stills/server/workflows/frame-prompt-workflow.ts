@@ -13,33 +13,36 @@ import {
   CONTENT_REJECTION_EVENT,
   contentFilterLlmMessage,
   isContentFilterFinish,
-} from '@/shared/ai/content-rejection';
-import { createAdapter } from '@/lib/ai/create-adapter';
-import { computeVisualPromptInputHash } from '@/lib/ai/input-hash';
+} from '@/models/content-rejection';
+import { createAdapter } from '@/models/server/create-adapter';
+import { computeVisualPromptInputHash } from '@/shots/input-hash';
 import {
   createUsageCapture,
   extractRunError,
   llmCostFromUsage,
   throwNotedRunError,
-} from '@/lib/ai/llm-client';
-import { chatModelOptionsForCall } from '@/lib/workflows/llm-call-helper';
-import { narrowShotPromptContext } from '@/lib/ai/prompt-context';
+} from '@/models/server/llm-client';
+import { chatModelOptionsForCall } from '@/models/server/llm-call-helper';
+import { narrowShotPromptContext } from '@/shots/server/prompt-context';
 import {
   type VisualPrompt,
   type VisualPromptResult,
   visualPromptResultSchema,
-} from '@/lib/ai/scene-analysis.schema';
-import { extractStreamingStringField } from '@/lib/ai/stream-extract';
+} from '@/shots/scene-analysis.schema';
+import { extractStreamingStringField } from '@/platform/server/ai/stream-extract';
 import type { Microdollars } from '@/billing/money';
 import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { aiObservabilityMiddleware } from '@/lib/observability/ai-otel';
-import { getLogger } from '@/shared/observability/logger';
-import { getChatPrompt } from '@/lib/prompts';
-import { getShotPromptChannel, getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import type { FramePromptWorkflowInput } from '@/lib/workflow/types';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { aiObservabilityMiddleware } from '@/platform/server/observability/ai-otel';
+import { getLogger } from '@/platform/logger';
+import { getChatPrompt } from '@/platform/server/ai/prompts-index';
+import {
+  getShotPromptChannel,
+  getGenerationChannel,
+} from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import type { FramePromptWorkflowInput } from '@/platform/server/workflow/types';
 import { chat } from '@tanstack/ai';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';

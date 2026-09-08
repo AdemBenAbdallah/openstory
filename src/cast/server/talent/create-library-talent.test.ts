@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { ScopedDb } from '@/lib/db/scoped';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import type { CreateLibraryTalentContext } from './create-library-talent';
 import { libraryTalentGenerateDedupId } from './library-talent-sheet-dedup';
 
@@ -23,16 +23,16 @@ const mockRequireUpload = vi.fn(
   ({ attestation }: { attestation: unknown }) => attestation ?? null
 );
 
-vi.doMock('@/lib/workflow/client', () => ({
+vi.doMock('@/platform/server/workflow/client', () => ({
   triggerWorkflow: mockTriggerWorkflow,
 }));
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getTalentChannel: () => ({ emit: mockEmit }),
 }));
 vi.doMock('#storage', () => ({
   moveFile: mockMoveFile,
 }));
-vi.doMock('@/lib/compliance/likeness-upload', () => ({
+vi.doMock('@/cast/server/likeness-upload', () => ({
   requireUploadAttestation: mockRequireUpload,
   recordPortraitAttestation: vi.fn(),
 }));

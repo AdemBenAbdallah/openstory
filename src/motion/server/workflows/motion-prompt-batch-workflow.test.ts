@@ -16,11 +16,11 @@
  * nothing succeeded is fatal.
  */
 
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type {
   MotionPromptBatchWorkflowInput,
   MotionPromptWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { describe, expect, test, vi } from 'vitest';
 
@@ -33,7 +33,9 @@ const spawnAndAwaitChild =
       args: { childId: string; childPayload: MotionPromptWorkflowInput }
     ) => Promise<unknown>
   >();
-vi.doMock('@/lib/workflow/await-child', () => ({ spawnAndAwaitChild }));
+vi.doMock('@/platform/server/workflow/await-child', () => ({
+  spawnAndAwaitChild,
+}));
 
 const { MotionPromptBatchWorkflow } =
   await import('./motion-prompt-batch-workflow');

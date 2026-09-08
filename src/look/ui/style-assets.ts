@@ -1,4 +1,4 @@
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 
 /**
  * Client-safe helpers for deriving a style's public media assets from the

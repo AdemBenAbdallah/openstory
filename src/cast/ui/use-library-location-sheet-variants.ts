@@ -5,8 +5,8 @@ import {
   undiscardLibraryLocationSheetVariantFn,
 } from '@/cast/library-location-sheet-variants.fn';
 import { libraryLocationKeys } from './use-sequence-locations';
-import { useUser } from '@/hooks/use-user';
-import type { LocationSheetVariant } from '@/lib/db/schema';
+import { useUser } from '@/platform/ui/use-user';
+import type { LocationSheetVariant } from '@/platform/server/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const libraryLocationSheetVariantKeys = {

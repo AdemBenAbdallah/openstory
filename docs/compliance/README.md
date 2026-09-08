@@ -27,11 +27,11 @@ Lookup is **Admin → Moderation → Trace content**, which resolves a trace id,
 asset URL or R2 key, a content hash (once populated), or the provider's request
 id back to the account that produced it.
 
-- Schema: `src/lib/db/schema/compliance.ts`
-- Recording: `src/lib/compliance/provenance.ts`, called from every workflow
+- Schema: `src/platform/server/db/schema/compliance.ts`
+- Recording: `src/platform/server/compliance/provenance.ts`, called from every workflow
   that writes a generated object to R2 (stills, grids, upscales, motion,
   sheets, music, direct model access, sequence export)
-- Lookup: `src/functions/moderation.ts` → `traceContentFn`
+- Lookup: `src/platform/moderation.fn.ts` → `traceContentFn`
 
 User-uploaded reference photos are not provenance — they are warrants in
 `upload_attestations`. Assets generated before this shipped have no
@@ -46,7 +46,7 @@ provenance row and must be traced through the sequence graph. See
    likeness can enter (`upload_attestations`), recording the exact wording
    agreed to, the declared basis for authorization, and request context.
 3. Provider content filters reject prohibited output; rejections are logged and
-   queryable (`src/shared/ai/content-rejection.ts`).
+   queryable (`src/models/content-rejection.ts`).
 4. Reported content is traced and the responsible account restricted.
 
 **Emergency response plan:** [`incident-response.md`](./incident-response.md),
@@ -74,7 +74,7 @@ rather than only asserted in a policy document:
   statement text shown, so a 2026 attestation cannot be misread against wording
   shipped later.
 - **Statement text** is versioned and single-sourced in
-  `src/shared/compliance/attestations.ts`. Editing a statement in place is
+  `src/platform/compliance/attestations.ts`. Editing a statement in place is
   prohibited (it would invalidate every stored hash); a test pins this.
 
 ---
@@ -123,7 +123,7 @@ IDs or run liveness checks.
 
 ## Configuration
 
-All optional; resolved in one place (`src/lib/compliance/config.ts`) and
+All optional; resolved in one place (`src/platform/server/compliance/config.ts`) and
 documented in `.env.example`.
 
 | Variable                    | Purpose                                                                  |

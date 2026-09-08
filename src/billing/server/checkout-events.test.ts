@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type Stripe from 'stripe';
 
 const captureProductEvent = vi.fn();
-vi.doMock('@/lib/observability/product-events', () => ({
+vi.doMock('@/platform/server/observability/product-events', () => ({
   captureProductEvent,
 }));
 

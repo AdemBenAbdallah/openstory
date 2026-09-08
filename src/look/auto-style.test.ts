@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { WORKFLOW_CHAT_PROMPTS } from '@/lib/prompts/workflow-prompts';
+import { WORKFLOW_CHAT_PROMPTS } from '@/platform/server/ai/workflow-prompts';
 import {
   AUTO_STYLE_PLACEHOLDER_NAME,
   DEFAULT_AUTO_STYLE_CATEGORY,

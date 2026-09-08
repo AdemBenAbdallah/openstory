@@ -20,7 +20,7 @@ Journal entries and `snapshot.json` files are **drizzle-kit outputs** — do not
 
 **Workflow:**
 
-1. Change `src/lib/db/schema/`
+1. Change `src/platform/server/db/schema/`
 2. `bun db:generate:local`
 3. Hand-edit **`migration.sql` only** if backfill DML is needed — use set-based `UPDATE … FROM` / windowed `JOIN` (#1019), no table rebuild (#612)
 4. `bun scripts/check-migrations.ts drizzle/migrations/<dir>/migration.sql` (must exit 0; lefthook runs this at pre-commit)

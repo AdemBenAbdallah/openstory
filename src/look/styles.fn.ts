@@ -3,18 +3,21 @@
  * End-to-end type-safe functions for style library operations
  */
 
-import { requireTeamAdminAccess } from '@/lib/auth/action-utils';
-import type { Sequence, Style } from '@/lib/db/schema';
-import { NotFoundError, ValidationError } from '@/shared/errors';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { requireTeamAdminAccess } from '@/platform/server/auth/action-utils';
+import type { Sequence, Style } from '@/platform/server/db/schema';
+import { NotFoundError, ValidationError } from '@/platform/errors';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import {
   createStyleSchema,
   updateStyleSchema,
-} from '@/lib/schemas/style.schemas';
+} from '@/look/server/style.schemas';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { authWithTeamMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import {
+  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
+} from '@/platform/middleware.fn';
 export { getPublicStylesFn } from './public-styles.fn';
 
 // ============================================================================

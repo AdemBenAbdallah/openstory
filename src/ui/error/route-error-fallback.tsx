@@ -1,12 +1,12 @@
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
-import { Button } from '@/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import { DefaultNotFound } from './default-not-found';
 import { useRouter } from '@tanstack/react-router';
 import type { ErrorComponentProps } from '@tanstack/react-router';
 import { AlertCircle } from 'lucide-react';
 
-import { errorCode } from '@/shared/errors';
-import { getLogger } from '@/shared/observability/logger';
+import { errorCode } from '@/platform/errors';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ui', 'error', 'route-error-fallback']);
 

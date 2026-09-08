@@ -1,4 +1,4 @@
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import type { GenerationMode } from '@/models/generation-mode';
 import { Gauge, Zap } from 'lucide-react';
 import type { FC } from 'react';

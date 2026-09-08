@@ -1,4 +1,4 @@
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,14 +7,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
-import { Switch } from '@/ui/switch';
+} from '@/ui/shadcn/dropdown-menu';
+import { Switch } from '@/ui/shadcn/switch';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/ui/tooltip';
+} from '@/ui/shadcn/tooltip';
 import {
   Check,
   ChevronDown,

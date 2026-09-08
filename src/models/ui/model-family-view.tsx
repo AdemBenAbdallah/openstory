@@ -4,21 +4,14 @@
  * linking to that endpoint's run page. Labels come from endpoint ids — the
  * catalog's display names are unreliable (see model-families.ts).
  */
-import {
-  ACTIVITY_ICONS,
-  ACTIVITY_LABELS,
-  categoryLabel,
-} from './model-card';
+import { ACTIVITY_ICONS, ACTIVITY_LABELS, categoryLabel } from './model-card';
 import { getModelGradient } from './model-gradient';
 import { ReleaseBadge } from './release-badge';
-import { Badge } from '@/ui/badge';
-import { EmptyState } from '@/ui/empty-state';
-import { Skeleton } from '@/ui/skeleton';
+import { Badge } from '@/ui/shadcn/badge';
+import { EmptyState } from '@/ui/shadcn/empty-state';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { getModelFamilyByPathFn } from '@/models/model-catalog.fn';
-import {
-  CATALOG_ACTIVITIES,
-  type CatalogActivity,
-} from '@/models/catalog';
+import { CATALOG_ACTIVITIES, type CatalogActivity } from '@/models/catalog';
 import type { ModelFamily, ModelVariant } from '@/models/model-families';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';

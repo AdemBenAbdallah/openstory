@@ -1,10 +1,13 @@
 import { useMemo } from 'react';
 import type React from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import { EvalSequenceMetadata } from './eval-sequence-metadata';
 import { EvalSceneCell } from './eval-scene-cell';
 import type { DialogTab } from './eval-cell-dialog';
-import { useScenesBySequence, type SceneWithScript } from '@/shots/ui/use-scenes';
+import {
+  useScenesBySequence,
+  type SceneWithScript,
+} from '@/shots/ui/use-scenes';
 import type { SequenceWithShots } from '@/sequences/ui/use-sequences-with-shots';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import { DEFAULT_ASPECT_RATIO } from '@/models/aspect-ratios';

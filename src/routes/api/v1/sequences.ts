@@ -24,23 +24,26 @@
  * tool of their own.
  */
 
-import { authWithTeamRequestMiddleware } from '@/functions/middleware';
-import { type OneShotWaitResult, runOneShotCreate } from '@/lib/api-v1/create';
-import { apiJsonError, runApiV1Handler } from '@/lib/api-v1/errors';
-import { apiCreateSequenceSchema } from '@/lib/api-v1/input-schema';
+import { authWithTeamRequestMiddleware } from '@/platform/middleware.fn';
+import {
+  type OneShotWaitResult,
+  runOneShotCreate,
+} from '@/platform/server/api-v1/create';
+import { apiJsonError, runApiV1Handler } from '@/platform/server/api-v1/errors';
+import { apiCreateSequenceSchema } from '@/platform/server/api-v1/input-schema';
 import {
   buildSequenceListPage,
   decodeCursor,
   parseLimitParam,
-} from '@/lib/api-v1/list';
+} from '@/platform/server/api-v1/list';
 import {
   buildSequenceState,
   isTerminalSequenceState,
   sequenceStateCursor,
   withSequenceStateLinks,
-} from '@/lib/api-v1/state';
-import { getWaitMs, longPoll } from '@/lib/api-v1/wait';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/platform/server/api-v1/state';
+import { getWaitMs, longPoll } from '@/platform/server/api-v1/wait';
+import { getLogger } from '@/platform/logger';
 import { createFileRoute } from '@tanstack/react-router';
 
 const logger = getLogger(['openstory', 'api-v1']);

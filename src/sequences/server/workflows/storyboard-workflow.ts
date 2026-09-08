@@ -11,26 +11,26 @@ import {
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { uploadPosterToStorage } from '@/stills/server/image-storage';
 import { buildPosterPrompt } from '@/sequences/server/poster-prompt';
 import {
   notifySequenceReady,
   sequenceScenesUrl,
-} from '@/lib/emails/notify-sequence-ready';
-import { getGenerationChannel } from '@/shared/realtime';
+} from '@/sequences/server/notify-sequence-ready';
+import { getGenerationChannel } from '@/platform/realtime';
 import { includesStage } from '@/sequences/pipeline';
-import { validateSequenceAuth } from '@/lib/workflow/auth';
-import { spawnAndAwaitChild } from '@/lib/workflow/await-child';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
+import { validateSequenceAuth } from '@/platform/server/workflow/auth';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
 import type {
   AnalyzeScriptWorkflowInput,
   StoryboardWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'storyboard']);
 

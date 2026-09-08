@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/ui/tooltip';
+} from '@/ui/shadcn/tooltip';
 import type { ModelCoverage } from './sequence-model-coverage';
 import { Check, CircleAlert, CircleCheck, Loader2 } from 'lucide-react';
 

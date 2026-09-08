@@ -1,6 +1,6 @@
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import { type ShotView, toShotView } from '@/shots/shot-view';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { faker } from '@faker-js/faker';
 import {
   frameFixture,

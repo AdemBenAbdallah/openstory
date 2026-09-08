@@ -2,11 +2,11 @@
  * Build a LocationSheetWorkflow payload from the live sequence-location row.
  */
 
-import type { SequenceLocationWithReference } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { SequenceLocationWithReference } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { resolveSheetImageModel } from '@/cast/sheet-image-model';
 import { resolveSequenceStyleConfig } from '@/look/style-config';
-import type { LocationSheetWorkflowInput } from '@/lib/workflow/types';
+import type { LocationSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLocationSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
 
 /** Narrow DB text column to the typed union, defaulting to 'interior'. */

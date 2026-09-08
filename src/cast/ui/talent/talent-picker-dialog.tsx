@@ -4,15 +4,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { useTalent } from '@/cast/ui/use-talent';
-import type { TalentWithSheets } from '@/lib/db/schema';
+import type { TalentWithSheets } from '@/platform/server/db/schema';
 import { Search, User } from 'lucide-react';
 import { useState } from 'react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type TalentPickerDialogProps = {
   open: boolean;

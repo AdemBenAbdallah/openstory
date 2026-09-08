@@ -4,8 +4,8 @@
  */
 
 import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
-import { Tabs, TabsList, TabsTrigger } from '@/ui/tabs';
-import { requireSessionOrRedirect } from '@/components/auth/route-guards';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
 import {
   createFileRoute,
   Link,

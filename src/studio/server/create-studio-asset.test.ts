@@ -10,11 +10,11 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
-import { generateId } from '@/shared/id';
-import type { Database } from '@/lib/db/client';
-import { generatedAssets, teams, user } from '@/lib/db/schema';
-import { relations } from '@/lib/db/schema/relations';
-import { InsufficientCreditsError } from '@/shared/errors';
+import { generateId } from '@/platform/id';
+import type { Database } from '@/platform/server/db/client';
+import { generatedAssets, teams, user } from '@/platform/server/db/schema';
+import { relations } from '@/platform/server/db/schema/relations';
+import { InsufficientCreditsError } from '@/platform/errors';
 import { studioCreateInputSchema } from '@/studio/schema';
 
 let db: Database;
@@ -34,28 +34,28 @@ vi.doMock('@/billing/server/preflight', async (importOriginal) => {
     reserveRunCredits: mockReserveRunCredits,
   };
 });
-vi.doMock('@/shared/realtime', () => ({
+vi.doMock('@/platform/realtime', () => ({
   getBillingChannel: () => ({
     emit: vi.fn().mockResolvedValue(undefined),
     history: async () => [],
   }),
   billingChannelId: (teamId: string) => `billing:${teamId}`,
 }));
-vi.doMock('@/lib/workflow/client', () => ({
+vi.doMock('@/platform/server/workflow/client', () => ({
   triggerWorkflow: mockTriggerWorkflow,
 }));
-vi.doMock('@/lib/compliance/generation-gate', () => ({
+vi.doMock('@/platform/server/compliance/generation-gate', () => ({
   requireGenerationAllowed: mockRequireGenerationAllowed,
 }));
-vi.doMock('@/lib/observability/product-events', () => ({
+vi.doMock('@/platform/server/observability/product-events', () => ({
   captureProductEvent: mockCaptureProductEvent,
 }));
-vi.doMock('@/lib/ai/fal-pricing-live', () => ({
+vi.doMock('@/billing/server/fal-pricing-live', () => ({
   getEffectiveFalPricing: mockGetEffectiveFalPricing,
 }));
 
 const { createStudioAssets } = await import('./create-studio-asset');
-const { createScopedDb } = await import('@/lib/db/scoped');
+const { createScopedDb } = await import('@/platform/server/db/scoped');
 
 const TEAM_ID = generateId();
 const USER_ID = 'user-1';
@@ -199,7 +199,7 @@ describe('studioCreateInputSchema', () => {
 
 describe('createStudioAssets', () => {
   it('rejects a restricted account BEFORE the credit gate, leaving no row', async () => {
-    const { AccountRestrictedError } = await import('@/shared/errors');
+    const { AccountRestrictedError } = await import('@/platform/errors');
     mockRequireGenerationAllowed.mockRejectedValue(
       new AccountRestrictedError('paused')
     );

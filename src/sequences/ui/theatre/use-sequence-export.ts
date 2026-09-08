@@ -15,7 +15,7 @@ import {
   sequenceExportInputsKey,
 } from './source-shots-hash';
 import { exportSequenceOnServer } from './server-export-client';
-import type { Sequence } from '@/lib/db/schema';
+import type { Sequence } from '@/platform/server/db/schema';
 import { copyTextToClipboard } from '@/ui/clipboard';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePostHog } from '@posthog/react';

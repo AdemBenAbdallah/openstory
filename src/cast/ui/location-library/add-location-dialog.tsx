@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/ui/button';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { Button } from '@/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -9,13 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/ui/dialog';
-import { Input } from '@/ui/input';
-import { Label } from '@/ui/label';
-import { Textarea } from '@/ui/textarea';
+} from '@/ui/shadcn/dialog';
+import { Input } from '@/ui/shadcn/input';
+import { Label } from '@/ui/shadcn/label';
+import { Textarea } from '@/ui/shadcn/textarea';
 import { useHydrated } from '@/ui/use-hydrated';
 import { useCreateLibraryLocation } from '@/cast/ui/use-location-library';
-import type { LibraryLocation } from '@/lib/db/schema';
+import type { LibraryLocation } from '@/platform/server/db/schema';
 import { Plus } from 'lucide-react';
 import { LocationMediaUpload } from './location-media-upload';
 

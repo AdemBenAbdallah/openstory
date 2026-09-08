@@ -17,10 +17,7 @@
  */
 
 import { getBytePlusImageModelId, IMAGE_MODELS } from '@/models/models';
-import {
-  DEFAULT_IMAGE_SIZE,
-  type ImageSize,
-} from '@/models/aspect-ratios';
+import { DEFAULT_IMAGE_SIZE, type ImageSize } from '@/models/aspect-ratios';
 import type { ImageGenerationParams } from './build-image-request';
 import type {
   BytePlusImageModel,

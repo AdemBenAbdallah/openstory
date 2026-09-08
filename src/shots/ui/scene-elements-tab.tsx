@@ -5,19 +5,15 @@
  * here — the standalone elements page was retired in #986.
  */
 
-import { Button } from '@/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/ui/popover';
-import { Skeleton } from '@/ui/skeleton';
+import { Button } from '@/ui/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/shadcn/popover';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { facetIdsForShots, useSceneFacetMaps } from './use-scene-facets';
 import {
   useSequenceElements,
   useUploadElementToSequence,
 } from '@/cast/ui/use-sequence-elements';
-import type { SequenceElement } from '@/lib/db/schema';
+import type { SequenceElement } from '@/platform/server/db/schema';
 import { MAX_SEQUENCE_ELEMENTS } from '@/cast/ui/element/limits';
 import { cn } from '@/ui/utils';
 import {
@@ -27,7 +23,7 @@ import {
 } from '@/ui/drag-images';
 import { Link } from '@tanstack/react-router';
 import { ImagePlus, Loader2, Upload } from 'lucide-react';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 

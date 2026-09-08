@@ -11,15 +11,11 @@ import {
   estimateLLMCost,
   estimateVideoCost,
 } from '@/billing/cost-estimation';
-import type { EffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import type { EffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 
 type FalPricingMap = Record<string, EffectiveFalPricing>;
 import { safeAudioModel, safeImageToVideoModel } from '@/models/models';
-import {
-  addMicros,
-  ZERO_MICROS,
-  type Microdollars,
-} from '@/billing/money';
+import { addMicros, ZERO_MICROS, type Microdollars } from '@/billing/money';
 import type { UpdateStalePlan } from './update-stale-plan';
 import type { UpdateStaleDepth } from '@/shots/update-stale-depth';
 

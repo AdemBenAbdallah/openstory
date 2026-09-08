@@ -11,16 +11,19 @@
  */
 
 import { DEFAULT_IMAGE_MODEL, safeTextToImageModel } from '@/models/models';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
+import type { Scene } from '@/shots/scene-analysis.schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type {
   CharacterWithSheet,
   SequenceElement,
   SequenceLocationWithReference,
-} from '@/lib/db/schema';
-import { r2KeyFromUrl, type StorageBucket } from '@/lib/storage/buckets';
+} from '@/platform/server/db/schema';
+import {
+  r2KeyFromUrl,
+  type StorageBucket,
+} from '@/platform/server/storage/buckets';
 import { USER_UPLOAD_MODEL } from '@/shots/user-upload-model';
-import { getExtensionFromUrl } from '@/lib/storage/file';
+import { getExtensionFromUrl } from '@/platform/server/storage/file';
 import { buildRegenerateShotSnapshot } from '@/shots/server/workflows/regenerate-shots-snapshot';
 
 /**

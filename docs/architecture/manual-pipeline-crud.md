@@ -161,7 +161,7 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
 `shotAccessMiddleware` (input `sequenceId + shotId`), the rest
 `sequenceAccessMiddleware` (input `sequenceId`) unless noted.
 
-### Media inject (`src/functions/media-upload.ts`)
+### Media inject (`src/shots/media-upload.fn.ts`)
 
 | Fn                                                                                                | Input → output                                                                                  | Rule enforced                                                    |
 | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -230,7 +230,7 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
   in-memory millisecond `Date`, in code or tests.
 - **Prompt-hash body changes use dual-hash verify, not catalog nulling.**
   Changing the hashed body shape still bumps `PROMPT_INPUT_HASH_VERSION`
-  (`src/lib/ai/input-hash.ts`) when the stamp itself needs a version tag, but
+  (`src/shots/input-hash.ts`) when the stamp itself needs a version tag, but
   verify is `*InputHashMatches`: a stored digest is fresh if it matches the
   current stamp **or** a legacy digest of the same live inputs. Do not NULL
   stored hashes to paper over a shape change — that is the #867 false-positive
@@ -250,13 +250,13 @@ Grouped the way an API/MCP layer would wrap them. Auth: `shot…` fns use
 
 ## 5. File map
 
-| Concern                                                                      | File                                                                                             |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Upload helpers (sentinel model, path/extension validation, still-hash stamp) | `src/shots/server/upload-media.ts`                                                                  |
-| Atomic replace + upload appends (stills)                                     | `src/lib/db/scoped/frame-variants.ts` (`replaceContent`, `appendUploadedVersion`)                |
-| Video upload append / guarded complete / cancel                              | `src/lib/db/scoped/video-variants.ts`                                                            |
-| Music retire-not-overwrite                                                   | `src/lib/db/scoped/sequence-variants.ts`                                                         |
-| Soft-delete + reorder (structure)                                            | `src/lib/db/scoped/scenes.ts`, `shots.ts`                                                        |
-| Soft-delete + bible CRUD (cast/world)                                        | `src/lib/db/scoped/characters.ts`, `sequence-locations.ts`, `sequence-elements.ts`               |
-| Staleness matrix tests (the executable §1 contract)                          | `src/shots/server/staleness-matrix.test.ts`                                                         |
-| Acceptance tests (media, cast, structure)                                    | `src/lib/db/scoped/media-upload.test.ts`, `sequence-cast-crud.test.ts`, `structure-crud.test.ts` |
+| Concern                                                                      | File                                                                                            |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Upload helpers (sentinel model, path/extension validation, still-hash stamp) | `src/shots/server/upload-media.ts`                                                              |
+| Atomic replace + upload appends (stills)                                     | `src/stills/server/db/frame-variants.ts` (`replaceContent`, `appendUploadedVersion`)            |
+| Video upload append / guarded complete / cancel                              | `src/motion/server/db/video-variants.ts`                                                        |
+| Music retire-not-overwrite                                                   | `src/audio/server/db/sequence-variants.ts`                                                      |
+| Soft-delete + reorder (structure)                                            | `src/shots/server/db/scenes.ts`, `shots.ts`                                                     |
+| Soft-delete + bible CRUD (cast/world)                                        | `src/cast/server/db/characters.ts`, `sequence-locations.ts`, `sequence-elements.ts`             |
+| Staleness matrix tests (the executable §1 contract)                          | `src/shots/server/staleness-matrix.test.ts`                                                     |
+| Acceptance tests (media, cast, structure)                                    | `src/shots/server/media-upload.test.ts`, `sequence-cast-crud.test.ts`, `structure-crud.test.ts` |

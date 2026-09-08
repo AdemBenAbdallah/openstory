@@ -10,8 +10,8 @@
  * 404.
  */
 
-import { getAuth } from '@/lib/auth/config';
-import { buildApiResourceMetadata } from '@/lib/auth/oauth-provider';
+import { getAuth } from '@/platform/server/auth/config';
+import { buildApiResourceMetadata } from '@/platform/server/auth/oauth-provider';
 import { createFileRoute } from '@tanstack/react-router';
 
 const API_RESOURCE_METADATA_PATH =

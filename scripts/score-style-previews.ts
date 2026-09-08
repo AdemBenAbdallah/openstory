@@ -28,13 +28,16 @@
  */
 import { parseStyleConfig } from '@/look/style-config';
 import type { TextModel } from '@/models/models';
-import { callLLM } from '@/lib/ai/llm-client';
+import { callLLM } from '@/models/server/llm-client';
 import {
   ANALYSIS_MODEL_IDS,
   isValidAnalysisModelId,
 } from '@/models/models.config';
-import type { StyleConfig } from '@/lib/db/schema/libraries';
-import type { ChatMessage, ChatMessageContentPart } from '@/lib/prompts';
+import type { StyleConfig } from '@/platform/server/db/schema/libraries';
+import type {
+  ChatMessage,
+  ChatMessageContentPart,
+} from '@/platform/server/ai/prompts-index';
 import { styleSlug } from '@/look/style-slug';
 import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
 import { PhotonImage } from '@cf-wasm/photon';

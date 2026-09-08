@@ -1,5 +1,5 @@
 import { EDIT_ENDPOINTS } from '@/models/models';
-import { typedEntries } from '@/shared/utils/typed-object';
+import { typedEntries } from '@/platform/typed-object';
 import { describe, expect, it } from 'vitest';
 import {
   buildGeminiImageRequest,

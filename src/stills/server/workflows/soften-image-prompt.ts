@@ -15,24 +15,24 @@ import {
   CONTENT_REJECTION_RETRY_EVENT,
   CONTENT_REJECTION_SOFTEN_EVENT,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
+} from '@/models/content-rejection';
+import { extractFalErrorMessage } from '@/models/fal-error';
 import { IMAGE_MODELS, type TextToImageModel } from '@/models/models';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
   type AnalysisModelId,
 } from '@/models/models.config';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import {
   generateImageWithProvider,
   type ImageGenerationParams,
   type ImageGenerationResult,
 } from '@/stills/server/image-generation';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 import { buildReferenceImagePrompt } from '@/stills/reference-image-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import type { ImageWorkflowInput } from '@/lib/workflow/types';
+import { getGenerationChannel } from '@/platform/realtime';
+import type { ImageWorkflowInput } from '@/platform/server/workflow/types';
 import {
   IMAGE_CONTENT_FALLBACK_MODEL,
   softenRejectedImagePrompt,

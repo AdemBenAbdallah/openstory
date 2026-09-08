@@ -16,11 +16,12 @@
  * the old video keeps playing and the manifest-staleness system flags it.
  */
 
-import type { Frame, NewFrame, NewFrameVariant } from '@/lib/db/schema';
-import {
-  frameFixture,
-  frameVariantFixture,
-} from '@/mocks/frame-fixtures';
+import type {
+  Frame,
+  NewFrame,
+  NewFrameVariant,
+} from '@/platform/server/db/schema';
+import { frameFixture, frameVariantFixture } from '@/mocks/frame-fixtures';
 import { describe, expect, it } from 'vitest';
 import {
   bindUpscaleVersion,

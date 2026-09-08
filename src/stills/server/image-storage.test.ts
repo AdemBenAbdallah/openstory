@@ -8,7 +8,10 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getPublicUrl, type StorageBucket } from '@/lib/storage/buckets';
+import {
+  getPublicUrl,
+  type StorageBucket,
+} from '@/platform/server/storage/buckets';
 
 const uploadFile = vi.fn(
   (

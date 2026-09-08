@@ -157,8 +157,8 @@ const file = `// AUTO-GENERATED Storybook fixture — real rows from local D1 (s
 // Regenerate via: bun scripts/generate-scenes-view-fixture.ts
 import type { SceneWithScript } from '@/shots/ui/use-scenes';
 import { dbSceneId } from '@/shots/scene-id';
-import type { Shot } from '@/lib/db/schema';
-import type { Sequence, Style } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
+import type { Sequence, Style } from '@/platform/server/db/schema';
 
 export const fixtureSequence: Sequence = ${emit(sequence)};
 

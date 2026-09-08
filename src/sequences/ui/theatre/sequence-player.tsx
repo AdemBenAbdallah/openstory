@@ -8,28 +8,18 @@
  * codecs. Download/Copy live on `overlayActions` (theatre).
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { VideoPlayer } from '@/motion/ui/video-player';
-import { Skeleton } from '@/ui/skeleton';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   getAspectRatioClassName,
   type AspectRatio,
 } from '@/models/aspect-ratios';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/ui/tooltip';
-import {
-  SequencePlayerEngine,
-  type SequencePlayerMeta,
-} from './playback';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/tooltip';
+import { SequencePlayerEngine, type SequencePlayerMeta } from './playback';
 import type { SceneInput } from './concatenated-video-source';
 import { scenePlaybackKey } from './playback-scenes';
-import {
-  playAttemptUiState,
-  type PlayAttemptResult,
-} from './play-attempt';
+import { playAttemptUiState, type PlayAttemptResult } from './play-attempt';
 import {
   captureVideoPlay,
   captureVideoPlayFailed,

@@ -14,14 +14,14 @@ import type {
   ElementBibleEntry,
   LocationBibleEntry,
   Scene,
-} from '@/lib/ai/scene-analysis.schema';
-import type { CharacterMinimal } from '@/lib/db/schema/characters';
-import type { SequenceElementMinimal } from '@/lib/db/schema/sequence-elements';
-import type { SequenceLocationMinimal } from '@/lib/db/schema/sequence-locations';
+} from '@/shots/scene-analysis.schema';
+import type { CharacterMinimal } from '@/platform/server/db/schema/characters';
+import type { SequenceElementMinimal } from '@/platform/server/db/schema/sequence-elements';
+import type { SequenceLocationMinimal } from '@/platform/server/db/schema/sequence-locations';
 import type {
   LibraryLocationMatch,
   TalentCharacterMatch,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { z } from 'zod';
 
 export const GENERATION_STAGES = [

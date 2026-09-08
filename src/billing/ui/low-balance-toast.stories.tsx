@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useEffect } from 'react';
-import { Button } from '@/ui/button';
-import { Toaster } from '@/ui/sonner';
+import { Button } from '@/ui/shadcn/button';
+import { Toaster } from '@/ui/shadcn/sonner';
 import { TYPICAL_SHORT_COST_USD } from '@/billing/constants';
 import {
   showLowBalanceToast,

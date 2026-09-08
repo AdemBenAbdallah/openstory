@@ -7,10 +7,7 @@
  * with correctly-typed duration values.
  */
 
-import {
-  IMAGE_TO_VIDEO_MODELS,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { IMAGE_TO_VIDEO_MODELS, type ImageToVideoModel } from '@/models/models';
 import type { z } from 'zod';
 import { buildKlingElementsInput } from './build-kling-elements';
 import { buildReferenceVideoPrompt } from './build-reference-video-prompt';

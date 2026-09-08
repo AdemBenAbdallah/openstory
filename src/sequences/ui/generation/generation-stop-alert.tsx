@@ -9,8 +9,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Checkbox } from '@/ui/checkbox';
+} from '@/ui/shadcn/alert-dialog';
+import { Checkbox } from '@/ui/shadcn/checkbox';
 import {
   useDraftGenerationEstimate,
   type DraftGenerationEstimateInput,

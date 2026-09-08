@@ -20,26 +20,23 @@
  * nothing the user must do.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
+} from '@/ui/shadcn/select';
 import { estimateSceneDurationFn } from '@/models/ai.fn';
 import { updateShotDurationFn } from '@/shots/shots.fn';
 import { sequenceKeys } from '@/sequences/ui/use-sequences';
 import { shotStalenessNamespace } from './use-shot-staleness';
 import { shotKeys } from './use-shots';
-import {
-  videoModelDisplayName,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { videoModelDisplayName, type ImageToVideoModel } from '@/models/models';
 import { durationGridForModel } from '@/motion/model-capabilities';
 import { snapDuration } from '@/motion/snap-duration';
-import type { Shot } from '@/lib/db/schema';
+import type { Shot } from '@/platform/server/db/schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useState } from 'react';

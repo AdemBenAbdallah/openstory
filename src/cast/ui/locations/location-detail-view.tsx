@@ -5,10 +5,10 @@ import { SheetComparisonDialog } from '@/cast/ui/sheets/sheet-comparison-dialog'
 import { SheetStalenessBanners } from '@/cast/ui/sheets/sheet-staleness-banners';
 import { SheetVersionStrip } from '@/cast/ui/sheets/sheet-version-strip';
 import { StalenessIndicator } from '@/shots/ui/staleness/staleness-indicator';
-import { Button } from '@/ui/button';
-import { ScrollArea } from '@/ui/scroll-area';
-import { Skeleton } from '@/ui/skeleton';
-import { useUploadLocationReference } from '@/hooks/use-media-upload';
+import { Button } from '@/ui/shadcn/button';
+import { ScrollArea } from '@/ui/shadcn/scroll-area';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { useUploadLocationReference } from '@/shots/ui/use-media-upload';
 import {
   locationSheetVariantKeys,
   useDiscardSequenceLocationSheetVariant,
@@ -29,10 +29,10 @@ import {
   useSequenceLocations,
   useSoftDeleteSequenceLocation,
 } from '@/cast/ui/use-sequence-locations';
-import type { LocationSheetVariant } from '@/lib/db/schema';
-import { errorMessage } from '@/shared/errors';
-import { useRealtime } from '@/components/realtime/client';
-import { useSheetStaleDetected } from '@/components/realtime/use-sheet-stale-detected';
+import type { LocationSheetVariant } from '@/platform/server/db/schema';
+import { errorMessage } from '@/platform/errors';
+import { useRealtime } from '@/platform/ui/realtime/client';
+import { useSheetStaleDetected } from '@/cast/ui/use-sheet-stale-detected';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,7 +42,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
+} from '@/ui/shadcn/alert-dialog';
 import { useFalPricing } from '@/billing/ui/use-fal-pricing';
 import { useSequence } from '@/sequences/ui/use-sequences';
 import type { TextToImageModel } from '@/models/models';
@@ -56,7 +56,7 @@ import { toast } from 'sonner';
 import { LocationBibleForm } from './location-bible-form';
 import { LocationPickerDialog } from './location-picker-dialog';
 import { LocationRecastConfirmDialog } from './location-recast-confirm-dialog';
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 
 type LocationDetailViewProps = {
   sequenceId: string;

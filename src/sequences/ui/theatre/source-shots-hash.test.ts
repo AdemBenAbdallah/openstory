@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { sha256Hex } from '@/shared/compliance/hash';
+import { sha256Hex } from '@/platform/compliance/hash';
 import {
   effectiveExportMusicUrl,
   hashSequenceExportInputs,

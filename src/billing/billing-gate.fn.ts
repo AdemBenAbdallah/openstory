@@ -4,7 +4,7 @@
  */
 
 import { createServerFn } from '@tanstack/react-start';
-import { authWithTeamMiddleware } from '@/functions/middleware';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 import { isStripeEnabled } from './constants';
 import { microsToUsd } from './money';
 

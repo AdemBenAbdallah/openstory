@@ -8,22 +8,18 @@
  * live schema — its per-field messages flow back into `<SchemaForm errors>`.
  */
 
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import {
-  ACTIVITY_ICONS,
-  ACTIVITY_LABELS,
-  categoryLabel,
-} from './model-card';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { ACTIVITY_ICONS, ACTIVITY_LABELS, categoryLabel } from './model-card';
 import { AssetResult } from '@/ui/schema-form/asset-result';
 import { SchemaForm } from '@/ui/schema-form/schema-form';
 import {
   issuesToFieldErrors,
   seedFormValue,
 } from '@/ui/schema-form/widget-plan';
-import { AppImage } from '@/ui/app-image';
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
-import { EmptyState } from '@/ui/empty-state';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
+import { EmptyState } from '@/ui/shadcn/empty-state';
 import {
   Select,
   SelectContent,
@@ -32,16 +28,16 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/ui/select';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/select';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   createGeneratedAssetFn,
   getGeneratedAssetFn,
   listGeneratedAssetsFn,
 } from '@/models/model-assets.fn';
 import { getModelDetailFn, getModelFamilyFn } from '@/models/model-catalog.fn';
-import { isInsufficientCreditsError } from '@/shared/errors';
-import type { GeneratedAsset } from '@/lib/db/schema';
+import { isInsufficientCreditsError } from '@/platform/errors';
+import type { GeneratedAsset } from '@/platform/server/db/schema';
 import {
   CATALOG_ACTIVITIES,
   type CatalogActivity,

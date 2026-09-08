@@ -16,9 +16,9 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
-import type { Frame, Shot } from '@/lib/db/schema';
+import type { Frame, Shot } from '@/platform/server/db/schema';
 
-vi.doMock('@/lib/ai/fal-pricing-live', () => ({
+vi.doMock('@/billing/server/fal-pricing-live', () => ({
   getEffectiveFalPricing: async () => ({}),
 }));
 vi.doMock('@/billing/server/preflight', () => ({

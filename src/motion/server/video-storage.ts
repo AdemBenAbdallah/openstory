@@ -4,16 +4,19 @@
  */
 
 import { getEnv } from '#env';
-import { STORAGE_BUCKETS, r2KeyFromUrl } from '@/lib/storage/buckets';
+import {
+  STORAGE_BUCKETS,
+  r2KeyFromUrl,
+} from '@/platform/server/storage/buckets';
 import { getSignedUrlWithDownload } from '#storage';
-import { uploadResponse } from '@/lib/storage/upload-response';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
 import {
   getExtensionFromUrl,
   getMimeTypeFromExtension,
-} from '@/lib/storage/file';
-import { generateId } from '@/shared/id';
+} from '@/platform/server/storage/file';
+import { generateId } from '@/platform/id';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'motion', 'video-storage']);
 

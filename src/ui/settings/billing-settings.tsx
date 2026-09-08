@@ -7,7 +7,7 @@
  */
 
 import { AutoTopUpDialog } from '@/billing/ui/auto-topup-dialog';
-import { Alert, AlertDescription, AlertTitle } from '@/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/ui/shadcn/alert';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,17 +17,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/ui/alert-dialog';
-import { Button } from '@/ui/button';
+} from '@/ui/shadcn/alert-dialog';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Skeleton } from '@/ui/skeleton';
-import { Switch } from '@/ui/switch';
+} from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Switch } from '@/ui/shadcn/switch';
 import {
   getTransactionsFn,
   reportCheckoutCanceledFn,

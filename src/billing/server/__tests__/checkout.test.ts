@@ -1,4 +1,4 @@
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { describe, expect, it, vi } from 'vitest';
 
 const create = vi.fn();
@@ -21,7 +21,7 @@ vi.doMock('@/billing/server/stripe', () => ({
 }));
 
 const captureProductEvent = vi.fn();
-vi.doMock('@/lib/observability/product-events', () => ({
+vi.doMock('@/platform/server/observability/product-events', () => ({
   captureProductEvent,
 }));
 

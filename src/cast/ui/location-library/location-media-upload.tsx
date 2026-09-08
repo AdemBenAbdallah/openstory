@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { Button } from '@/ui/button';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { Button } from '@/ui/shadcn/button';
 import {
   FileUpload,
   FileUploadDropzone,
@@ -11,7 +11,7 @@ import {
   FileUploadList,
   FileUploadTrigger,
   type FileUploadProps,
-} from '@/ui/file-upload';
+} from '@/ui/shadcn/file-upload';
 import { useUploadLocationMedia } from '@/cast/ui/use-location-library';
 import { getFileKey } from '@/ui/upload';
 import { Upload, X } from 'lucide-react';

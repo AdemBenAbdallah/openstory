@@ -41,7 +41,7 @@ import {
   type SceneCodecProbe,
 } from './transmux';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'sequence-player', 'concat-source']);
 

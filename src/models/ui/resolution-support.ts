@@ -12,10 +12,7 @@
 
 import { IMAGE_MODELS, IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import type { ImageToVideoModel, TextToImageModel } from '@/models/models';
-import {
-  DEFAULT_ASPECT_RATIO,
-  type AspectRatio,
-} from '@/models/aspect-ratios';
+import { DEFAULT_ASPECT_RATIO, type AspectRatio } from '@/models/aspect-ratios';
 import {
   RESOLUTION_OPTIONS,
   RESOLUTIONS,

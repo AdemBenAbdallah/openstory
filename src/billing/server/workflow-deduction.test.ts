@@ -4,7 +4,7 @@
  * that key is what makes a workflow-step replay charge-once (issue #846 RC1).
  */
 
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { describe, expect, it, vi } from 'vitest';
 import { micros, ZERO_MICROS } from '@/billing/money';
 

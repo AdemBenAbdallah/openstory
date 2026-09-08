@@ -16,7 +16,10 @@
  * up by segment id.
  */
 
-import type { VideoManifestEntry, VideoVariant } from '@/lib/db/schema';
+import type {
+  VideoManifestEntry,
+  VideoVariant,
+} from '@/platform/server/db/schema';
 import type { ShotView } from './shot-view';
 
 /** One video render (version) of a segment, trimmed to what the editor shows. */

@@ -19,7 +19,7 @@ import {
   type ViaAvailability,
 } from '@/models/via-availability.fn';
 import { referenceOnlyMotionModels } from '@/models/models';
-import { useAuthSession } from '@/components/auth/session-query';
+import { useAuthSession } from '@/platform/ui/auth/session-query';
 
 /** No native vias — every model that qualifies on its fal route alone. */
 const CONSERVATIVE: ViaAvailability = {

@@ -1,6 +1,6 @@
 import type { ModelGenerationStatus } from './base-model-selector';
-import type { FrameVariant } from '@/lib/db/schema';
-import type { VariantType } from '@/lib/db/schema/shot-variants';
+import type { FrameVariant } from '@/platform/server/db/schema';
+import type { VariantType } from '@/platform/server/db/schema/shot-variants';
 
 /**
  * Sequence-wide generation coverage for one model (#547). Drives the header

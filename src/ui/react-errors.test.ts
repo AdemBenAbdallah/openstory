@@ -1,4 +1,4 @@
-import { OpenStoryError } from '@/shared/errors';
+import { OpenStoryError } from '@/platform/errors';
 import { describe, expect, it, vi } from 'vitest';
 
 const captureException = vi.fn();

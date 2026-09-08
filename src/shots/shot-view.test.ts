@@ -6,7 +6,7 @@
  * shot gets so a left-joined batch read never drops it.
  */
 
-import type { Frame, Shot, VideoVariant } from '@/lib/db/schema';
+import type { Frame, Shot, VideoVariant } from '@/platform/server/db/schema';
 import {
   frameFixture,
   frameVariantFixture,

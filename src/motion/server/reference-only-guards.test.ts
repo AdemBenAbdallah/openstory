@@ -9,10 +9,7 @@ import { canRenderReferenceOnly } from './motion-generation';
 import { estimateFalCost } from '@/billing/fal-cost';
 import { estimateVideoCost } from '@/billing/cost-estimation';
 import { micros } from '@/billing/money';
-import {
-  isBatchMotionEligible,
-  isMotionGenerating,
-} from '@/shots/shot-view';
+import { isBatchMotionEligible, isMotionGenerating } from '@/shots/shot-view';
 import {
   referenceOnlyCapableWith,
   referenceOnlyMotionModels,
@@ -22,7 +19,7 @@ import {
   REFERENCE_ONLY_MODEL_ERROR,
   REFERENCE_ONLY_REQUIRES_MOTION_ERROR,
   updateSequenceSchema,
-} from '@/lib/schemas/sequence.schemas';
+} from '@/sequences/server/sequence.schemas';
 
 const xaiKeyDb = {
   userId: 'u1',

@@ -1,5 +1,5 @@
-import { Badge } from '@/ui/badge';
-import { Button } from '@/ui/button';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
 import { videoModelDisplayName } from '@/models/models';
 import type {
   SegmentVideoVersion,

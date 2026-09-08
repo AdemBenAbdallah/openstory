@@ -1,4 +1,4 @@
-import { AppImage } from '@/ui/app-image';
+import { AppImage } from '@/ui/shadcn/app-image';
 import { cn } from '@/ui/utils';
 import { Loader2 } from 'lucide-react';
 

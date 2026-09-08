@@ -20,23 +20,23 @@ import {
   CONTENT_REJECTION_EVENT,
   clipContentRejectionMessage,
   isContentRejectionError,
-} from '@/shared/ai/content-rejection';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
+} from '@/models/content-rejection';
+import { extractFalErrorMessage } from '@/models/fal-error';
 import { IMAGE_TO_VIDEO_MODELS } from '@/models/models';
 import { ZERO_MICROS } from '@/billing/money';
 import {
   deductWorkflowCredits,
   recordFalUsageStep,
 } from '@/billing/server/workflow-deduction';
-import { recordProvenance } from '@/lib/compliance/provenance';
+import { recordProvenance } from '@/platform/server/compliance/provenance';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { GeneratedAssetOutput } from '@/lib/db/schema';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { GeneratedAssetOutput } from '@/platform/server/db/schema';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { resolveMotionVia } from '@/motion/server/motion-generation';
 import { videoUrlFitsWorkflowCheckpoint } from '@/motion/server/video-storage';
-import { recordMediaGenerationSpan } from '@/lib/observability/ai-otel';
-import { getLogger } from '@/shared/observability/logger';
+import { recordMediaGenerationSpan } from '@/platform/server/observability/ai-otel';
+import { getLogger } from '@/platform/logger';
 import {
   pollStudioVideoJob,
   studioVideoCostFromUsage,
@@ -45,8 +45,8 @@ import {
 import type { StudioCreateInput } from '@/studio/schema';
 import { tagStudioReferences } from '@/studio/text-to-video';
 import { uploadStudioImage, uploadStudioVideo } from '@/studio/server/upload';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import type { StudioGenerationWorkflowInput } from '@/lib/workflow/types';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import type { StudioGenerationWorkflowInput } from '@/platform/server/workflow/types';
 import type { TokenUsage } from '@tanstack/ai';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';

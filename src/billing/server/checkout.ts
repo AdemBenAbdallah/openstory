@@ -6,8 +6,8 @@
 import {
   ValidationError,
   WelcomeCardAlreadyClaimedError,
-} from '@/shared/errors';
-import { captureProductEvent } from '@/lib/observability/product-events';
+} from '@/platform/errors';
+import { captureProductEvent } from '@/platform/server/observability/product-events';
 import {
   formatPlatformFeePercent,
   grantSignupCredits,
@@ -17,7 +17,7 @@ import {
 } from '@/billing/constants';
 import { microsToUsd } from '@/billing/money';
 import { captureCheckoutOpened } from './checkout-events';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import { getStripeOrThrow } from './stripe';
 import type Stripe from 'stripe';
 

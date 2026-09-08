@@ -27,24 +27,27 @@
 import {
   createDeadlineFetch,
   FAL_REQUEST_TIMEOUT_MS,
-} from '@/lib/ai/fal-deadline-fetch';
-import { extractFalErrorMessage } from '@/shared/ai/fal-error';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+} from '@/models/server/fal-deadline-fetch';
+import { extractFalErrorMessage } from '@/models/fal-error';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import type {
   GeneratedAssetActivity,
   GeneratedAssetOutput,
   JsonValue,
-} from '@/lib/db/schema';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/platform/server/db/schema';
+import { getLogger } from '@/platform/logger';
 import {
   extractPromptForProvenance,
   recordProvenance,
-} from '@/lib/compliance/provenance';
-import { STORAGE_BUCKETS, type StorageBucket } from '@/lib/storage/buckets';
-import { uploadResponse } from '@/lib/storage/upload-response';
-import { getMimeTypeFromExtension } from '@/lib/storage/file';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import type { AssetGenerationWorkflowInput } from '@/lib/workflow/types';
+} from '@/platform/server/compliance/provenance';
+import {
+  STORAGE_BUCKETS,
+  type StorageBucket,
+} from '@/platform/server/storage/buckets';
+import { uploadResponse } from '@/platform/server/storage/upload-response';
+import { getMimeTypeFromExtension } from '@/platform/server/storage/file';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import type { AssetGenerationWorkflowInput } from '@/platform/server/workflow/types';
 import { fal } from '@fal-ai/client';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';

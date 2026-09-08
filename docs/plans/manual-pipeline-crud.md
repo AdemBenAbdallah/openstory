@@ -94,7 +94,7 @@ Team
 ### Staleness model (do not reinvent)
 
 - **No stored `stale` flag.** Derived: `stored inputHash` vs `recompute(now)`.
-- Helpers: `src/lib/ai/input-hash.ts`, `src/shots/server/shot-staleness.ts`
+- Helpers: `src/shots/input-hash.ts`, `src/shots/server/shot-staleness.ts`
 - Cascade plan: `update-stale-plan.ts` / `update-stale-depth.ts` → `UpdateStaleShotsWorkflow`
 - Docs: `docs/architecture/prompt-staleness-dependency-graph.md`, `workflow-snapshots-and-content-hash-staleness.md`
 
@@ -370,7 +370,7 @@ You are implementing Manual Pipeline Driveability for OpenStory.
 Contract (do not violate):
 1. Server functions in src/functions/ are the product API. Extend scoped DB in
    src/lib/db/scoped/ when needed. Do NOT build public API/MCP.
-2. Staleness is derived via input hashes (src/lib/ai/input-hash.ts) — never a
+2. Staleness is derived via input hashes (src/shots/input-hash.ts) — never a
    stored stale flag. Only downstream artifacts may become stale.
 3. Versions are append-only; selection is a pointer; soft discard only.
 4. Product "delete" is SOFT (deletedAt / discardedAt / archived). Always ship a

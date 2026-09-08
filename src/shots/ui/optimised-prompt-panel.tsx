@@ -4,14 +4,14 @@
  * catalog model; most of that JSON was for models the user had not picked.
  */
 
-import { AppImage } from '@/ui/app-image';
-import { Button } from '@/ui/button';
+import { AppImage } from '@/ui/shadcn/app-image';
+import { Button } from '@/ui/shadcn/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/ui/collapsible';
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group';
+} from '@/ui/shadcn/collapsible';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/shadcn/toggle-group';
 import type {
   BoundPromptImage,
   OptimisedPromptPreview,

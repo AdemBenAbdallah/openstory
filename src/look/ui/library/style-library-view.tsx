@@ -1,22 +1,22 @@
 import { GalleryIcon } from '@/ui/icons/gallery-icon';
 import { StyleDetailDialog } from '@/look/ui/style-detail-dialog';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/ui/empty';
+} from '@/ui/shadcn/empty';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/ui/input-group';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/input-group';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import { groupStylesByCategory } from '@/look/ui/style-assets';
 import { filterStyles } from './style-filters';
-import type { Style } from '@/lib/db/schema';
+import type { Style } from '@/platform/server/db/schema';
 import { Search, X } from 'lucide-react';
 import type { ChangeEvent, FC } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

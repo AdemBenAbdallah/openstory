@@ -7,8 +7,11 @@
  * images (recurring products detected during scene split with no upload).
  */
 
-import type { ElementBibleEntry } from '@/lib/ai/scene-analysis.schema';
-import type { SequenceElementMinimal, StyleConfig } from '@/lib/db/schema';
+import type { ElementBibleEntry } from '@/shots/scene-analysis.schema';
+import type {
+  SequenceElementMinimal,
+  StyleConfig,
+} from '@/platform/server/db/schema';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 
 /**

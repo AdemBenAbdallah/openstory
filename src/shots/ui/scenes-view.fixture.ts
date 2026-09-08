@@ -12,7 +12,7 @@ import type {
   FrameVariant,
   Shot,
   VideoVariant,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import {
   frameFixture,
   frameVariantFixture,
@@ -23,7 +23,7 @@ import {
   type ShotGridSheet,
   type ShotView,
 } from '@/shots/shot-view';
-import type { Sequence, Style } from '@/lib/db/schema';
+import type { Sequence, Style } from '@/platform/server/db/schema';
 
 export const fixtureSequence: Sequence = {
   id: '01KT2TPG5WYQ15H79SAV88EH45',

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import { useState } from 'react';
 import { PromptHistorySheet } from './prompt-history-sheet';
 

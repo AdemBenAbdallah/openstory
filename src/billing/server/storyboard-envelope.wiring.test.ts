@@ -53,7 +53,7 @@ describe('storyboard envelope wiring', () => {
 
   test('reservation:short does not toast as an error (#1328)', () => {
     const source = readFileSync(
-      'src/components/realtime/use-generation-stream.ts',
+      'src/sequences/ui/use-generation-stream.ts',
       'utf8'
     );
     expect(source).not.toMatch(/toast\.error/);

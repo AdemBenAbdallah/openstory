@@ -6,16 +6,19 @@
  * structured output so usage.cost lands) but skips the production
  * structured-output allowlist so candidate models can be measured too.
  */
-import { createAdapter } from '@/lib/ai/create-adapter';
+import { createAdapter } from '@/models/server/create-adapter';
 import {
   createUsageCapture,
   extractRunError,
   throwNotedRunError,
   type LLMRequestParams,
-} from '@/lib/ai/llm-client';
+} from '@/models/server/llm-client';
 import type { TextModel } from '@/models/models';
 import { getMaxOutputTokens } from '@/models/models.config';
-import type { ChatMessage, ChatMessageImagePart } from '@/lib/prompts';
+import type {
+  ChatMessage,
+  ChatMessageImagePart,
+} from '@/platform/server/ai/prompts-index';
 import { chat, type TokenUsage } from '@tanstack/ai';
 import type { ProviderPreferences } from '@tanstack/ai-openrouter';
 import { z } from 'zod';

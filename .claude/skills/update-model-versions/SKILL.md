@@ -14,8 +14,8 @@ description: >
 
 Our model registries are the single source of truth:
 
-| Class                   | File                             | Export                   |
-| ----------------------- | -------------------------------- | ------------------------ |
+| Class                   | File                          | Export                   |
+| ----------------------- | ----------------------------- | ------------------------ |
 | Text (OpenRouter)       | `src/models/models.config.ts` | `SCRIPT_ANALYSIS_MODELS` |
 | Image (fal.ai)          | `src/models/models.ts`        | `IMAGE_MODELS`           |
 | Video / motion (fal.ai) | `src/models/models.ts`        | `IMAGE_TO_VIDEO_MODELS`  |
@@ -128,7 +128,7 @@ Per class, edit and follow through:
   shipped id may not be in its typed union yet. When a text-model bump adopts an
   id the installed catalog lacks, `bun typecheck` fails at the `createAdapter`
   call sites — add a `createModel` entry for the id to `CATALOG_LAG_MODELS`
-  (`src/lib/ai/create-adapter.ts`) with the correct `input` modalities, plus
+  (`src/models/server/create-adapter.ts`) with the correct `input` modalities, plus
   `features: ['reasoning', 'structured_outputs']` when the model supports them.
   (The reverse — pruning a bridged id once the adapter package catches up — is
   handled by Dependabot's package bump, guided by `catalog-lag.test.ts`, not by
@@ -146,7 +146,7 @@ Per class, edit and follow through:
 - **BytePlus-routed models** (a `byteplusId` on the entry): bump the
   `byteplusId` in the same PR as the fal id — never one without the other.
   Then follow through:
-  - `src/lib/ai/byteplus-pricing.ts` — the rate card is keyed by Ark model id,
+  - `src/billing/byteplus-pricing.ts` — the rate card is keyed by Ark model id,
     so the old id's entry must be replaced with the new id at the new model's
     advertised rate (BytePlus publishes no pricing API; read the pricing page,
     re-date the header comment, and note the rate is advertised-not-verified).
@@ -162,7 +162,7 @@ Per class, edit and follow through:
     `match.model` is the fal endpoint id, which aimock matches on — migrate
     them (rename dir + edit `match.model`) rather than re-recording when the
     prompt is unchanged.
-- **fal pricing:** model ids are pricing keys in `src/lib/ai/fal-pricing-data.ts`
+- **fal pricing:** model ids are pricing keys in `model_pricing` (D1, see `src/billing/server/fal-pricing-live.ts`)
   (auto-generated). After any fal id change run **`bun scripts/update-fal-pricing.ts`**
   (needs `FAL_KEY`). If it can't run, add the new id's pricing manually via the
   override path documented in that script and flag it in the PR.

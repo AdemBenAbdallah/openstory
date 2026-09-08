@@ -4,7 +4,10 @@ import {
   isValidImageToVideoModel,
 } from '@/models/models';
 import { ASPECT_RATIOS } from '@/models/aspect-ratios';
-import { MOTION_INPUT_SCHEMAS, MOTION_JSON_SCHEMAS } from '@/motion/server/endpoint-map';
+import {
+  MOTION_INPUT_SCHEMAS,
+  MOTION_JSON_SCHEMAS,
+} from '@/motion/server/endpoint-map';
 import { getDurationValues, numericOf } from '@/motion/server/motion-transform';
 import { motionResolutionTokens } from '@/motion/server/build-model-input';
 import {

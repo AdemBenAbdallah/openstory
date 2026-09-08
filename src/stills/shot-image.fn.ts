@@ -11,7 +11,7 @@ import {
   estimateStoryboardCost,
   gateEstimate,
 } from '@/billing/cost-estimation';
-import { getEffectiveFalPricing } from '@/lib/ai/fal-pricing-live';
+import { getEffectiveFalPricing } from '@/billing/server/fal-pricing-live';
 import { getFrameImageUrl } from '@/shots/server/frame-image';
 import {
   releaseReservationOnThrow,
@@ -24,26 +24,27 @@ import { buildCharacterReferenceImages } from '@/cast/character-prompt';
 import {
   generateVariantSchema,
   regenerateShotSchema,
-} from '@/lib/schemas/shot.schemas';
+} from '@/shots/server/shot.schemas';
 import { dbSceneId } from '@/shots/scene-id';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { rescanContinuityFromPrompt } from '@/shots/server/rescan-continuity-from-prompt';
 import {
   getSceneLocationReferenceImages,
   prepareShotImageWorkflowInput,
 } from '@/shots/server/shot-image-input';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { triggerStoryboard } from '@/lib/workflow/launchers';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { triggerStoryboard } from '@/sequences/server/launchers';
 import type {
   StoryboardTriggerInput,
   ShotVariantWorkflowInput,
   UpscaleShotVariantWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { matchCharactersToShotImage } from '@/shots/scene-matching';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { shotAccessMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
 
 // ---------------------------------------------------------------------------
 // Generate Shots (Storyboard Workflow)

@@ -5,7 +5,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/ui/sidebar';
+} from '@/ui/shadcn/sidebar';
 import { SECTION_ORDER } from './sections';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { allDocs } from 'content-collections';

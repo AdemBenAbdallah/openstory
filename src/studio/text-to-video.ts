@@ -12,10 +12,7 @@
  * Client-safe: no env, no adapters.
  */
 
-import {
-  IMAGE_TO_VIDEO_MODELS,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { IMAGE_TO_VIDEO_MODELS, type ImageToVideoModel } from '@/models/models';
 import { motionResolutionTokensForModel } from '@/motion/model-capabilities';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import {

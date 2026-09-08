@@ -22,16 +22,16 @@ import {
   type CharacterBibleHashFields,
   type ShotImageHashInput,
   type LocationBibleHashFields,
-} from '@/lib/ai/input-hash';
+} from '@/shots/input-hash';
 import { DEFAULT_IMAGE_MODEL } from '@/models/models';
 import { styleConfigHashBody } from '@/look/style-config';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
   StyleConfig,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import type {
   CharacterSheetWorkflowInput,
   ShotImageSceneSnapshot,
@@ -39,14 +39,14 @@ import type {
   LibraryLocationSheetWorkflowInput,
   LibraryTalentSheetWorkflowInput,
   LocationSheetWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import {
   matchCharactersToShotImage,
   matchElementsToShotImage,
   matchLocationsToScene,
 } from '@/shots/scene-matching';
 
-export type { ShotImageSceneSnapshot } from '@/lib/workflow/types';
+export type { ShotImageSceneSnapshot } from '@/platform/server/workflow/types';
 
 /**
  * The live reads the `*Current` divergence-recompute helpers make. Narrowed so

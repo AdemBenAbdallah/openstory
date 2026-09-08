@@ -11,9 +11,9 @@
  * render queues until the SDK's `loaded` callback calls `flushReactErrors`.
  */
 
-import { errorCode } from '@/shared/errors';
+import { errorCode } from '@/platform/errors';
 import { isReloadPending } from './chunk-reload';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 import posthog from 'posthog-js';
 import type { ErrorInfo } from 'react';
 

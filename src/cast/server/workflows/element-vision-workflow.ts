@@ -5,16 +5,16 @@
 import {
   describeElementImage,
   ELEMENT_VISION_MODEL,
-} from '@/lib/ai/element-vision';
+} from '@/cast/server/element-vision';
 import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import type {
   ElementVisionWorkflowInput,
   ElementVisionWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'element-vision']);
 

@@ -15,7 +15,7 @@ import { modelSupportsAspectRatio } from '@/motion/model-capabilities';
 // a retired id then fails typecheck instead of at request time (#1157).
 import type { BytePlusImageModel } from '@tanstack/ai-byteplus';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'ai', 'models']);
 

@@ -39,67 +39,68 @@ import {
   callLLMStream,
   llmCostFromUsage,
   PROMPT_REASONING,
-} from '@/lib/ai/llm-client';
+} from '@/models/server/llm-client';
 import { PREVIEW_IMAGE_MODEL } from '@/models/models';
-import {
-  getMaxOutputTokens,
-  SCENE_SPLIT_MODEL,
-} from '@/models/models.config';
+import { getMaxOutputTokens, SCENE_SPLIT_MODEL } from '@/models/models.config';
 import {
   type SceneSplitBiblesResult,
   type SceneSplitScenesResult,
   sceneSplitBiblesResultSchema,
   sceneSplitScenesResultSchema,
-} from '@/lib/ai/response-schemas';
+} from '@/sequences/response-schemas';
 import {
   addLineGutter,
   isExcessivelyRepaired,
   sceneIndexForLine,
   type ResolvedBoundaries,
-} from '@/lib/ai/boundary-split';
+} from '@/sequences/boundary-split';
 import {
   assembleScenes,
   createStreamingSceneParser,
   type SceneSplittingScene,
-} from '@/lib/ai/streaming-scene-parser';
-import { reconcileSceneTags } from '@/lib/ai/tag-reconcile';
+} from '@/sequences/server/streaming-scene-parser';
+import { reconcileSceneTags } from '@/sequences/tag-reconcile';
 import type {
   ElementBibleEntry,
   LocationBibleEntry,
-} from '@/lib/ai/scene-analysis.schema';
+} from '@/shots/scene-analysis.schema';
 import { addMicros, type Microdollars } from '@/billing/money';
 import type { TokenUsage } from '@tanstack/ai';
 import { deductWorkflowCredits } from '@/billing/server/workflow-deduction';
 import {
   buildSceneInsert,
   buildSceneShotLinks,
-} from '@/lib/ai/scene-persistence';
+} from '@/sequences/server/scene-persistence';
 import { aspectRatioToImageSize } from '@/models/aspect-ratios';
-import { generateId } from '@/shared/id';
-import { dbSceneId, type NewShot } from '@/lib/db/schema';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
-import type { ShotWithAnchorFrame } from '@/lib/db/scoped/shots';
-import { getChatPrompt, type ChatMessage } from '@/lib/prompts';
+import { generateId } from '@/platform/id';
+import type { NewShot } from '@/platform/server/db/schema';
+import { dbSceneId } from '@/shots/scene-id';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import type { ShotWithAnchorFrame } from '@/shots/server/db/shots';
+import {
+  getChatPrompt,
+  type ChatMessage,
+} from '@/platform/server/ai/prompts-index';
 import { buildPreviewPrompt } from '@/sequences/server/poster-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import { previewImageDedupId } from '@/lib/workflow/dedup-ids';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import { handleLlmAuthFailure } from '@/lib/workflow/llm-auth-failure';
-import { sanitizeFailResponse } from '@/lib/workflow/sanitize-fail-response';
+import { getGenerationChannel } from '@/platform/realtime';
+import { previewImageDedupId } from '@/platform/server/workflow/dedup-ids';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import { handleLlmAuthFailure } from '@/platform/server/workflow/llm-auth-failure';
+import { sanitizeFailResponse } from '@/platform/server/workflow/sanitize-fail-response';
 import type {
   ImageWorkflowInput,
   SceneSplitWorkflowInput,
   SceneSplitWorkflowResult,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import type {
   WorkflowEvent,
   WorkflowStep,
   WorkflowStepConfig,
 } from 'cloudflare:workers';
 import { NonRetryableError } from 'cloudflare:workflows';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'scene-split']);
 

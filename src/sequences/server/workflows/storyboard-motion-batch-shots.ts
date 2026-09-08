@@ -14,19 +14,19 @@
  */
 
 import type { ImageToVideoModel } from '@/models/models';
-import type { MotionPrompt, Scene } from '@/lib/ai/scene-analysis.schema';
+import type { MotionPrompt, Scene } from '@/shots/scene-analysis.schema';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
 import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
 import { buildMotionReferenceImages } from '@/motion/server/build-motion-references';
-import { getLogger } from '@/shared/observability/logger';
-import { WorkflowValidationError } from '@/lib/workflow/errors';
-import type { BatchMotionMusicWorkflowInput } from '@/lib/workflow/types';
+import { getLogger } from '@/platform/logger';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import type { BatchMotionMusicWorkflowInput } from '@/platform/server/workflow/types';
 
 const logger = getLogger(['openstory', 'workflow', 'analyze-script']);
 

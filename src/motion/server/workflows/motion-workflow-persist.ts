@@ -24,8 +24,8 @@
  * testable without bootstrapping a `WorkflowEntrypoint`.
  */
 
-import type { NewShot, NewVideoVariant } from '@/lib/db/schema';
-import type { RecordEventInput } from '@/lib/db/scoped/sequence-events';
+import type { NewShot, NewVideoVariant } from '@/platform/server/db/schema';
+import type { RecordEventInput } from '@/sequences/server/db/sequence-events';
 
 export type MotionStorageResult = { url: string; path: string };
 

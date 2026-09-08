@@ -13,20 +13,20 @@ import {
   requireUploadAttestation,
   type LikenessRequestContext,
   type UploadAttestationInput,
-} from '@/lib/compliance/likeness-upload';
-import { generateId } from '@/shared/id';
-import type { Talent } from '@/lib/db/schema';
-import type { ScopedDb } from '@/lib/db/scoped';
-import { getLogger } from '@/shared/observability/logger';
+} from '@/cast/server/likeness-upload';
+import { generateId } from '@/platform/id';
+import type { Talent } from '@/platform/server/db/schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
 import {
   STORAGE_BUCKETS,
   getPathFromUrl,
   getPublicUrl,
-} from '@/lib/storage/buckets';
-import { getExtensionFromUrl } from '@/lib/storage/file';
-import type { LibraryTalentSheetWorkflowInput } from '@/lib/workflow/types';
+} from '@/platform/server/storage/buckets';
+import { getExtensionFromUrl } from '@/platform/server/storage/file';
+import type { LibraryTalentSheetWorkflowInput } from '@/platform/server/workflow/types';
 import { computeLibraryTalentSheetHashFromDto } from '@/cast/server/workflows/sheet-snapshots';
-import type { CharacterBibleEntry } from '@/lib/ai/scene-analysis.schema';
+import type { CharacterBibleEntry } from '@/shots/scene-analysis.schema';
 import {
   analyzeTalentMediaForTeam,
   sheetMetadataFromAnalysis,

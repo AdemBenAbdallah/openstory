@@ -2,25 +2,25 @@
  * The `generateMusicPromptWorflow` durable workflow.
  *
  * The LLM call goes through `durableLLMCallCf` (the CF port of
- * `durableLLMCall`); see `src/lib/workflows/llm-call-helper.ts`.
+ * `durableLLMCall`); see `src/models/server/llm-call-helper.ts`.
  *
  * Class name `MusicPromptWorkflow` intentionally fixes the legacy typo in
  * the prior export name (`generateMusicPromptWorflow`).
  */
 
-import { computeMusicPromptInputHash } from '@/lib/ai/input-hash';
-import { musicDesignResultSchema } from '@/lib/ai/response-schemas';
-import type { WorkflowScopedDb } from '@/lib/db/scoped-workflow';
+import { computeMusicPromptInputHash } from '@/shots/input-hash';
+import { musicDesignResultSchema } from '@/sequences/response-schemas';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
 import { reinforceInstrumentalTags } from '@/audio/server/music-prompt';
-import { getGenerationChannel } from '@/shared/realtime';
-import { OpenStoryWorkflowEntrypoint } from '@/lib/workflow/base-workflow';
+import { getGenerationChannel } from '@/platform/realtime';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
 import type {
   MusicPromptWorkflowInput,
   MusicPromptWorkflowResult,
-} from '@/lib/workflow/types';
-import { durableLLMCallCf } from '@/lib/workflows/llm-call-helper';
+} from '@/platform/server/workflow/types';
+import { durableLLMCallCf } from '@/models/server/llm-call-helper';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'workflow', 'music-prompt']);
 

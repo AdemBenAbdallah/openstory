@@ -1,10 +1,10 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
 import { AddLocationDialog } from '@/cast/ui/location-library/add-location-dialog';
 import { LocationLibraryFilters } from '@/cast/ui/location-library/location-library-filters';
 import { LocationLibraryList } from '@/cast/ui/location-library/location-library-list';
 import { PageContainer } from '@/ui/layout/page-container';
 import { PageIntro } from '@/ui/typography/page-intro';
-import { EmptyState } from '@/ui/empty-state';
+import { EmptyState } from '@/ui/shadcn/empty-state';
 import { useLibraryLocations } from '@/cast/ui/use-sequence-locations';
 import { createFileRoute } from '@tanstack/react-router';
 import { MapPin } from 'lucide-react';

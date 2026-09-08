@@ -4,21 +4,21 @@
  * Approval mints a normal API key, revocable under Settings → Developer.
  */
 
-import { Button } from '@/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
-import { Input } from '@/ui/input';
-import { Skeleton } from '@/ui/skeleton';
+} from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   decideDeviceGrantFn,
   lookupDeviceGrantFn,
-} from '@/functions/device-auth';
-import { requireSessionOrRedirect } from '@/components/auth/route-guards';
+} from '@/platform/device-auth.fn';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
 import {
   useMutation,
   useQueryClient,

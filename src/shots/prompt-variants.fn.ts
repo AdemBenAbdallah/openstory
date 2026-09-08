@@ -10,7 +10,7 @@ import {
   motionPromptInputHashMatches,
   musicPromptInputHashMatches,
   visualPromptInputHashMatches,
-} from '@/lib/ai/input-hash';
+} from './input-hash';
 import {
   DEFAULT_ANALYSIS_MODEL,
   getAnalysisModelById,
@@ -18,35 +18,36 @@ import {
 import {
   loadShotPromptContext,
   narrowShotPromptContext,
-} from '@/lib/ai/prompt-context';
+} from '@/shots/server/prompt-context';
 import {
   SHOT_PROMPT_TYPES,
   type ShotPromptVersion,
   type SequenceMusicPromptVersion,
-} from '@/lib/db/schema';
-import { ulidSchema } from '@/lib/schemas/id.schemas';
+} from '@/platform/server/db/schema';
+import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import {
   loadSceneContextBySequence,
   resolveSceneForShot,
 } from '@/shots/server/scene-script';
 import { getFrameImageUrl } from '@/shots/server/frame-image';
-import { simpleHash } from '@/shared/utils/hash';
-import { triggerWorkflow } from '@/lib/workflow/client';
-import { terminateSingleArtifactRun } from '@/lib/workflow/run-outcome';
-import type { Scene } from '@/lib/ai/scene-analysis.schema';
-import type { ScopedDb } from '@/lib/db/scoped';
+import { simpleHash } from '@/platform/hash';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { terminateSingleArtifactRun } from '@/platform/server/workflow/run-outcome';
+import type { Scene } from './scene-analysis.schema';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 import type {
   MotionPromptWorkflowInput,
   MusicPromptWorkflowInput,
   FramePromptWorkflowInput,
-} from '@/lib/workflow/types';
+} from '@/platform/server/workflow/types';
 import { buildMusicSceneSummaries } from '@/audio/server/workflows/music-scene-summaries';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { shotAccessMiddleware, sequenceAccessMiddleware } from '@/functions/middleware';
+import { sequenceAccessMiddleware } from '@/platform/middleware.fn';
+import { shotAccessMiddleware } from '@/shots/shot-access.fn';
 
-import { getLogger } from '@/shared/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'serverFn', 'prompt-variants']);
 

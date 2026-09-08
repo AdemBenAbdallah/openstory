@@ -9,10 +9,7 @@
  */
 
 import { NATIVE_GEMINI_VIDEO_MODEL } from '@/models/gemini-native';
-import {
-  IMAGE_TO_VIDEO_MODELS,
-  type ImageToVideoModel,
-} from '@/models/models';
+import { IMAGE_TO_VIDEO_MODELS, type ImageToVideoModel } from '@/models/models';
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { ReferenceImageDescription } from '@/stills/reference-image-prompt';
 import {

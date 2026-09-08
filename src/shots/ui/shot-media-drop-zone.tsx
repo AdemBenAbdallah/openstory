@@ -1,9 +1,6 @@
-import {
-  useReplaceFrameImage,
-  useReplaceShotVideo,
-} from '@/hooks/use-media-upload';
+import { useReplaceFrameImage, useReplaceShotVideo } from './use-media-upload';
 import type { AspectRatio } from '@/models/aspect-ratios';
-import { errorMessage } from '@/shared/errors';
+import { errorMessage } from '@/platform/errors';
 import { Loader2, Upload } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { toast } from 'sonner';

@@ -5,14 +5,14 @@
  * entry; this module is server-only.
  */
 
-import type { AssemblableMotionPrompt } from '@/lib/ai/scene-analysis.schema';
-import { isBytePlusConfigured } from '@/lib/ai/byteplus-config';
-import { toCdnUrl } from '@/lib/storage/buckets';
+import type { AssemblableMotionPrompt } from '@/shots/scene-analysis.schema';
+import { isBytePlusConfigured } from '@/models/server/byteplus-config';
+import { toCdnUrl } from '@/platform/server/storage/buckets';
 import type {
   CharacterMinimal,
   SequenceElementMinimal,
   SequenceLocationMinimal,
-} from '@/lib/db/schema';
+} from '@/platform/server/db/schema';
 import { isNativeGeminiVideoModel } from '@/models/gemini-native';
 import { isNativeGrokVideoModel } from '@/models/grok-native';
 import {

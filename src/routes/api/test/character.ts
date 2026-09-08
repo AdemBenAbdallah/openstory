@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { createTestCharacter, getTestCharacter } from '@/lib/test/seed';
+import {
+  createTestCharacter,
+  getTestCharacter,
+} from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateCharacterSchema = z.object({
