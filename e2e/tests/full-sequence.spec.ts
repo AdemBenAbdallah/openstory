@@ -36,6 +36,7 @@ import {
 } from '../fixtures/talent.fixture';
 import {
   fillScriptEditor,
+  openComposerReference,
   pinRecordedPipelineSettings,
   selectComposerStyle,
   selectRecordedPipelineModels,
@@ -261,10 +262,7 @@ SUPER:  CORAL.  OUT NOW.
       );
 
       // 5. Pick talent.
-      await page
-        .locator('main')
-        .getByRole('button', { name: 'Talent' })
-        .click();
+      await openComposerReference(page, 'Talent');
       const talentDialog = page.getByRole('dialog');
       await expect(talentDialog).toBeVisible({ timeout: 10_000 });
       const firstTalent = testTalents[0];
@@ -276,10 +274,7 @@ SUPER:  CORAL.  OUT NOW.
       await expect(talentDialog).not.toBeVisible();
 
       // 6. Pick location.
-      await page
-        .locator('main')
-        .getByRole('button', { name: 'Locations' })
-        .click();
+      await openComposerReference(page, 'Locations');
       const locationDialog = page.getByRole('dialog');
       await expect(locationDialog).toBeVisible({ timeout: 10_000 });
       if (!testLocation) throw new Error('testLocation not initialised');
@@ -314,7 +309,7 @@ SUPER:  CORAL.  OUT NOW.
       // dialog because the confirm button is also called "Generate".
       const stopAtAlert = page.getByRole('alertdialog');
       await expect(
-        stopAtAlert.getByText('How much control do you want?')
+        stopAtAlert.getByText('Generate the whole sequence?')
       ).toBeVisible({ timeout: t(10_000) });
       await stopAtAlert.getByRole('button', { name: /^Generate$/i }).click();
 

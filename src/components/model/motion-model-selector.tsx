@@ -201,6 +201,7 @@ type MotionModelSelectorProps = {
   selectedModel: ImageToVideoModel;
   onModelChange: (model: ImageToVideoModel) => void;
   disabled?: boolean;
+  size?: 'default' | 'sm';
   /** Per-scene generation status by model (#545); renders ✓/⟳/! in the list. */
   generatedStatuses?: Map<string, ModelGenerationStatus>;
 } & MotionModelFilterProps;
@@ -209,6 +210,7 @@ export const MotionModelSelector: React.FC<MotionModelSelectorProps> = ({
   selectedModel,
   onModelChange,
   disabled = false,
+  size = 'default',
   aspectRatio,
   styleCategory,
   recommendedVideoModel,
@@ -255,6 +257,7 @@ export const MotionModelSelector: React.FC<MotionModelSelectorProps> = ({
         }}
         disabled={disabled}
         multiSelect={false}
+        size={size}
       />
       <RecommendationHint
         status={recommendationStatus}
@@ -269,6 +272,7 @@ type MotionModelMultiSelectorProps = {
   selectedModels: ImageToVideoModel[];
   onModelsChange: (models: ImageToVideoModel[]) => void;
   disabled?: boolean;
+  size?: 'default' | 'sm';
 } & MotionModelFilterProps;
 
 export const MotionModelMultiSelector: React.FC<
@@ -277,6 +281,7 @@ export const MotionModelMultiSelector: React.FC<
   selectedModels,
   onModelsChange,
   disabled = false,
+  size = 'default',
   aspectRatio,
   styleCategory,
   recommendedVideoModel,
@@ -313,6 +318,7 @@ export const MotionModelMultiSelector: React.FC<
         }}
         disabled={disabled}
         multiSelect={true}
+        size={size}
       />
       <RecommendationHint
         status={recommendationStatus}
