@@ -167,6 +167,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     phoneCountry,
     hasUsedCredits,
     hasSignupGrant,
+    hasOtherCredits,
     isSuccess: balanceReady,
     isError: balanceFailed,
   } = useBillingBalance();
@@ -196,6 +197,7 @@ export const WelcomeCreditsProvider: React.FC<{ children: ReactNode }> = ({
     stripeEnabled,
     hasSignupGrant,
     hasUsedCredits,
+    hasOtherCredits,
   });
 
   const grantOff = SIGNUP_GRANT_MICROS <= 0;

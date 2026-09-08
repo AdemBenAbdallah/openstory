@@ -22,6 +22,7 @@ import {
   type ChatCompletionRequest,
   type Fixture,
   type JournalEntry,
+  type Mountable,
 } from '@copilotkit/aimock';
 import { createHash } from 'node:crypto';
 import {
@@ -46,6 +47,15 @@ const FAL_FIXTURE_DIR = resolve(
   import.meta.dirname,
   '../fixtures/recorded/fal'
 );
+// Native xAI gets its own aimock: the images / Responses handlers proxy to
+// the `openai` upstream, which on :4010 is OpenRouter. The worker reaches it
+// via XAI_BASE_URL (playwright.config.ts) — path shapes are OpenAI's, so no
+// request transform is needed, and the recorder writes flat into this dir.
+const XAI_AIMOCK_PORT = 4011;
+const XAI_FIXTURE_DIR = resolve(
+  import.meta.dirname,
+  '../fixtures/recorded/xai'
+);
 // aimock's recorder writes flat into a single directory; we point it here and
 // `sortStagingFixtures()` (run on shutdown) classifies each new file by its
 // provider-key prefix (`openai-…` vs `fal-…`) and moves it into the right
@@ -61,9 +71,12 @@ const RECORD_STAGING_DIR = resolve(
 // family — otherwise its recordings get stuck in `_unsorted/` with a warning.
 const STAGE_PREFIXES: ReadonlyArray<readonly [string, string]> = [
   ['Enhance the script inside <USER_SCRIPT>', 'script-enhance'],
+  // The duration-fix retry turn of the same call (enhance-duration.ts).
+  ['Your clip duration labels sum to', 'script-enhance'],
   ['STYLE CATALOG (choose by index):', 'style-recommend'],
   ['Split the script within the USER_SCRIPT', 'script-analyze'],
   ['Extract a complete character bible', 'script-bibles'],
+  ['Cover each scene.', 'script-shot-list'],
   ['Match the following library locations', 'location-match'],
   ['Cast the following talent', 'talent-cast'],
   ['Generate the visual prompt for the starting frame', 'visual-prompts'],
@@ -297,7 +310,10 @@ function tolerantUserMessageRegex(userMessage: string): RegExp {
         : '[0-9A-HJKMNP-TV-Z]{26}';
     })
     .join('');
-  return new RegExp(pattern);
+  // Anchored: a fixture must match the WHOLE prompt. Unanchored, a prompt
+  // that is a prefix of another (the untagged talent-vision prompt vs. its
+  // `Uploaded filename:` variants) answered for both, first file wins.
+  return new RegExp(`^${pattern}$`);
 }
 
 // The OpenRouter fixtures were recorded when DEFAULT_ANALYSIS_MODEL was Opus 5
@@ -328,7 +344,111 @@ function tolerateRuntimeIds(fixtures: Fixture[]): Fixture[] {
   return fixtures;
 }
 
+/**
+ * xAI's `/v1/images/edits` takes `application/json` (the Grok adapter posts
+ * `{ model, prompt, image | images }`), but aimock's built-in edits handler
+ * only parses OpenAI's multipart form and 400s a JSON body with
+ * "Missing required parameter: 'prompt'" — the character-sheet step that
+ * hands Grok Imagine a reference still hit exactly that. This mount sits in
+ * front of the built-in route and takes JSON only:
+ *
+ * - replay: re-wrap prompt + model as multipart and loop back into the same
+ *   server, so aimock's own matcher, journal and STRICT abort still apply
+ *   (the mount returns false for multipart, which is what lets the loopback
+ *   reach the built-in handler);
+ * - record: aimock would forward that multipart to xAI, which rejects it, so
+ *   post the JSON upstream ourselves and write the fixture in the same
+ *   `{ match: { endpoint: 'image' }, response: { image } }` shape the
+ *   recorder uses for generations.
+ */
+function xaiJsonImageEditsMount(): Mountable {
+  return {
+    async handleRequest(req, res) {
+      if (
+        req.method !== 'POST' ||
+        !req.headers['content-type']?.includes('application/json')
+      ) {
+        return false;
+      }
+      const chunks: Buffer[] = [];
+      for await (const chunk of req) chunks.push(Buffer.from(chunk));
+      const raw = Buffer.concat(chunks);
+      const body: { model: string; prompt: string } = JSON.parse(
+        raw.toString('utf8')
+      );
+
+      let upstream: Response;
+      if (E2E_RECORDING) {
+        upstream = await fetch('https://api.x.ai/v1/images/edits', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            authorization: req.headers.authorization ?? '',
+          },
+          body: raw,
+        });
+        if (upstream.ok) {
+          const json: { data?: Array<{ url?: string; b64_json?: string }> } =
+            await upstream.clone().json();
+          const image = json.data?.[0];
+          if (image) {
+            const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const hash = createHash('sha256')
+              .update(body.prompt)
+              .digest('hex')
+              .slice(0, 8);
+            mkdirSync(XAI_FIXTURE_DIR, { recursive: true });
+            writeFileSync(
+              resolve(XAI_FIXTURE_DIR, `openai-${stamp}-${hash}.json`),
+              JSON.stringify(
+                {
+                  fixtures: [
+                    {
+                      match: {
+                        endpoint: 'image',
+                        userMessage: body.prompt,
+                        model: body.model,
+                      },
+                      response: { image },
+                    },
+                  ],
+                },
+                null,
+                2
+              )
+            );
+          }
+        }
+      } else {
+        // Hand-built multipart: the web FormData serializer rewrites every \n
+        // in a field value as \r\n, and the recorded prompt has bare \n — the
+        // matcher compares them byte for byte.
+        const boundary = `----xai-edits-${Date.now()}`;
+        const part = (name: string, value: string) =>
+          `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`;
+        upstream = await fetch(
+          `http://127.0.0.1:${XAI_AIMOCK_PORT}/v1/images/edits`,
+          {
+            method: 'POST',
+            headers: {
+              'content-type': `multipart/form-data; boundary=${boundary}`,
+            },
+            body: `${part('prompt', body.prompt)}${part('model', body.model)}--${boundary}--\r\n`,
+          }
+        );
+      }
+      res.writeHead(upstream.status, {
+        'content-type':
+          upstream.headers.get('content-type') ?? 'application/json',
+      });
+      res.end(Buffer.from(await upstream.arrayBuffer()));
+      return true;
+    },
+  };
+}
+
 let mockServer: LLMock | null = null;
+let xaiMockServer: LLMock | null = null;
 
 export async function startAimockServer(): Promise<string> {
   mockServer = new LLMock({
@@ -403,6 +523,32 @@ export async function startAimockServer(): Promise<string> {
   // spec keeps running. Kill Playwright on the first miss instead.
   if (!E2E_RECORDING) abortPlaywrightOnStrictMiss(mockServer);
   console.log(`[e2e] aimock server started at ${url}`);
+
+  xaiMockServer = new LLMock({
+    port: XAI_AIMOCK_PORT,
+    strict: !E2E_RECORDING,
+    logLevel: 'info',
+    replaySpeed: Number(process.env.AIMOCK_REPLAY_SPEED ?? 100),
+    ...(E2E_RECORDING && {
+      record: {
+        // Chat (Responses) + images go through the generic `openai` proxy;
+        // /v1/videos/* has its own handler keyed on `grok`.
+        providers: { openai: 'https://api.x.ai', grok: 'https://api.x.ai' },
+        fixturePath: XAI_FIXTURE_DIR,
+        // Grok Imagine's image endpoint is synchronous: it answers only once
+        // the still is rendered, which under a concurrent fan-out runs past
+        // aimock's 30s default deadline for response HEADERS.
+        upstreamTimeoutMs: 180_000,
+        bodyTimeoutMs: 120_000,
+      },
+    }),
+  }).mount('/v1/images/edits', xaiJsonImageEditsMount());
+  if (existsSync(XAI_FIXTURE_DIR)) {
+    xaiMockServer.addFixtures(loadFixturesRecursive(XAI_FIXTURE_DIR));
+  }
+  const xaiUrl = await xaiMockServer.start();
+  if (!E2E_RECORDING) abortPlaywrightOnStrictMiss(xaiMockServer);
+  console.log(`[e2e] aimock xAI server started at ${xaiUrl}`);
   return url;
 }
 
@@ -453,6 +599,14 @@ function abortPlaywrightOnStrictMiss(server: LLMock): void {
 }
 
 export async function stopAimockServer(): Promise<void> {
+  if (xaiMockServer) {
+    try {
+      await xaiMockServer.stop();
+    } catch {
+      // Ignore stop errors — the server may never have started.
+    }
+    xaiMockServer = null;
+  }
   if (!mockServer) return;
   dumpUnmatchedRequests(mockServer);
   if (E2E_RECORDING) sortStagingFixtures();
