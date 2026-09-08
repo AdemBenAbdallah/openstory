@@ -27,7 +27,7 @@
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { styleSlug } from '@/look/style-slug';
 import { z } from 'zod';
 

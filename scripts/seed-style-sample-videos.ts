@@ -25,7 +25,7 @@
 import { styles, teams } from '@/platform/server/db/schema';
 import type { StyleSampleVideo } from '@/platform/server/db/schema/libraries';
 import { buildSampleVideos } from '@/look/server/sample-videos';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { eq } from 'drizzle-orm';
 import { getTableConfig } from 'drizzle-orm/sqlite-core';
 import { writeFile } from 'node:fs/promises';

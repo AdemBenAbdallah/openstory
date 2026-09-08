@@ -7,7 +7,7 @@ import { parseStyleConfig } from '@/look/style-config';
 import { generateImageWithProvider } from '@/stills/server/image-generation';
 import { buildStyledImagePrompt } from '@/look/server/style-image-prompt';
 import { styleSlug } from '@/look/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { PhotonImage } from '@cf-wasm/photon';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';

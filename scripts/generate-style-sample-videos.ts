@@ -70,7 +70,7 @@ import {
   type SampleBeat,
 } from '@/look/server/sample-videos';
 import { styleSlug } from '@/look/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';

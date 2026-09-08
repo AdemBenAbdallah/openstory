@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { z } from 'zod';
 import { migrateStyleConfigV1ToV2 } from '@/look/style-config';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { toEnhanceInputs } from '@/models/enhance-inputs';
 import { createUserPrompt } from './script-enhancer';
 

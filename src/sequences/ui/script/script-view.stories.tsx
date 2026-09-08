@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AuthGateStub } from '@/platform/ui/auth/auth-gate-provider';
 import { styleKeys } from '@/look/ui/use-styles';
 import type { Sequence } from '@/platform/server/db/schema/sequences';
-import { MOCK_SYSTEM_STYLES } from '@/look/server/style-templates';
+import { MOCK_SYSTEM_STYLES } from '@/look/style-templates';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ScriptView } from './script-view';
 

@@ -28,7 +28,7 @@ import {
 import { relations } from '@/platform/server/db/schema/relations';
 import { ensureSystemTemplatesSeeded } from './seed-system-templates';
 import { DEFAULT_SYSTEM_LOCATIONS } from '@/cast/server/location/location-templates';
-import { DEFAULT_SYSTEM_STYLES } from '@/look/server/style-templates';
+import { DEFAULT_SYSTEM_STYLES } from '@/look/style-templates';
 import { DEFAULT_SYSTEM_TALENT } from '@/cast/server/talent/talent-templates';
 import { createClient, type Client } from '@libsql/client';
 import { eq } from 'drizzle-orm';

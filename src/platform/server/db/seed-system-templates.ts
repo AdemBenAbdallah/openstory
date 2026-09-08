@@ -19,7 +19,7 @@ import {
   DEFAULT_SYSTEM_LOCATIONS,
   getLocationSheetUrl,
 } from '@/cast/server/location/location-templates';
-import { DEFAULT_SYSTEM_STYLES } from '@/look/server/style-templates';
+import { DEFAULT_SYSTEM_STYLES } from '@/look/style-templates';
 import {
   DEFAULT_SYSTEM_TALENT,
   getTalentSheetUrl,

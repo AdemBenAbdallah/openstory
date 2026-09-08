@@ -14,7 +14,7 @@ import type {
   LocationBibleEntry,
   Scene,
 } from '@/shots/scene-analysis.schema';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import type { StyleConfig } from '@/look/style-config';
 
 const DIR = dirname(fileURLToPath(import.meta.url));

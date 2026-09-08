@@ -1,6 +1,6 @@
-import type { StyleConfig } from '@/look/style-config';
-import { styleSlug } from '@/look/style-slug';
-import { getPublicAssetsDomain } from '@/platform/server/storage/public-assets';
+import type { StyleConfig } from './style-config';
+import { styleSlug } from './style-slug';
+import { getPublicAssetsDomain } from '@/platform/public-assets';
 import type { Style } from '@/platform/server/db/schema';
 
 function getStylePreviewUrl(styleName: string): string {

@@ -1,5 +1,5 @@
 import { StyleSampleVideoSchema } from '@/platform/server/db/schema/libraries';
-import { DEFAULT_STYLE_TEMPLATES } from './style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { describe, expect, it } from 'vitest';
 import {
   briefForStyle,

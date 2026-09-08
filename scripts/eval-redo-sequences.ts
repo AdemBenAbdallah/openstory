@@ -20,7 +20,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { briefForStyle } from '@/look/server/sample-videos';
 import { styleSlug } from '@/look/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { z } from 'zod';
 
 const OPENROUTER_KEY = process.env.OPENROUTER_KEY;

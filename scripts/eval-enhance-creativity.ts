@@ -30,7 +30,7 @@ import {
 } from '@/models/models.config';
 import { toEnhanceInputs } from '@/models/enhance-inputs';
 import { createUserPrompt } from '@/sequences/script-enhancer';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { WORKFLOW_TEXT_PROMPTS } from '@/platform/server/ai/workflow-prompts';
 import { writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';

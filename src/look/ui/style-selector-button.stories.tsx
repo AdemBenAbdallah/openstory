@@ -1,5 +1,5 @@
 import { useStyles } from './use-styles';
-import { MOCK_SYSTEM_STYLES } from '@/look/server/style-templates';
+import { MOCK_SYSTEM_STYLES } from '@/look/style-templates';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { StyleSelectionDialogWithTrigger } from './style-selection-dialog';

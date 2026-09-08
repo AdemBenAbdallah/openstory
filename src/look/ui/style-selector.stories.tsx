@@ -1,6 +1,6 @@
 import { generateMockStyles } from '@/mocks/data-generators';
 import { DEFAULT_COMPOSER_STYLE_CATEGORY } from './composer-style-row';
-import { MOCK_SYSTEM_STYLES } from '@/look/server/style-templates';
+import { MOCK_SYSTEM_STYLES } from '@/look/style-templates';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { fn } from 'storybook/test';

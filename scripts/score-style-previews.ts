@@ -39,7 +39,7 @@ import type {
   ChatMessageContentPart,
 } from '@/platform/server/ai/prompts-index';
 import { styleSlug } from '@/look/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { PhotonImage } from '@cf-wasm/photon';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';

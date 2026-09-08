@@ -10,7 +10,7 @@ import {
   toStyleProjection,
   type StyleConfigV1,
 } from './style-config';
-import { DEFAULT_STYLE_TEMPLATES } from '@/look/server/style-templates';
+import { DEFAULT_STYLE_TEMPLATES } from './style-templates';
 
 const V1: StyleConfigV1 = {
   mood: 'tense and paranoid',
