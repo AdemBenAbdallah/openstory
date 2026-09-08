@@ -12,18 +12,15 @@ import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = resolve(__dirname, '..', '..');
-const DOMAINS = [
-  'sequences',
-  'shots',
-  'motion',
-  'stills',
-  'audio',
-  'cast',
-  'look',
-  'billing',
-  'studio',
-  'models',
-];
+/** Top-level src/ folders that are NOT product domains; everything else is. */
+const NOT_DOMAINS = new Set([
+  'platform',
+  'ui',
+  'mocks',
+  'test',
+  'types',
+  'styles',
+]);
 
 /** Files the lint config exempts, read from the override that names them. */
 function compositionRootsFromLint(): string[] {
@@ -58,7 +55,10 @@ function domainOf(from: string, spec: string): string | null {
       : null;
   if (!target) return null;
   const top = target.split('/')[1];
-  return top && DOMAINS.includes(top) ? top : null;
+  if (!top || !target.startsWith('src/')) return null;
+  // A root file (src/server.ts) has no folder; only folders are domains.
+  if (!target.slice(4).includes('/')) return null;
+  return NOT_DOMAINS.has(top) ? null : top;
 }
 
 describe('src/platform is domain-blind', () => {

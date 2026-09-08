@@ -201,17 +201,17 @@
         "boundaries/platform-domain-blind": [
           "error",
           {
+            // Everything under src/ is a product domain unless named here, so a
+            // new domain folder is covered without touching this list, and a
+            // new non-domain folder fails loudly until it is added.
             "modules": [
-              "@/sequences/**",
-              "@/shots/**",
-              "@/motion/**",
-              "@/stills/**",
-              "@/audio/**",
-              "@/cast/**",
-              "@/look/**",
-              "@/billing/**",
-              "@/studio/**",
-              "@/models/**"
+              "@/**",
+              "!@/platform/**",
+              "!@/ui/**",
+              "!@/mocks/**",
+              "!@/test/**",
+              "!@/types/**",
+              "!@/styles/**"
             ],
             "message": "src/platform is domain-blind: it may not value-import a product domain. Move this file to the domain it is about (its server/ half if it needs server code), or make the import type-only. Composition roots are listed in the `boundaries/platform-domain-blind` override."
           }
