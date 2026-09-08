@@ -167,6 +167,9 @@
     {
       // Raw `#db-client` readers: platform-wide (not team-scoped) tables or
       // the scoped-db factory itself. Pinned by db-access-allowlist.test.ts.
+      // The four pricing/reconcile jobs + the cron dispatcher are one
+      // capability without a db-layer module yet (#1535); they collapse to
+      // one entry when it lands.
       "files": [
         "src/platform/server/db/scoped.ts",
         "src/platform/server/db/client.ts",
