@@ -160,7 +160,6 @@
         "src/billing/server/fal-pricing-live.ts",
         "src/billing/server/seed-model-pricing.ts",
         "src/**/*.test.ts",
-        "src/**/*.test.tsx",
         "scripts/**"
       ],
       "rules": { "boundaries/no-sql": "off" }
