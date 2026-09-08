@@ -278,7 +278,8 @@ export type WelcomeGrantSource =
   | 'setup_checkout'
   | 'setup_intent'
   | 'claim'
-  | 'purchase';
+  | 'purchase'
+  | 'phone';
 
 export async function teamHasSavedCard(scopedDb: ScopedDb): Promise<boolean> {
   const settings = await scopedDb.billing.getBillingSettings();
@@ -313,7 +314,7 @@ export async function fulfillSavedCard(opts: {
     teamId: opts.teamId,
     userId: opts.userId,
     source: opts.source,
-    cardFingerprint: fingerprint,
+    fingerprint,
   });
 }
 
@@ -326,10 +327,11 @@ export async function grantWelcomeCreditsForTeam(opts: {
   teamId: string;
   userId: string;
   source: WelcomeGrantSource;
-  cardFingerprint: string;
+  /** Stripe payment-method fingerprint (card, Alipay, WeChat Pay) or the hashed phone number (#1539). */
+  fingerprint: string;
 }): Promise<{ granted: boolean }> {
   const reserved = await opts.scopedDb.billing.claimWelcomeCardFingerprint(
-    opts.cardFingerprint
+    opts.fingerprint
   );
   if (!reserved) {
     throw new WelcomeCardAlreadyClaimedError();
@@ -379,7 +381,7 @@ export async function grantWelcomeCreditsForPaymentMethod(opts: {
     teamId: opts.teamId,
     userId: opts.userId,
     source: opts.source,
-    cardFingerprint: fingerprint,
+    fingerprint,
   });
 }
 
