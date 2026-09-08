@@ -202,7 +202,7 @@ jobs:
         run: |
           subdomain=$(curl -sf -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain" \
-            | jq -r '.result.name')
+            | jq -r '.result.subdomain')
           if [ -z "$subdomain" ] || [ "$subdomain" = "null" ]; then
             echo "::error::Could not resolve the workers.dev subdomain"
             exit 1
