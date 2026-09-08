@@ -4,41 +4,21 @@
  */
 
 import { type Microdollars, microsToDisplayUsd } from '@/billing/money';
-import type { Database } from '@/platform/server/db/client';
-import { teamMembers } from '@/platform/server/db/schema/teams';
-import { user } from '@/platform/server/db/schema/auth';
 import { getLogger } from '@/platform/logger';
 import { captureProductEvent } from '@/platform/server/observability/product-events';
 import { sendAutoTopUpFailedEmail } from './auto-top-up-failed-email';
 import { SITE_CONFIG } from '@/ui/marketing/constants';
-import { and, eq } from 'drizzle-orm';
 
 const logger = getLogger(['openstory', 'emails', 'auto-top-up-failed']);
 
-/**
- * Billing contact = the team owner, not the user whose generation happened
- * to trip the debit — they may not be the one holding the card.
- */
-async function getBillingContactEmail(
-  db: Database,
-  teamId: string
-): Promise<string | null> {
-  const [row] = await db
-    .select({ email: user.email })
-    .from(teamMembers)
-    .innerJoin(user, eq(teamMembers.userId, user.id))
-    .where(and(eq(teamMembers.teamId, teamId), eq(teamMembers.role, 'owner')))
-    .limit(1);
-  return row?.email ?? null;
-}
-
 export async function notifyAutoTopUpFailed(opts: {
-  db: Database;
+  /** The team owner's address (`scopedDb.teamManagement.getOwnerEmail`); null = no owner row. */
+  to: string | null;
   teamId: string;
   userId: string;
   balanceMicros: Microdollars;
 }): Promise<void> {
-  const to = await getBillingContactEmail(opts.db, opts.teamId);
+  const { to } = opts;
   if (!to) {
     logger.warn('No billing contact for declined auto top-up', {
       teamId: opts.teamId,

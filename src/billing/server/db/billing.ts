@@ -38,6 +38,7 @@ import type {
   TransactionType,
 } from '@/platform/server/db/schema/credits';
 import { notifyAutoTopUpFailed } from '@/billing/server/notify-auto-top-up-failed';
+import { createTeamManagementMethods } from '@/platform/server/db/scoped/team-management';
 import { ValidationError } from '@/platform/errors';
 import { getBillingChannel } from '@/platform/realtime';
 import {
@@ -423,7 +424,11 @@ export function createBillingMethods(
     try {
       const { available } = await read.getAvailable();
       await notifyAutoTopUpFailed({
-        db,
+        to: await createTeamManagementMethods(
+          db,
+          teamId,
+          userId
+        ).getOwnerEmail(),
         teamId,
         userId,
         balanceMicros: available,

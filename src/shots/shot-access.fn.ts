@@ -1,18 +1,17 @@
 /**
  * Shot access middleware (#1489). Lives in the shots domain because it
  * resolves the shot's scene script — a domain read `platform/middleware.fn.ts`
- * may not make. Same shape as `sequenceAccessMiddleware`: loads the row,
- * verifies team access (system admins may cross teams), narrows the context.
+ * may not make. Builds on `sequenceAccessMiddleware`, which already loaded
+ * the sequence and re-scoped the db for a system admin crossing teams, so
+ * this one never mints a scoped db itself.
  */
 import type { AspectRatio } from '@/models/aspect-ratios';
 import type { Resolution } from '@/models/resolutions';
 import { NotFoundError } from '@/platform/errors';
 import {
-  authWithTeamMiddleware,
+  sequenceAccessMiddleware,
   type TeamContext,
 } from '@/platform/middleware.fn';
-import { isSystemAdmin } from '@/platform/server/auth/system-admin';
-import { createScopedDb } from '@/platform/server/db/scoped';
 import type { Frame, Shot } from '@/platform/server/db/schema';
 import type { SequenceStatus } from '@/platform/server/db/schema/sequences';
 import { ulidSchema } from '@/platform/server/schemas/id.schemas';
@@ -59,25 +58,16 @@ export type ShotContext = TeamContext & {
  * Requires sequenceId and shotId in input data
  */
 export const shotAccessMiddleware = createMiddleware({ type: 'function' })
-  .middleware([authWithTeamMiddleware])
+  .middleware([sequenceAccessMiddleware])
   .validator(
     zodValidator(z.looseObject({ sequenceId: ulidSchema, shotId: ulidSchema }))
   )
   .server(async ({ next, context, data }) => {
-    const shotData = await context.scopedDb.shots.getWithSequence(data.shotId);
+    const { scopedDb } = context;
+    const shotData = await scopedDb.shots.getWithSequence(data.shotId);
 
-    if (!shotData || shotData.sequenceId !== data.sequenceId) {
+    if (!shotData || shotData.sequenceId !== context.sequence.id) {
       throw new NotFoundError('Shot not found in this sequence');
-    }
-
-    let { teamId, scopedDb } = context;
-
-    if (shotData.sequence.teamId !== context.teamId) {
-      if (!isSystemAdmin(context.user.email)) {
-        throw new NotFoundError('Shot not found in this sequence');
-      }
-      teamId = shotData.sequence.teamId;
-      scopedDb = createScopedDb(shotData.sequence.teamId, context.user.id);
     }
 
     // Extract sequence from shot data (using the partial sequence from the query)
@@ -112,8 +102,6 @@ export const shotAccessMiddleware = createMiddleware({ type: 'function' })
         sequence,
         scene,
         script,
-        teamId,
-        scopedDb,
       },
     });
   });

@@ -50,6 +50,20 @@ type AcceptInvitationParams = {
  * Read-only team management methods + acceptInvitation (needed by invitation flow).
  */
 function createTeamManagementReadMethods(db: Database, teamId: string) {
+  /**
+   * Billing contact = the team owner, not whichever member tripped the
+   * debit — they may not be the one holding the card (#1499).
+   */
+  async function getOwnerEmail(): Promise<string | null> {
+    const [row] = await db
+      .select({ email: user.email })
+      .from(teamMembers)
+      .innerJoin(user, eq(teamMembers.userId, user.id))
+      .where(and(eq(teamMembers.teamId, teamId), eq(teamMembers.role, 'owner')))
+      .limit(1);
+    return row?.email ?? null;
+  }
+
   async function getMembers(): Promise<TeamMember[]> {
     const members: TeamMember[] = await db
       .select({
@@ -184,6 +198,7 @@ function createTeamManagementReadMethods(db: Database, teamId: string) {
 
   return {
     getMembers,
+    getOwnerEmail,
     getMemberEmail,
     getInvitations,
     acceptInvitation,
