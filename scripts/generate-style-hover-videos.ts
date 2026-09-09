@@ -52,37 +52,40 @@ import {
   createAdapter,
   getPlatformLlmKey,
   type LlmKeyInfo,
-} from '@/lib/ai/create-adapter';
-import { PROMPT_REASONING } from '@/lib/ai/llm-client';
+} from '@/models/server/create-adapter';
+import { PROMPT_REASONING } from '@/models/server/llm-client';
 import {
   DEFAULT_VIDEO_MODEL,
   IMAGE_TO_VIDEO_MODELS,
   isValidImageToVideoModel,
   safeImageToVideoModel,
   type ImageToVideoModel,
-} from '@/lib/ai/models';
+} from '@/models/models';
 import {
   analysisModelSupportsVision,
   DEFAULT_ANALYSIS_MODEL,
   getContextWindow,
   resolveVisionModel,
-} from '@/lib/ai/models.config';
+} from '@/models/models.config';
 import {
   motionPromptSchema,
   type MotionPrompt,
-} from '@/lib/ai/scene-analysis.schema';
-import { assembleMotionPrompt } from '@/lib/motion/assemble-motion-prompt';
-import { fetchVideoForUpload } from '@/lib/motion/video-storage';
-import { pollMotionJob, submitMotionJob } from '@/lib/motion/motion-generation';
-import { snapDuration } from '@/lib/motion/snap-duration';
+} from '@/shots/scene-analysis.schema';
+import { assembleMotionPrompt } from '@/motion/server/assemble-motion-prompt';
+import { fetchVideoForUpload } from '@/motion/server/video-storage';
+import {
+  pollMotionJob,
+  submitMotionJob,
+} from '@/motion/server/motion-generation';
+import { snapDuration } from '@/motion/snap-duration';
 import {
   getChatPrompt,
   type ChatMessage,
   type ChatMessageImagePart,
-} from '@/lib/prompts';
-import { toVisionImageSource } from '@/lib/storage/external-url';
-import { styleSlug } from '@/lib/style/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
+} from '@/platform/server/ai/prompts-index';
+import { toVisionImageSource } from '@/platform/server/storage/external-url';
+import { styleSlug } from '@/look/style-slug';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { chat } from '@tanstack/ai';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -292,7 +295,7 @@ function motionSourceUrl(style: StyleTemplate): string {
 /**
  * Flatten chat-prompt messages into `chat()`-ready form and append the vision
  * still to the last user turn. Verbatim copy of the private `buildChatMessages`
- * in `src/lib/workflows/llm-call-helper.ts` — duplicated, not imported, because
+ * in `src/models/server/llm-call-helper.ts` — duplicated, not imported, because
  * that module pulls in `cloudflare:workers` (unavailable under Node).
  */
 function buildChatMessages(

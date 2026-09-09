@@ -1,10 +1,13 @@
-import { getEnv } from '#env';
-import { getProductionDeploymentAppUrl } from '@/shared/utils/environment';
-import { DocsReferrerTracker } from '@/components/docs/docs-referrer-tracker';
-import { DefaultNotFound } from '@/components/error/default-not-found';
-import { Providers } from '@/components/providers';
-import { Button } from '@/components/ui/button';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+// Used only inside createIsomorphicFn().server(…) below. The Start compiler
+// strips that body from the client build; the boundary test models the strip.
+// oxlint-disable-next-line boundaries/no-server-imports
+import { getProductionDeploymentAppUrl } from '@/platform/server/env/environment';
+import { IS_PREVIEW_DEPLOYMENT } from '@/platform/flags';
+import { DocsReferrerTracker } from '@/ui/docs/docs-referrer-tracker';
+import { DefaultNotFound } from '@/ui/error/default-not-found';
+import { Providers } from '@/ui/providers';
+import { Button } from '@/ui/shadcn/button';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 import appCss from '@/styles/global.css?url';
 import type { QueryClient } from '@tanstack/react-query';
 import type { ErrorComponentProps } from '@tanstack/react-router';
@@ -23,14 +26,6 @@ import { getRequest } from '@tanstack/react-start/server';
 type RouterContext = {
   queryClient: QueryClient;
 };
-const getIsPreviewFn = createIsomorphicFn()
-  .server(() => {
-    const appUrl = getEnv().VITE_APP_URL;
-    if (!appUrl) return true;
-    return appUrl.includes('pr-');
-  })
-  .client(() => false);
-
 const getCanonicalOriginFn = createIsomorphicFn().server(() => {
   const request = getRequest();
   const host =
@@ -57,7 +52,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     }
   },
   head: () => {
-    const isPreview = getIsPreviewFn();
+    const isPreview = IS_PREVIEW_DEPLOYMENT;
     return {
       meta: [
         ...(isPreview

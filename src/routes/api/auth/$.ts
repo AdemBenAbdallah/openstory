@@ -1,7 +1,7 @@
-import { assertDeviceLoginRate } from '@/lib/api-v1/device-auth';
-import { getAuth } from '@/lib/auth/config';
-import { pruneOrphanedOAuthClients } from '@/lib/db/scoped';
-import { getLogger } from '@/lib/observability/logger';
+import { assertDeviceLoginRate } from '@/platform/server/api-v1/device-auth';
+import { getAuth } from '@/platform/server/auth/config';
+import { pruneOrphanedOAuthClients } from '@/platform/server/db/scoped';
+import { getLogger } from '@/platform/logger';
 import { createFileRoute } from '@tanstack/react-router';
 import { scheduleFlushAnalytics } from '#flush-scheduler';
 
@@ -40,7 +40,7 @@ async function guardClientRegistration(request: Request): Promise<void> {
  * but none for four days, and only two `user_signed_up` ever.
  *
  * Server functions avoid this because their middleware schedules the flush
- * (`src/functions/middleware.ts`); this route has no middleware, so it
+ * (`src/platform/middleware.fn.ts`); this route has no middleware, so it
  * schedules its own. `scheduleFlushAnalytics` routes through `waitUntil` on
  * Workers, so the response is not delayed.
  */

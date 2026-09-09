@@ -1,17 +1,17 @@
-import { OpenStoryLogo } from '@/components/icons/openstory-logo';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { OpenStoryLogo } from '@/ui/icons/openstory-logo';
+import { Alert, AlertDescription } from '@/ui/shadcn/alert';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { redeemGiftTokenFn } from '@/functions/gift-tokens';
-import { BILLING_BALANCE_KEY } from '@/hooks/use-billing-balance';
-import { BILLING_GATE_KEY } from '@/hooks/use-billing-gate';
-import { sessionQueryOptions } from '@/lib/auth/session-query';
+} from '@/ui/shadcn/card';
+import { redeemGiftTokenFn } from '@/billing/gift-tokens.fn';
+import { BILLING_BALANCE_KEY } from '@/billing/ui/use-billing-balance';
+import { BILLING_GATE_KEY } from '@/billing/ui/use-billing-gate';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
 import { usePostHog } from '@posthog/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {

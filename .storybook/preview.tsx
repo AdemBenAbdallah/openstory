@@ -7,11 +7,11 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router';
-import { RealtimeProvider } from '../src/lib/realtime/client';
-import { TooltipProvider } from '../src/components/ui/tooltip';
+import { RealtimeProvider } from '@/platform/ui/realtime/client';
+import { TooltipProvider } from '@/ui/shadcn/tooltip';
 import { mswLoader } from 'msw-storybook-addon/csf3';
 import { setupWorker } from 'msw/browser';
-import { handlers } from '../src/shared/mocks/handlers';
+import { handlers } from '../src/mocks/handlers';
 
 import '../src/styles/global.css';
 

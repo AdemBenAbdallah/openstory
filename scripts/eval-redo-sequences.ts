@@ -18,9 +18,9 @@
  *     [--limit 5] [--concurrency 4]
  */
 import { readFile, writeFile } from 'node:fs/promises';
-import { briefForStyle } from '@/lib/style/sample-videos';
-import { styleSlug } from '@/lib/style/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
+import { briefForStyle } from '@/look/server/sample-videos';
+import { styleSlug } from '@/look/style-slug';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { z } from 'zod';
 
 const OPENROUTER_KEY = process.env.OPENROUTER_KEY;

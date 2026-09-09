@@ -9,28 +9,28 @@
  * skeleton.
  */
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/shadcn/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/ui/shadcn/card';
 import {
   decideOAuthConsentFn,
   getOAuthConsentContextFn,
   type OAuthConsentContext,
-} from '@/functions/oauth-consent';
+} from '@/platform/oauth-consent.fn';
 import {
   consentPageHref,
   displayFieldsFromOAuthQuery,
   needsOAuthQueryPack,
   pickOAuthQuery,
   resolveOAuthQuery,
-} from '@/lib/auth/oauth-query-snapshot';
-import { requireSessionOrRedirect } from '@/lib/auth/route-guards';
-import { errorMessage } from '@/shared/errors';
+} from '@/platform/auth/oauth-query-snapshot';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
+import { errorMessage } from '@/platform/errors';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { createIsomorphicFn } from '@tanstack/react-start';

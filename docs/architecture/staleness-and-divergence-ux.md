@@ -100,7 +100,7 @@ For non-image artifacts (video, audio): same dialog shape, with `<video>` or `<a
 
 ### Promote
 
-Reuses the recast-confirm pattern (`src/components/talent/recast-confirm-dialog.tsx`):
+Reuses the recast-confirm pattern (`src/cast/ui/talent/recast-confirm-dialog.tsx`):
 
 ```
 Promote alternate?

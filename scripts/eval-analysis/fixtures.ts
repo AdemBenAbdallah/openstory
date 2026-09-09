@@ -8,14 +8,14 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { replayRecordedE2eScenes } from '@/lib/ai/recorded-e2e-scenes';
+import { replayRecordedE2eScenes } from '@/sequences/server/recorded-e2e-scenes';
 import type {
   CharacterBibleEntry,
   LocationBibleEntry,
   Scene,
-} from '@/lib/ai/scene-analysis.schema';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
-import type { StyleConfig } from '@/lib/style/style-config';
+} from '@/shots/scene-analysis.schema';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
+import type { StyleConfig } from '@/look/style-config';
 
 const DIR = dirname(fileURLToPath(import.meta.url));
 

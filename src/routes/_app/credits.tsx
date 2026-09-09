@@ -3,12 +3,12 @@
  * Balance, transactions, and gift codes in a single tabbed view
  */
 
-import { RouteErrorFallback } from '@/components/error/route-error-fallback';
-import { BillingSettings } from '@/components/settings/billing-settings';
-import { GiftCodeSettings } from '@/components/settings/gift-code-settings';
-import { TransactionSettings } from '@/components/settings/transaction-settings';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { requireSessionOrRedirect } from '@/lib/auth/route-guards';
+import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
+import { BillingSettings } from '@/ui/settings/billing-settings';
+import { GiftCodeSettings } from '@/ui/settings/gift-code-settings';
+import { TransactionSettings } from '@/ui/settings/transaction-settings';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Gift, Receipt, Wallet } from 'lucide-react';
 import { z } from 'zod';

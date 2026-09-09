@@ -17,7 +17,7 @@ import {
   checkMotionStatus,
   getMotionResult,
   cancelMotionGeneration,
-} from '../src/lib/motion/motion-generation';
+} from '@/motion/server/motion-generation';
 
 const args = process.argv.slice(2);
 

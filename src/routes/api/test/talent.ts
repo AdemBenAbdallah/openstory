@@ -7,7 +7,7 @@ import {
   createTestTalent,
   createTestTalentWithMedia,
   getSystemTalentByName,
-} from '@/lib/test/seed';
+} from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateTalentSchema = z.object({

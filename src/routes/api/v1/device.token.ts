@@ -13,11 +13,11 @@
 import {
   assertDeviceLoginRate,
   exchangeDeviceCode,
-} from '@/lib/api-v1/device-auth';
-import { apiJsonError, runApiV1Handler } from '@/lib/api-v1/errors';
-import { API_V1_BASE } from '@/lib/api-v1/hal';
-import { getWaitMs, longPoll } from '@/lib/api-v1/wait';
-import { ValidationError } from '@/shared/errors';
+} from '@/platform/server/api-v1/device-auth';
+import { apiJsonError, runApiV1Handler } from '@/platform/server/api-v1/errors';
+import { API_V1_BASE } from '@/platform/server/api-v1/hal';
+import { getWaitMs, longPoll } from '@/platform/server/api-v1/wait';
+import { ValidationError } from '@/platform/errors';
 import { createFileRoute } from '@tanstack/react-router';
 
 /**

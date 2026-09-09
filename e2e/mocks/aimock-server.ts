@@ -8,7 +8,7 @@
  *   recorded fixtures under `fixtures/recorded/openrouter/<stage>/`.
  * - fal.ai: aimock's built-in `/fal/*` dispatcher (server.js dispatch at
  *   `FAL_PREFIX_RE`) reads the `x-fal-target-host` header that
- *   `src/lib/ai/fal-config.ts` already stamps on fal requests, and matches
+ *   `src/models/server/fal-config.ts` already stamps on fal requests, and matches
  *   against recorded fixtures under `fixtures/recorded/fal/`. No `mount()`
  *   needed — the library handles it.
  *

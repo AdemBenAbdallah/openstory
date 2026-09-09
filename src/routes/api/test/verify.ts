@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { createOtpVerification } from '@/lib/test/seed';
+import { createOtpVerification } from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const VerifySchema = z.object({

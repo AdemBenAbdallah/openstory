@@ -3,9 +3,9 @@
  * Layout for authentication pages (login, verify)
  */
 
-import { RouteErrorFallback } from '@/components/error/route-error-fallback';
-import { sessionQueryOptions } from '@/lib/auth/session-query';
-import { getAuthOptionsFn } from '@/functions/auth-options';
+import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
+import { getAuthOptionsFn } from '@/platform/auth-options.fn';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth')({

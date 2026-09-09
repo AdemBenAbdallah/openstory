@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { cleanupTestUser, createTestUser } from '@/lib/test/seed';
+import { cleanupTestUser, createTestUser } from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const DeleteUserSchema = z.object({

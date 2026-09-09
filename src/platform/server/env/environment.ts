@@ -1,0 +1,58 @@
+/**
+ * Environment utility functions for checking feature availability
+ * based on environment variables and deployment context.
+ *
+ * IMPORTANT: All functions use lazy evaluation to support Cloudflare Workers
+ * where process.env is only populated at request time.
+ */
+
+import { getEnv } from '#env';
+
+/**
+ * Server-side application URL
+ * Used by Better Auth, webhooks, and internal API calls
+ * Lazily evaluated to support Cloudflare Workers
+ */
+export function getServerAppUrl(request: Request): string {
+  const url = new URL(request.url);
+  return url.origin;
+}
+
+/**
+ * Get production deployment app URL
+ * Used for OAuth redirects on preview branches.
+ * If VITE_APP_URL env var is set, use that as the canonical production URL.
+ * Otherwise fall back to the request origin.
+ */
+export function getProductionDeploymentAppUrl(request: Request): string {
+  const envAppUrl = getEnv().VITE_APP_URL;
+  if (envAppUrl) {
+    return envAppUrl.replace(/\/$/, '');
+  }
+
+  return getServerAppUrl(request);
+}
+
+/**
+ * Is this request being served on a local/network-dev host (localhost or a
+ * bare IP)? Mirrors the local-access check in `src/routes/__root.tsx`: real
+ * deployments — wherever they are hosted — are always reached by hostname,
+ * never a bare IP or localhost.
+ *
+ * This is a host-based, env-independent signal. Unlike IS_PREVIEW_DEPLOYMENT,
+ * it does not rely on VITE_APP_URL / NODE_ENV being present in the worker env
+ * (they are only declared under wrangler.jsonc [env.test].vars, so they are
+ * undefined in production and in the e2e-built worker alike).
+ */
+export function isLocalRequestHost(request: Request): boolean {
+  const host =
+    request.headers.get('x-forwarded-host') ?? request.headers.get('host');
+  if (!host) return false;
+  const hostname = (host.split(':')[0] ?? host).toLowerCase();
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === '::1' ||
+    /^\d+\.\d+\.\d+\.\d+$/.test(hostname)
+  );
+}

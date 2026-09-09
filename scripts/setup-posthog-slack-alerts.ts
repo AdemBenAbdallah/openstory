@@ -224,7 +224,7 @@ function spikeBlocks() {
  * (#1513). The spike alert only fires on a *rate* change, so a two-user
  * regression right after a deploy reached nobody.
  *
- * `replay_url` is stamped client-side in `src/components/providers.tsx`; the
+ * `replay_url` is stamped client-side in `src/ui/providers.tsx`; the
  * fallback keeps the button a valid URL when there is no recording (Slack
  * rejects the whole message over one empty button href).
  */

@@ -1,27 +1,27 @@
 import { useState } from 'react';
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { routeParams } from '@/components/layout/breadcrumbs';
-import { EditTalentDialog } from '@/components/talent-library/edit-talent-dialog';
-import { PortraitAttestationFields } from '@/components/talent-library/portrait-attestation-fields';
-import { TalentMediaUpload } from '@/components/talent-library/talent-media-upload';
-import { statementFor } from '@/lib/compliance/attestations';
-import { PageContainer } from '@/components/layout/page-container';
-import { getCurrentUserProfileFn } from '@/functions/user';
-import { PageDescription } from '@/components/typography/page-description';
-import { PageHeader } from '@/components/typography/page-header';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useTalentSheetRealtime } from '@/hooks/use-talent-realtime';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { routeParams } from '@/ui/layout/breadcrumbs';
+import { EditTalentDialog } from '@/cast/ui/talent-library/edit-talent-dialog';
+import { PortraitAttestationFields } from '@/cast/ui/talent-library/portrait-attestation-fields';
+import { TalentMediaUpload } from '@/cast/ui/talent-library/talent-media-upload';
+import { statementFor } from '@/platform/compliance/attestations';
+import { PageContainer } from '@/ui/layout/page-container';
+import { getCurrentUserProfileFn } from '@/platform/user.fn';
+import { PageDescription } from '@/ui/typography/page-description';
+import { PageHeader } from '@/ui/typography/page-header';
+import { Button } from '@/ui/shadcn/button';
+import { Card } from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { useTalentSheetRealtime } from '@/cast/ui/use-talent-realtime';
 import {
   useTalentById,
   useDeleteTalent,
   useGenerateTalentSheet,
   useSetDefaultSheet,
   useToggleTalentFavorite,
-} from '@/hooks/use-talent';
-import { sheetProgressCopy } from '@/lib/talent/sheet-progress-copy';
-import { cn } from '@/shared/utils';
+} from '@/cast/ui/use-talent';
+import { sheetProgressCopy } from '@/cast/sheet-progress-copy';
+import { cn } from '@/ui/utils';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import {

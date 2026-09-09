@@ -10,7 +10,7 @@
  * Returns the drizzle client plus a `dispose()` that tears down the platform
  * proxy when one was created.
  */
-import { createD1HttpClient } from '@/lib/db/client-d1-http';
+import { createD1HttpClient } from '@/platform/server/db/client-d1-http';
 import { drizzle as drizzleD1 } from 'drizzle-orm/d1';
 import { getLocalPlatformProxy } from './local-platform-proxy';
 

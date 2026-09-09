@@ -42,7 +42,7 @@ result as an **individual team asset** decoupled from the sequence→scene→sho
   Workflows, R2 origin-relative URLs #894, `requireCredits` + BYOK via
   `scopedDb.apiKeys.resolveKey('fal')`), but every output row is sequence-anchored. Needs a new
   flat `generated_assets` table. Zod is v4 (`z.fromJSONSchema` available). Nav slot:
-  `navLinks` in `src/components/layout/app-sidebar.tsx`.
+  `navLinks` in `src/ui/layout/app-sidebar.tsx`.
 
 ## Architecture decisions
 
@@ -68,7 +68,7 @@ result as an **individual team asset** decoupled from the sequence→scene→sho
 
 ### DB: `generated_assets` (Agent A owns)
 
-`src/lib/db/schema/generated-assets.ts`, exported from schema `index.ts`. CREATE-only additive
+`src/platform/server/db/schema/generated-assets.ts`, exported from schema `index.ts`. CREATE-only additive
 migration via `bun db:generate` (NEVER hand-written SQL). ULID pk. FKs use `'restrict'`/no
 action — **no ON DELETE CASCADE** (D1 table-rebuild trap).
 
@@ -79,7 +79,7 @@ Columns: `id`, `teamId`, `userId`, `provider` ('fal'), `endpointId` (e.g. `fal-a
 `{ url: string; contentType: string }[]`, url is origin-relative R2), `error` text nullable,
 `workflowRunId` text nullable, `costMicros` integer nullable, `createdAt`/`updatedAt`.
 
-### Server fns: `src/functions/model-assets.ts` (Agent A owns)
+### Server fns: `src/models/model-assets.fn.ts` (Agent A owns)
 
 - `createGeneratedAssetFn({ endpointId, activity, modelName, input, inputSchema })` →
   `{ id, workflowRunId }`. Steps: auth (team member) → `z.fromJSONSchema(inputSchema)`
@@ -91,14 +91,14 @@ Columns: `id`, `teamId`, `userId`, `provider` ('fal'), `endpointId` (e.g. `fal-a
 
 ### Workflow (Agent A owns)
 
-`src/lib/workflows/asset-generation-workflow.ts`, class `AssetGenerationWorkflow` extends
+`src/studio/server/workflows/asset-generation-workflow.ts`, class `AssetGenerationWorkflow` extends
 `OpenStoryWorkflowEntrypoint`. Payload: `{ userId, teamId, assetId, endpointId, activity,
 input }`. Wire in all 3 places (wrangler.jsonc `workflows[]` binding `ASSET_WORKFLOW`,
 `src/server.ts` re-export, `TRIGGER_TO_BINDING['/asset']`) — `wiring-consistency.test.ts`
 enforces. Follow the existing image/motion workflow structure for fal key resolution, fal queue
 call, R2 upload, cost deduction, failure handling. Steps write the row status transitions.
 
-### Catalog lib: `src/lib/models/catalog.ts` + `src/functions/model-catalog.ts` (Agent B owns)
+### Catalog lib: `src/models/catalog.ts` + `src/models/model-catalog.fn.ts` (Agent B owns)
 
 - `listCatalogModels({ activity?, q?, cursor?, limit? })` → modelschemas `/v1/models` (provider
   fal), returns `{ models: CatalogModel[], nextCursor? }`. `CatalogModel`: `endpointId`,
@@ -121,7 +121,7 @@ call, R2 upload, cost deduction, failure handling. Steps write the row status tr
   renderer + widget registry (shadcn only, Tailwind layout-only). Heuristics per openfield +
   schema-studio (see research conclusions). Honor `x-fal-order-properties`, `required`-first,
   optional fields behind "+ field" chips, oneOf/anyOf tabs, depth-cap raw-JSON fallback.
-- `src/components/schema-form/asset-result.tsx` — output renderer: detect image/video/audio
+- `src/ui/schema-form/asset-result.tsx` — output renderer: detect image/video/audio
   fields by name+shape → media components; else JSON view.
 - Sidebar: add "Models" to `navLinks` in `app-sidebar.tsx`.
 
@@ -146,7 +146,7 @@ call, R2 upload, cost deduction, failure handling. Steps write the row status tr
 - Commit regularly with clear messages; lefthook runs lint/format/typecheck/knip on commit.
   End commit messages with `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`. Do NOT push.
 - No `any`/`unknown`/`Record<string, unknown>`; no non-null assertions; typedEntries/
-  typedFromEntries from `@/shared/utils/typed-object` instead of Object.entries/fromEntries.
+  typedFromEntries from `@/platform/typed-object` instead of Object.entries/fromEntries.
 - DB access only in server handlers/services — never components. ULID pks. Migrations only via
   `bun db:generate`.
 - React: TanStack Query + Suspense (no isLoading), shadcn base components, Tailwind layout-only,

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { isPreviewDeployment } from '@/shared/utils/environment';
-import { SITE_CONFIG } from '@/shared/marketing/constants';
+import { IS_PREVIEW_DEPLOYMENT } from '@/platform/flags';
+import { SITE_CONFIG } from '@/ui/marketing/constants';
 
 function buildRobotsTxt(isPreview: boolean): string {
   if (isPreview) {
@@ -12,9 +12,8 @@ function buildRobotsTxt(isPreview: boolean): string {
 export const Route = createFileRoute('/robots.txt')({
   server: {
     handlers: {
-      GET: async ({ request }) => {
-        const isPreview = isPreviewDeployment(request);
-        return new Response(buildRobotsTxt(isPreview), {
+      GET: async () => {
+        return new Response(buildRobotsTxt(IS_PREVIEW_DEPLOYMENT), {
           status: 200,
           headers: {
             'Content-Type': 'text/plain; charset=utf-8',

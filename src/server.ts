@@ -13,24 +13,24 @@ import {
   markdownResponse,
   withDiscoveryLinkHeader,
   withHtmlAccept,
-} from '@/lib/agent/discovery';
-import { reconcileAllStuckJobs } from '@/lib/cron/reconcile-all';
+} from '@/platform/server/agent/discovery';
+import { reconcileAllStuckJobs } from '@/platform/server/cron/reconcile-all';
 import {
   FAL_PRICING_CRON,
   refreshFalPricing,
-} from '@/lib/cron/refresh-fal-pricing';
+} from '@/billing/server/refresh-fal-pricing';
 import {
   FAL_BILLING_RECONCILE_CRON,
   reconcileFalBilling,
-} from '@/lib/cron/reconcile-fal-billing';
+} from '@/billing/server/reconcile-fal-billing';
 import {
   BYTEPLUS_ASSETS_RECONCILE_CRON,
   reconcileBytePlusAssets,
-} from '@/lib/cron/reconcile-byteplus-assets';
-import { ensureLocalModelPricingSeeded } from '@/lib/db/seed-model-pricing';
-import { ensureSystemTemplatesSeeded } from '@/lib/db/seed-system-templates';
+} from '@/models/server/reconcile-byteplus-assets';
+import { ensureLocalModelPricingSeeded } from '@/billing/server/seed-model-pricing';
+import { ensureSystemTemplatesSeeded } from '@/platform/server/db/seed-system-templates';
 
-import { getLogger, toErrorPayload } from '@/lib/observability/logger';
+import { getLogger, toErrorPayload } from '@/platform/logger';
 import { drizzle } from 'drizzle-orm/d1';
 
 const logger = getLogger(['openstory', 'server']);
@@ -80,50 +80,50 @@ function ensureSeededOnce(db: D1Database, e2eTest?: string): Promise<void> {
 // Re-export Cloudflare Workflow entrypoint classes so the Worker bundle
 // includes them. Each must have a matching entry in `wrangler.jsonc` under
 // `workflows[]`.
-export { ImageWorkflow } from '@/lib/workflows/image-workflow';
-export { ElementVisionWorkflow } from '@/lib/workflows/element-vision-workflow';
-export { ElementSheetWorkflow } from '@/lib/workflows/element-sheet-workflow';
-export { MusicWorkflow } from '@/lib/workflows/music-workflow';
-export { MotionWorkflow } from '@/lib/workflows/motion-workflow';
-export { MotionBatchWorkflow } from '@/lib/workflows/motion-batch-workflow';
-export { CharacterSheetWorkflow } from '@/lib/workflows/character-sheet-workflow';
-export { LocationSheetWorkflow } from '@/lib/workflows/location-sheet-workflow';
-export { LibraryTalentSheetWorkflow } from '@/lib/workflows/library-talent-sheet-workflow';
-export { LibraryLocationSheetWorkflow } from '@/lib/workflows/library-location-sheet-workflow';
-export { ShotVariantWorkflow } from '@/lib/workflows/shot-variant-workflow';
-export { UpscaleShotVariantWorkflow } from '@/lib/workflows/upscale-shot-variant-workflow';
-export { FramePromptWorkflow } from '@/lib/workflows/frame-prompt-workflow';
-export { MotionPromptWorkflow } from '@/lib/workflows/motion-prompt-workflow';
-export { MusicPromptWorkflow } from '@/lib/workflows/music-prompt-workflow';
-export { RecastCharacterWorkflow } from '@/lib/workflows/recast-character-workflow';
-export { LocationMatchingWorkflow } from '@/lib/workflows/location-matching-workflow';
-export { ShotImagesWorkflow } from '@/lib/workflows/shot-images-workflow';
-export { TalentMatchingWorkflow } from '@/lib/workflows/talent-matching-workflow';
-export { CharacterBibleWorkflow } from '@/lib/workflows/character-bible-workflow';
-export { LocationBibleWorkflow } from '@/lib/workflows/location-bible-workflow';
-export { FramePromptBatchWorkflow } from '@/lib/workflows/frame-prompt-batch-workflow';
-export { MotionPromptBatchWorkflow } from '@/lib/workflows/motion-prompt-batch-workflow';
-export { MotionMusicPromptsWorkflow } from '@/lib/workflows/motion-music-prompts-workflow';
-export { RegenerateShotsWorkflow } from '@/lib/workflows/regenerate-shots-workflow';
-export { UpdateStaleShotsWorkflow } from '@/lib/workflows/update-stale-shots-workflow';
-export { RecastLocationWorkflow } from '@/lib/workflows/recast-location-workflow';
-export { ReplaceElementWorkflow } from '@/lib/workflows/replace-element-workflow';
-export { SceneSplitWorkflow } from '@/lib/workflows/scene-split-workflow';
-export { StoryboardWorkflow } from '@/lib/workflows/storyboard-workflow';
-export { AnalyzeScriptWorkflow } from '@/lib/workflows/analyze-script-workflow';
-export { SequenceExportWorkflow } from '@/lib/workflows/sequence-export-workflow';
-export { AssetGenerationWorkflow } from '@/lib/workflows/asset-generation-workflow';
-export { StudioGenerationWorkflow } from '@/lib/workflows/studio-generation-workflow';
+export { ImageWorkflow } from '@/stills/server/workflows/image-workflow';
+export { ElementVisionWorkflow } from '@/cast/server/workflows/element-vision-workflow';
+export { ElementSheetWorkflow } from '@/cast/server/workflows/element-sheet-workflow';
+export { MusicWorkflow } from '@/audio/server/workflows/music-workflow';
+export { MotionWorkflow } from '@/motion/server/workflows/motion-workflow';
+export { MotionBatchWorkflow } from '@/motion/server/workflows/motion-batch-workflow';
+export { CharacterSheetWorkflow } from '@/cast/server/workflows/character-sheet-workflow';
+export { LocationSheetWorkflow } from '@/cast/server/workflows/location-sheet-workflow';
+export { LibraryTalentSheetWorkflow } from '@/cast/server/workflows/library-talent-sheet-workflow';
+export { LibraryLocationSheetWorkflow } from '@/cast/server/workflows/library-location-sheet-workflow';
+export { ShotVariantWorkflow } from '@/stills/server/workflows/shot-variant-workflow';
+export { UpscaleShotVariantWorkflow } from '@/stills/server/workflows/upscale-shot-variant-workflow';
+export { FramePromptWorkflow } from '@/stills/server/workflows/frame-prompt-workflow';
+export { MotionPromptWorkflow } from '@/motion/server/workflows/motion-prompt-workflow';
+export { MusicPromptWorkflow } from '@/audio/server/workflows/music-prompt-workflow';
+export { RecastCharacterWorkflow } from '@/cast/server/workflows/recast-character-workflow';
+export { LocationMatchingWorkflow } from '@/cast/server/workflows/location-matching-workflow';
+export { ShotImagesWorkflow } from '@/stills/server/workflows/shot-images-workflow';
+export { TalentMatchingWorkflow } from '@/cast/server/workflows/talent-matching-workflow';
+export { CharacterBibleWorkflow } from '@/cast/server/workflows/character-bible-workflow';
+export { LocationBibleWorkflow } from '@/cast/server/workflows/location-bible-workflow';
+export { FramePromptBatchWorkflow } from '@/stills/server/workflows/frame-prompt-batch-workflow';
+export { MotionPromptBatchWorkflow } from '@/motion/server/workflows/motion-prompt-batch-workflow';
+export { MotionMusicPromptsWorkflow } from '@/motion/server/workflows/motion-music-prompts-workflow';
+export { RegenerateShotsWorkflow } from '@/shots/server/workflows/regenerate-shots-workflow';
+export { UpdateStaleShotsWorkflow } from '@/shots/server/workflows/update-stale-shots-workflow';
+export { RecastLocationWorkflow } from '@/cast/server/workflows/recast-location-workflow';
+export { ReplaceElementWorkflow } from '@/cast/server/workflows/replace-element-workflow';
+export { SceneSplitWorkflow } from '@/sequences/server/workflows/scene-split-workflow';
+export { StoryboardWorkflow } from '@/sequences/server/workflows/storyboard-workflow';
+export { AnalyzeScriptWorkflow } from '@/sequences/server/workflows/analyze-script-workflow';
+export { SequenceExportWorkflow } from '@/sequences/server/workflows/sequence-export-workflow';
+export { AssetGenerationWorkflow } from '@/studio/server/workflows/asset-generation-workflow';
+export { StudioGenerationWorkflow } from '@/studio/server/workflows/studio-generation-workflow';
 
 // Realtime broker Durable Object. Re-exported so the binding's `class_name`
 // in wrangler.jsonc resolves in the Worker bundle (#802).
-export { RealtimeChannel } from '@/lib/realtime/realtime-channel.do';
-export { BytePlusGovernor } from '@/lib/ai/byteplus-governor.do';
+export { RealtimeChannel } from '@/platform/server/realtime/realtime-channel.do';
+export { BytePlusGovernor } from '@/models/server/byteplus-governor.do';
 
 // Server-side video-export container DO (#968). Production-only binding
 // (`VIDEO_EXPORT_CONTAINER`); re-exported so its `class_name` resolves in the
 // bundle when CLOUDFLARE_ENV=production bakes the [env.production] block.
-export { VideoExportContainer } from '@/lib/containers/video-export-container';
+export { VideoExportContainer } from '@/sequences/server/video-export-container';
 
 // Bindings shape from wrangler.jsonc. Only declared so the scheduled() handler
 // has a real type for its env parameter (vs. the framework default of unknown).
@@ -189,7 +189,7 @@ const exportedHandler: ExportedHandler<WorkerEnv> = {
       return;
     }
     // Best-effort sweep for stuck generating-status rows across every table.
-    // See src/lib/cron/reconcile-all.ts; cron schedule is in wrangler.jsonc.
+    // See src/platform/server/cron/reconcile-all.ts; cron schedule is in wrangler.jsonc.
     ctx.waitUntil(
       reconcileAllStuckJobs().catch((error) => {
         logger.error('reconcileAllStuckJobs failed:', { err: error });

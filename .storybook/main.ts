@@ -25,16 +25,13 @@ const config: StorybookConfig = {
     // Mock TanStack Start server functions so they become no-ops in Storybook.
     // Without this, createServerFn calls try to fetch /_serverFn/ which doesn't exist.
     // Use regex so only exact imports are matched (not subpath like /client).
-    const mockPath = path.resolve(
-      __dirname,
-      '../src/shared/mocks/tanstack-start.ts'
-    );
+    const mockPath = path.resolve(__dirname, '../src/mocks/tanstack-start.ts');
     // The cloudflare() plugin (which provides the `cloudflare:workers` virtual
     // module) is stripped below; alias the import to a stub so server-only
     // modules pulled into story graphs still resolve.
     const cloudflareWorkersMock = path.resolve(
       __dirname,
-      '../src/shared/mocks/cloudflare-workers.ts'
+      '../src/mocks/cloudflare-workers.ts'
     );
     const existingAliases = Array.isArray(config.resolve.alias)
       ? config.resolve.alias

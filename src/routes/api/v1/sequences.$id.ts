@@ -11,16 +11,16 @@
  * agent without a sleep tool can create→watch in one call.
  */
 
-import { authWithTeamRequestMiddleware } from '@/functions/middleware';
-import { runApiV1Handler } from '@/lib/api-v1/errors';
+import { authWithTeamRequestMiddleware } from '@/platform/middleware.fn';
+import { runApiV1Handler } from '@/platform/server/api-v1/errors';
 import {
   buildSequenceState,
   isTerminalSequenceState,
   sequenceStateCursor,
   withSequenceStateLinks,
-} from '@/lib/api-v1/state';
-import { getWaitMs, longPoll } from '@/lib/api-v1/wait';
-import { NotFoundError } from '@/shared/errors';
+} from '@/platform/server/api-v1/state';
+import { getWaitMs, longPoll } from '@/platform/server/api-v1/wait';
+import { NotFoundError } from '@/platform/errors';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/v1/sequences/$id')({

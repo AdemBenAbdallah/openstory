@@ -10,7 +10,7 @@ import { defineConfig, type Plugin } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import viteReact from '@vitejs/plugin-react';
-import { worktreeAuthCookiePrefix } from './src/lib/auth/cookie-prefix.ts';
+import { worktreeAuthCookiePrefix } from './src/platform/auth/cookie-prefix.ts';
 
 const isDev = process.env.NODE_ENV !== 'production';
 // Per-worktree auth cookie name (#1288). Set on process.env so Vite's usual
@@ -178,7 +178,7 @@ export default defineConfig({
       // No email renders <CodeBlock>; see the stub for details.
       '@react-email/code-block': resolve(
         import.meta.dirname,
-        'src/lib/emails/stubs/code-block.tsx'
+        'src/platform/server/emails/stubs/code-block.tsx'
       ),
     },
     // TipTap/ProseMirror use instanceof Node. Nested 1.25.7 copies next to

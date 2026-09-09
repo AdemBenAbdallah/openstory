@@ -49,7 +49,7 @@ subject motion in separate sentences, one physics event, one continuous take.
 
 Two templates rather than one template with a conditional block. They disagree
 on their most load-bearing rule, and a prompt that hedges between them gets
-both half-right. `src/lib/prompts/motion-prompt-templates.test.ts` pins the
+both half-right. `src/motion/server/motion-prompt-templates.test.ts` pins the
 disagreement so a future edit cannot quietly merge them.
 
 ### What it must still NOT describe

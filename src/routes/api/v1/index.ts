@@ -7,8 +7,8 @@
  * so the narrative can explain how to get one.
  */
 
-import { runApiV1Handler } from '@/lib/api-v1/errors';
-import { buildRootDocument } from '@/lib/api-v1/discovery';
+import { runApiV1Handler } from '@/platform/server/api-v1/errors';
+import { buildRootDocument } from '@/platform/server/api-v1/discovery';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/v1/')({

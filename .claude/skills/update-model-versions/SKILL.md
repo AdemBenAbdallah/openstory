@@ -16,11 +16,11 @@ Our model registries are the single source of truth:
 
 | Class                   | File                          | Export                   |
 | ----------------------- | ----------------------------- | ------------------------ |
-| Text (OpenRouter)       | `src/lib/ai/models.config.ts` | `SCRIPT_ANALYSIS_MODELS` |
-| Image (fal.ai)          | `src/lib/ai/models.ts`        | `IMAGE_MODELS`           |
-| Video / motion (fal.ai) | `src/lib/ai/models.ts`        | `IMAGE_TO_VIDEO_MODELS`  |
-| Audio (fal.ai)          | `src/lib/ai/models.ts`        | `AUDIO_MODELS`           |
-| BytePlus Ark ids        | `src/lib/ai/models.ts`        | `byteplusId` fields      |
+| Text (OpenRouter)       | `src/models/models.config.ts` | `SCRIPT_ANALYSIS_MODELS` |
+| Image (fal.ai)          | `src/models/models.ts`        | `IMAGE_MODELS`           |
+| Video / motion (fal.ai) | `src/models/models.ts`        | `IMAGE_TO_VIDEO_MODELS`  |
+| Audio (fal.ai)          | `src/models/models.ts`        | `AUDIO_MODELS`           |
+| BytePlus Ark ids        | `src/models/models.ts`        | `byteplusId` fields      |
 
 A model with a native BytePlus route (#1157) carries **two ids under one
 key**: the fal endpoint `id` AND a `byteplusId` (Ark model id). A version bump
@@ -128,7 +128,7 @@ Per class, edit and follow through:
   shipped id may not be in its typed union yet. When a text-model bump adopts an
   id the installed catalog lacks, `bun typecheck` fails at the `createAdapter`
   call sites — add a `createModel` entry for the id to `CATALOG_LAG_MODELS`
-  (`src/lib/ai/create-adapter.ts`) with the correct `input` modalities, plus
+  (`src/models/server/create-adapter.ts`) with the correct `input` modalities, plus
   `features: ['reasoning', 'structured_outputs']` when the model supports them.
   (The reverse — pruning a bridged id once the adapter package catches up — is
   handled by Dependabot's package bump, guided by `catalog-lag.test.ts`, not by
@@ -139,20 +139,20 @@ Per class, edit and follow through:
   flow if it had one.
 - **Video / motion** (`models.ts` `IMAGE_TO_VIDEO_MODELS`): update `id` + meta,
   then regenerate the schemas — **`bun motion:codegen`** (writes
-  `src/lib/motion/generated/**` and `endpoint-map.ts`). Never hand-write motion
+  `src/motion/server/generated/**` and `src/motion/server/endpoint-map.ts`). Never hand-write motion
   schemas. Re-check `maxPromptLength` against the new schema.
 - **Audio** (`models.ts` `AUDIO_MODELS`): update `id` + `capabilities`
   (durations, formats) from the new schema.
 - **BytePlus-routed models** (a `byteplusId` on the entry): bump the
   `byteplusId` in the same PR as the fal id — never one without the other.
   Then follow through:
-  - `src/lib/ai/byteplus-pricing.ts` — the rate card is keyed by Ark model id,
+  - `src/billing/byteplus-pricing.ts` — the rate card is keyed by Ark model id,
     so the old id's entry must be replaced with the new id at the new model's
     advertised rate (BytePlus publishes no pricing API; read the pricing page,
     re-date the header comment, and note the rate is advertised-not-verified).
     A missed rename means Ark generations bill $0 — exactly the #1069 failure
     mode the card exists to prevent.
-  - `src/lib/ai/fal-cost.ts` `ENDPOINT_STRATEGY` — if the old fal endpoint ids
+  - `src/billing/fal-cost.ts` `ENDPOINT_STRATEGY` — if the old fal endpoint ids
     appear there (token-billed Seedance endpoints do), rename them too.
   - The request builders (`build-byteplus-video-request.ts` /
     `build-byteplus-image-request.ts`) read the id from the registry, but
@@ -162,7 +162,7 @@ Per class, edit and follow through:
     `match.model` is the fal endpoint id, which aimock matches on — migrate
     them (rename dir + edit `match.model`) rather than re-recording when the
     prompt is unchanged.
-- **fal pricing:** model ids are pricing keys in `src/lib/ai/fal-pricing-data.ts`
+- **fal pricing:** model ids are pricing keys in `model_pricing` (D1, see `src/billing/server/fal-pricing-live.ts`)
   (auto-generated). After any fal id change run **`bun scripts/update-fal-pricing.ts`**
   (needs `FAL_KEY`). If it can't run, add the new id's pricing manually via the
   override path documented in that script and flag it in the PR.
@@ -172,8 +172,8 @@ Per class, edit and follow through:
 ```bash
 bun typecheck
 bun lint
-bun run test src/lib/ai src/lib/motion   # registry + motion suites
-bun run test src/lib/billing             # pricing/cost if fal pricing changed
+bun run test src/models src/motion   # registry + motion suites
+bun run test src/billing             # pricing/cost if fal pricing changed
 ```
 
 Fix anything that breaks. If a bump cascades into non-trivial changes (schema

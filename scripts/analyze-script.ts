@@ -27,22 +27,16 @@
 
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/lib/ai/models';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL } from '@/models/models';
 import {
   ANALYSIS_MODEL_IDS,
   DEFAULT_ANALYSIS_MODEL,
   isValidAnalysisModelId,
-} from '../src/lib/ai/models.config';
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '../src/shared/constants/aspect-ratios';
+} from '@/models/models.config';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
 import { z } from 'zod';
-import {
-  parseStyleConfig,
-  type StyleConfig,
-} from '../src/lib/style/style-config';
-import { triggerWorkflow } from '../src/lib/workflow/client';
+import { parseStyleConfig, type StyleConfig } from '@/look/style-config';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
 
 function printUsage() {
   console.log(`
@@ -191,21 +185,17 @@ async function main() {
   console.log('');
 
   try {
-    const workflowRunId = await triggerWorkflow(
-      '/analyze-script',
-      {
-        script,
-        styleConfig: parsedStyle,
-        aspectRatio,
-        analysisModelId: analysisModel,
-        imageModel: values['image-model'],
-        videoModel: values['video-model'],
-        userId: values['user-id'] ?? 'cli-user',
-        teamId: values['team-id'] ?? 'cli-team',
-        sequenceId: values['sequence-id'],
-      },
-      { label: 'cli-analyze-script' }
-    );
+    const workflowRunId = await triggerWorkflow('/analyze-script', {
+      script,
+      styleConfig: parsedStyle,
+      aspectRatio,
+      analysisModelId: analysisModel,
+      imageModel: values['image-model'],
+      videoModel: values['video-model'],
+      userId: values['user-id'] ?? 'cli-user',
+      teamId: values['team-id'] ?? 'cli-team',
+      sequenceId: values['sequence-id'],
+    });
 
     console.log('✅ Workflow triggered successfully');
     console.log(`   Workflow Run ID: ${workflowRunId}`);

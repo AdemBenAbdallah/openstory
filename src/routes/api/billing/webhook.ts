@@ -3,7 +3,7 @@
  * POST /api/billing/webhook - Handle Stripe webhook events
  */
 
-import { stripeWebhookMiddleware } from '@/functions/stripe-webhook-middleware';
+import { stripeWebhookMiddleware } from '@/billing/stripe-webhook-middleware.fn';
 import {
   chargeFingerprint,
   fulfillSavedCard,
@@ -11,19 +11,19 @@ import {
   grantWelcomeCreditsForTeam,
   SAVE_CARD_METADATA_TYPE,
   type WelcomeGrantSource,
-} from '@/lib/billing/checkout';
-import { SIGNUP_GRANT_MICROS } from '@/lib/billing/constants';
-import { isWelcomeCardAlreadyClaimedError } from '@/shared/errors';
-import { captureCheckoutAnalyticsForStripeEvent } from '@/lib/billing/checkout-events';
-import { microsToDisplayUsd, usdToMicros } from '@/lib/billing/money';
-import { getStripeOrThrow } from '@/lib/billing/stripe';
-import { getPostHogClient } from '@/lib/posthog-server';
+} from '@/billing/server/checkout';
+import { SIGNUP_GRANT_MICROS } from '@/billing/constants';
+import { isWelcomeCardAlreadyClaimedError } from '@/platform/errors';
+import { captureCheckoutAnalyticsForStripeEvent } from '@/billing/server/checkout-events';
+import { microsToDisplayUsd, usdToMicros } from '@/billing/money';
+import { getStripeOrThrow } from '@/billing/server/stripe';
+import { getPostHogClient } from '@/platform/server/observability/posthog-server';
 import { createFileRoute } from '@tanstack/react-router';
 import { scheduleFlushAnalytics } from '#flush-scheduler';
 import type Stripe from 'stripe';
-import type { ScopedDb } from '@/lib/db/scoped';
+import type { ScopedDb } from '@/platform/server/db/scoped';
 
-import { getLogger } from '@/lib/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'api', 'billing', 'webhook']);
 

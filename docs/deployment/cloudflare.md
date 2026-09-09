@@ -107,7 +107,7 @@ remote apply path.
 ## Seeding
 
 There are no CI seed steps: the worker self-seeds system templates on first
-request (`src/server.ts` → `src/lib/db/seed-system-templates.ts`). A hash of
+request (`src/server.ts` → `src/platform/server/db/seed-system-templates.ts`). A hash of
 the template definitions is stored in `app_metadata`; when it matches, the
 check is a single SELECT per isolate, and when it doesn't (fresh database, or
 a deploy that changed templates) the idempotent sync runs once. `bun

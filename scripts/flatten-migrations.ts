@@ -14,7 +14,7 @@
  * ones by full filename in `d1_migrations`. drizzle's fixed-width 14-digit
  * timestamps make numeric and lexicographic order coincide — keep that
  * prefix shape for any hand-named migration (a non-numeric prefix sorts as
- * NaN). src/lib/db/migrations-layout.test.ts pins this.
+ * NaN). src/platform/server/db/migrations-layout.test.ts pins this.
  *
  * Run by the `deploy` and `db:migrate:prd` package scripts, and directly by
  * the PR-preview migrate step in .github/workflows/deploy-cloudflare.yml.

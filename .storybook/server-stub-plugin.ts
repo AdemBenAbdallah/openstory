@@ -5,10 +5,7 @@ import type { Plugin } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const STUB_RUNTIME = path.resolve(
-  __dirname,
-  '../src/shared/mocks/server-stub.ts'
-);
+const STUB_RUNTIME = path.resolve(__dirname, '../src/mocks/server-stub.ts');
 
 // Module paths whose import graph must NOT enter the Storybook bundle.
 // These are server-only files that drag Node-only deps into the iframe and
@@ -16,10 +13,11 @@ const STUB_RUNTIME = path.resolve(
 // already turns the function bodies into no-ops, so all we need is for the
 // import to resolve to something with the same export names but no real code.
 const SERVER_ONLY_PATTERNS: RegExp[] = [
-  /^@\/functions(\/|$)/,
-  /^@\/lib\/observability(\/|$)/,
-  /^@\/lib\/posthog-server$/,
-  /^@\/lib\/auth\/server$/,
+  /^@\/.+\.fn$/,
+  /\.fn$/,
+  /^@\/.+\/server(\/|$)/,
+  /^@\/platform\/server(\/|$)/,
+  /^@\/platform\/server\/observability\/posthog-server$/,
 ];
 
 const TS_ALIAS_PREFIX = '@/';
@@ -84,9 +82,19 @@ export function serverStubPlugin(): Plugin {
   return {
     name: 'storybook-server-stub',
     enforce: 'pre',
-    async resolveId(source) {
+    async resolveId(source, importer) {
       if (!matchesServerOnly(source)) return null;
-      const fsBase = aliasToFsPath(source);
+      let fsBase = aliasToFsPath(source);
+      // `/\.fn$/` also matches relative/absolute ids, not just `@/` aliases.
+      if (!fsBase && /\.fn(?:\.tsx?)?$/.test(source)) {
+        const raw = path.isAbsolute(source)
+          ? source
+          : importer
+            ? path.resolve(path.dirname(importer), source)
+            : null;
+        fsBase = raw?.replace(/\.(ts|tsx)$/, '') ?? null;
+        if (!fsBase) return null;
+      }
       if (!fsBase) {
         throw new Error(
           `[storybook-server-stub] matched ${source} as server-only but it does not start with the ${TS_ALIAS_PREFIX} alias. Update SERVER_ONLY_PATTERNS or fix the import.`

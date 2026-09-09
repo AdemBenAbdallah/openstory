@@ -6,7 +6,7 @@
  * the root) so tooling can fetch it before a key is wired up.
  */
 
-import { buildOpenApiDocument } from '@/lib/api-v1/openapi';
+import { buildOpenApiDocument } from '@/platform/server/api-v1/openapi';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/v1/openapi.json')({

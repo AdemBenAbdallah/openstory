@@ -7,12 +7,12 @@
  * for an API key, and redirect the user back to settings.
  */
 
-import { authWithTeamRequestMiddleware } from '@/functions/middleware';
-import { completeOpenRouterOAuth } from '@/lib/byok/complete-oauth';
-import { getOAuthCookieClearHeader } from '@/lib/byok/openrouter-oauth-cookie';
+import { authWithTeamRequestMiddleware } from '@/platform/middleware.fn';
+import { completeOpenRouterOAuth } from '@/platform/server/byok/complete-oauth';
+import { getOAuthCookieClearHeader } from '@/platform/server/byok/openrouter-oauth-cookie';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { getLogger } from '@/lib/observability/logger';
+import { getLogger } from '@/platform/logger';
 
 const logger = getLogger(['openstory', 'api', 'openrouter', 'callback']);
 

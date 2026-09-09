@@ -1,6 +1,6 @@
 import { getEnv } from '#env';
 import { createFileRoute } from '@tanstack/react-router';
-import { authRequestMiddleware } from '@/functions/middleware';
+import { authRequestMiddleware } from '@/platform/middleware.fn';
 
 /**
  * SSE subscription endpoint. One request carries *many* channels: the client

@@ -1,7 +1,7 @@
-import { PageContainer } from '@/components/layout/page-container';
-import { ModelFamilyView } from '@/components/models/model-family-view';
-import { MODELS_ENABLED } from '@/shared/flags';
-import { CATALOG_ACTIVITIES } from '@/lib/models/catalog';
+import { PageContainer } from '@/ui/layout/page-container';
+import { ModelFamilyView } from '@/models/ui/model-family-view';
+import { MODELS_ENABLED } from '@/platform/flags';
+import { CATALOG_ACTIVITIES } from '@/models/catalog';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { z } from 'zod';

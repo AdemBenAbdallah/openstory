@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { serveStoredMedia } from '@/lib/storage/serve-media';
+import { serveStoredMedia } from '@/platform/server/storage/serve-media';
 
 /**
  * Serve route for stored media. Stored media URLs are origin-relative

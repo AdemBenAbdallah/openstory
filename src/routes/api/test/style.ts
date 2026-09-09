@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { createTestStyle } from '@/lib/test/seed';
+import { createTestStyle } from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateStyleSchema = z.object({

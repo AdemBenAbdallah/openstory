@@ -1,6 +1,6 @@
-import { routeParams } from '@/components/layout/breadcrumbs';
-import { LocationDetailView } from '@/components/locations/location-detail-view';
-import { useSequenceLocations } from '@/hooks/use-sequence-locations';
+import { routeParams } from '@/ui/layout/breadcrumbs';
+import { LocationDetailView } from '@/cast/ui/locations/location-detail-view';
+import { useSequenceLocations } from '@/cast/ui/use-sequence-locations';
 import { createFileRoute } from '@tanstack/react-router';
 
 function LocationCrumbLabel({

@@ -1,5 +1,5 @@
 /**
- * Fetch live pricing from OpenRouter and write src/lib/ai/openrouter-pricing-data.ts
+ * Fetch live pricing from OpenRouter and write src/billing/openrouter-pricing-data.ts
  * Usage:
  *   bun scripts/update-openrouter-pricing.ts
  *
@@ -8,7 +8,7 @@
  * the public pricing page and pre-flight estimates.
  */
 import { writeFile } from 'node:fs/promises';
-import { SCRIPT_ANALYSIS_MODELS } from '../src/lib/ai/models.config';
+import { SCRIPT_ANALYSIS_MODELS } from '@/models/models.config';
 
 type OpenRouterModel = {
   id: string;
@@ -84,8 +84,8 @@ ${entries.join('\n')}
 export const OPENROUTER_PRICING_LAST_UPDATED = '${timestamp}';
 `;
 
-await writeFile('src/lib/ai/openrouter-pricing-data.ts', output);
+await writeFile('src/billing/openrouter-pricing-data.ts', output);
 console.log(
-  `Wrote ${entries.length} model prices to src/lib/ai/openrouter-pricing-data.ts`
+  `Wrote ${entries.length} model prices to src/billing/openrouter-pricing-data.ts`
 );
 if (missing.length > 0) process.exit(1);

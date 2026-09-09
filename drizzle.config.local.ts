@@ -75,7 +75,7 @@ if (!existsSync(sqlitePath)) {
 }
 
 export default defineConfig({
-  schema: './src/lib/db/schema/index.ts',
+  schema: './src/platform/server/db/schema/index.ts',
   out: './drizzle/migrations',
   dialect: 'sqlite',
   dbCredentials: {

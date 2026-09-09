@@ -2,7 +2,7 @@
  * Database Seed Script
  * Seeds the database with initial template styles and system team.
  *
- * The actual sync lives in src/lib/db/seed-system-templates.ts and is shared
+ * The actual sync lives in src/platform/server/db/seed-system-templates.ts and is shared
  * with the worker runtime (src/server.ts), which self-seeds on first request
  * when the stored seed hash is stale. This CLI exists for local/test setup
  * and as a manual escape hatch for remote databases.
@@ -15,12 +15,12 @@
  *                                      # template rows when the hash row survived)
  */
 
-import { createD1HttpClient } from '@/lib/db/client-d1-http';
-import { ensureLocalModelPricingSeeded } from '@/lib/db/seed-model-pricing';
+import { createD1HttpClient } from '@/platform/server/db/client-d1-http';
+import { ensureLocalModelPricingSeeded } from '@/billing/server/seed-model-pricing';
 import {
   ensureSystemTemplatesSeeded,
   type SeedDb,
-} from '@/lib/db/seed-system-templates';
+} from '@/platform/server/db/seed-system-templates';
 import { drizzle as drizzleD1 } from 'drizzle-orm/d1';
 import { getLocalPlatformProxy } from './local-platform-proxy';
 

@@ -1,10 +1,10 @@
-import { AppLayout } from '@/components/layout/app-layout';
-import { RouteErrorFallback } from '@/components/error/route-error-fallback';
+import { AppLayout } from '@/ui/layout/app-layout';
+import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { redirect } from '@tanstack/react-router';
-import { sessionQueryOptions } from '@/lib/auth/session-query';
-import { viaAvailabilityQueryOptions } from '@/hooks/use-via-availability';
-import { billingBalanceQueryOptions } from '@/hooks/use-billing-balance';
+import { sessionQueryOptions } from '@/platform/ui/auth/session-query';
+import { viaAvailabilityQueryOptions } from '@/models/ui/use-via-availability';
+import { billingBalanceQueryOptions } from '@/billing/ui/use-billing-balance';
 
 export const Route = createFileRoute('/_app')({
   component: ProtectedLayout,

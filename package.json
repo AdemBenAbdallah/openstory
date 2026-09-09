@@ -5,21 +5,21 @@
   "type": "module",
   "imports": {
     "#env": {
-      "workerd": "./src/lib/env/cloudflare.ts",
-      "default": "./src/lib/env/default.ts"
+      "workerd": "./src/platform/server/env/cloudflare.ts",
+      "default": "./src/platform/server/env/default.ts"
     },
     "#db-client": {
-      "workerd": "./src/lib/db/client-d1.ts",
-      "storybook": "./src/lib/db/client-stub.ts",
-      "default": "./src/lib/db/client-node.ts"
+      "workerd": "./src/platform/server/db/client-d1.ts",
+      "storybook": "./src/platform/server/db/client-stub.ts",
+      "default": "./src/platform/server/db/client-node.ts"
     },
     "#storage": {
-      "workerd": "./src/lib/storage/storage-cloudflare.ts",
-      "default": "./src/lib/storage/storage-stub.ts"
+      "workerd": "./src/platform/server/storage/storage-cloudflare.ts",
+      "default": "./src/platform/server/storage/storage-stub.ts"
     },
     "#flush-scheduler": {
-      "workerd": "./src/lib/observability/flush-scheduler.cloudflare.ts",
-      "default": "./src/lib/observability/flush-scheduler.ts"
+      "workerd": "./src/platform/server/observability/flush-scheduler.cloudflare.ts",
+      "default": "./src/platform/server/observability/flush-scheduler.ts"
     },
     "#actions/*": {
       "storybook": "./src/app/actions/*/index.mock.ts",
@@ -73,7 +73,7 @@
     "prepare:e2e-built": "mkdir -p .wrangler/deploy && printf '%s' '{\"configPath\":\"../../dist/server/wrangler.json\",\"auxiliaryWorkers\":[]}' > .wrangler/deploy/config.json",
     "test:e2e:setup": "bun run db:migrate:test && bun scripts/seed.ts --test",
     "db:generate": "bun drizzle-kit generate --config=drizzle.config.d1.ts",
-    "auth:generate": "bun x auth@1.7.2 generate --config src/lib/auth/cli-config.ts",
+    "auth:generate": "bun x auth@1.7.2 generate --config src/platform/server/auth/cli-config.ts",
     "db:check": "bun drizzle-kit check --config=drizzle.config.d1.ts",
     "db:migrate:local": "bun scripts/migrate-local-d1.ts",
     "db:migrate:test": "bun scripts/migrate-local-d1.ts --test",
@@ -95,7 +95,6 @@
     "deploy:production": "bun scripts/flatten-migrations.ts && wrangler d1 migrations apply DB --env=production --remote && wrangler deploy"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1121.0",
     "@base-ui/react": "^1.7.0",
     "@better-auth/api-key": "1.7.2",
     "@better-auth/mcp": "1.7.2",

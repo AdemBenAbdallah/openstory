@@ -51,8 +51,13 @@ flowchart TD
 Create `src/lib/db/scoped-context.ts`:
 
 ```typescript
-import type { Frame, Sequence, Style, Character } from '@/lib/db/schema';
-import { AuthorizationError } from '@/shared/errors';
+import type {
+  Frame,
+  Sequence,
+  Style,
+  Character,
+} from '@/platform/server/db/schema';
+import { AuthorizationError } from '@/platform/errors';
 
 export interface ScopedDbContext {
   readonly teamId: string;
@@ -122,7 +127,7 @@ export class AuthorizationError extends Error {
 
 ### 2.1 Extend context types
 
-Update `src/functions/middleware.ts`:
+Update `src/platform/middleware.fn.ts`:
 
 ```typescript
 import { createScopedDb, type ScopedDbContext } from '@/lib/db/scoped-context';
@@ -235,7 +240,7 @@ export function createFrameService(db: ScopedDbContext) {
 
 ### 4.1 Sequences
 
-Update `src/functions/sequences.ts`:
+Update `src/sequences/sequences.fn.ts`:
 
 **Before:**
 
@@ -278,7 +283,7 @@ export const getFramesFn = createServerFn({ method: 'GET' })
 
 ### 4.3 Styles
 
-Update `src/functions/styles.ts` - currently uses `getDb()` directly:
+Update `src/look/styles.fn.ts` - currently uses `getDb()` directly:
 
 ```typescript
 // Remove: import { getDb } from '#db-client';
@@ -428,18 +433,18 @@ bunx oxlint --type-aware src/functions/
 | --------------------------------------- | --------------------------------- |
 | `src/lib/db/scoped-context.ts`          | New file                          |
 | `src/lib/errors.ts`                     | Add AuthorizationError            |
-| `src/functions/middleware.ts`           | Update context types + middleware |
+| `src/platform/middleware.fn.ts`         | Update context types + middleware |
 | `src/lib/services/sequence.service.ts`  | Refactor to factory               |
 | `src/lib/services/frame.service.ts`     | Refactor to factory               |
 | `src/lib/services/character.service.ts` | Refactor to factory               |
 | `src/lib/services/team.service.ts`      | Refactor to factory               |
-| `src/functions/sequences.ts`            | Use context.db                    |
+| `src/sequences/sequences.fn.ts`         | Use context.db                    |
 | `src/functions/frames.ts`               | Use context.db                    |
-| `src/functions/styles.ts`               | Use context.db                    |
+| `src/look/styles.fn.ts`                 | Use context.db                    |
 | `src/functions/teams.ts`                | Use context.db                    |
-| `src/functions/ai.ts`                   | Use context.db                    |
+| `src/models/ai.fn.ts`                   | Use context.db                    |
 | `src/functions/invite-codes.ts`         | Use context.db                    |
-| `src/functions/user.ts`                 | Use context.db                    |
+| `src/platform/user.fn.ts`               | Use context.db                    |
 | `.oxlintrc.json`                        | Add no-restricted-imports rules   |
 | `src/lib/db/scoped-context.test.ts`     | New test file                     |
 

@@ -4,7 +4,7 @@ import {
   createTestShot,
   getTestShot,
   getTestSequenceShots,
-} from '@/lib/test/seed';
+} from '@/platform/server/test/seed';
 import { testOnlyGuard } from './route';
 
 const CreateShotSchema = z.object({

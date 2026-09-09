@@ -57,22 +57,31 @@ bun deploy:production              # Workers Builds prod deploy command (migrate
 
 ```
 src/
-  routes/           # TanStack Router file-based routes
-    api/            #   Webhooks (workflows + auth only)
-    _app/           #   App shell (anonymous-browsable; actions gated behind login)
-  functions/        # createServerFn endpoints — most business logic lives here
-  components/       # React UI (shadcn/ui base + layout-only Tailwind)
-  shared/         # Client-safe code (utils, vocabularies, sequence-player…) — where client code should import from; `@/lib` value imports are limited to the shrinking exception list in .oxlintrc.json
-  lib/            # Server-only (see Client/server boundary below)
-    ai/             #   AI model configs, prompt schemas, frame.schema
-    db/             #   Drizzle schema + clients (D1 in prod + dev via Wrangler)
-    services/       #   Frame, motion, etc. business services
-    workflows/      #   Cloudflare Workflows durable definitions
-    auth/           #   Better Auth wiring + action-utils
+  routes/           # TanStack file routes (thin: params, loader, which screen)
+  ui/               # app shell, providers, cn, cross-cutting hooks
+    shadcn/         #   generated shadcn primitives (lint/knip-ignored; managed by the CLI)
+  platform/         # DOMAIN-BLIND infrastructure: auth, env, db client + schema,
+                    # storage, workflow engine, logger, realtime transport, emails
+    server/         #   its server-only half
+    ui/             #   its React half (auth forms, realtime client)
+  models/           # catalog, vias (fal/BytePlus/xAI/Google adapters), duration/resolution grids
+  sequences/        # aggregate: script analysis, pipeline, checkpoint, export
+  shots/            # content unit (frame + scene + staleness + prompt versions)
+  motion/           # video request/submit/poll + player
+  stills/           # image gen, sheets, upscale
+  audio/            # music
+  cast/             # talent, locations, elements, bibles
+  look/             # style
+  billing/          # money, estimates, pricing data + refresh, Stripe
+  studio/           # playground
 e2e/                # Playwright tests
 scripts/            # CLI tooling and setup
 drizzle/migrations/ # Generated SQL (do NOT hand-edit)
 ```
+
+Inside a product domain: root files are client-safe (catalogs, pure logic, zod); `server/` is server-only (workflows, `server/db/<table>.ts` scoped-db modules, AI calls, prompts); `*.fn.ts` is a Start server fn (client imports the stub; `.handler()` is stripped); `ui/` is React + hooks. Domains may import each other's roots and `server/` halves; the coupling is real and is not hidden.
+
+**`src/platform` is domain-blind.** It may not value-import a product domain (`import type` is free) — enforced by `boundaries/platform-domain-blind` in `.oxlintrc.json` and, for relative imports the alias pattern cannot see, by `src/platform/domain-blind.test.ts`. A platform file that needs a domain belongs to that domain. Platform tests are exempt; the only other exceptions are the **composition roots** listed in the `boundaries/platform-domain-blind` override — the ScopedDb aggregate (`server/db/scoped.ts`, `scoped-workflow.ts`, `scoped/admin.ts`), `server/db/seed-system-templates.ts`, the public API layer `server/api-v1/**`, the realtime `query-cache-updater`, and the workflow base (`server/workflow/base-workflow.ts`, which bootstraps each run). Keep that list short: a new entry usually means a file that belongs in a domain.
 
 ## Architecture
 
@@ -81,7 +90,13 @@ drizzle/migrations/ # Generated SQL (do NOT hand-edit)
 **Core rules:**
 
 - Database access ONLY in server handlers (never in components).
-- **Client/server boundary (#1445):** `src/lib` is server-only; `src/shared` is client-safe. `src/components`, `src/hooks`, `src/routes` and `src/shared` may not value-import `@/lib/**` — enforced per-file by `no-restricted-imports` in `.oxlintrc.json`, and transitively by `src/lib/client-server-boundary.test.ts` (pre-commit). `src/routes/api/**` and `src/functions/**` are exempt from the per-file rule (server handlers); the test covers them by modelling what the Start compiler strips. Top-level `import type` is free; the inline `import { type X }` form is NOT — it leaves a side-effect import that ships the whole graph, so `typescript/no-import-type-side-effects` bans it. Directories still listed as `!@/lib/<dir>` exceptions mix both halves; moving a helper into `src/shared` and deleting its exception line is the migration (two exceptions are not that shape — see the comment in `.oxlintrc.json`).
+- **Import boundaries are one lint rule per question** (`scripts/lint/restricted-imports.ts`, plugin `boundaries`). oxlint overrides replace a rule's whole config for the files they match, so concerns sharing one rule key cannot be layered — every override would have to restate the others. Instead each concern is its own rule, on for every file, and each override in `.oxlintrc.json` is exactly "these files may do X":
+  - `boundaries/no-server-imports` — **client/server seam (#1445).** `src/**/server/**` is server-only; lifted for server code (`src/**/server/**`, `src/**/*.fn.ts` — the compiler strips `.handler()`, `src/routes/api/**`, the root-level server-only routes, `*.test.ts`, scripts). `*.test.tsx` and stories are NOT lifted: a React test or story only ever needs `import type` from server code. Transitive backstop: `src/platform/client-server-boundary.test.ts` (pre-commit). Do not punch `!` holes in the pattern: a file that needs server code belongs under `server/` or is a `*.fn.ts`; a file that mixes halves is split, not exempted. One deliberate leak shape remains: a `createIsomorphicFn().server(…)` body may value-import server modules under an `oxlint-disable-next-line boundaries/no-server-imports` (`src/billing/billing-observability.ts`, `routes/__root.tsx`), because the compiler strips it.
+  - `boundaries/no-sql` — **SQL is written in the db layer only.** `drizzle-orm` query builders are lifted for `src/**/server/db/**` (the scoped-db modules), the schema, the seeds, scripts, `*.test.ts`, and the pricing/cron jobs that still read the raw handle (collapsing into one db-layer module under #1535); `drizzle-orm/zod` validators are fine anywhere. A domain module that needs a query adds a method to its scoped-db module and calls it through `scopedDb` — it does not take a `Database` handle as a parameter.
+  - `boundaries/no-raw-db` and `boundaries/no-scoped-factory` — **raw db access is allowlisted twice.** `#db-client` is lifted only for the raw-handle readers (the scoped-db factory, the Better Auth adapter, the pricing/cron jobs, the seeds); `createScopedDb` / `createSystemAdminScopedDb` only for the two request middlewares and the workflow base. Even the allowlisted files keep table SQL out where they can: the sign-up hook calls `createDefaultTeam`, the same bootstrap `ensureUserAndTeam` uses. `src/platform/server/db/db-access-allowlist.test.ts` pins both lists by resolving every value import, which catches the relative-path form the lint rule cannot see. Everything team-scoped goes through `context.scopedDb`.
+  - `boundaries/platform-domain-blind` — on for `src/platform/**` only (see Project Structure).
+  - All of them ignore `import type`; the inline `import { type X }` form is banned by `typescript/no-import-type-side-effects` because it leaves a side-effect import that ships the whole graph.
+
 - Anonymous-first → upgrade to save work.
 - Team-based resources (sequences, styles, characters).
 - Script-driven generation for consistency.
@@ -153,10 +168,13 @@ Steps: 1) validate input · 2) auth via `authWithTeamRequestMiddleware` (user/te
 
 Durable async work runs on **Cloudflare Workflows**. Each workflow is a
 `WorkflowEntrypoint` subclass; there is no QStash and no HTTP callback route.
+`triggerWorkflow`'s only option besides `enforcement` is `deduplicationId` —
+the QStash-era `label` / `retries` / `retryDelay` were no-ops and are gone
+(retry policy is per `step.do`; observability is the instance id).
 
 **Triggering workflows — use `triggerWorkflow(path, body)`** from
-`@/lib/workflow/client`. It resolves the workflow binding for `path` (see
-`TRIGGER_TO_BINDING` in `src/lib/workflow/trigger-bindings.ts`) and calls
+`@/platform/server/workflow/client`. It resolves the workflow binding for `path` (see
+`TRIGGER_TO_BINDING` in `src/platform/server/workflow/trigger-bindings.ts`) and calls
 `binding.create()`, returning the workflow instance id (store it as
 `workflowRunId`):
 
@@ -171,14 +189,14 @@ const workflowRunId = await triggerWorkflow('/image', {
 
 Pass a stable `deduplicationId` in the options to make a trigger idempotent.
 
-**Defining workflows** — each lives in `src/lib/workflows/<name>-workflow.ts`,
-extends `OpenStoryWorkflowEntrypoint` (`src/lib/workflow/base-workflow.ts`),
+**Defining workflows** — each lives in `src/<domain>/server/workflows/<name>-workflow.ts`,
+extends `OpenStoryWorkflowEntrypoint` (`src/platform/server/workflow/base-workflow.ts`),
 and must be wired in three places (a test in
-`src/lib/workflow/wiring-consistency.test.ts` enforces this):
+`src/platform/server/workflow/wiring-consistency.test.ts` enforces this):
 
 1. `wrangler.jsonc` `workflows[]` — declares the binding + `class_name`.
 2. `src/server.ts` — re-exports the class so it lands in the Worker bundle.
-3. `TRIGGER_TO_BINDING` in `src/lib/workflow/trigger-bindings.ts` — maps the
+3. `TRIGGER_TO_BINDING` in `src/platform/server/workflow/trigger-bindings.ts` — maps the
    trigger path to the binding name.
 
 The base class validates `userId`/`teamId` on the payload, builds a
@@ -186,7 +204,7 @@ The base class validates `userId`/`teamId` on the payload, builds a
 `runImpl(event, step, scopedDb)`, run steps via
 `step.do('step-name', async () => { ... })` (durable, auto-retried), and write
 DB updates directly. For parent→child fan-out (await a child's result), use
-`spawnAndAwaitChild` from `src/lib/workflow/await-child.ts`.
+`spawnAndAwaitChild` from `src/platform/server/workflow/await-child.ts`.
 
 **Workflows must not read mutable D1 state mid-run.** A run starts minutes to
 hours after the click, replays its steps from a durable cache, and races its own
@@ -194,7 +212,7 @@ children — so a live re-read can feed a step a value the user never asked for,
 and can feed two steps of the same run different values. Snapshot everything
 onto the payload in the server fn that triggers the run. This is enforced by
 construction: `runImpl` receives a **`WorkflowScopedDb`**
-(`src/lib/db/scoped-workflow.ts`) — the full write surface with every read
+(`src/platform/server/db/scoped-workflow.ts`) — the full write surface with every read
 method removed — so a mid-run read is a type error. The few reads that cannot be
 snapshotted reach the run through three **named hatches**, so the spelling at
 the call site is the justification:
@@ -209,7 +227,7 @@ the call site is the justification:
   existence guards.
 
 Each surface is enumerated in `scoped-workflow.ts` and pinned by
-`src/lib/workflow/no-mid-run-reads.test.ts`, which also fails if a read's
+`src/platform/server/workflow/no-mid-run-reads.test.ts`, which also fails if a read's
 category doesn't match the hatch it came through. Full rationale:
 `docs/architecture/workflow-snapshots-and-content-hash-staleness.md`.
 
@@ -276,7 +294,7 @@ Full rationale: `docs/architecture/reference-only-motion.md`.
 ## Stop-at stages and continue (#1408)
 
 Generate asks how far to run. **One ordered list**, `GENERATION_STAGES` in
-`src/lib/generation/pipeline.ts` (script → references → images → motion →
+`src/sequences/pipeline.ts` (script → references → images → motion →
 music), drives the Generate-dialog slider, the progress banner and the
 scene-list continue button. Casting is part of `script` (it emits the Script
 phase number); there is no separate stage.
@@ -310,14 +328,33 @@ phase number); there is no separate stage.
   full `Scene` lives in `frame.metadata`); the staleness tooling covers them
   after the fact.
 
+## Public API OpenAPI document
+
+`GET /api/v1/openapi.json` is built by `src/platform/server/api-v1/openapi.ts`, and **every
+schema in it is generated** — nothing is hand-authored. Request bodies come
+from the validators the routes parse with; response documents come from the
+Zod schemas their TypeScript types are `z.infer`'d from (`state.ts`,
+`create.ts`, `list.ts`, `styles.ts`, `hal.ts`). So a response shape cannot
+drift from its published contract: change the schema and both move together.
+
+- A component is named by `.meta({ id })`; `componentDefs()` hoists the `$defs`
+  Zod emits into `components.schemas` and repoints the refs.
+- **`.extend()` mints a new schema and drops the `.meta({ id })`.** Tag the
+  shape you actually return — the `_links`-bearing _resource_
+  (`sequenceStateResourceSchema`, `styleResourceSchema`), not the bare body —
+  or the component is published but never referenced.
+- `openapi.test.ts` fails on any dangling `$ref`, which is what caught that.
+- Use `z.string().meta({ format: 'date-time' })`, not `z.iso.datetime()`: the
+  latter also publishes a multi-hundred-character regex.
+
 ## OAuth authorization server ("login with OpenStory", #1456)
 
 OpenStory is an OAuth 2.1 authorization server, built on Better Auth's `jwt()` + `@better-auth/mcp` (= `@better-auth/oauth-provider` preconfigured for MCP). Three kinds of clients: hosted MCP clients (discover via RFC 9728/8414, self-register via RFC 7591 DCR, consent screen — nobody registers apps by hand), forks/self-hosts (the OpenRouter pattern inverted: the fork is the client, upstream is the server, the grant is a team credential — **not** SSO), and anything else that can do auth-code + PKCE. Skills/CLIs keep the device-code login (`/api/v1/device/*` → `osk_` key).
 
-- **Config:** `src/lib/auth/oauth-provider.ts` (issuer = `VITE_APP_URL` origin, HTTPS or loopback only; two RFC 8707 resources: `…/mcp` and `…/api/v1`; scopes `sequences:read|write`, `generate`, `credits:read`). The plugins are spread into `config.ts`.
+- **Config:** `src/platform/server/auth/oauth-provider.ts` (issuer = `VITE_APP_URL` origin, HTTPS or loopback only; two RFC 8707 resources: `…/mcp` and `…/api/v1`; scopes `sequences:read|write`, `generate`, `credits:read`). The plugins are spread into `config.ts`.
 - **Discovery:** Better Auth lives at `/api/auth`, so `src/routes/[.]well-known/$.ts` forwards root `/.well-known/*` to `auth.handler` (the plugins answer from their `onRequest` hooks) and builds the `/api/v1` protected-resource document itself.
 - **Login/consent:** the provider's `loginPage` is `/oauth/login`, a server route that turns the signed authorize query into `/login?redirectTo=/api/auth/oauth2/authorize?…` (`oauth-login-resume.ts`); after sign-in `finishSignInRedirect` does a full navigation for `/api/` paths. `consentPage` is `/oauth/consent-start`, which packs the signed query (repeated `ba_param` keys) into a single `q` param and 302s to `/oauth/consent` — TanStack's qss parser would otherwise collapse the repeats and fail signature verify. At consent the grant is stamped with the user's default team (`postLogin.consentReferenceId` → `resolveUserTeam`); there is no picker yet. `/api/v1` uses `team_id` when present, otherwise the same default-team lookup as an `osk_` key.
-- **Bearer JWTs on `/api/v1` only:** `customAPIKeyGetter` only hands `osk_` values to the api-key plugin; `src/lib/auth/oauth-bearer.ts` verifies tokens locally against the JWKS in D1 (audience `…/api/v1`) in `authWithTeamRequestMiddleware`, which enforces `src/lib/api-v1/oauth-scopes.ts` and the `team_id` membership. Internal routes (`/api/storage`, `/api/realtime`) do not accept OAuth JWTs. `osk_` keys are unscoped. JWT plugin `GET /token` is disabled (`disabledPaths`) and `disableSettingJwtHeader` is on so session JWTs are not minted from the same JWKS.
+- **Bearer JWTs on `/api/v1` only:** `customAPIKeyGetter` only hands `osk_` values to the api-key plugin; `src/platform/server/auth/oauth-bearer.ts` verifies tokens locally against the JWKS in D1 (audience `…/api/v1`) in `authWithTeamRequestMiddleware`, which enforces `src/platform/server/api-v1/oauth-scopes.ts` and the `team_id` membership. Internal routes (`/api/storage`, `/api/realtime`) do not accept OAuth JWTs. `osk_` keys are unscoped. JWT plugin `GET /token` is disabled (`disabledPaths`) and `disableSettingJwtHeader` is on so session JWTs are not minted from the same JWKS.
 - **Schema:** `jwks` + `oauth_*` tables in `schema/auth.ts`, from `bun auth:generate` (the CLI config swallows the provider's background init rejection — generation never needs it). The generated FKs into `user`/`session` are deliberately not declared (#612); FKs between the OAuth tables cascade from `oauth_client`, which is what lets `pruneOrphanedOAuthClients` (run on `/oauth2/register`, which is also rate-limited per IP) clean up.
 - **Not yet:** `@better-auth/cimd` (its Node transport needs `node:dns`/`node:https`; the Workers transport is a follow-up), a team picker on consent, the `/mcp` endpoint (#1457), the fork-side "Connect OpenStory" flow and gateway via.
 
@@ -356,10 +393,10 @@ Two vias, one catalog key. `IMAGE_TO_VIDEO_MODELS.seedance_v2` / `seedance_v2_5`
 
 - **Platform key only.** `team_api_keys` stays `'openrouter' | 'fal'` — there is no `'byteplus'` on `API_KEY_PROVIDERS` and no `resolveOptionalKey('byteplus')`.
 - **Ark is not fal-shaped**, so the fal codegen (`bun motion:codegen`, `MOTION_TRANSFORMS`) does not apply. `resolveMotionEndpoint` stays fal i2v / reference-to-video / text-to-video. Ark Seedance with refs uses `buildBytePlusVideoRequest` — Ark **rejects frame roles mixed with reference roles** (a shot with cast refs sends the still AS a reference). Seedream's `2K` token is **square**, so non-square sizes must be spelled in pixels. Image `watermark` **defaults to true**.
-- **Pricing is a static card**, not `model_pricing` — BytePlus publishes no pricing API. `src/lib/ai/byteplus-pricing.ts` holds dated, advertised (NOT bill-verified) rates and is merged into the effective pricing map at read time, so a fresh deploy never bills $0. When Ark is configured, `applyBytePlusRouteAliases` points the fal endpoint ids at the Ark rate, which is why **no estimator or UI call site needs to know the via**. Video bills in tokens (÷1000 for the `1000 tokens` unit); images bill per image. Ark units set `recordFalUsage: false`.
-- **Ark quotas are per-ACCOUNT** (shared by every team), where fal's are per-key — so the backpressure is 429 classification + exponential backoff in `byteplus-rate-limit.ts` (`withBytePlusQuotaRetry` lives inside the byteplus via case), which deliberately does **not** consume the content-flag retry budget. Deliberately **not** a per-run fan-out cap: #1143 deleted that mechanism because it is per workflow RUN. Real admission control has to live where it can see the whole system. Every rejection emits a `byteplus_quota_backoff` PostHog event (`byteplus-observability.ts`) — un-deduped. Watch the `exhausted: true` rate: non-zero means it is time for a bounded queue in front of Ark (#891).
+- **Pricing is a static card**, not `model_pricing` — BytePlus publishes no pricing API. `src/billing/byteplus-pricing.ts` holds dated, advertised (NOT bill-verified) rates and is merged into the effective pricing map at read time, so a fresh deploy never bills $0. When Ark is configured, `applyBytePlusRouteAliases` points the fal endpoint ids at the Ark rate, which is why **no estimator or UI call site needs to know the via**. Video bills in tokens (÷1000 for the `1000 tokens` unit); images bill per image. Ark units set `recordFalUsage: false`.
+- **Ark quotas are per-ACCOUNT** (shared by every team), where fal's are per-key — so the backpressure is 429 classification + exponential backoff in `quota-retry.ts` (`withBytePlusQuotaRetry` lives inside the byteplus via case; `withLlmRateLimitRetry` is the same loop for the LLM providers), which deliberately does **not** consume the content-flag retry budget. Deliberately **not** a per-run fan-out cap: #1143 deleted that mechanism because it is per workflow RUN. Real admission control has to live where it can see the whole system. Every rejection emits a `byteplus_quota_backoff` PostHog event (`byteplus-observability.ts`) — un-deduped. Watch the `exhausted: true` rate: non-zero means it is time for a bounded queue in front of Ark (#891).
 - **The Assets OpenAPI is paced by a Durable Object (#1519).** `BytePlusGovernor` (`byteplus-governor.do.ts`, binding `BYTEPLUS_GOVERNOR`, migration tag `v3` in all three env blocks) holds a token bucket per account. **CreateAsset is 3/min per account** (`BYTEPLUS_ASSET_WRITE_QPM`), so registering stills is a sequence of durable workflow steps, not part of submit: `ingestArkAssets` (`byteplus-asset-steps.ts`) claims a pool slot, reserves a create turn in the DO, `step.sleep`s the delay (free while idle, survives eviction), then creates — and hands `submitMotionJob` / `submitStudioVideoJob` an `arkAssets` map they only look up (`arkUrlFor` throws on a miss). Only stills that can carry a face are registered: the start frame and character sheets (`arkStillsForMotion`); location/element sheets go as plain URLs; studio registers every user image (`arkStillsForStudio`). Reads (`ListAssets`, `GetAsset` polls) are paced in-step on a separate bucket (`BYTEPLUS_OPENAPI_QPM`, default 60), with the backoff retry underneath.
-- **Asset groups are per deployment, and swept hourly (#1519).** The AIGC group is `openstory-virtual-<app host>` (`aigcGroupName`, from `VITE_APP_URL`; `BYTEPLUS_ASSET_GROUP_ID` pins one by id), so production and each preview own separate groups on the shared account. `reconcileBytePlusAssets` (`src/lib/cron/reconcile-byteplus-assets.ts`, cron `53 * * * *` in both blocks) diffs the group against `byteplus_assets` both ways: an Ark asset the ledger does not know and older than the 45-minute lease window is deleted (a closed preview's D1 takes its ledger with it, its assets stayed); a ledger row whose asset is gone is forgotten so the slot counts as free. Nothing is deleted from Ark after a video — assets are a reusable working set, only their lease is released. The preview patch splices the container's `v2` between `v1` and `v3` — wrangler applies migrations in array order after the last-applied tag. **Never fall back**: a failed ingest fails the shot, and an Ark portrait rejection is thrown as an Ark error — a quiet hop to fal (or to a public URL) is how a throttled ingest showed up as a fal error the user could not act on.
+- **Asset groups are per deployment, and swept hourly (#1519).** The AIGC group is `openstory-virtual-<app host>` (`aigcGroupName`, from `VITE_APP_URL`; `BYTEPLUS_ASSET_GROUP_ID` pins one by id), so production and each preview own separate groups on the shared account. `reconcileBytePlusAssets` (`src/models/server/reconcile-byteplus-assets.ts`, cron `53 * * * *` in both blocks) diffs the group against `byteplus_assets` both ways: an Ark asset the ledger does not know and older than the 45-minute lease window is deleted (a closed preview's D1 takes its ledger with it, its assets stayed); a ledger row whose asset is gone is forgotten so the slot counts as free. Nothing is deleted from Ark after a video — assets are a reusable working set, only their lease is released. The preview patch splices the container's `v2` between `v1` and `v3` — wrangler applies migrations in array order after the last-applied tag. **Never fall back**: a failed ingest fails the shot, and an Ark portrait rejection is thrown as an Ark error — a quiet hop to fal (or to a public URL) is how a throttled ingest showed up as a fal error the user could not act on.
 - **Photorealistic faces (including generated ones).** Seedance 2.5/2.0 reject a public URL that _may contain a real person_ (`InputImageSensitiveContentDetected.PrivacyInformation`). Advanced Creation Rights unlock the **virtual** portrait library. Submit registers **every still** as `asset://` (`BYTEPLUS_ACCESS_KEY` / `BYTEPLUS_SECRET_KEY`) — start frame and all references. If ingest is missing or Ark still 400s, fal fallback remains. Do **not** fold it into the content-flag re-roll.
 - **ACR slots are a working set, not a library (#1361).** ~50 resident assets per BytePlus **account** (`BYTEPLUS_ASSET_SLOTS`), shared by every team — the same shape as the Ark quotas. `byteplus-asset-pool.ts` reuses by identity (the **stored** URL, hashed), evicts the least-recently-used **unleased** slot when full (start frames before cast/location sheets), and refuses when everything is leased, which falls through to fal. The lease is a `byteplus_assets` row with a CAS delete as the mutex: deleting an `asset://` a job is still polling 400s that job, so the lease must cover submit **through** poll. `MotionWorkflow` releases on BOTH exits — success and `onFailure`, the lease twin of the batch's `zeroReservation` — and the TTL only covers a run that reached neither. A parent must never sweep its fan-out's leases: a terminal parent does not imply dead children (#839). LRU is our own `lastUsedAt`, never Ark's `LastInferenceTime` (absent ≠ never used). `MotionBatchWorkflow` counts the batch's distinct stills against `free + evictable` before fanning out (`liveRead.bytePlusAssets.getAdmission`, bucket `POOL-CAPACITY` — occupancy is shared with every other team, so it cannot be snapshotted at the trigger). Every statement lives in `scopedDb.bytePlusAssets`; like `modelUsage` it is platform-global, so nothing is team-scoped, and `claimSlot` is a write that happens to read.
 - **Ark keys are region-scoped** and Seedance is served only from `ap-southeast`; an EU key fails at request time, not startup.
@@ -373,7 +410,7 @@ OpenRouter/fal when an xAI key resolves (team `xai` key → platform
 a mock `XAI_API_KEY` and points `XAI_BASE_URL` at a second aimock instance
 (:4011), so Grok replays the native path from `fixtures/recorded/xai`.
 
-`src/lib/ai/grok-native.ts` owns registry id → xAI model name plus the pricing,
+`src/models/grok-native.ts` owns registry id → xAI model name plus the pricing,
 transcribed from docs.x.ai — the adapter reports a cost for video only. Native
 spend bypasses `model_pricing` and the hourly fal reconcile, so it is
 **unaudited**: the #1069 drift detection covers none of it.
@@ -394,7 +431,7 @@ neither, which falls back to OpenRouter/fal unchanged). e2e never sets
 `GEMINI_API_KEY`, so fixtures keep exercising the fallback;
 `GEMINI_BASE_URL` is the aimock hook for the native path.
 
-`src/lib/ai/gemini-native.ts` owns registry id → Gemini model name plus the
+`src/models/gemini-native.ts` owns registry id → Gemini model name plus the
 pricing, transcribed from ai.google.dev — Google reports tokens, never cost,
 so those tables ARE the bill (like xAI, native spend is **unaudited** by the
 #1069 drift detection). Omni Flash bills video output as tokens (5,792/s of
@@ -438,7 +475,7 @@ picks the endpoint. UI:
 **Settings → API Keys → LLMTR**. Team BYOK only — there is no platform
 LLMTR key; without a team key, resolution falls through to OpenRouter/fal.
 
-`src/lib/ai/llmtr.ts` pins the two silent-break traps:
+`src/models/llmtr.ts` pins the two silent-break traps:
 
 - **Slug drift.** LLMTR namespaces some vendors differently (`xai/` not
   `x-ai/`, `zai/` not `z-ai/`, `mistral/` not `mistralai/`). A registry id
@@ -475,15 +512,15 @@ https://fal.ai/models/{model-path}/llms.txt
 # e.g. https://fal.ai/models/fal-ai/kling-video/v2.5-turbo/pro/image-to-video/llms.txt
 ```
 
-More reliable than HTML docs; essential for `src/lib/ai/models.ts`. **For new motion models, run `bun motion:codegen`** to auto-generate schemas — don't write inline.
+More reliable than HTML docs; essential for `src/models/models.ts`. **For new motion models, run `bun motion:codegen`** to auto-generate schemas — don't write inline.
 
-Motion status checking: `checkMotionStatus(statusUrl)`, `getMotionResult(responseUrl)`, `cancelMotionGeneration(cancelUrl)` from `@/lib/services/motion.service`, or `bun scripts/check-motion-status.ts <url>`.
+Motion status checking: `checkMotionStatus(statusUrl)`, `getMotionResult(responseUrl)`, `cancelMotionGeneration(cancelUrl)` from `@/motion/server/motion-generation`, or `bun scripts/check-motion-status.ts <url>`.
 
 **Pricing is DB-only (#1069).** `model_pricing` in D1 is the **only** pricing record — there is no baked-in seed. The daily cron (and `bun scripts/refresh-fal-pricing.ts` locally, needs `FAL_KEY`) fills it with unit prices for **every priced endpoint in fal's catalog** (~1,350; raw unit strings, batches of ≤50 — the pricing API's cap), plus fal's typical-units estimates for the endpoints we actually use and observed medians from our own generations. `bun dev` never fires `scheduled()`, so until the script runs locally the table is empty: estimates gate on the $0.10 floor and billing records $0 (reported via `reportMissingBillingCost`).
 
-**The pricing API can lie — fal's bill is the ground truth.** fal's `/v1/models/pricing` reported Grok Imagine at "compute seconds" × $0.00017 while fal actually billed "units" × $0.01 (~59× under-charge; audit found 6 more mispriced endpoints, one 33% OVER-charging). Three corrective layers, all needing the ADMIN-scoped `FAL_BILLING_KEY` (`wrangler secret put` in prod; `.env.local` or `FAL_BILLING_KEY_DEV` locally — without it both crons error-log and prices run unverified): (1) the nightly refresh overlays billed rates from `/v1/models/usage` (30d); (2) `model_pricing.rateVerifiedAt` — once bill-verified, an advertised rate can never overwrite a row, only newer billed data; (3) the **hourly reconcile** (`src/lib/cron/reconcile-fal-billing.ts`) audits every charge against per-request `/v1/models/billing-events` (joined by the fal `requestId` workflows store in transaction metadata), corrects rates within the hour, and reports drift (`billing_drift` PostHog event) — report-only, no retroactive ledger adjustments. `x-fal-billable-units` is set by each model's own code (denomination is author-defined), so billing stays `unitsBilled × verified unitPrice` and never interprets units client-side.
+**The pricing API can lie — fal's bill is the ground truth.** fal's `/v1/models/pricing` reported Grok Imagine at "compute seconds" × $0.00017 while fal actually billed "units" × $0.01 (~59× under-charge; audit found 6 more mispriced endpoints, one 33% OVER-charging). Three corrective layers, all needing the ADMIN-scoped `FAL_BILLING_KEY` (`wrangler secret put` in prod; `.env.local` or `FAL_BILLING_KEY_DEV` locally — without it both crons error-log and prices run unverified): (1) the nightly refresh overlays billed rates from `/v1/models/usage` (30d); (2) `model_pricing.rateVerifiedAt` — once bill-verified, an advertised rate can never overwrite a row, only newer billed data; (3) the **hourly reconcile** (`src/billing/server/reconcile-fal-billing.ts`) audits every charge against per-request `/v1/models/billing-events` (joined by the fal `requestId` workflows store in transaction metadata), corrects rates within the hour, and reports drift (`billing_drift` PostHog event) — report-only, no retroactive ledger adjustments. `x-fal-billable-units` is set by each model's own code (denomination is author-defined), so billing stays `unitsBilled × verified unitPrice` and never interprets units client-side.
 
-**Cron jobs need wiring in three places** (like Workflows): `wrangler.jsonc` `triggers.crons` in the **default** block, the same in **`[env.production]`** (non-inheritable), and the constant `scheduled()` string-matches on (e.g. `FAL_PRICING_CRON`). Drift is silent — an unmatched expression falls through to the 5-minute reconcile sweep, which _succeeds_, so the job just never runs. `src/lib/cron/refresh-fal-pricing.test.ts` enforces it.
+**Cron jobs need wiring in three places** (like Workflows): `wrangler.jsonc` `triggers.crons` in the **default** block, the same in **`[env.production]`** (non-inheritable), and the constant `scheduled()` string-matches on (e.g. `FAL_PRICING_CRON`). Drift is silent — an unmatched expression falls through to the 5-minute reconcile sweep, which _succeeds_, so the job just never runs. `src/billing/server/refresh-fal-pricing.test.ts` enforces it.
 
 ---
 
@@ -507,9 +544,9 @@ bun db:generate  # Generate migrations from schema changes
 bun db:migrate   # Apply migrations to local.db
 ```
 
-- Schema in `src/lib/db/schema/` (Drizzle auto-infers types).
+- Schema in `src/platform/server/db/schema/` (Drizzle auto-infers types).
 - **NEVER** hand-write migration SQL. The one exception is a pure data backfill/repair, which has no schema diff so drizzle-kit cannot emit it: generate the empty file with `bun db:generate --custom --name=<name>`, write the SQL into it, and say so in a comment header. It must be a migration and not a script — PR previews and Deploy-button clones only ever run `wrangler d1 migrations apply`.
-- **NEVER hand-write Better Auth tables.** Adding/changing a Better Auth plugin → run `bun auth:generate` (Better Auth CLI against the real config via `src/lib/auth/cli-config.ts`; emits `auth-schema.ts` at the root), port the new table(s) verbatim into `src/lib/db/schema/auth.ts` (same `snakeCase.table` style as the neighbours), then `bun db:generate`. Field names/types must match the plugin exactly or the adapter silently breaks.
+- **NEVER hand-write Better Auth tables.** Adding/changing a Better Auth plugin → run `bun auth:generate` (Better Auth CLI against the real config via `src/platform/server/auth/cli-config.ts`; emits `auth-schema.ts` at the root), port the new table(s) verbatim into `src/platform/server/db/schema/auth.ts` (same `snakeCase.table` style as the neighbours), then `bun db:generate`. Field names/types must match the plugin exactly or the adapter silently breaks.
 - **ULIDs are the ONLY id format in the database.** Every id is an app-generated ULID from `generateId()` — never a UUID, never a slug, never `lower(hex(randomblob(16)))` or any other SQL-minted value. SQL cannot produce a ULID, so a migration that has to insert a row **reuses its parent row's ULID as the new id**. Ids only have to be unique within their own table; the same ULID appearing as a `characters.id` and as that character's `character_sheet_variants.id` is fine, and it makes the migration deterministic and replay-safe. See `20260901073033_backfill_character_sheet_variants`.
 - **Typed JSONB:** `frame.metadata` typed as `Scene`.
 
@@ -547,7 +584,7 @@ This destroyed `team_members`, `session`, `account`, and `passkey` in production
 
 **Local guardrail:** `scripts/check-migrations.ts` runs as a Lefthook pre-commit step on staged `drizzle/migrations/**/*.sql`. It flags `DROP TABLE`, `TRUNCATE`, `DELETE FROM`, `ALTER TABLE … DROP COLUMN`, and annotates each `DROP TABLE` with the count of inbound `ON DELETE CASCADE` FKs. Bypass for a manually-applied migration: `bun scripts/check-migrations.ts --allow-destructive`. Note `--allow-destructive` is an argument to the SCRIPT — the Lefthook step (`lefthook.yml`) invokes it without one, so to land an intentionally destructive migration commit with `LEFTHOOK_EXCLUDE=migration-safety git commit`, NOT `--no-verify` (which also skips typecheck, lint, format and knip). A native `ALTER TABLE … DROP COLUMN` is flagged but is exactly the refactor the check asks for — it rebuilds no table, so #612 does not apply.
 
-**Schema-drift trap (#898):** drizzle-kit only diffs **top-level exported** tables — removing a table's named export from `src/lib/db/schema/index.ts` (e.g. in a dead-code sweep) makes the next `db:generate` emit `DROP TABLE` for it. Keep every table individually exported. And never change a column's SQL `.default()` without generating the migration in the same PR — a default change forces a full table rebuild (see trap above); prefer `$defaultFn()` for app-level defaults with no DDL impact.
+**Schema-drift trap (#898):** drizzle-kit only diffs **top-level exported** tables — removing a table's named export from `src/platform/server/db/schema/index.ts` (e.g. in a dead-code sweep) makes the next `db:generate` emit `DROP TABLE` for it. Keep every table individually exported. And never change a column's SQL `.default()` without generating the migration in the same PR — a default change forces a full table rebuild (see trap above); prefer `$defaultFn()` for app-level defaults with no DDL impact.
 
 Refs: [drizzle-orm#3065](https://github.com/drizzle-team/drizzle-orm/issues/3065), [workers-sdk#5438](https://github.com/cloudflare/workers-sdk/issues/5438), [SQLite foreign_keys docs](https://sqlite.org/foreignkeys.html#fk_enable).
 
@@ -633,7 +670,7 @@ export const ScriptForm: React.FC = () => {
 };
 ```
 
-See `src/components/` for the house pattern.
+See `src/ui/` and any domain's `ui/` for the house pattern.
 
 ## UI/UX Non-Negotiables
 
@@ -651,7 +688,7 @@ See `src/components/` for the house pattern.
 
 **Unit-test framework:** Vitest (run via `bun run test`, never `bun test` — that invokes Bun's built-in runner and ignores `vitest.config.ts`).
 
-- Server handlers: `__tests__/` alongside routes.
+- Route handlers: test the logic next to where it lives (the domain's `server/` folder, e.g. `platform/server/api-v1/device-routes.test.ts`). Never put a test under `src/routes/` — every file there becomes a route (`boundaries/wrong-place` fails it).
 - Services/utils: co-located (`service.test.ts`).
 - Focus: business logic, not React components.
 - DB: mock `#db-client` via `vi.doMock` (not real connections); ULID primary keys.
@@ -662,10 +699,13 @@ See `src/components/` for the house pattern.
 
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
-import * as realModule from '@/lib/some-module';
+import * as realModule from '@/platform/some-module';
 
 const mockFn = vi.fn();
-vi.doMock('@/lib/some-module', () => ({ ...realModule, someExport: mockFn }));
+vi.doMock('@/platform/some-module', () => ({
+  ...realModule,
+  someExport: mockFn,
+}));
 
 // Dynamic import so the mock applies. Static imports are hoisted above
 // vi.doMock and would bypass it. Prefer vi.mock + vi.hoisted for top-of-file
@@ -676,11 +716,11 @@ const { thingUnderTest } = await import('./thing-under-test');
 
 When re-mocking inside an `it()` block to test a different code path, call `vi.resetModules()` first — otherwise the dynamic import returns the cached module from the prior mock.
 
-**E2E:** Playwright drives `vite dev` (cf-plugin → Workerd) on port 3001 with `E2E_TEST=true`. `bun test:e2e:setup` applies D1 migrations against the isolated `[env.test]` block in `wrangler.jsonc` and seeds via `getPlatformProxy()`. Aimock (`:4010`) intercepts LLM/fal calls. R2 is NOT mocked: uploads do real puts into the local Miniflare R2 binding (asset bytes come from the real `fal.media` URLs recorded in aimock fixtures) and reads are served by the worker's `/r2/$` route. Recording (`E2E_RECORD=1`) hits real LLM/fal; locally-served URLs sent to real providers are made fetchable via `fal.storage.upload` / data-URIs (`src/lib/storage/external-url.ts`).
+**E2E:** Playwright drives `vite dev` (cf-plugin → Workerd) on port 3001 with `E2E_TEST=true`. `bun test:e2e:setup` applies D1 migrations against the isolated `[env.test]` block in `wrangler.jsonc` and seeds via `getPlatformProxy()`. Aimock (`:4010`) intercepts LLM/fal calls. R2 is NOT mocked: uploads do real puts into the local Miniflare R2 binding (asset bytes come from the real `fal.media` URLs recorded in aimock fixtures) and reads are served by the worker's `/r2/$` route. Recording (`E2E_RECORD=1`) hits real LLM/fal; locally-served URLs sent to real providers are made fetchable via `fal.storage.upload` / data-URIs (`src/platform/server/storage/external-url.ts`).
 
 ## Platform & Deployment
 
-Production target: **Cloudflare Workers** (the only supported platform). Deployment-context helpers (preview/local detection) live in `src/shared/utils/environment.ts`. Workers Builds auto-deploys main (same mechanism as Deploy-button clones); PRs get GitHub Actions preview deployments with unique D1 databases. See `.env.example` for required vars (or `bun setup` for local defaults).
+Production target: **Cloudflare Workers** (the only supported platform). Deployment-context helpers (preview/local detection) live in `src/platform/server/env/environment.ts`. Workers Builds auto-deploys main (same mechanism as Deploy-button clones); PRs get GitHub Actions preview deployments with unique D1 databases. See `.env.example` for required vars (or `bun setup` for local defaults).
 
 <!-- intent-skills:start -->
 

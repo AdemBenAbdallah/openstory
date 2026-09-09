@@ -1,9 +1,9 @@
-import { PageContainer } from '@/components/layout/page-container';
-import { SampleVideoCard } from '@/components/style/sample-video-showcase';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useStyles } from '@/hooks/use-styles';
-import { buildSampleEntries } from '@/lib/style/sample-entries';
+import { PageContainer } from '@/ui/layout/page-container';
+import { SampleVideoCard } from '@/look/ui/sample-video-showcase';
+import { EmptyState } from '@/ui/shadcn/empty-state';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { useStyles } from '@/look/ui/use-styles';
+import { buildSampleEntries } from '@/look/ui/sample-entries';
 import { createFileRoute } from '@tanstack/react-router';
 import { Clapperboard } from 'lucide-react';
 

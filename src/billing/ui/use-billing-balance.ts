@@ -1,0 +1,56 @@
+/**
+ * Shared billing balance hook
+ * Provides balance data, low-balance detection, and query key for invalidation
+ */
+
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { useAuthSession } from '@/platform/ui/auth/session-query';
+import { LOW_BALANCE_THRESHOLD_USD } from '@/billing/constants';
+import { getBillingBalanceFn } from '@/billing/billing.fn';
+
+export const BILLING_BALANCE_KEY = ['billing-balance'] as const;
+export const BILLING_PAYMENT_METHODS_KEY = ['billing-payment-methods'] as const;
+
+/** Seeded in the app shell's beforeLoad so the welcome dialog (and its
+ *  card/SMS options) paints on first render instead of after a client fetch. */
+export const billingBalanceQueryOptions = queryOptions({
+  queryKey: [...BILLING_BALANCE_KEY],
+  queryFn: () => getBillingBalanceFn(),
+  staleTime: 30_000,
+});
+
+export function useBillingBalance() {
+  const { data: session } = useAuthSession();
+
+  const query = useQuery({
+    ...billingBalanceQueryOptions,
+    enabled: !!session?.user,
+  });
+
+  const posted = query.data?.balance ?? null;
+  const balance = query.data?.availableUsd ?? posted;
+  const reserved = query.data?.reservedUsd ?? 0;
+  const autoTopUp = query.data?.autoTopUp;
+  const lowBalanceThreshold =
+    autoTopUp?.enabled && autoTopUp.thresholdUsd != null
+      ? autoTopUp.thresholdUsd
+      : LOW_BALANCE_THRESHOLD_USD;
+
+  return {
+    ...query,
+    balance,
+    posted,
+    reserved,
+    teamId: query.data?.teamId,
+    stripeEnabled: query.data?.stripeEnabled ?? false,
+    phoneVerificationEnabled: query.data?.phoneVerificationEnabled ?? false,
+    phoneCountry: query.data?.phoneCountry ?? null,
+    hasUsedCredits: query.data?.hasUsedCredits ?? false,
+    hasSignupGrant: query.data?.hasSignupGrant ?? false,
+    hasOtherCredits: query.data?.hasOtherCredits ?? false,
+    isLowBalance:
+      balance !== null && balance > 0 && balance <= lowBalanceThreshold,
+    isZeroBalance: balance !== null && balance <= 0,
+    lowBalanceThreshold,
+  };
+}

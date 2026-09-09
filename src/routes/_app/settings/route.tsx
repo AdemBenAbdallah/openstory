@@ -3,9 +3,9 @@
  * Provides tab navigation between settings sub-pages
  */
 
-import { RouteErrorFallback } from '@/components/error/route-error-fallback';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { requireSessionOrRedirect } from '@/lib/auth/route-guards';
+import { RouteErrorFallback } from '@/ui/error/route-error-fallback';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
+import { requireSessionOrRedirect } from '@/platform/ui/auth/route-guards';
 import {
   createFileRoute,
   Link,

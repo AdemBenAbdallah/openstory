@@ -50,14 +50,11 @@ import {
   safeTextToImageModel,
   type ImageToVideoModel,
   type TextToImageModel,
-} from '@/lib/ai/models';
-import { microsToUsd } from '@/lib/billing/money';
+} from '@/models/models';
+import { microsToUsd } from '@/billing/money';
 import { loadLocalFalPricing } from './load-local-fal-pricing';
-import {
-  aspectRatioSchema,
-  type AspectRatio,
-} from '@/shared/constants/aspect-ratios';
-import { calculateMotionMetadata } from '@/lib/motion/motion-generation';
+import { aspectRatioSchema, type AspectRatio } from '@/models/aspect-ratios';
+import { calculateMotionMetadata } from '@/motion/server/motion-generation';
 import {
   createSampleSequence,
   orderedShotVideos,
@@ -71,9 +68,9 @@ import {
   CANONICAL_SCRIPT_OVERRIDES,
   NOMINAL_BEAT_SECONDS,
   type SampleBeat,
-} from '@/lib/style/sample-videos';
-import { styleSlug } from '@/lib/style/style-slug';
-import { DEFAULT_STYLE_TEMPLATES } from '@/lib/style/style-templates';
+} from '@/look/server/sample-videos';
+import { styleSlug } from '@/look/style-slug';
+import { DEFAULT_STYLE_TEMPLATES } from '@/look/style-templates';
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';

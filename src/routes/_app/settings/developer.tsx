@@ -4,8 +4,8 @@
  * apps that were granted access via OAuth (#1456).
  */
 
-import { DeveloperApiKeySettings } from '@/components/settings/developer-api-key-settings';
-import { DeveloperAuthorizedApps } from '@/components/settings/developer-authorized-apps';
+import { DeveloperApiKeySettings } from '@/ui/settings/developer-api-key-settings';
+import { DeveloperAuthorizedApps } from '@/ui/settings/developer-authorized-apps';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/settings/developer')({

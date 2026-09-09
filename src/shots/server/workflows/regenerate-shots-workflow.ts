@@ -1,0 +1,321 @@
+/**
+ * The `regenerateShotsWorkflow` durable workflow.
+ *
+ * The batch snapshot hash (`computeRegenerateShotsBatchHash`) is validated
+ * inside `step.do('validate-snapshot')`, so a stale payload fails the run
+ * rather than regenerating against shots the user has since changed.
+ */
+
+import { DEFAULT_IMAGE_MODEL } from '@/models/models';
+import { aspectRatioToImageSize } from '@/models/aspect-ratios';
+import type { WorkflowScopedDb } from '@/platform/server/db/scoped-workflow';
+import { triggerWorkflow } from '@/platform/server/workflow/client';
+import { WorkflowValidationError } from '@/platform/server/workflow/errors';
+import { spawnAndAwaitChild } from '@/platform/server/workflow/await-child';
+import { OpenStoryWorkflowEntrypoint } from '@/platform/server/workflow/base-workflow';
+import type {
+  ImageWorkflowInput,
+  RegenerateShotsWorkflowInput,
+  ShotVariantWorkflowInput,
+} from '@/platform/server/workflow/types';
+import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
+import { NonRetryableError } from 'cloudflare:workflows';
+import {
+  computeRegenerateShotsBatchHash,
+  emitRecastEvent,
+} from './regenerate-shots-snapshot';
+import { getLogger } from '@/platform/logger';
+
+const logger = getLogger(['openstory', 'workflow', 'regenerate-shots']);
+
+/**
+ * Concurrent fire-and-forget `/variant-image` creates.
+ *
+ * Kept when the image fan-out ceiling went away (#1143): these are
+ * `binding.create()` calls rather than awaited children, and Cloudflare rate
+ * limits instance creation at 100/second per workflow — so this bounds a
+ * documented platform limit, not isolate pressure.
+ */
+const VARIANT_TRIGGER_CONCURRENCY = 8;
+
+type ShotResult =
+  | { shotId: string; success: true; imageUrl: string }
+  | { shotId: string; success: false; error: string };
+
+type RegenerateShotsResult = {
+  totalShots: number;
+  successCount: number;
+  failedShots: string[];
+  divergedShotIds: string[];
+};
+
+type ImageChildOutput = {
+  imageUrl: string;
+  shotId?: string;
+  sequenceId?: string;
+};
+
+export class RegenerateShotsWorkflow extends OpenStoryWorkflowEntrypoint<RegenerateShotsWorkflowInput> {
+  protected override async runImpl(
+    event: Readonly<WorkflowEvent<RegenerateShotsWorkflowInput>>,
+    step: WorkflowStep,
+    scopedDb: WorkflowScopedDb
+  ): Promise<RegenerateShotsResult> {
+    const input = event.payload;
+    const parentInstanceId = event.instanceId;
+    const { sequenceId, teamId, triggerKind, triggerId } = input;
+    // ============================================================
+    // Top-level validation (re-throws as NonRetryableError via the base
+    // class's WorkflowValidationError re-wrap). Inside step.do we use
+    // CF's NonRetryableError directly so the step machinery doesn't burn
+    // its retry budget on programmer errors.
+    // ============================================================
+    if (!sequenceId) {
+      throw new WorkflowValidationError('Sequence ID is required');
+    }
+
+    const childBinding = this.env.IMAGE_WORKFLOW;
+
+    // Validate the snapshot hash inside the workflow body: a payload that no
+    // longer matches the live shots must halt the run, not regenerate against
+    // stale intent.
+    await step.do('validate-snapshot', async () => {
+      const expected = input.snapshotInputHash;
+      if (!expected) return;
+      const recomputed = await computeRegenerateShotsBatchHash(input);
+      if (recomputed !== expected) {
+        throw new NonRetryableError(
+          'snapshotInputHash does not match the inlined DTO; payload was tampered with or serialized inconsistently',
+          'WorkflowValidationError'
+        );
+      }
+    });
+
+    const snapshots = input.shotSnapshots;
+    if (snapshots.length === 0) {
+      return {
+        totalShots: 0,
+        successCount: 0,
+        failedShots: [],
+        divergedShotIds: [],
+      };
+    }
+
+    const imageModel = input.imageModel ?? DEFAULT_IMAGE_MODEL;
+    const aspectRatio = input.aspectRatio;
+    const resolution = input.resolution;
+
+    await step.do('emit-start', async () => {
+      await emitRecastEvent({
+        kind: triggerKind,
+        event: 'start',
+        sequenceId,
+        triggerId,
+        shotCount: snapshots.length,
+      });
+    });
+
+    // ============================================================
+    // PHASE: Per-shot image regeneration — Pattern 3 fan-out, unbounded
+    // (#1143: the per-run ceiling measured no benefit and was never global).
+    // allSettled so one failing shot doesn't poison its peers.
+    // ============================================================
+    const settled = await Promise.allSettled(
+      snapshots.map(async (snapshot, shotIndex): Promise<ShotResult> => {
+        if (!snapshot.imagePrompt) {
+          // Per-shot failure — peer shots in the batch should still run.
+          return {
+            shotId: snapshot.shotId,
+            success: false,
+            error: 'no image prompt',
+          };
+        }
+
+        const referenceImages = [
+          ...snapshot.characterRefs,
+          ...snapshot.locationRefs,
+        ];
+
+        const childPayload: ImageWorkflowInput = {
+          userId: input.userId,
+          teamId,
+          sequenceId,
+          shotId: snapshot.shotId,
+          // Mandatory alongside `shotId` — without it the child renders and
+          // bills, then writes nothing back to the frame (#1119).
+          frameId: snapshot.frameId ?? undefined,
+          prompt: snapshot.imagePrompt,
+          model: imageModel,
+          imageSize: aspectRatioToImageSize(aspectRatio),
+          numImages: 1,
+          referenceImages,
+        };
+
+        try {
+          const body = await spawnAndAwaitChild<
+            ImageWorkflowInput,
+            ImageChildOutput
+          >(step, {
+            binding: childBinding,
+            parentBindingName: 'REGENERATE_SHOTS_WORKFLOW',
+            parentInstanceId,
+            childId: `image:${sequenceId}:${snapshot.shotId}`,
+            childPayload,
+            spawnStepName: `spawn-image-${shotIndex}`,
+            awaitStepName: `await-image-${shotIndex}`,
+          });
+          if (!body.imageUrl) {
+            logger.error(
+              `[RegenerateShotsWorkflow:cf] Image generation failed shot=${snapshot.shotId} reason=no imageUrl`
+            );
+            return {
+              shotId: snapshot.shotId,
+              success: false,
+              error: 'Image generation no imageUrl',
+            };
+          }
+          return {
+            shotId: snapshot.shotId,
+            success: true,
+            imageUrl: body.imageUrl,
+          };
+        } catch (err: unknown) {
+          const reason = err instanceof Error ? err.message : String(err);
+          logger.error(
+            `[RegenerateShotsWorkflow:cf] Image generation failed shot=${snapshot.shotId} reason=${reason}`
+          );
+          return {
+            shotId: snapshot.shotId,
+            success: false,
+            error: `Image generation failed: ${reason}`,
+          };
+        }
+      })
+    );
+
+    // allSettled preserves input order; collect into ShotResult[] for reconcile.
+    const imageResults: ShotResult[] = settled.map((outcome, i) => {
+      if (outcome.status === 'fulfilled') return outcome.value;
+      const snapshot = snapshots[i];
+      const reason =
+        outcome.reason instanceof Error
+          ? outcome.reason.message
+          : String(outcome.reason);
+      return {
+        shotId: snapshot?.shotId ?? `#${i}`,
+        success: false,
+        error: `Image generation failed: ${reason}`,
+      };
+    });
+
+    // Image-workflow (#989) appends + selects each new version itself, and on a
+    // mid-flight input drift retains the version WITHOUT repointing the primary.
+    // There is no separate divergence reconcile here anymore — a successful
+    // image result means the frame's primary was (re)generated.
+    const succeeded = imageResults.filter(
+      (r): r is Extract<ShotResult, { success: true }> => r.success
+    );
+    const succeededShotIds = succeeded.map((r) => r.shotId);
+
+    // Regenerate the 3×3 grid sheet for each (re)imaged shot — it is derived
+    // from the primary still and would otherwise show the pre-recast subject.
+    // Fire-and-forget creates, wave-bounded. Promise.all within each wave (not
+    // allSettled) so a failed create fails the durable step and CF retries.
+    await step.do('trigger-variant-regen', async () => {
+      const enforcement = await scopedDb.liveRead.compliance.listEnforcementFor(
+        input.userId,
+        teamId
+      );
+      const limit = VARIANT_TRIGGER_CONCURRENCY;
+      for (let i = 0; i < succeeded.length; i += limit) {
+        const wave = succeeded.slice(i, i + limit);
+        await Promise.all(
+          wave.map(async (result) => {
+            const snapshot = snapshots.find((s) => s.shotId === result.shotId);
+            if (!snapshot) return;
+            await triggerWorkflow<ShotVariantWorkflowInput>(
+              '/variant-image',
+              {
+                userId: input.userId,
+                teamId,
+                sequenceId,
+                shotId: result.shotId,
+                frameId: snapshot.frameId ?? undefined,
+                thumbnailUrl: result.imageUrl,
+                scenePrompt: snapshot.imagePrompt,
+                characterReferences:
+                  snapshot.characterRefs.length > 0
+                    ? snapshot.characterRefs
+                    : undefined,
+                locationReferences:
+                  snapshot.locationRefs.length > 0
+                    ? snapshot.locationRefs
+                    : undefined,
+                aspectRatio,
+                resolution,
+                model: imageModel,
+              },
+              {
+                // Dedupe: a retry of this step.do mustn't re-fire variants.
+                deduplicationId: `variant-image-${result.shotId}-${imageModel}-${snapshot.snapshotInputHash.slice(0, 16)}`,
+                enforcement,
+              }
+            );
+          })
+        );
+      }
+    });
+
+    const failedShots = imageResults
+      .filter((r) => !r.success)
+      .map((r) => r.shotId);
+    const successCount = succeededShotIds.length;
+
+    await step.do('emit-complete', async () => {
+      await emitRecastEvent({
+        kind: triggerKind,
+        event: 'complete',
+        sequenceId,
+        triggerId,
+        successCount,
+        failedCount: failedShots.length,
+      });
+    });
+
+    logger.info(
+      `[RegenerateShotsWorkflow] Completed: ${successCount} success, ${failedShots.length} failed`
+    );
+
+    return {
+      totalShots: snapshots.length,
+      successCount,
+      failedShots,
+      divergedShotIds: [],
+    };
+  }
+
+  protected override async onFailure({
+    event,
+    error,
+  }: {
+    event: Readonly<WorkflowEvent<RegenerateShotsWorkflowInput>>;
+    error: string;
+    scopedDb: WorkflowScopedDb;
+  }): Promise<void> {
+    const input = event.payload;
+
+    if (input.sequenceId) {
+      await emitRecastEvent({
+        kind: input.triggerKind,
+        event: 'failed',
+        sequenceId: input.sequenceId,
+        triggerId: input.triggerId,
+        error,
+      });
+    }
+
+    logger.error(
+      `[RegenerateShotsWorkflow:cf] Shot regeneration failed: ${error}`
+    );
+  }
+}

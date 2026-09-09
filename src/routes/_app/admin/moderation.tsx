@@ -9,25 +9,25 @@
  * Auth is inherited from `/admin/route.tsx` (ADMIN_EMAILS gate).
  */
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/ui/shadcn/badge';
+import { Button } from '@/ui/shadcn/button';
+import { Card, CardContent } from '@/ui/shadcn/card';
+import { Input } from '@/ui/shadcn/input';
+import { Skeleton } from '@/ui/shadcn/skeleton';
+import { Tabs, TabsList, TabsTrigger } from '@/ui/shadcn/tabs';
+import { Textarea } from '@/ui/shadcn/textarea';
 import {
   applyEnforcementFn,
   attributeContentReportFn,
   listContentReportsFn,
   resolveContentReportFn,
   traceContentFn,
-} from '@/functions/moderation';
-import { formatReportReference } from '@/lib/compliance/provenance';
+} from '@/platform/moderation.fn';
+import { formatReportReference } from '@/platform/compliance/report-reference';
 import {
   CONTENT_REPORT_REASONS,
   type ContentReportReason,
-} from '@/shared/content-reports';
+} from '@/platform/content-reports';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Search, ShieldAlert } from 'lucide-react';

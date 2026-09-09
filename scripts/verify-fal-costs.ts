@@ -18,7 +18,7 @@
  *   bun scripts/verify-fal-costs.ts --compare            # fetch usage for existing results
  */
 
-import { estimateFalCost } from '@/lib/ai/fal-cost';
+import { estimateFalCost } from '@/billing/fal-cost';
 // Verifies the local `model_pricing` snapshot against fal's actual usage.
 import { loadLocalFalPricing } from './load-local-fal-pricing';
 import {
@@ -27,11 +27,11 @@ import {
   IMAGE_TO_VIDEO_MODELS,
   type AudioModel,
   type TextToImageModel,
-} from '@/lib/ai/models';
-import { microsToUsd, type Microdollars } from '@/lib/billing/money';
-import { buildModelInput } from '@/lib/motion/build-model-input';
-import { snapDuration } from '@/lib/motion/snap-duration';
-import { typedEntries } from '@/shared/utils/typed-object';
+} from '@/models/models';
+import { microsToUsd, type Microdollars } from '@/billing/money';
+import { buildModelInput } from '@/motion/server/build-model-input';
+import { snapDuration } from '@/motion/snap-duration';
+import { typedEntries } from '@/platform/typed-object';
 import { createFalClient } from '@fal-ai/client';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -73,7 +73,7 @@ const imageUrlIdx = args.indexOf('--image-url');
 const testImageUrl = imageUrlIdx >= 0 ? args[imageUrlIdx + 1] : undefined;
 
 // Intentionally direct clients that bypass FAL_PROXY_URL (see
-// configureFalProxyFromEnv in src/lib/ai/fal-config.ts): this script exists
+// configureFalProxyFromEnv in src/models/server/fal-config.ts): this script exists
 // to verify real fal costs against real usage data, so routing it through
 // the e2e aimock proxy would be pointless.
 const falLow = createFalClient({ credentials: FAL_KEY_LOW });

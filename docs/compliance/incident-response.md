@@ -171,7 +171,7 @@ where practical. A successful appeal is a **revocation**, not a deletion.
 | Terms prohibit likeness use without authorization              | `/terms` § Acceptable Use                                      |
 | Portrait-rights attestation required on likeness upload        | Add-talent dialog → `upload_attestations`                      |
 | Email login + card on file (accepted real-name auth)           | Better Auth session; Stripe customer on the team               |
-| Provider content filters, with rejections logged and queryable | `src/lib/ai/content-rejection.ts`, PostHog `content_rejection` |
+| Provider content filters, with rejections logged and queryable | `src/models/content-rejection.ts`, PostHog `content_rejection` |
 
 ---
 

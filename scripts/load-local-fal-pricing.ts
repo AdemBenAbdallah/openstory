@@ -6,8 +6,8 @@
 import {
   buildFalPricingMap,
   type EffectiveFalPricing,
-} from '@/lib/ai/fal-pricing-live';
-import { modelPricing } from '@/lib/db/schema';
+} from '@/billing/server/fal-pricing-live';
+import { modelPricing } from '@/platform/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { getLocalPlatformProxy } from './local-platform-proxy';

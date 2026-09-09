@@ -1,20 +1,20 @@
-import { useAuthGate } from '@/components/auth/auth-gate-provider';
-import { routeParams } from '@/components/layout/breadcrumbs';
-import { PageContainer } from '@/components/layout/page-container';
-import { EditLocationDialog } from '@/components/location-library/edit-location-dialog';
-import { LocationMediaUpload } from '@/components/location-library/location-media-upload';
-import { PageDescription } from '@/components/typography/page-description';
-import { PageHeader } from '@/components/typography/page-header';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useAuthGate } from '@/platform/ui/auth/auth-gate-provider';
+import { routeParams } from '@/ui/layout/breadcrumbs';
+import { PageContainer } from '@/ui/layout/page-container';
+import { EditLocationDialog } from '@/cast/ui/location-library/edit-location-dialog';
+import { LocationMediaUpload } from '@/cast/ui/location-library/location-media-upload';
+import { PageDescription } from '@/ui/typography/page-description';
+import { PageHeader } from '@/ui/typography/page-header';
+import { Button } from '@/ui/shadcn/button';
+import { Card } from '@/ui/shadcn/card';
+import { Skeleton } from '@/ui/shadcn/skeleton';
 import {
   useAddLocationSheets,
   useDeleteLibraryLocation,
   useDeleteLocationSheet,
   useLibraryLocationById,
-} from '@/hooks/use-location-library';
-import { useLocationSheetRealtime } from '@/hooks/use-location-realtime';
+} from '@/cast/ui/use-location-library';
+import { useLocationSheetRealtime } from '@/cast/ui/use-location-realtime';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import {
   ArrowLeft,
