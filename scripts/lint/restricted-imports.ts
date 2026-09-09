@@ -1,5 +1,5 @@
 /**
- * oxlint rules `openstory/no-*` (#1489): one banned-imports check, registered
+ * oxlint plugin `boundaries` (#1489): one banned-imports check, registered
  * once per concern so each concern is its own rule key.
  *
  * oxlint overrides replace a rule's whole config for the files they match,

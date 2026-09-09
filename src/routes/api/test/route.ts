@@ -8,7 +8,7 @@ import { isLocalRequestHost } from '@/platform/server/env/environment';
  * Guard middleware for all test-only API endpoints.
  *
  * These endpoints are powerful (they forge Better Auth verification rows,
- * create/delete users, and can wipe the database via /api/test/cleanup), so
+ * create/delete users), so
  * the guard enforces TWO independent gates — both must pass:
  *
  *  1. Local-host backstop: the request must be served on a local/network-dev

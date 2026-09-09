@@ -6,6 +6,7 @@
  */
 
 import { getEnv } from '#env';
+import { IS_PRODUCTION_DEPLOYMENT } from '@/platform/flags';
 import { env as workerEnv } from 'cloudflare:workers';
 import { AbuseReportEmail } from './abuse-report-email';
 import { FeedbackEmail } from './feedback-email';
@@ -39,16 +40,14 @@ function getEmailConfig(): {
   fromEmail: string;
   fromName: string;
 } {
-  const env = getEnv();
-  const envEmail = env.EMAIL_FROM;
-  const isDev = env.NODE_ENV === 'development';
+  const envEmail = getEnv().EMAIL_FROM;
   const appName = getAppName();
 
   if (envEmail) {
     return { fromEmail: envEmail, fromName: appName };
   }
 
-  if (isDev) {
+  if (!IS_PRODUCTION_DEPLOYMENT) {
     // Local dev simulates sends (the binding has no `remote` flag in the
     // default wrangler.jsonc block), so the sender never reaches a real
     // mailbox — any placeholder address works.

@@ -160,6 +160,7 @@ export const IMAGE_TO_VIDEO_MODELS = {
     license: 'proprietary' as const,
     qualityRank: 6,
     maxPromptLength: 4096,
+    supportsAudio: true,
     performance: { estimatedGenerationTime: 120, quality: 'best' as const },
     // Half the 2.0 rate, 720p ceiling, 4–15s. fal has no enterprise mini, so
     // like 2.5 the public fal endpoint 400s photoreal faces: offered only

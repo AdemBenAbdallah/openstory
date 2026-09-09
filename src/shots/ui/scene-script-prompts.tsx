@@ -1075,7 +1075,7 @@ export const SceneScriptPrompts: React.FC<SceneScriptPromptsProps> = ({
     return () => window.clearTimeout(timeout);
   }, [editedImagePrompt, editedMotionPrompt]);
 
-  const { data: promptPreview } = useQuery({
+  const { data: promptPreview, error: promptPreviewError } = useQuery({
     queryKey: [
       'shot-prompt-preview',
       sequenceId,
@@ -1100,6 +1100,13 @@ export const SceneScriptPrompts: React.FC<SceneScriptPromptsProps> = ({
       }),
     enabled: Boolean(shot?.id),
   });
+  useEffect(() => {
+    if (promptPreviewError) {
+      toast.error('Prompt preview failed', {
+        description: errorMessage(promptPreviewError),
+      });
+    }
+  }, [promptPreviewError]);
   const assembledPrompt = promptPreview?.assembledMotionPrompt ?? null;
   const imageRequestPreview = promptPreview?.image ?? null;
   const motionRequestPreview = promptPreview?.motion ?? null;
@@ -1127,7 +1134,9 @@ export const SceneScriptPrompts: React.FC<SceneScriptPromptsProps> = ({
     return estimateVideoCost(effectiveMotionModel, duration, {
       pricing: falPricing,
       resolution,
-      hasReferenceImages: promptPreview?.motionHasReferenceImages ?? false,
+      // Unknown (preview failed or pending) falls back to the mode's default
+      // endpoint inside estimateVideoCost — never to "no references".
+      hasReferenceImages: promptPreview?.motionHasReferenceImages,
       referenceOnly,
     });
   }, [

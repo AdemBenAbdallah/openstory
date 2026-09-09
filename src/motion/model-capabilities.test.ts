@@ -64,6 +64,17 @@ describe('baked motion capabilities stay in lockstep with fal schemas', () => {
     }
   });
 
+  // videoModelSupportsAudio reads the flag alone (no schema fallback), so an
+  // undeclared model silently loses audio everywhere it is asked.
+  it('every model declares supportsAudio', () => {
+    for (const key of keys) {
+      expect(
+        typeof IMAGE_TO_VIDEO_MODELS[key].supportsAudio,
+        `${key} must declare supportsAudio`
+      ).toBe('boolean');
+    }
+  });
+
   it('covers every catalog model', () => {
     expect(Object.keys(MOTION_DURATION_GRID).sort()).toEqual(
       keys.slice().sort()

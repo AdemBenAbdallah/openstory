@@ -80,7 +80,7 @@ export function getCfBindingForTriggerPath(
   const bindingName = TRIGGER_TO_BINDING[key];
   if (!bindingName) {
     throw new Error(
-      `[triggerWorkflow] no workflow binding mapped for trigger path '${key}'. Add it to TRIGGER_TO_BINDING in src/lib/workflow/trigger-bindings.ts.`
+      `[triggerWorkflow] no workflow binding mapped for trigger path '${key}'. Add it to TRIGGER_TO_BINDING in src/platform/server/workflow/trigger-bindings.ts.`
     );
   }
   const binding = env[bindingName];

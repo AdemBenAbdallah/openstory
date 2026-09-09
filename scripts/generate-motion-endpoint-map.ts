@@ -14,16 +14,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const GENERATED_DIR = join(
-  import.meta.dirname,
-  '..',
-  'src',
-  'lib',
-  'motion',
-  'generated'
-);
-
-const MOTION_DIR = join(import.meta.dirname, '..', 'src', 'shared', 'motion');
+const MOTION_DIR = join(import.meta.dirname, '..', 'src', 'motion', 'server');
+const GENERATED_DIR = join(MOTION_DIR, 'generated');
 
 type EndpointInfo = {
   endpointId: string;
@@ -120,11 +112,11 @@ import { motionTransform } from './motion-transform';
 
 import {
 ${zodImports.map((s) => `  ${s},`).join('\n')}
-} from './generated/zod.gen';
+} from '@/motion/server/generated/zod.gen';
 
 import {
 ${jsonSchemaImports.map((s) => `  ${s},`).join('\n')}
-} from './generated/schemas.gen';
+} from '@/motion/server/generated/schemas.gen';
 
 export type MotionJSONSchema = ${jsonSchemaUnion};
 

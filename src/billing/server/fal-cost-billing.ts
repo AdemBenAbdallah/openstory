@@ -1,7 +1,7 @@
 /**
  * Exact fal cost for a completed generation — the server half of
  * `@/billing/fal-cost`. It reads live `model_pricing` from D1, which is
- * why it lives in `src/lib` while the pre-flight estimator stays client-safe.
+ * why it lives under `server/` while the pre-flight estimator stays client-safe.
  */
 
 import { getEffectiveFalPricing } from './fal-pricing-live';

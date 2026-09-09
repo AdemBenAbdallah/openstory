@@ -28,3 +28,12 @@ export function assertModelsEnabled(): void {
  * robots.txt and the root route branch on it directly.
  */
 export const IS_PREVIEW_DEPLOYMENT = import.meta.env.VITE_IS_PREVIEW === 'true';
+
+/**
+ * The canonical production deploy: a production build that is not a PR
+ * preview. Local dev, e2e (`vite dev`) and previews are all false. Prefer
+ * this over sniffing `NODE_ENV` / `VITE_APP_URL` at request time — both are
+ * baked at build.
+ */
+export const IS_PRODUCTION_DEPLOYMENT =
+  import.meta.env.PROD && !IS_PREVIEW_DEPLOYMENT;

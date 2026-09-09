@@ -1,4 +1,5 @@
 import { getEnv } from '#env';
+import { authWithTeamMiddleware } from '@/platform/middleware.fn';
 import { isBytePlusConfigured } from '@/models/server/byteplus-config';
 import {
   getEffectiveFalPricing,
@@ -101,10 +102,12 @@ export const getCatalogFalPricingFn = createServerFn({ method: 'GET' }).handler(
 );
 
 const estimateDraftGenerationInputSchema = z.object({
-  script: z.string(),
-  imageModels: z.array(z.string()).min(1),
-  videoModels: z.array(z.string()).min(1),
-  audioModels: z.array(z.string()).min(1),
+  // Same ceiling as the analysis path (models/ai.fn.ts); the create schema
+  // has no max of its own.
+  script: z.string().max(50_000),
+  imageModels: z.array(z.string()).min(1).max(10),
+  videoModels: z.array(z.string()).min(1).max(10),
+  audioModels: z.array(z.string()).min(1).max(10),
   aspectRatio: aspectRatioSchema,
   resolution: resolutionSchema.optional(),
   stopAt: generationStageSchema,
@@ -112,8 +115,12 @@ const estimateDraftGenerationInputSchema = z.object({
   targetDurationSeconds: z.number().int().positive().optional(),
 });
 
-/** Live Generate-dialog estimate. Public: catalog rates only, no secrets. */
+/**
+ * Live Generate-dialog estimate. Catalog rates only, no secrets, but every
+ * debounced composer edit lands here, so it is gated like the create fn.
+ */
 export const estimateDraftGenerationFn = createServerFn({ method: 'POST' })
+  .middleware([authWithTeamMiddleware])
   .validator(zodValidator(estimateDraftGenerationInputSchema))
   .handler(async ({ data }) => {
     if (!data.script.trim()) return { estimateMicros: null };

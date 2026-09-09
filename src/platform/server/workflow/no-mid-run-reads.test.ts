@@ -427,7 +427,7 @@ const ALLOWED_LIVE_READS: Record<string, SanctionedRead[]> = {
     {
       read: 'talent.getWithRelations',
       bucket: 'DIVERGENCE-CHECK',
-      why: "The upstream talent sheet's inputHash. NOTE the identity it resolves: sheets come back ordered isDefault DESC, createdAt DESC, and resolveTalentSheetHash takes the first NON-DIVERGED one — so with no explicit default the NEWEST convergent sheet wins (src/cast/server/db/talent.ts). A new sheet therefore shifts the hash and re-stales downstream character sheets by design.",
+      why: "The upstream talent sheet's inputHash. NOTE the identity it resolves: sheets come back ordered isDefault DESC, createdAt DESC, and resolveTalentSheetHash takes the first NON-DIVERGED one — so with no explicit default the NEWEST convergent sheet wins (src/cast/server/db/talent.ts:234). A new sheet therefore shifts the hash and re-stales downstream character sheets by design.",
     },
     {
       read: 'sequenceLocations.getById',
@@ -539,7 +539,7 @@ const ALLOWED_LIVE_READS: Record<string, SanctionedRead[]> = {
     {
       read: 'talent.getByIds',
       bucket: 'WAIT-GATE',
-      why: "Polls for /library-talent-sheet's write. NOTE defaultSheet's identity: the isDefault sheet, else a newest-first (createdAt DESC) scan of non-diverged sheets (src/platform/server/db/scoped/talent.ts:234) — so the gate opens on the newest convergent sheet, not necessarily the one the user will see as default later.",
+      why: "Polls for /library-talent-sheet's write. NOTE defaultSheet's identity: the isDefault sheet, else a newest-first (createdAt DESC) scan of non-diverged sheets (src/cast/server/db/talent.ts:234) — so the gate opens on the newest convergent sheet, not necessarily the one the user will see as default later.",
     },
     {
       read: 'locations.getByIds',
