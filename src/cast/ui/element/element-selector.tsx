@@ -171,7 +171,9 @@ export const ElementSelector: React.FC<ElementSelectorProps> = (props) => {
   // own emissions so two uploads completing in the same tick don't lose the
   // first append (the prop only catches up on the parent's next render).
   const draftElementsRef = useRef<DraftElementUpload[]>(draftElements ?? []);
-  draftElementsRef.current = draftElements ?? [];
+  useEffect(() => {
+    draftElementsRef.current = draftElements ?? [];
+  });
 
   const emitDraftElements = useCallback(
     (next: DraftElementUpload[]) => {
@@ -220,6 +222,7 @@ export const ElementSelector: React.FC<ElementSelectorProps> = (props) => {
     const persistedFilenames = new Set(
       persistedElements.map((el) => el.uploadedFilename)
     );
+    // oxlint-disable-next-line react/set-state-in-effect -- blob-URL lifecycle tied to query data, not a derivable value: the row landing is the only signal, and dropping the entry without revoking (or deriving it away and keeping the File alive) leaks.
     setEntries((prev) => {
       let changed = false;
       const next = new Map(prev);
