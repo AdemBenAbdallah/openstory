@@ -6,22 +6,18 @@ import {
 } from '@/cast/server/element-vision';
 import { reportMissingBillingCost } from '@/billing/billing-observability';
 import { estimateLLMCost } from '@/billing/cost-estimation';
-import {
-  InsufficientCreditsError,
-  NotFoundError,
-  ValidationError,
-} from '@/platform/errors';
+import { InsufficientCreditsError, NotFoundError } from '@/platform/errors';
 import { generateId } from '@/platform/id';
 import { ulidSchema } from '@/platform/server/schemas/id.schemas';
 import { deriveTokenFromFilename } from './derive-token';
 import {
+  assertElementUploadAttachable,
   attachElementUpload,
   triggerElementVision,
 } from '@/cast/server/sequence-elements/attach-element-upload';
 import {
   DRAFT_ELEMENT_UPLOAD_PREFIX,
   elementImageUrlFromPath,
-  isValidElementStoragePath,
 } from '@/cast/server/sequence-elements/storage-path';
 import { STORAGE_BUCKETS } from '@/platform/server/storage/buckets';
 import {
@@ -335,11 +331,11 @@ export const replaceSequenceElementFn = createServerFn({ method: 'POST' })
     )
   )
   .handler(async ({ context, data }) => {
-    if (!isValidElementStoragePath(data.path, context.teamId)) {
-      throw new ValidationError(
-        `Element "${data.filename}" could not be attached: its upload is outside this team's storage.`
-      );
-    }
+    await assertElementUploadAttachable({
+      path: data.path,
+      filename: data.filename,
+      teamId: context.teamId,
+    });
 
     const element = await context.scopedDb.sequenceElements.getById(
       data.elementId

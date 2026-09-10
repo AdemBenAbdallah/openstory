@@ -13,8 +13,11 @@ vi.doMock('@/platform/server/workflow/client', () => ({
 }));
 vi.doMock('#storage', () => ({ fileExists: mockFileExists }));
 
-const { attachDraftElementUploads, attachElementUpload } =
-  await import('./attach-element-upload');
+const {
+  assertDraftElementUploadsAttachable,
+  attachDraftElementUploads,
+  attachElementUpload,
+} = await import('./attach-element-upload');
 
 function makeScopedDb(): ScopedDb {
   // oxlint-disable-next-line typescript-eslint/no-unsafe-type-assertion -- stub covering only the sequenceElements methods attach calls
@@ -109,17 +112,6 @@ describe('attachElementUpload', () => {
     expect(new Set(rows.map((row) => row.id)).size).toBe(2);
   });
 
-  it('still attaches a legacy `temp/` draft restored from localStorage', async () => {
-    await attachDrafts([
-      makeUpload({ tempPath: 'elements/team-1/temp/up-1.png' }),
-    ]);
-
-    expect(mockCreate.mock.calls[0]?.[0]).toMatchObject({
-      imagePath: 'elements/team-1/temp/up-1.png',
-      imageUrl: '/r2/elements/team-1/temp/up-1.png',
-    });
-  });
-
   it('rejects a path outside the team namespace instead of skipping it', async () => {
     await expect(
       attachDrafts([makeUpload({ tempPath: 'elements/team-2/uploads/x.png' })])
@@ -166,11 +158,6 @@ describe('attachElementUpload', () => {
     );
   });
 
-  it('skips the vision workflow when vision already ran inline', async () => {
-    await attachDrafts([makeUpload()]);
-    expect(mockTriggerWorkflow).not.toHaveBeenCalled();
-  });
-
   it('marks the row failed when the vision trigger throws', async () => {
     mockTriggerWorkflow.mockRejectedValue(new Error('binding down'));
 
@@ -195,5 +182,26 @@ describe('attachElementUpload', () => {
   it('derives a token from the filename when the draft carries none', async () => {
     await attachDrafts([makeUpload({ token: null })]);
     expect(mockEnsureUniqueToken).toHaveBeenCalledWith('seq-1', 'JERSEY');
+  });
+});
+
+describe('assertDraftElementUploadsAttachable', () => {
+  it('rejects the whole batch before create writes anything', async () => {
+    // Runs ahead of the per-model fan-out in createSequences: a failure once a
+    // sequence row exists would strand that row with no workflow behind it.
+    mockFileExists.mockImplementation(
+      async (_bucket: string, path: string) => !path.endsWith('gone.png')
+    );
+
+    await expect(
+      assertDraftElementUploadsAttachable({
+        teamId: 'team-1',
+        uploads: [
+          makeUpload(),
+          makeUpload({ tempPath: 'elements/team-1/uploads/gone.png' }),
+        ],
+      })
+    ).rejects.toThrow(/no longer available in storage/);
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 });

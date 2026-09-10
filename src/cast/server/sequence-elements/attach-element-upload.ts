@@ -34,6 +34,34 @@ export async function triggerElementVision(params: {
 }
 
 /**
+ * Prove a client-supplied element key may back a row: inside the team's
+ * namespace, and actually present in R2. The second check is not paranoia —
+ * the move it replaced (#1471) was the only thing proving the object existed,
+ * and without it a row can point at a permanent 404 that nothing surfaces
+ * until image generation fails hours later.
+ *
+ * Every path that points a row at an uploaded object goes through here:
+ * draft attach at creation, finalize on an existing sequence, and replace.
+ */
+export async function assertElementUploadAttachable(params: {
+  path: string;
+  filename: string;
+  teamId: string;
+}): Promise<void> {
+  const { path, filename, teamId } = params;
+  if (!isValidElementStoragePath(path, teamId)) {
+    throw new ValidationError(
+      `Element "${filename}" could not be attached: its upload is outside this team's storage.`
+    );
+  }
+  if (!(await fileExists(STORAGE_BUCKETS.ELEMENTS, elementBucketPath(path)))) {
+    throw new NotFoundError(
+      `Element "${filename}" is no longer available in storage. Re-upload it and try again.`
+    );
+  }
+}
+
+/**
  * Attach one already-uploaded R2 object to a sequence as a `sequence_elements`
  * row, then run vision on it unless the caller already has a description.
  *
@@ -42,12 +70,6 @@ export async function triggerElementVision(params: {
  * draft upload — which is what creation does, fanning out one sequence per
  * selected analysis model. The predecessor moved the object on the way in, so
  * the first of those N deleted it out from under its siblings.
- *
- * `path` is client-supplied, so it is checked twice: inside the team's
- * namespace, and actually present in R2. The second check is not paranoia —
- * the move it replaces was the only thing proving the object existed, and
- * without it a row can point at a permanent 404 that nothing surfaces until
- * image generation fails hours later.
  */
 export async function attachElementUpload(params: {
   scopedDb: ScopedDb;
@@ -62,16 +84,7 @@ export async function attachElementUpload(params: {
 }): Promise<SequenceElement> {
   const { scopedDb, teamId, userId, sequenceId, path, filename } = params;
 
-  if (!isValidElementStoragePath(path, teamId)) {
-    throw new ValidationError(
-      `Element "${filename}" could not be attached: its upload is outside this team's storage.`
-    );
-  }
-  if (!(await fileExists(STORAGE_BUCKETS.ELEMENTS, elementBucketPath(path)))) {
-    throw new NotFoundError(
-      `Element "${filename}" is no longer available in storage. Re-upload it and try again.`
-    );
-  }
+  await assertElementUploadAttachable({ path, filename, teamId });
 
   const imageUrl = elementImageUrlFromPath(path);
   const token = await scopedDb.sequenceElements.ensureUniqueToken(
@@ -124,9 +137,35 @@ export async function attachElementUpload(params: {
 }
 
 /**
+ * Check every draft upload on a create request before anything is reserved or
+ * inserted. A bad path or a vanished object must fail the request while it is
+ * still a request — once `createSequences` is inside its per-model fan-out,
+ * the sequence row is already written and a throw there strands it with no
+ * workflow behind it.
+ */
+export async function assertDraftElementUploadsAttachable(params: {
+  teamId: string;
+  uploads: DraftElementUploadInput[];
+}): Promise<void> {
+  const { teamId, uploads } = params;
+  await Promise.all(
+    uploads.map((upload) =>
+      assertElementUploadAttachable({
+        path: upload.tempPath,
+        filename: upload.filename,
+        teamId,
+      })
+    )
+  );
+}
+
+/**
  * Attach every draft element upload carried on a create request to the
  * freshly created sequence. Runs before the storyboard trigger so
  * analyze-script's `waitForElementVision` gate has rows to wait on.
+ *
+ * Sequential on purpose: `ensureUniqueToken` must see the previous insert, or
+ * two uploads that derive the same token both get the "unique" one.
  */
 export async function attachDraftElementUploads(params: {
   scopedDb: ScopedDb;

@@ -51,7 +51,10 @@ import {
 } from './sequence.schemas';
 import { UNTITLED_SEQUENCE_TITLE } from '@/sequences/untitled-sequence-title';
 import { copySequenceElements } from '@/cast/server/sequence-elements/copy-sequence-elements';
-import { attachDraftElementUploads } from '@/cast/server/sequence-elements/attach-element-upload';
+import {
+  assertDraftElementUploadsAttachable,
+  attachDraftElementUploads,
+} from '@/cast/server/sequence-elements/attach-element-upload';
 import { captureProductEvent } from '@/platform/server/observability/product-events';
 import { bumpStylePopularity } from '@/look/server/bump-style-popularity';
 import { triggerStoryboard } from './launchers';
@@ -271,6 +274,16 @@ export const createSequences = createServerOnlyFn(
 
     if (!styleId || !aspectRatio) {
       throw new Error('Style ID and aspect ratio are required');
+    }
+
+    // Fail on a bad draft upload here, before any credit reservation or
+    // sequence row exists — a throw inside the fan-out below would strand a
+    // sequence with no workflow behind it.
+    if (elementUploads && elementUploads.length > 0) {
+      await assertDraftElementUploadsAttachable({
+        teamId,
+        uploads: elementUploads,
+      });
     }
 
     const envelopeCost = estimateStoryboardPreflightCost({
