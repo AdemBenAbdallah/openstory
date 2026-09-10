@@ -2,7 +2,7 @@
  * Element selector for the sequence creation + edit forms.
  *
  * Two modes:
- *  - draft (default): files upload to a temp R2 path and land in the parent's
+ *  - draft (default): files upload to a permanent R2 path and land in the parent's
  *    `draftElements` list via onDraftElementsChange. The parent list is the
  *    canonical state (it's what localStorage draft persistence restores after
  *    a reload — #1079); local entries here only track in-flight uploads and
@@ -434,7 +434,7 @@ export const ElementSelector: React.FC<ElementSelectorProps> = (props) => {
 
   // Rename a draft (pre-sequence) element in the parent's canonical list; the
   // parent rewrites script references through onDraftTokenRename. Uniqueness
-  // is checked locally — promoteTempElements would silently suffix a
+  // is checked locally — attachElementUpload would silently suffix a
   // collision, but a user-typed name should be rejected loudly instead
   // (matching the persisted rename server fn).
   const renameDraftElement = useCallback(
